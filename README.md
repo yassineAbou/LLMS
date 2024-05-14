@@ -1,7 +1,7 @@
 <div align="center">  
  <img src="https://imgur.com/9atzLry.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
- <h1 style="display: inline-block; margin: 0; vertical-align: middle;">LLMS</h1>  
-</div>  
+ <h1 style="display: inline-block; margin: 0; vertical-align: middle; text-align: center; width: 100%;">LLMS</h1>  
+</div>
   
 <p align="center">
 <img src="https://img.shields.io/badge/AI Horde-DC143C?logo=ai" alt="AI Horde">
@@ -20,7 +20,7 @@
 <img src="https://img.shields.io/badge/macOS-C0C0C0?logo=apple" alt="macOS">
 
  
-Discover the power of AI with our app, where you can choose from many text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync on your devices
+Discover the power of AI with our Kotlin Multiplatform app, where you can choose from many text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync on your devices
   
 ## 🌟 Features
 ⚠️ **Note:** New models provided by Horde AI will be added as they become available. This ensures that the app remains up-to-date with the latest advancements in AI technology.
