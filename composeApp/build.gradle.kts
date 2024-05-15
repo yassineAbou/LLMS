@@ -32,6 +32,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
+           implementation(libs.voyager.navigator)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -79,17 +80,21 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+
+            val iconsRoot = project.file("composeApp/src/commonMain/composeResources/drawable")
+
             packageName = "org.yassineabou.llms"
             packageVersion = "1.0.0"
 
             macOS {
-                iconFile.set(project.file("icon.icns"))
+                iconFile.set(iconsRoot.resolve("macos.icns"))
+                jvmArgs("-Xdock:icon=/composeApp/src/commonMain/composeResources/drawable/macos.icns")
             }
             windows {
-                iconFile.set(project.file("icon.ico"))
+                iconFile.set(iconsRoot.resolve("windows.ico"))
             }
             linux {
-                iconFile.set(project.file("icon.png"))
+                iconFile.set(iconsRoot.resolve("linux.png"))
             }
         }
     }
