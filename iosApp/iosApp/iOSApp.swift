@@ -4,7 +4,14 @@ import SwiftUI
 struct iOSApp: App {
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+			ScreenA()
 		}
 	}
+}
+
+extension View {
+    func centered() -> some View {
+        self.frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemBackground))
+    }
 }
