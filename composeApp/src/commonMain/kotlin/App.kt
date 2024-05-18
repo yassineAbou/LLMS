@@ -1,10 +1,8 @@
-package app.ui
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import app.ui.navigation.Navigation
 import cafe.adriel.voyager.core.screen.Screen
-import feature.ScreenA
+import screens.ScreenA
 
 @Composable
 fun App() {
@@ -14,7 +12,6 @@ fun App() {
 }
 
 private object MainScreen : Screen {
-
     @Composable
     override fun Content() {
        ScreenA().Content()
