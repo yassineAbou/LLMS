@@ -44,6 +44,10 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
 
+            implementation(libs.coil)
+            implementation(libs.coil.network)
+            implementation(libs.coil.compose)
+
 
 
         }
