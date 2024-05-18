@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -38,6 +40,10 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.compose.material3.windowSizeClass)
 
+            implementation(libs.androidx.data.store.core)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+
 
 
         }
@@ -45,6 +51,14 @@ kotlin {
             implementation(compose.desktop.currentOs)
         }
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    ksp(libs.androidx.room.compiler)
 }
 
 android {
