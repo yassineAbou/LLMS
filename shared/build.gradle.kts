@@ -2,6 +2,9 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -28,9 +31,29 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+
+            implementation(libs.androidx.data.store.core)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+            implementation(libs.coil)
+            implementation(libs.coil.network)
+            implementation(libs.coil.compose)
+
+            implementation(libs.kotlinx.serialization)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kotlinx.coroutines.core)
         }
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    ksp(libs.androidx.room.compiler)
 }
 
 android {

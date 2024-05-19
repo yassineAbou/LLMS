@@ -28,6 +28,13 @@ androidx-room = "2.7.0-alpha02"
 
 coil = "3.0.0-alpha06"
 
+kotlinx-serialization = "1.6.3"
+kotlinx-datetime = "0.5.0"
+kotlinx-collections-immutable = "0.3.7"
+kotlinx-coroutines = "1.8.0"
+
+
+
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -60,6 +67,13 @@ coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+
+
+
 
 
 [plugins]
@@ -73,3 +87,5 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 room = { id = "androidx.room", version.ref = "androidx-room" }
+
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
