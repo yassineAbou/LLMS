@@ -5,9 +5,13 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.kotlinxSerialization)
+    id("com.rickclephas.kmp.nativecoroutines") version "1.0.0-ALPHA-30"
 }
 
 kotlin {
+
+    task("testClasses")
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -30,6 +34,12 @@ kotlin {
     }
     
     sourceSets {
+
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+        }
+
         commonMain.dependencies {
 
             implementation(libs.androidx.data.store.core)
@@ -54,6 +64,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.core.coroutines)
             implementation(libs.koin.annotations)
+
+            api(libs.kmp.observableviewmodel.core)
 
         }
 
