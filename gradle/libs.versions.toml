@@ -11,7 +11,7 @@ androidx-espresso-core = "3.5.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 compose = "1.6.7"
-compose-plugin = "1.6.10-rc03"
+compose-plugin = "1.6.10"
 junit = "4.13.2"
 kmpObservableviewmodelCore = "1.0.0-BETA-2"
 kotlin = "1.9.24"
@@ -37,6 +37,8 @@ kotlinx-coroutines = "1.8.1"
 koin = "3.5.6"
 koin-ksp = "1.3.1"
 koin-compose = "1.1.5"
+
+kmpNativeCoroutines = "1.0.0-ALPHA-28"
 
 
 
@@ -114,3 +116,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
 
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+kmpNativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "kmpNativeCoroutines" }

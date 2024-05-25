@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.kotlinxSerialization)
-    id("com.rickclephas.kmp.nativecoroutines") version "1.0.0-ALPHA-30"
+    alias(libs.plugins.kmpNativeCoroutines)
 }
 
 kotlin {

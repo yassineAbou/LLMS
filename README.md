@@ -26,8 +26,8 @@ Discover the power of AI with our Kotlin Multiplatform app, where you can choose
 ⚠️ **Note:** New models provided by Horde AI will be added as they become available. This ensures that the app remains up-to-date with the latest advancements in AI technology.
 
 ### 📝 Text LLM Models
-- **Default Model:** Multiple models are selected. so, the first available model in the queue will generate the output.
--  **Selection:** Choose from a diverse range of  open-source text LLM models.
+- **Default Model:** The most advanced open source text model is chosen by default for generating text.
+-  **Selection:** Choose from a diverse range of  open-source text models.
 - **Customization:** Enhance your experience by setting the maximum token context (512 to 2048 tokens) and controlling the output length (from 16 to 128 tokens).
 
 ### 🖼️ Image Models
@@ -88,7 +88,17 @@ Here we will display the progress of the project. Check back often to see update
 
 <p align="center">
   <img src="https://imgur.com/zcTKG0w.jpg" alt="Kotlin Multiplatform" width="500">
-</p>
+
+
+## 📦 Shared Module Libraries
+
+- [Kotlinx Libraries](https://resources.jetbrains.com/storage/products/kotlinconf-2023/KotlinX%20Libraries.pdf):  provide support for serialization, date time, immutable collections and coroutines.
+- [KMP-ObservableViewModel](https://github.com/rickclephas/KMP-ObservableViewModel) : Library to use AndroidX/Kotlin ViewModels with SwiftUI.
+- [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) : Library to use Kotlin Coroutines from Swift code in KMP apps.
+- [Room](https://developer.android.com/kotlin/multiplatform/room) : Abstraction layer over SQLite.
+- [Datastore](https://developer.android.com/kotlin/multiplatform/datastore) : Key-value storage.
+- [Ktor](https://ktor.io/docs/client-create-multiplatform-application.html):  HTTP client for executing requests.
+- [Koin](https://insert-koin.io/): a dependency injection framework for Kotlin Multiplatform.
   
 ## 🤝 Contribution
 We welcome contributions to our project! Please follow these guidelines when submitting changes:  
