@@ -87,7 +87,7 @@ Here we will display the progress of the project. Check back often to see update
 -   **Android and Desktop**: Uses [Compose multiplatfrom](https://www.jetbrains.com/lp/compose-multiplatform/).
 
 <p align="center">
-  <img src="https://imgur.com/zcTKG0w.jpg" alt="Kotlin Multiplatform" width="500">
+  <img src="https://imgur.com/T3eukaV.jpg" alt="Kotlin Multiplatform" width="500">
 
 
 ## 📦 Shared Module Libraries
