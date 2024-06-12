@@ -8,26 +8,27 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ScreenB: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        VStack {
+        
+        VStack(alignment:.center, spacing: 16) {
+            
             Text("Screen B")
-            Button("Navigate Back") {
-                self.presentationMode.wrappedValue.dismiss()
+               .textStyle(MaterialTheme.Typography.headlineLarge)
+            Button("Navigate back") {
+                presentationMode.wrappedValue.dismiss()
             }
+           .foregroundColor(MaterialTheme.ColorScheme.primary)
+           .textStyle(MaterialTheme.Typography.bodyLarge)
+            
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationTitle("Screen B")
-        .navigationBarTitleDisplayMode(.inline)
-        .centered()
+       .frame(maxWidth:.infinity, maxHeight:.infinity)
+       .background(MaterialTheme.ColorScheme.surface)
+        
     }
 }
-
-
 
 #Preview {
     ScreenB()

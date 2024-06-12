@@ -10,20 +10,22 @@
 import SwiftUI
 
 struct ScreenA: View {
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                Text("Screen A")
-                NavigationLink(destination: ScreenB()) {
-                    Text("Navigate to Screen B")
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationTitle("Screen A")
-            .navigationBarTitleDisplayMode(.inline)
-            .centered()
+        
+        VStack(alignment:.center, spacing: 16) {
+            
+            Text("Screen A")
+               .textStyle(MaterialTheme.Typography.headlineLarge)
+            NavigationLink("Navigate to Screen B", destination: ScreenB())
+               .foregroundColor(MaterialTheme.ColorScheme.primary)
+               .textStyle(MaterialTheme.Typography.bodyLarge)
         }
+       .frame(maxWidth:.infinity, maxHeight:.infinity)
+       .background(MaterialTheme.ColorScheme.surface)
+        
     }
+    
 }
 
 #Preview {

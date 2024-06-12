@@ -43,11 +43,14 @@ fun ScreenA(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text("Screen A")
+            Text(
+                style = MaterialTheme.typography.headlineLarge,
+                text = "Screen A"
+            )
             Button(onClick = onButtonClick) {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = "Navigate to Screen B"
+                    text = "Navigate to Screen B",
                 )
             }
         }
