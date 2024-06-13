@@ -94,7 +94,7 @@ Here we will display the progress of the project. Check back often to see update
 
 - [Kotlinx Libraries](https://resources.jetbrains.com/storage/products/kotlinconf-2023/KotlinX%20Libraries.pdf):  provide support for serialization, date time, immutable collections and coroutines.
 - [KMP-ObservableViewModel](https://github.com/rickclephas/KMP-ObservableViewModel) : Library to use AndroidX/Kotlin ViewModels with SwiftUI.
-- [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) : Library to use Kotlin Coroutines from Swift code in KMP apps.
+- [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) : Library to use Kotlin Coroutines from Swift code in KMM apps.
 - [Room](https://developer.android.com/kotlin/multiplatform/room) : Abstraction layer over SQLite.
 - [Datastore](https://developer.android.com/kotlin/multiplatform/datastore) : Key-value storage.
 - [Ktor](https://ktor.io/docs/client-create-multiplatform-application.html):  HTTP client for executing requests.
