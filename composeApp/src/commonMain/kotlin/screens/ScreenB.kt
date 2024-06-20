@@ -29,7 +29,9 @@ class ScreenB : Screen {
 fun ScreenB(
     onButtonClick: () -> Unit
 ) {
-    Surface {
+    Surface(
+        color = MaterialTheme.colorScheme.surface
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

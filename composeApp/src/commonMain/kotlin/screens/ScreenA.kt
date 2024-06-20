@@ -37,7 +37,9 @@ fun Navigator.navigateToScreenB() {
 fun ScreenA(
     onButtonClick: () -> Unit
 ) {
-    Surface {
+    Surface(
+        color = MaterialTheme.colorScheme.surface
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
