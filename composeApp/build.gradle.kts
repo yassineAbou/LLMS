@@ -42,6 +42,8 @@ kotlin {
             implementation(libs.compose.material3.windowSizeClass)
 
             implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.bottom.sheet.navigator)
 
             implementation(libs.koin.compose)
         }
