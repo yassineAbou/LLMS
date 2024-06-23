@@ -13,11 +13,13 @@
 		521CF2E92C17CA850037A3BD /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 521CF2E82C17CA850037A3BD /* Roboto-Medium.ttf */; };
 		521CF2EB2C17CA970037A3BD /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 521CF2EA2C17CA970037A3BD /* Roboto.ttf */; };
 		521CF2F02C17D6D70037A3BD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521CF2EF2C17D6D70037A3BD /* Theme.swift */; };
+		52644BA02C27A262002D484B /* TextGenTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644B9F2C27A262002D484B /* TextGenTab.swift */; };
+		52644BA22C27A289002D484B /* ImageGenTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644BA12C27A289002D484B /* ImageGenTab.swift */; };
+		52644BA42C27A2A9002D484B /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644BA32C27A2A9002D484B /* ProfileTab.swift */; };
+		52644BA62C27A726002D484B /* BottomNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644BA52C27A726002D484B /* BottomNavigation.swift */; };
 		52B2B3272BFC19F5008BF0A2 /* KMPObservableViewModelCore in Frameworks */ = {isa = PBXBuildFile; productRef = 52B2B3262BFC19F5008BF0A2 /* KMPObservableViewModelCore */; };
 		52B2B3292BFC19F5008BF0A2 /* KMPObservableViewModelSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 52B2B3282BFC19F5008BF0A2 /* KMPObservableViewModelSwiftUI */; };
 		52B2B32B2BFC1A3E008BF0A2 /* KMPObservableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B2B32A2BFC1A3E008BF0A2 /* KMPObservableViewModel.swift */; };
-		52E9402A2BF5580000B6A697 /* ScreenA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E940292BF5580000B6A697 /* ScreenA.swift */; };
-		52E9402C2BF5585C00B6A697 /* ScreenB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E9402B2BF5585C00B6A697 /* ScreenB.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,9 +29,11 @@
 		521CF2E82C17CA850037A3BD /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		521CF2EA2C17CA970037A3BD /* Roboto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Roboto.ttf; sourceTree = "<group>"; };
 		521CF2EF2C17D6D70037A3BD /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		52644B9F2C27A262002D484B /* TextGenTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextGenTab.swift; sourceTree = "<group>"; };
+		52644BA12C27A289002D484B /* ImageGenTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGenTab.swift; sourceTree = "<group>"; };
+		52644BA32C27A2A9002D484B /* ProfileTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTab.swift; sourceTree = "<group>"; };
+		52644BA52C27A726002D484B /* BottomNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavigation.swift; sourceTree = "<group>"; };
 		52B2B32A2BFC1A3E008BF0A2 /* KMPObservableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMPObservableViewModel.swift; sourceTree = "<group>"; };
-		52E940292BF5580000B6A697 /* ScreenA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenA.swift; sourceTree = "<group>"; };
-		52E9402B2BF5585C00B6A697 /* ScreenB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenB.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* LLMS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LLMS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB3632DC29227652001CCB65 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -80,6 +84,16 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		52644B9E2C27A23B002D484B /* tabs */ = {
+			isa = PBXGroup;
+			children = (
+				52644B9F2C27A262002D484B /* TextGenTab.swift */,
+				52644BA12C27A289002D484B /* ImageGenTab.swift */,
+				52644BA32C27A2A9002D484B /* ProfileTab.swift */,
+			);
+			path = tabs;
+			sourceTree = "<group>";
+		};
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
@@ -102,14 +116,14 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				52644B9E2C27A23B002D484B /* tabs */,
 				521CF2EC2C17CCF90037A3BD /* Theme */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
-				52E940292BF5580000B6A697 /* ScreenA.swift */,
-				52E9402B2BF5585C00B6A697 /* ScreenB.swift */,
 				52B2B32A2BFC1A3E008BF0A2 /* KMPObservableViewModel.swift */,
+				52644BA52C27A726002D484B /* BottomNavigation.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -224,11 +238,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52644BA22C27A289002D484B /* ImageGenTab.swift in Sources */,
+				52644BA62C27A726002D484B /* BottomNavigation.swift in Sources */,
 				52B2B32B2BFC1A3E008BF0A2 /* KMPObservableViewModel.swift in Sources */,
-				52E9402A2BF5580000B6A697 /* ScreenA.swift in Sources */,
+				52644BA42C27A2A9002D484B /* ProfileTab.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
-				52E9402C2BF5585C00B6A697 /* ScreenB.swift in Sources */,
 				521CF2F02C17D6D70037A3BD /* Theme.swift in Sources */,
+				52644BA02C27A262002D484B /* TextGenTab.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
