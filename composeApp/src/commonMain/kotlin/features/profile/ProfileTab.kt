@@ -1,4 +1,4 @@
-package tabs
+package features.profile
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +39,7 @@ object ProfileTab : Tab {
 }
 
 @Composable
-fun ProfileContent() {
+private fun ProfileContent() {
     Surface(
         color = MaterialTheme.colorScheme.surface
     ) {

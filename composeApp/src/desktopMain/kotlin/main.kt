@@ -1,5 +1,6 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import app.App
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.linux
 import org.jetbrains.compose.resources.painterResource

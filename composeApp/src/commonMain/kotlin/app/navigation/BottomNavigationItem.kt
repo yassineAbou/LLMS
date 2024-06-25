@@ -1,3 +1,5 @@
+package app.navigation
+
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -10,11 +12,11 @@ import cafe.adriel.voyager.navigator.tab.Tab
 @Composable
 fun RowScope.TabNavigationItem(tab: Tab) {
 
-    val tabNavigator = LocalTabNavigator.current
+    val localBottomNavigator = LocalTabNavigator.current
 
     NavigationBarItem(
-        selected = tabNavigator.current == tab,
-        onClick = { tabNavigator.current = tab },
+        selected = localBottomNavigator.current == tab,
+        onClick = { localBottomNavigator.current = tab },
         icon = { tab.options.icon?.let { Icon(painter = it, contentDescription = null) } },
         label = { Text(tab.options.title) }
     )
