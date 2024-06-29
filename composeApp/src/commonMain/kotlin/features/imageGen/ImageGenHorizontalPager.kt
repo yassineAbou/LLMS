@@ -71,6 +71,8 @@ private fun ImageGenHorizontalPager() {
                 imageGenTabRows.forEachIndexed { index, currentTab ->
                     Tab(
                         selected = selectedTabIndex.value == index,
+                        selectedContentColor = MaterialTheme.colorScheme.primary,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(index)

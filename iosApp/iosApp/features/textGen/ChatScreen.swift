@@ -1,17 +1,17 @@
 //
-//  ImageGenTab.swift
+//  ChatScreen.swift
 //  iosApp
 //
-//  Created by Yassine Abou on 23/6/2024.
+//  Created by Yassine Abou on 28/6/2024.
 //  Copyright © 2024 orgName. All rights reserved.
 //
 
 import SwiftUI
 
-struct ImageGenTab: View {
+struct ChatScreen: View {
     var body: some View {
         ZStack {
-            Text("Image Gen Content")
+            Text("Chat")
                .textStyle(MaterialTheme.Typography.headlineLarge)
         }
        .frame(maxWidth:.infinity, maxHeight:.infinity)
@@ -20,5 +20,5 @@ struct ImageGenTab: View {
 }
 
 #Preview {
-    ImageGenTab()
+    ChatScreen()
 }

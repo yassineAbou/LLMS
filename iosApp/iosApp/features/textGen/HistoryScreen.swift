@@ -1,18 +1,17 @@
 //
-//  TextGenTab.swift
+//  HistoryScreen.swift
 //  iosApp
 //
-//  Created by Yassine Abou on 23/6/2024.
+//  Created by Yassine Abou on 28/6/2024.
 //  Copyright © 2024 orgName. All rights reserved.
 //
 
 import SwiftUI
 
-struct TextGenTab: View {
+struct HistoryScreen: View {
     var body: some View {
-        
         ZStack {
-            Text("Text Gen Content")
+            Text("History")
                .textStyle(MaterialTheme.Typography.headlineLarge)
         }
        .frame(maxWidth:.infinity, maxHeight:.infinity)
@@ -21,5 +20,5 @@ struct TextGenTab: View {
 }
 
 #Preview {
-    TextGenTab()
+    HistoryScreen()
 }
