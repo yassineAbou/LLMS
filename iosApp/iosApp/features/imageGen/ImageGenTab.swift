@@ -15,7 +15,8 @@ struct ImageGenTab: View {
 
     let tabs: [Tab] = [
        .init(selectedIcon: Image(systemName: "doc.plaintext.fill"), unselectedIcon: Image(systemName: "doc.plaintext"), title: "Txt2Img"),
-       .init(selectedIcon: Image(systemName: "photo.badge.plus.fill"), unselectedIcon: Image(systemName: "photo.badge.plus"), title: "Img2Img")
+       .init(selectedIcon: Image(systemName: "photo.badge.plus.fill"), unselectedIcon: Image(systemName: "photo.badge.plus"), title: "Img2Img"),
+       .init(selectedIcon: Image(systemName: "square.grid.2x2.fill"), unselectedIcon: Image(systemName: "square.grid.2x2"), title: "Images")
     ]
 
     var body: some View {
@@ -32,6 +33,8 @@ struct ImageGenTab: View {
                                .tag(0)
                             Img2ImgScreen()
                                .tag(1)
+                            GridImagesScreen()
+                               .tag(2)
                         })
                    .tabViewStyle(PageTabViewStyle(indexDisplayMode:.never))
             }

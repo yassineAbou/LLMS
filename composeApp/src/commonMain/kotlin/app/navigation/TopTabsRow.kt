@@ -4,9 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TextSnippet
 import androidx.compose.material.icons.automirrored.outlined.TextSnippet
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Sms
 import androidx.compose.material.icons.outlined.AddPhotoAlternate
+import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Sms
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,6 +22,7 @@ val textGenTabRows = listOf(
 
 val imageGenTabRows = listOf(
     TopTabsRow(title = "Txt2Img", selectedIcon = Icons.AutoMirrored.Filled.TextSnippet, unselectedIcon = Icons.AutoMirrored.Outlined.TextSnippet),
-    TopTabsRow("Img2Img", selectedIcon = Icons.Filled.AddPhotoAlternate, unselectedIcon = Icons.Outlined.AddPhotoAlternate)
+    TopTabsRow("Img2Img", selectedIcon = Icons.Filled.AddPhotoAlternate, unselectedIcon = Icons.Outlined.AddPhotoAlternate),
+    TopTabsRow("Images", selectedIcon = Icons.Filled.GridView, unselectedIcon = Icons.Outlined.GridView)
 )
 

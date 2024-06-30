@@ -13,6 +13,7 @@
 		521CF2E92C17CA850037A3BD /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 521CF2E82C17CA850037A3BD /* Roboto-Medium.ttf */; };
 		521CF2EB2C17CA970037A3BD /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 521CF2EA2C17CA970037A3BD /* Roboto.ttf */; };
 		521CF2F02C17D6D70037A3BD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521CF2EF2C17D6D70037A3BD /* Theme.swift */; };
+		52323E2D2C31D2D2001C9D87 /* GridImagesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52323E2C2C31D2D2001C9D87 /* GridImagesScreen.swift */; };
 		52644BA02C27A262002D484B /* TextGenTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644B9F2C27A262002D484B /* TextGenTab.swift */; };
 		52644BA22C27A289002D484B /* ImageGenTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644BA12C27A289002D484B /* ImageGenTab.swift */; };
 		52644BA42C27A2A9002D484B /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52644BA32C27A2A9002D484B /* ProfileTab.swift */; };
@@ -34,6 +35,7 @@
 		521CF2E82C17CA850037A3BD /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		521CF2EA2C17CA970037A3BD /* Roboto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Roboto.ttf; sourceTree = "<group>"; };
 		521CF2EF2C17D6D70037A3BD /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		52323E2C2C31D2D2001C9D87 /* GridImagesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridImagesScreen.swift; sourceTree = "<group>"; };
 		52644B9F2C27A262002D484B /* TextGenTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextGenTab.swift; sourceTree = "<group>"; };
 		52644BA12C27A289002D484B /* ImageGenTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGenTab.swift; sourceTree = "<group>"; };
 		52644BA32C27A2A9002D484B /* ProfileTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTab.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				52BE31D62C2F3E3D003AA012 /* Img2ImgScreen.swift */,
 				52644BA12C27A289002D484B /* ImageGenTab.swift */,
 				52BE31D42C2F3DA0003AA012 /* Txt2ImgScreen.swift */,
+				52323E2C2C31D2D2001C9D87 /* GridImagesScreen.swift */,
 			);
 			path = imageGen;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				52644BA42C27A2A9002D484B /* ProfileTab.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				521CF2F02C17D6D70037A3BD /* Theme.swift in Sources */,
+				52323E2D2C31D2D2001C9D87 /* GridImagesScreen.swift in Sources */,
 				52BE31D02C2F3CB6003AA012 /* ChatScreen.swift in Sources */,
 				52BE31D22C2F3D30003AA012 /* HistoryScreen.swift in Sources */,
 				52644BA02C27A262002D484B /* TextGenTab.swift in Sources */,
