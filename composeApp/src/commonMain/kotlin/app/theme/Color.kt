@@ -74,6 +74,9 @@ val surfaceContainerHighDark = Color(0xFF312822)
 val surfaceContainerHighestDark = Color(0xFF3C332C)
 
 
+val pink100 = Color(0xFFFF2476)
+
+
 
 
 

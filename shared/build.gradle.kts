@@ -46,10 +46,6 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
 
-            implementation(libs.coil)
-            implementation(libs.coil.network)
-            implementation(libs.coil.compose)
-
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.collections.immutable)
@@ -61,9 +57,11 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
 
+            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.koin.core.coroutines)
-            implementation(libs.koin.annotations)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
 
             api(libs.kmp.observableviewmodel.core)
 

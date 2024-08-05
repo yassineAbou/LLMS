@@ -28,9 +28,9 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import kotlinx.coroutines.launch
 
-
 object TextGenHorizontalPager : Tab {
     private fun readResolve(): Any = TextGenHorizontalPager
+
     override val options: TabOptions
         @Composable
         get() {
