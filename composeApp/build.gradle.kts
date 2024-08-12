@@ -56,17 +56,48 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(libs.compose.material3.windowSizeClass)
+
+            implementation(libs.navigation.compose)
+
+            implementation(libs.kotlinx.serialization)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.core.coroutines)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.coil.ktor.client.core)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.mp)
+            implementation(libs.coil.network.ktor)
+
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.bottom.sheet.navigator)
+
+
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
