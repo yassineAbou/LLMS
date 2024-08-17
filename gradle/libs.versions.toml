@@ -15,6 +15,7 @@ junit = "4.13.2"
 kotlin = "2.0.0"
 kotlinx-coroutines = "1.8.1"
 ktor = "2.3.12"
+landscapistCoil3 = "2.3.6"
 logback = "1.5.6"
 compose-material3-windowSizeClass = "0.5.0"
 navigationCompose = "2.7.0-alpha07"
@@ -26,9 +27,6 @@ kotlinx-collections-immutable = "0.3.7"
 koin-bom = "3.6.0-Beta4"
 koin-compose = "1.2.0-Beta4"
 
-coil3 = "3.0.0-alpha06"
-
-coil-ktor = "3.0.0-wasm2"
 
 voyager = "1.0.0"
 
@@ -47,6 +45,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+landscapist-coil3 = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landscapistCoil3" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
@@ -66,12 +65,6 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-core-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin-compose" }
-
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
-coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
-coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
-coil-ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "coil-ktor" }
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-bottom-sheet-navigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
