@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.app.navigation.textGenTabRows
+import org.yassineabou.playground.app.ui.navigation.textGenTabRows
 
 object TextGenHorizontalPager : Tab {
     private fun readResolve(): Any = TextGenHorizontalPager

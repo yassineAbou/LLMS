@@ -1,4 +1,4 @@
-package org.yassineabou.playground.app.navigation
+package org.yassineabou.playground.app.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TextSnippet

@@ -1,4 +1,4 @@
-package org.yassineabou.playground.app.navigation
+package org.yassineabou.playground.app.ui.navigation
 
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold

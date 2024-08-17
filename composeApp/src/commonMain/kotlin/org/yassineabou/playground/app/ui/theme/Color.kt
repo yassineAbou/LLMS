@@ -1,4 +1,4 @@
-package org.yassineabou.playground.app.theme
+package org.yassineabou.playground.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -65,7 +65,8 @@ import llms.composeapp.generated.resources.ic_user
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.yassineabou.playground.app.theme.pink100
+import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.ui.theme.pink100
 import org.yassineabou.playground.feature.imageGen.ImageGenHorizontalPager
 import org.yassineabou.playground.feature.profile.model.UserUiState
 import org.yassineabou.playground.feature.profile.ui.view.LoginBottomSheet
@@ -239,7 +240,7 @@ private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
              modifier = Modifier
                  .size(100.dp)
                  .clip(CircleShape),
-             imageModel = { userUiState.thumbnailUrl }, // loading a network image or local resource using an URL.
+             imageModel = { userUiState.thumbnailUrl },
              imageOptions = ImageOptions(
                  contentScale = ContentScale.Crop,
              )
@@ -373,7 +374,7 @@ private fun MenuList(
                         title = "Delete Account",
                         description = "Warning! this can not be undone",
                         icon = Icons.Filled.Person,
-                        iconTint = pink100, // TODO: Add custom colorTheme
+                        iconTint = MaterialTheme.colorSchemeCustom.alwaysPink,
                         onClick = onDeleteAccount
                     )
                 }

@@ -1,4 +1,4 @@
-package org.yassineabou.playground.app.theme
+package org.yassineabou.playground.app.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -6,6 +6,8 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -83,13 +85,22 @@ private val darkScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
+private val lightCustomColorScheme = CustomColorScheme(
+    alwaysPink = pink100
+)
+
+private val darkCustomColorScheme = CustomColorScheme(
+    alwaysPink = pink100
+)
+
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-
+    val customColorScheme = if (!darkTheme) lightCustomColorScheme else darkCustomColorScheme
     CompositionLocalProvider(
+        LocalCustomColorScheme provides customColorScheme
     ) {
         val colors = if (!darkTheme) lightScheme else darkScheme
         MaterialTheme(
@@ -99,3 +110,8 @@ fun AppTheme(
         )
     }
 }
+
+val MaterialTheme.colorSchemeCustom: CustomColorScheme
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalCustomColorScheme.current
