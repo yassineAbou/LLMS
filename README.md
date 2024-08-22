@@ -59,14 +59,22 @@ To interact with the models provided by Horde AI, the application utilizes the H
 -   **Chat with Llama 3-70B**: How would you use AI to help you be more creative every day?
 
 
-https://github.com/yassineAbou/LLMS/assets/72861602/14542392-5765-4e7d-88e2-72b2219e5f60
+
+
+https://github.com/user-attachments/assets/454ce90c-2f63-4482-ba25-a9c902c43dc5
+
+
 
 
 
 -   **Generate Image using AlbedoBase XL (SDXL)**: a dog takes a selfie in the forest, in the style of fisheye effects, somber mood, strong facial expression, tilt shif.
 
 
-https://github.com/yassineAbou/LLMS/assets/72861602/edfc27ab-aae7-49d7-993e-c42a2020e530
+
+
+https://github.com/user-attachments/assets/476cc53f-f2e4-4d74-b45d-ab62f2482ef7
+
+
 
 
 
