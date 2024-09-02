@@ -9,11 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun Text2ImageScreen() {
+fun CreateImageScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Text2Image", style = MaterialTheme.typography.headlineLarge)
+        Text(text = "Create", style = MaterialTheme.typography.headlineLarge)
     }
 }

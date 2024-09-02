@@ -4,10 +4,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TextSnippet
 import androidx.compose.material.icons.automirrored.outlined.TextSnippet
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.EmojiObjects
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Sms
 import androidx.compose.material.icons.outlined.AddPhotoAlternate
+import androidx.compose.material.icons.outlined.Brush
+import androidx.compose.material.icons.outlined.EmojiObjects
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Sms
@@ -21,7 +25,6 @@ val textGenTabRows = listOf(
 )
 
 val imageGenTabRows = listOf(
-    TopTabsRow(title = "Txt2Img", selectedIcon = Icons.AutoMirrored.Filled.TextSnippet, unselectedIcon = Icons.AutoMirrored.Outlined.TextSnippet),
-    TopTabsRow("Img2Img", selectedIcon = Icons.Filled.AddPhotoAlternate, unselectedIcon = Icons.Outlined.AddPhotoAlternate),
-    TopTabsRow("Images", selectedIcon = Icons.Filled.GridView, unselectedIcon = Icons.Outlined.GridView)
+    TopTabsRow(title = "Imagine", selectedIcon = Icons.Filled.Brush, unselectedIcon = Icons.Outlined.Brush),
+    TopTabsRow(" Generated Images", selectedIcon = Icons.Filled.GridView, unselectedIcon = Icons.Outlined.GridView)
 )

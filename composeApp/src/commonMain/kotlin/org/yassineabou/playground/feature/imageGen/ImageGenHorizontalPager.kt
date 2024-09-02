@@ -99,9 +99,8 @@ private fun ImageGenHorizontalPager() {
 fun ImageGenContent(pagerState: PagerState) {
     HorizontalPager(state = pagerState) { index ->
         when (index) {
-            0 -> Text2ImageScreen()
-            1 -> Image2ImageScreen()
-            2 -> GridImagesScreen()
+            0 -> CreateImageScreen()
+            1 -> GridImagesScreen()
         }
     }
 }
