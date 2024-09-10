@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,38 +20,13 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.ui.navigation.textGenTabRows
 
-object TextGenHorizontalPager : Tab {
-    private fun readResolve(): Any = TextGenHorizontalPager
-
-    override val options: TabOptions
-        @Composable
-        get() {
-            val title = "TextGen"
-            val icon = rememberVectorPainter(Icons.Filled.Description)
-
-            return remember {
-                TabOptions(
-                    index = 0u,
-                    title = title,
-                    icon = icon
-                )
-            }
-        }
-
-    @Composable
-    override fun Content() {
-        TextGenHorizontalPager()
-    }
-}
 
 @Composable
-private fun TextGenHorizontalPager() {
+fun TextGenHorizontalPager(navController: NavController) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { textGenTabRows.size })
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }

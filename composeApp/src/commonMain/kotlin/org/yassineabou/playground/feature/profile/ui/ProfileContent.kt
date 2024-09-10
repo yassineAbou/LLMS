@@ -2,6 +2,7 @@
 
 package org.yassineabou.playground.feature.profile.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,120 +38,68 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
+import androidx.navigation.NavController
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_github
 import llms.composeapp.generated.resources.ic_linkedIn
 import llms.composeapp.generated.resources.ic_logout
 import llms.composeapp.generated.resources.ic_play_store
 import llms.composeapp.generated.resources.ic_user
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.theme.pink100
-import org.yassineabou.playground.feature.imageGen.ImageGenHorizontalPager
 import org.yassineabou.playground.feature.profile.model.UserUiState
 import org.yassineabou.playground.feature.profile.ui.view.LoginBottomSheet
-import org.yassineabou.playground.feature.textGen.TextGenHorizontalPager
-
-object ProfileTab : Tab {
-    private fun readResolve(): Any = ProfileTab
-    override val options: TabOptions
-        @Composable
-        get() {
-            val title = "Profile"
-            val icon = rememberVectorPainter(Icons.Filled.Person)
-            return remember {
-                TabOptions(
-                    index = 2u,
-                    title = title,
-                    icon = icon
-                )
-            }
-        }
-
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinViewModel<ProfileViewModel>()
-        val userUiState by viewModel.userUiState.collectAsState()
-        val showBottomSheetState by viewModel.showBottomSheet.collectAsState()
-
-        ProfileContent(
-            userUiState = userUiState,
-            showBottomSheet = showBottomSheetState,
-            onLogin = { viewModel.onLogin() },
-            onLogout = { viewModel.onLogout() },
-            onAuthenticated = { viewModel.onAuthenticated() },
-            onDismissBottomSheet = { viewModel.onDismissBottomSheet() },
-            onGeneratedImages = { navigator.push(ImageGenHorizontalPager) },
-            onChatHistory = {
-                navigator.push(TextGenHorizontalPager)
-            },
-        )
-    }
-}
 
 @Composable
-private fun ProfileContent(
-    userUiState: UserUiState?,
-    showBottomSheet: Boolean,
-    onLogin: () -> Unit,
-    onLogout: () -> Unit,
-    onAuthenticated: () -> Unit,
-    onDismissBottomSheet: () -> Unit,
-    onGeneratedImages: () -> Unit,
-    onChatHistory: () -> Unit,
+fun ProfileContent(
+    profileViewModel: ProfileViewModel = koinViewModel(),
+    navController: NavController
 ) {
+    val userUiState by profileViewModel.userUiState.collectAsState()
+    val showBottomSheetState by profileViewModel.showBottomSheet.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.onBackground)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 50.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             UserProfileHeader(
                 userUiState = userUiState,
                 modifier = Modifier.statusBarsPadding(),
-                onLogin = onLogin,
-                onLogout = onLogout
+                onLogin = { profileViewModel.onLogin() },
+                onLogout = { profileViewModel.onLogout() }
 
             )
             MenuList(
                 loggedIn = userUiState != null,
                 modifier = Modifier.padding(top = 16.dp),
-                onGeneratedImages = onGeneratedImages,
-                onChatHistory = onChatHistory,
-                onDeleteAccount = onLogout
+                onGeneratedImages = { navController.navigate(Screen.ImageGen.route) },
+                onChatHistory = { navController.navigate(Screen.TextGen.route) },
+                onDeleteAccount = { profileViewModel.onLogout() }
             )
         }
 
-        if (showBottomSheet) {
+        if (showBottomSheetState) {
             LoginBottomSheet(
-                onDismissRequest = onDismissBottomSheet,
-                onAuthenticated = onAuthenticated
+                onDismissRequest =  { profileViewModel.onDismissBottomSheet() },
+                onAuthenticated = { profileViewModel.onAuthenticated()}
             )
         }
     }
@@ -235,15 +184,14 @@ private fun UserDetails(
 
 @Composable
 private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
-    if (userUiState?.thumbnailUrl != null) {
-         CoilImage(
+    if (userUiState?.thumbnailImage != null) {
+         Image(
+             painter = painterResource(userUiState.thumbnailImage),
+             contentDescription = "user thumbnail",
              modifier = Modifier
                  .size(100.dp)
                  .clip(CircleShape),
-             imageModel = { userUiState.thumbnailUrl },
-             imageOptions = ImageOptions(
-                 contentScale = ContentScale.Crop,
-             )
+             contentScale = ContentScale.Crop
          )
 
     } else {
