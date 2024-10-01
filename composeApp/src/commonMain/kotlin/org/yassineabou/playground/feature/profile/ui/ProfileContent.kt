@@ -1,4 +1,4 @@
-@file:OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package org.yassineabou.playground.feature.profile.ui
 
@@ -59,7 +59,6 @@ import llms.composeapp.generated.resources.ic_user
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.profile.model.UserUiState

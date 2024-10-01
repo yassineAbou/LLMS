@@ -5,7 +5,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 data class CustomColorScheme(
-    val alwaysPink: Color
+    val alwaysPink: Color,
+    val alwaysWhite: Color
 )
 
 val LocalCustomColorScheme: ProvidableCompositionLocal<CustomColorScheme> = staticCompositionLocalOf {

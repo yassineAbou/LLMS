@@ -1,5 +1,6 @@
 [versions]
 agp = "8.6.0"
+
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -10,25 +11,31 @@ androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.1"
 androidx-test-junit = "1.2.1"
-compose-plugin = "1.7.0-beta01"
 junit = "4.13.2"
-kotlin = "2.0.20"
-kotlinx-coroutines = "1.8.1"
-ktor = "2.3.12"
-logback = "1.5.6"
-compose-material3-windowSizeClass = "0.5.0"
-navigationCompose = "2.8.0-alpha09"
 
-kotlinx-serialization = "1.6.3"
+compose-plugin = "1.7.0-rc01"
+
+dragselect = "2.3.2"
+
+kotlin = "2.0.20"
+
+ktor = "2.3.12"
+
+logback = "1.5.6"
+
+compose-material3-windowSizeClass = "0.5.0"
+navigationCompose = "2.8.0-alpha10"
+
+kotlinx-coroutines = "1.8.1"
+kotlinx-serialization-json = "1.7.1"
 kotlinx-datetime = "0.6.0"
 kotlinx-collections-immutable = "0.3.7"
 
-koin-bom = "3.6.0-Beta4"
-koin-compose = "1.2.0-Beta4"
-
+koin-bom = "4.0.0"
 
 
 [libraries]
+dragselect = { module = "com.dragselectcompose:dragselect", version.ref = "dragselect" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -49,7 +56,7 @@ ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "k
 compose-material3-windowSizeClass = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "compose-material3-windowSizeClass" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -57,9 +64,8 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
-koin-core-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin-compose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel"}
 
 #android
 koin-android = { module = "io.insert-koin:koin-android" }

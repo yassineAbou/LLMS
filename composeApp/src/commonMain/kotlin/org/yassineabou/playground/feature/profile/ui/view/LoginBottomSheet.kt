@@ -30,6 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import org.yassineabou.playground.app.ui.view.BottomSheetButton
+import org.yassineabou.playground.app.ui.view.BottomSheetContent
+import org.yassineabou.playground.app.ui.view.PrivacyInfoSection
+import org.yassineabou.playground.app.ui.view.TermsOfServiceAndPrivacyPolicy
 
 @Composable
 fun LoginBottomSheet(

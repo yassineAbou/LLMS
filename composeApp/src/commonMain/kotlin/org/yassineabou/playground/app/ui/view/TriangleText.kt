@@ -1,0 +1,53 @@
+package org.yassineabou.playground.app.ui.view
+
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable
+fun PyramidText(text: String) {
+    val lines = text.split("\n")
+    val windowSizeClass = calculateWindowSizeClass()
+    val pyramidDepth = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> 2
+        WindowWidthSizeClass.Medium -> 3
+        WindowWidthSizeClass.Expanded -> 4
+        else -> 3
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        lines.forEachIndexed { index, line ->
+            val leftPadding = 16.dp * (pyramidDepth - index - 1)
+            Text(
+                text = line,
+                modifier = Modifier.padding(start = leftPadding),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+    }
+}
+
+
+
+
+

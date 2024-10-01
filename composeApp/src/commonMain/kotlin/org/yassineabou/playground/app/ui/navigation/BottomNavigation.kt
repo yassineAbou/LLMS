@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,13 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.launch
-import org.yassineabou.playground.feature.imageGen.FullScreenImage
-import org.yassineabou.playground.feature.imageGen.ImageGenHorizontalPager
+import androidx.navigation.navArgument
+import com.dragselectcompose.core.rememberDragSelectState
+import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
+import org.yassineabou.playground.feature.imageGen.ui.FullScreenImage
+import org.yassineabou.playground.feature.imageGen.ui.ImageGenHorizontalPager
+import org.yassineabou.playground.feature.imageGen.model.Photo
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
 import org.yassineabou.playground.feature.textGen.TextGenHorizontalPager
 
@@ -39,23 +44,20 @@ fun BottomNavigation() {
     val navController = rememberNavController()
     var isBottomBarVisible by rememberSaveable { (mutableStateOf(true)) }
     var isFullScreenImage by rememberSaveable { (mutableStateOf(true)) }
+    val dragSelectState = rememberDragSelectState<Photo>(compareSelector = { it.id })
+    val isSelectionMode = dragSelectState.inSelectionMode
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    LaunchedEffect(navBackStackEntry?.destination?.route) {
-        this.launch {
-            isFullScreenImage = when (navBackStackEntry?.destination?.route) {
-                Screen.FullScreenImage.route -> true
-                else -> false
-            }
-            isBottomBarVisible = when (navBackStackEntry?.destination?.route) {
-                Screen.FullScreenImage.route -> false
-                else -> true
-            }
-        }
+    LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
+        isFullScreenImage = navBackStackEntry?.destination?.route?.startsWith("FullScreenImage")?: false
+        isBottomBarVisible =!isFullScreenImage and !isSelectionMode
     }
 
+
+    SnackbarControllerProvider { host ->
         Scaffold(
             topBar = {},
+            snackbarHost = { SnackbarHost(hostState = host) },
             bottomBar = {
                 AnimatedVisibility(
                     visible = isBottomBarVisible,
@@ -70,13 +72,32 @@ fun BottomNavigation() {
             },
             content = { innerPadding ->
                 NavHost(navController, startDestination = Screen.TextGen.route, Modifier.padding(innerPadding)) {
-                    composable(Screen.TextGen.route) { TextGenHorizontalPager(navController) }
-                    composable(Screen.ImageGen.route) { ImageGenHorizontalPager(navController) }
-                    composable(Screen.Profile.route) { ProfileContent(navController = navController) }
-                    composable(Screen.FullScreenImage.route) { FullScreenImage(navController) }
+                    composable(Screen.TextGen.route) {
+                        TextGenHorizontalPager(navController)
+                    }
+                    composable(Screen.ImageGen.route) {
+                        ImageGenHorizontalPager(
+                            navController = navController,
+                            dragSelectState = dragSelectState
+                        )
+                    }
+                    composable(Screen.Profile.route) {
+                        ProfileContent(navController = navController)
+                    }
+                    composable(
+                        route = "FullScreenImage/{startIndex}",
+                        arguments = listOf(navArgument("startIndex") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val startIndex = backStackEntry.arguments?.getInt("startIndex") ?: 0
+                        FullScreenImage(
+                            navController = navController,
+                            startIndex = startIndex
+                        )
+                    }
                 }
             }
         )
+    }
 }
 
 data class BottomBarItem(
@@ -86,7 +107,7 @@ data class BottomBarItem(
 )
 
 @Composable
-fun BottomNavigationBar(
+private fun BottomNavigationBar(
     listBottomBarItems: List<BottomBarItem>,
     navController: NavController,
     modifier: Modifier = Modifier,

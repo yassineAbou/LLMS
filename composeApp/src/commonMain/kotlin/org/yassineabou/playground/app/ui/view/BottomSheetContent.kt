@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.profile.ui.view
+package org.yassineabou.playground.app.ui.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

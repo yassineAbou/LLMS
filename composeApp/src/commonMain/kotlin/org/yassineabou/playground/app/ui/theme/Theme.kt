@@ -86,11 +86,13 @@ private val darkScheme = darkColorScheme(
 )
 
 private val lightCustomColorScheme = CustomColorScheme(
-    alwaysPink = pink100
+    alwaysPink = pink100,
+    alwaysWhite = Color.White
 )
 
 private val darkCustomColorScheme = CustomColorScheme(
-    alwaysPink = pink100
+    alwaysPink = pink100,
+    alwaysWhite = Color.White
 )
 
 @Composable
