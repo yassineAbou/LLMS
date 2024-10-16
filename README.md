@@ -106,7 +106,7 @@ Our development process is divided into three key steps:
 - **backend**: The backend is developed using [Ktor framework](https://ktor.io/).
 
 <p align="center">
-  <img src="https://kotlinlang.org/docs/images/multiplatform-compose.svg" alt="Kotlin Multiplatform" width="500">
+  <img src="https://miro.medium.com/v2/resize:fit:2552/1*0MUE4D4nlEITAUyOTZ1zcg.png" alt="Kotlin Multiplatform" width="250">
 </p>
 
 
