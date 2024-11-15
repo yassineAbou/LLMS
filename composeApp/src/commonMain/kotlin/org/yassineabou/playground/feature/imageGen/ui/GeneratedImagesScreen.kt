@@ -3,7 +3,6 @@
 
 package org.yassineabou.playground.feature.imageGen.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,18 +25,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dragselectcompose.core.DragSelectState
 import com.dragselectcompose.grid.LazyDragSelectVerticalGrid
+import com.dragselectcompose.grid.indicator.IndicatorIconDefaults
 import com.dragselectcompose.grid.indicator.SelectedIcon
 import com.dragselectcompose.grid.indicator.UnselectedIcon
-import org.jetbrains.compose.resources.painterResource
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.feature.imageGen.model.Photo
+import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.feature.imageGen.model.UrlExample
 
 @Composable
 fun GridImagesScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel = koinViewModel(),
-    dragSelectState: DragSelectState<Photo>
+    dragSelectState: DragSelectState<UrlExample>
 ) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
     val selectedPhotos = dragSelectState.selected
@@ -62,20 +64,28 @@ fun GridImagesScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            items { photo ->
-                val isSelected = photo in selectedPhotos
-                val selectedModifier = if (isSelected) Modifier.background(MaterialTheme.colorScheme.outline).padding(4.dp) else Modifier
+            items { image ->
+                val isSelected = image in selectedPhotos
+                val selectedModifier = if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray).padding(4.dp) else Modifier
                 SelectableItem(
                     modifier = selectedModifier,
-                    item = photo,
-                    selectedIcon = { SelectedIcon(Modifier.align(Alignment.TopStart)) },
+                    item = image,
+                    selectedIcon = {
+                        SelectedIcon(
+                             options = IndicatorIconDefaults.selectedIconOptions(
+                             tint = MaterialTheme.colorSchemeCustom.alwaysBlue,
+                             backgroundColor = MaterialTheme.colorSchemeCustom.alwaysWhite
+                             ),
+                             modifier = Modifier.align(Alignment.TopStart)
+                        )
+                    },
                     unselectedIcon = { UnselectedIcon(Modifier.align(Alignment.TopStart)) }
                 ) {
-                      PhotoItem(
-                          photo = photo,
+                      ImageItem(
+                          image = image,
                           isInSelectionMode = inSelectionMode,
                           onClick = {
-                                  navController.navigate("${Screen.FullScreenImage.route}/${photo.id}")
+                                  navController.navigate("${Screen.FullScreenImage.route}/${image.id}")
                           },
                       )
                 }
@@ -85,13 +95,13 @@ fun GridImagesScreen(
 }
 
 @Composable
-fun PhotoItem(
-    photo: Photo,
+fun ImageItem(
+    image: UrlExample,
     isInSelectionMode: Boolean,
     onClick: () -> Unit
 ) {
-    Image(
-        painter = painterResource(photo.drawable),
+    KamelImage(
+        resource = { asyncPainterResource(data = image.url)},
         contentScale = ContentScale.FillBounds,
         contentDescription = null,
         modifier = Modifier

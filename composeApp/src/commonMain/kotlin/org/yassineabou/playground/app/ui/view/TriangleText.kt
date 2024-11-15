@@ -1,6 +1,7 @@
 package org.yassineabou.playground.app.ui.view
 
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +19,12 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun PyramidText(text: String) {
+fun PyramidText(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyLarge
+) {
     val lines = text.split("\n")
     val windowSizeClass = calculateWindowSizeClass()
     val pyramidDepth = when (windowSizeClass.widthSizeClass) {
@@ -28,21 +34,23 @@ fun PyramidText(text: String) {
         else -> 3
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        lines.forEachIndexed { index, line ->
-            val leftPadding = 16.dp * (pyramidDepth - index - 1)
-            Text(
-                text = line,
-                modifier = Modifier.padding(start = leftPadding),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+    Box(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            lines.forEachIndexed { index, line ->
+                val leftPadding = 16.dp * (pyramidDepth - index - 1)
+                Text(
+                    text = line,
+                    modifier = Modifier.padding(start = leftPadding),
+                    textAlign = TextAlign.Center,
+                    style = style,
+                    color = color
+                )
+            }
         }
     }
 }

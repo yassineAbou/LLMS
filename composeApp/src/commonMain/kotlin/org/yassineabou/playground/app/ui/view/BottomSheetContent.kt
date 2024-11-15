@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottomSheetContent(
-    title: String? = null,
+    title: (@Composable ColumnScope.() -> Unit)? = null,
     body: (@Composable ColumnScope.() -> Unit)? = null,
     actionContent: @Composable (ColumnScope.() -> Unit)? = null,
     footerContent: @Composable (ColumnScope.() -> Unit)? = null,
@@ -34,9 +34,7 @@ fun BottomSheetContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (title != null) {
-            BottomSheetTitle(text = title)
-        }
+        title?.invoke(this)
         body?.invoke(this)
         Box(
             modifier = Modifier.fillMaxWidth()

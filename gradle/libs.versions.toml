@@ -1,33 +1,34 @@
 [versions]
-agp = "8.6.0"
+agp = "8.6.1"
 
 android-compileSdk = "34"
-android-minSdk = "24"
+android-minSdk = "28"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.2"
-androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.1.4"
-androidx-core-ktx = "1.13.1"
+androidx-activityCompose = "1.9.3"
+androidx-appcompat = "1.7.1"
+androidx-constraintlayout = "2.2.0"
+androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.8.1"
+androidx-lifecycle = "2.8.3"
 androidx-test-junit = "1.2.1"
 junit = "4.13.2"
 
-compose-plugin = "1.7.0-rc01"
+compose-plugin = "1.7.0"
 
 dragselect = "2.3.2"
 
-kotlin = "2.0.20"
+kamelImageDefault = "1.0.1"
+kotlin = "2.0.21"
 
-ktor = "2.3.12"
+ktor = "3.0.0"
 
 logback = "1.5.6"
 
 compose-material3-windowSizeClass = "0.5.0"
 navigationCompose = "2.8.0-alpha10"
 
-kotlinx-coroutines = "1.8.1"
-kotlinx-serialization-json = "1.7.1"
+kotlinx-coroutines = "1.9.0"
+kotlinx-serialization-json = "1.7.3"
 kotlinx-datetime = "0.6.0"
 kotlinx-collections-immutable = "0.3.7"
 
@@ -36,6 +37,7 @@ koin-bom = "4.0.0"
 
 [libraries]
 dragselect = { module = "com.dragselectcompose:dragselect", version.ref = "dragselect" }
+kamel-image-default = { module = "media.kamel:kamel-image-default", version.ref = "kamelImageDefault" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -69,7 +71,6 @@ koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel"}
 
 #android
 koin-android = { module = "io.insert-koin:koin-android" }
-
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

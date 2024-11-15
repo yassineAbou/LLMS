@@ -1,6 +1,5 @@
 package org.yassineabou.playground.feature.imageGen.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,17 +39,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.util.PlatformConfig
 import org.yassineabou.playground.app.ui.util.isDesktop
 import org.yassineabou.playground.app.ui.view.BottomSheetContent
 import org.yassineabou.playground.app.ui.view.PyramidText
 import org.yassineabou.playground.app.ui.view.SnackbarController
-import org.yassineabou.playground.feature.imageGen.model.randomSizedPhotos
+import org.yassineabou.playground.feature.imageGen.model.UrlExample
+import org.yassineabou.playground.feature.imageGen.view.FullScreenTopBar
 
 
 @Composable
@@ -72,11 +73,18 @@ fun FullScreenImage(
             modifier = Modifier
             .padding(4.dp)
             .align(Alignment.Start),
-            onBackPress = { navController.popBackStack() }
+            onBackPress = {
+                navController.navigate(Screen.ImageGen.route) {
+                    popUpTo(Screen.ImageGen.route) {
+                        inclusive = true
+                    }
+                }
+            }
         )
 
         ImagePager(
             pagerState = pagerState,
+            listGenerated = listGeneratedPhotos,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -102,21 +110,9 @@ fun FullScreenImage(
 }
 
 @Composable
-private fun FullScreenTopBar(modifier: Modifier = Modifier, onBackPress: () -> Unit) {
-    IconButton(
-        onClick = onBackPress,
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
-            contentDescription = "ArrowBackIos"
-        )
-    }
-}
-
-@Composable
 private fun ImagePager(
     pagerState: PagerState,
+    listGenerated: List<UrlExample>,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -129,9 +125,9 @@ private fun ImagePager(
                 .fillMaxWidth()
                 .align(Alignment.Center)
         ) { page ->
-            val photo = randomSizedPhotos[page]
+            val image = listGenerated[page]
             ImageReview(
-                imageRes = photo.drawable,
+                url = image.url,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -158,9 +154,9 @@ private fun ImagePager(
 }
 
 @Composable
-private fun ImageReview(modifier: Modifier = Modifier, imageRes: DrawableResource) {
-    Image(
-        painter = painterResource(imageRes),
+private fun ImageReview(modifier: Modifier = Modifier, url: String) {
+    KamelImage(
+        resource = { asyncPainterResource(data = url)},
         contentDescription = "Wallpaper",
         contentScale = ContentScale.FillBounds,
         modifier = modifier

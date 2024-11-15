@@ -88,6 +88,8 @@ kotlin {
 
             implementation(libs.dragselect)
 
+            implementation(libs.kamel.image.default)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.ui.view.BottomSheetButton
 import org.yassineabou.playground.app.ui.view.BottomSheetContent
+import org.yassineabou.playground.app.ui.view.BottomSheetTitle
 import org.yassineabou.playground.app.ui.view.PrivacyInfoSection
 import org.yassineabou.playground.app.ui.view.TermsOfServiceAndPrivacyPolicy
 
@@ -51,10 +52,14 @@ fun LoginBottomSheet(
             visible = !showWhyLoginContent
         ) {
             BottomSheetContent(
-                title = """
+                title = {
+                    BottomSheetTitle(
+                        """
                     Please login
                     to continue
-                     """.trimIndent(),
+                     """.trimIndent()
+                    )
+                },
                 actionContent = {
                     BottomSheetButton(
                         text = "Login with Google",

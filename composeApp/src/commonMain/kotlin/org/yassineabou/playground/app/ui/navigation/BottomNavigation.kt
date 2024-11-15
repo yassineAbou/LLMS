@@ -32,9 +32,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dragselectcompose.core.rememberDragSelectState
 import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
+import org.yassineabou.playground.feature.imageGen.model.UrlExample
 import org.yassineabou.playground.feature.imageGen.ui.FullScreenImage
 import org.yassineabou.playground.feature.imageGen.ui.ImageGenHorizontalPager
-import org.yassineabou.playground.feature.imageGen.model.Photo
+import org.yassineabou.playground.feature.imageGen.ui.ImageProcessingScreen
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
 import org.yassineabou.playground.feature.textGen.TextGenHorizontalPager
 
@@ -44,12 +45,18 @@ fun BottomNavigation() {
     val navController = rememberNavController()
     var isBottomBarVisible by rememberSaveable { (mutableStateOf(true)) }
     var isFullScreenImage by rememberSaveable { (mutableStateOf(true)) }
-    val dragSelectState = rememberDragSelectState<Photo>(compareSelector = { it.id })
+    val dragSelectState = rememberDragSelectState<UrlExample>(compareSelector = { it.id })
     val isSelectionMode = dragSelectState.inSelectionMode
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
-        isFullScreenImage = navBackStackEntry?.destination?.route?.startsWith("FullScreenImage")?: false
+
+        val routeToCheck = listOf(Screen.FullScreenImage.route, Screen.ImageProcessingScreen.route)
+
+        isFullScreenImage = navBackStackEntry?.destination?.route?.let {currentRoute ->
+            routeToCheck.any { currentRoute.startsWith(it) }
+        } ?: false
+
         isBottomBarVisible =!isFullScreenImage and !isSelectionMode
     }
 
@@ -93,6 +100,11 @@ fun BottomNavigation() {
                             navController = navController,
                             startIndex = startIndex
                         )
+                    }
+                    composable(
+                        route = Screen.ImageProcessingScreen.route,
+                    ) {
+                        ImageProcessingScreen(navController = navController)
                     }
                 }
             }

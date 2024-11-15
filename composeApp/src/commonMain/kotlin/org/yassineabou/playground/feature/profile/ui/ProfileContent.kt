@@ -2,7 +2,6 @@
 
 package org.yassineabou.playground.feature.profile.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,20 +42,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_github
 import llms.composeapp.generated.resources.ic_linkedIn
 import llms.composeapp.generated.resources.ic_logout
 import llms.composeapp.generated.resources.ic_play_store
 import llms.composeapp.generated.resources.ic_user
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
@@ -183,16 +182,14 @@ private fun UserDetails(
 
 @Composable
 private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
-    if (userUiState?.thumbnailImage != null) {
-         Image(
-             painter = painterResource(userUiState.thumbnailImage),
+    if (userUiState?.thumbnailUrl != null) {
+        KamelImage(
+             resource = { asyncPainterResource(data = userUiState.thumbnailUrl) },
              contentDescription = "user thumbnail",
              modifier = Modifier
                  .size(100.dp)
                  .clip(CircleShape),
-             contentScale = ContentScale.Crop
          )
-
     } else {
         Icon(
             imageVector = vectorResource(Res.drawable.ic_user),

@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.imageGen.ui
+package org.yassineabou.playground.feature.imageGen.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -45,15 +45,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.imageGenTabRows
-import org.yassineabou.playground.feature.imageGen.CreateImageScreen
-import org.yassineabou.playground.feature.imageGen.model.Photo
+import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.feature.imageGen.model.UrlExample
 
 
 @Composable
 fun ImageGenHorizontalPager(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel = koinViewModel(),
-    dragSelectState: DragSelectState<Photo> = rememberDragSelectState(compareSelector = { it.id })
+    dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id })
 ) {
     val scope = rememberCoroutineScope()
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
@@ -140,7 +140,7 @@ fun CloseButton(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.secondary,
+        color = MaterialTheme.colorSchemeCustom.alwaysBlue,
         shadowElevation = 4.dp,
         modifier = Modifier
             .padding(12.dp)
@@ -153,11 +153,13 @@ fun CloseButton(
             Icon(
                 modifier = Modifier.size(30.dp),
                 imageVector = Icons.Filled.Close,
+                tint = MaterialTheme.colorSchemeCustom.alwaysWhite,
                 contentDescription = "Close"
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = if (selectedPhotoCount > 0) "$selectedPhotoCount" else "  ",
+                color = MaterialTheme.colorSchemeCustom.alwaysWhite,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(end = 8.dp)
             )
@@ -228,11 +230,11 @@ private fun ActionButtonsRow(
 private fun ImageGenContent(
     pagerState: PagerState,
     navController: NavController,
-    dragSelectState: DragSelectState<Photo>
+    dragSelectState: DragSelectState<UrlExample>
 ) {
     HorizontalPager(state = pagerState) { index ->
         when (index) {
-            0 -> CreateImageScreen()
+            0 -> CreateImageScreen(navController = navController)
             1 -> {
                 GridImagesScreen(
                     navController= navController,

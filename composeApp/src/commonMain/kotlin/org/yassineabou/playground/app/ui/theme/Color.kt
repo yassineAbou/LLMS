@@ -76,3 +76,4 @@ val surfaceContainerHighestDark = Color(0xFF3C332C)
 
 
 val pink100 = Color(0xFFFF2476)
+val blue100 = Color(0xFF4068df)
