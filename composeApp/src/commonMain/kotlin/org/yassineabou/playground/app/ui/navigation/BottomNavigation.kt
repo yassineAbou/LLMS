@@ -5,7 +5,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -32,12 +32,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dragselectcompose.core.rememberDragSelectState
 import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
-import org.yassineabou.playground.feature.imageGen.model.UrlExample
-import org.yassineabou.playground.feature.imageGen.ui.FullScreenImage
-import org.yassineabou.playground.feature.imageGen.ui.ImageGenHorizontalPager
-import org.yassineabou.playground.feature.imageGen.ui.ImageProcessingScreen
+import org.yassineabou.playground.feature.Imagine.model.UrlExample
+import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
+import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
+import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
+import org.yassineabou.playground.feature.Imagine.ui.ImagineScreen
+import org.yassineabou.playground.feature.chat.ui.ChatScreen
+import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
+import org.yassineabou.playground.feature.chat.ui.history.SearchHistoryScreen
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
-import org.yassineabou.playground.feature.textGen.TextGenHorizontalPager
 
 
 @Composable
@@ -51,7 +54,7 @@ fun BottomNavigation() {
 
     LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
 
-        val routeToCheck = listOf(Screen.FullScreenImage.route, Screen.ImageProcessingScreen.route)
+        val routeToCheck = listOf(Screen.FullScreenImage.route, Screen.ImageProcessingScreen.route, Screen.ChatHistoryScreen.route, Screen.GeneratedImagesScreen.route, Screen.SearchHistoryScreen.route)
 
         isFullScreenImage = navBackStackEntry?.destination?.route?.let {currentRoute ->
             routeToCheck.any { currentRoute.startsWith(it) }
@@ -78,18 +81,27 @@ fun BottomNavigation() {
                 }
             },
             content = { innerPadding ->
-                NavHost(navController, startDestination = Screen.TextGen.route, Modifier.padding(innerPadding)) {
-                    composable(Screen.TextGen.route) {
-                        TextGenHorizontalPager(navController)
+                NavHost(navController, startDestination = Screen.ChatScreen.route, Modifier.padding(innerPadding)) {
+                    composable(Screen.ChatScreen.route) {
+                        ChatScreen(navController)
                     }
-                    composable(Screen.ImageGen.route) {
-                        ImageGenHorizontalPager(
-                            navController = navController,
-                            dragSelectState = dragSelectState
-                        )
+                    composable(
+                        route = Screen.ChatHistoryScreen.route
+                    ) {
+                        ChatHistoryScreen(navController = navController)
                     }
-                    composable(Screen.Profile.route) {
-                        ProfileContent(navController = navController)
+                    composable(
+                        route = Screen.SearchHistoryScreen.route
+                    ) {
+                        SearchHistoryScreen(navController = navController)
+                    }
+                    composable(Screen.ImagineScreen.route) {
+                        ImagineScreen(navController = navController)
+                    }
+                    composable(
+                        route = Screen.ImageProcessingScreen.route,
+                    ) {
+                        ImageProcessingScreen(navController = navController)
                     }
                     composable(
                         route = "FullScreenImage/{startIndex}",
@@ -102,9 +114,14 @@ fun BottomNavigation() {
                         )
                     }
                     composable(
-                        route = Screen.ImageProcessingScreen.route,
+                        route = Screen.GeneratedImagesScreen.route
                     ) {
-                        ImageProcessingScreen(navController = navController)
+                        GeneratedImagesScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(Screen.Profile.route) {
+                        ProfileContent(navController = navController)
                     }
                 }
             }
@@ -159,13 +176,13 @@ private fun BottomNavigationBar(
 
 val listBottomBarItems = listOf(
     BottomBarItem(
-        name = "TextGen",
-        route = Screen.TextGen.route,
-        icon = Icons.Default.Description,
+        name = "Chat",
+        route = Screen.ChatScreen.route,
+        icon = Icons.AutoMirrored.Filled.Chat,
     ),
     BottomBarItem(
-        name = "ImageGen",
-        route = Screen.ImageGen.route,
+        name = "Imagine",
+        route = Screen.ImagineScreen.route,
         icon = Icons.Default.Image,
     ),
     BottomBarItem(

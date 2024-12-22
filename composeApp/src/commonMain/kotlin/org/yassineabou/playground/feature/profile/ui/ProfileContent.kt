@@ -88,8 +88,8 @@ fun ProfileContent(
             MenuList(
                 loggedIn = userUiState != null,
                 modifier = Modifier.padding(top = 16.dp),
-                onGeneratedImages = { navController.navigate(Screen.ImageGen.route) },
-                onChatHistory = { navController.navigate(Screen.TextGen.route) },
+                onGeneratedImages = { navController.navigate(Screen.GeneratedImagesScreen.route) },
+                onChatHistory = { navController.navigate(Screen.ChatHistoryScreen.route) },
                 onDeleteAccount = { profileViewModel.onLogout() }
             )
         }

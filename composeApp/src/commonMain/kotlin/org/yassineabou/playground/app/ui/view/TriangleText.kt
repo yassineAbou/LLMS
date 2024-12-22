@@ -26,6 +26,7 @@ fun PyramidText(
     style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyLarge
 ) {
     val lines = text.split("\n")
+
     val windowSizeClass = calculateWindowSizeClass()
     val pyramidDepth = when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> 2
@@ -33,6 +34,7 @@ fun PyramidText(
         WindowWidthSizeClass.Expanded -> 4
         else -> 3
     }
+
 
     Box(modifier = modifier) {
         Column(
