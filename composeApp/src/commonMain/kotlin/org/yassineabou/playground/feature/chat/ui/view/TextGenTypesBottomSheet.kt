@@ -61,6 +61,7 @@ fun TextGenTypesBottomSheet(
     onAuthenticated: () -> Unit
 ) {
     val tempSelectedTextModel by textGenViewModel.tempSelectedTextModel.collectAsState()
+    val selectedTextModel by textGenViewModel.selectedTextModel.collectAsState()
     var isInfoIconClicked by remember { mutableStateOf(false) }
     var infoTextModel by remember { mutableStateOf(tempSelectedTextModel) }
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -83,9 +84,12 @@ fun TextGenTypesBottomSheet(
                 title = {
                     GenTypesButtons(
                         onDismissRequest = onDismissRequest,
-                        onAuthenticated = {
+                        onDone = {
                             onAuthenticated()
                             textGenViewModel.confirmSelectedTextModel()
+                            if (tempSelectedTextModel.title != selectedTextModel.title) {
+                                textGenViewModel.startNewChat()
+                            }
                         }
                     )
                 },

@@ -34,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun SearchHistoryScreen(navController: NavController) {
+fun SearchHistoryScreen(
+    navController: NavController
+) {
     var searchQuery by remember { mutableStateOf("") }
     val focusRequest = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current

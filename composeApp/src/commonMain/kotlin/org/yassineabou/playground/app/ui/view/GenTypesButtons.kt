@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 
 @Composable
-fun GenTypesButtons(onDismissRequest: () -> Unit, onAuthenticated: () -> Unit) {
+fun GenTypesButtons(onDismissRequest: () -> Unit, onDone: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -30,7 +30,7 @@ fun GenTypesButtons(onDismissRequest: () -> Unit, onAuthenticated: () -> Unit) {
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorSchemeCustom.alwaysBlue),
             modifier = Modifier
                 .align(Alignment.CenterEnd),
-            onClick = onAuthenticated
+            onClick = onDone
         ) {
             Text(
                 color = MaterialTheme.colorSchemeCustom.alwaysWhite,

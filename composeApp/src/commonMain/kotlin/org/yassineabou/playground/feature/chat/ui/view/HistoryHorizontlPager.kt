@@ -18,6 +18,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.feature.chat.model.historyTabRows
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -27,7 +28,8 @@ import org.yassineabou.playground.feature.chat.ui.history.SavedChatHistoryConten
 @Composable
 fun HistoryHorizontalPager(
     modifier: Modifier = Modifier,
-    chatViewModel: ChatViewModel
+    chatViewModel: ChatViewModel,
+    navController: NavController
 ) {
     val pagerState = rememberPagerState(pageCount = { 2 })
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
@@ -46,11 +48,13 @@ fun HistoryHorizontalPager(
                     pagerState = pagerState
                 )
 
-                AIProvidersFilterMenu(chatViewModel = chatViewModel)
+                AIProvidersFilterMenu(chatViewModel)
             }
 
             HistoryPagerContent(
                 pagerState = pagerState,
+                chatViewModel = chatViewModel,
+                navController = navController
             )
         }
 
@@ -90,12 +94,14 @@ private fun HistoryTabRows(
 
 @Composable
 fun HistoryPagerContent(
-    pagerState: PagerState
+    pagerState: PagerState,
+    chatViewModel: ChatViewModel,
+    navController: NavController
 ) {
     HorizontalPager(state = pagerState) { index ->
         when (index) {
-            0 -> RecentChatHistoryContent()
-            1 -> SavedChatHistoryContent()
+            0 -> RecentChatHistoryContent(chatViewModel = chatViewModel, navController = navController)
+            1 -> SavedChatHistoryContent(chatViewModel = chatViewModel, navController = navController)
         }
     }
 }

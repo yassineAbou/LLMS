@@ -3,6 +3,7 @@ package org.yassineabou.playground.feature.chat.ui.view
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,7 +45,8 @@ import org.yassineabou.playground.feature.chat.model.ChatHistory
 fun ChatHistoryListView(
     historyConversationList: List<ChatHistory>,
     removeHistoryConversation: (ChatHistory) -> Unit,
-    toggleBookmark: (ChatHistory) -> Unit
+    toggleBookmark: (ChatHistory) -> Unit,
+    onClick: (ChatHistory) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +59,8 @@ fun ChatHistoryListView(
             ChatHistoryCard(
                 conversation = conversationItem,
                 removeHistoryConversation = { removeHistoryConversation(it) },
-                toggleBookmark = { toggleBookmark(it) }
+                toggleBookmark = { toggleBookmark(it) },
+                onClick = { onClick(it) }
             )
         }
     }
@@ -67,11 +70,13 @@ fun ChatHistoryListView(
 fun ChatHistoryCard(
     conversation: ChatHistory,
     removeHistoryConversation: (ChatHistory) -> Unit,
-    toggleBookmark: (ChatHistory) -> Unit
+    toggleBookmark: (ChatHistory) -> Unit,
+    onClick: (ChatHistory) -> Unit
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick(conversation) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

@@ -10,6 +10,7 @@ data class CustomColorScheme(
     val alwaysBlue: Color,
     val alwaysBlack: Color,
     val alwaysGray: Color,
+    val askAnythingBgColor: Color
 )
 
 val LocalCustomColorScheme: ProvidableCompositionLocal<CustomColorScheme> = staticCompositionLocalOf {

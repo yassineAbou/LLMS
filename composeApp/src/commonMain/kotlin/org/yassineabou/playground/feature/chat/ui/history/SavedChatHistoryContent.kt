@@ -3,22 +3,24 @@ package org.yassineabou.playground.feature.chat.ui.history
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import org.koin.compose.viewmodel.koinViewModel
+import androidx.navigation.NavController
+import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.feature.Imagine.view.ContentStateAnimator
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatHistoryListView
 
 @Composable
 fun SavedChatHistoryContent(
-    chatViewModel: ChatViewModel = koinViewModel()
+    chatViewModel: ChatViewModel,
+    navController: NavController
 ) {
-    val chatHistoryList = chatViewModel.savedChatHistoryList
+    val savedChatHistoryList = chatViewModel.savedChatHistoryList
     val selectedAIProviders = chatViewModel.selectedAIProviders.collectAsState()
 
     Surface {
         ContentStateAnimator(
             contentType = "Saved Chats History",
-            contentList = chatHistoryList.filter { conversation ->
+            contentList = savedChatHistoryList.filter { conversation ->
                 selectedAIProviders.value[conversation.aiProvider.name] == true
             },
             contentComposable = { list ->
@@ -28,7 +30,11 @@ fun SavedChatHistoryContent(
                         chatViewModel.deleteChatHistory(it)
                         chatViewModel.toggleBookmark(it)
                     },
-                    toggleBookmark = { chatViewModel.toggleBookmark(it) }
+                    toggleBookmark = { chatViewModel.toggleBookmark(it) },
+                    onClick = { chatHistory ->
+                        chatViewModel.loadChatMessages(chatHistory)
+                        navController.navigate(Screen.ChatScreen.route)
+                    }
                 )
             }
         )

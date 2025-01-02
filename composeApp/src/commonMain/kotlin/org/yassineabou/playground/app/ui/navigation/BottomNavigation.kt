@@ -31,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dragselectcompose.core.rememberDragSelectState
+import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
@@ -38,6 +39,7 @@ import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImagineScreen
 import org.yassineabou.playground.feature.chat.ui.ChatScreen
+import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
 import org.yassineabou.playground.feature.chat.ui.history.SearchHistoryScreen
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
@@ -51,6 +53,7 @@ fun BottomNavigation() {
     val dragSelectState = rememberDragSelectState<UrlExample>(compareSelector = { it.id })
     val isSelectionMode = dragSelectState.inSelectionMode
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val chatViewModel = koinViewModel<ChatViewModel>()
 
     LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
 
@@ -83,12 +86,12 @@ fun BottomNavigation() {
             content = { innerPadding ->
                 NavHost(navController, startDestination = Screen.ChatScreen.route, Modifier.padding(innerPadding)) {
                     composable(Screen.ChatScreen.route) {
-                        ChatScreen(navController)
+                        ChatScreen(navController = navController, chatViewModel = chatViewModel)
                     }
                     composable(
                         route = Screen.ChatHistoryScreen.route
                     ) {
-                        ChatHistoryScreen(navController = navController)
+                        ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
                     }
                     composable(
                         route = Screen.SearchHistoryScreen.route

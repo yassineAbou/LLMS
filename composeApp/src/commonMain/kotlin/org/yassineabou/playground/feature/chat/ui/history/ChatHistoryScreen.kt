@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -37,7 +36,7 @@ import org.yassineabou.playground.feature.chat.ui.view.HistoryHorizontalPager
 @Composable
 fun ChatHistoryScreen(
     navController: NavController,
-    chatViewModel: ChatViewModel = koinViewModel()
+    chatViewModel: ChatViewModel
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
 
@@ -52,7 +51,7 @@ fun ChatHistoryScreen(
         )
         HistoryHeaderRow(onHistorySearch = { navController.navigate(Screen.SearchHistoryScreen.route)} )
 
-        HistoryHorizontalPager(chatViewModel = chatViewModel)
+        HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
 
         if (showClearHistoryDialog) {
            ClearHistoryDialog(

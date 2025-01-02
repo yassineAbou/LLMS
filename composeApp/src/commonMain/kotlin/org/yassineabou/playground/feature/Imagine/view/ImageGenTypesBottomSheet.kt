@@ -74,7 +74,7 @@ fun ImageGenTypesBottomSheet(
             title = {
                 GenTypesButtons(
                     onDismissRequest = onDismissRequest,
-                    onAuthenticated = {
+                    onDone = {
                         onAuthenticated()
                         imageGenViewModel.confirmSelectedImageModel()
                     }
