@@ -16,12 +16,14 @@ kotlin {
     wasmJs {
         moduleName = "composeApp"
         browser {
+            val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside browser
+                        add(rootDirPath)
                         add(projectDirPath)
                     }
                 }
@@ -87,6 +89,8 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.dragselect)
+            implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+            implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
 
             implementation(libs.kamel.image.default)
 

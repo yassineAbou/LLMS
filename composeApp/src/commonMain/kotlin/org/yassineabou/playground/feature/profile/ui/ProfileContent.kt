@@ -42,14 +42,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
+import coil3.compose.AsyncImage
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_github
 import llms.composeapp.generated.resources.ic_linkedIn
@@ -141,7 +141,7 @@ private fun UserPageTopAppBar(
                 ) {
                     Surface(
                         shape = CircleShape,
-                        color = MaterialTheme.colorScheme.outline,
+                        color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5F),
                         contentColor = Color.White,
                     ) {
                         Icon(
@@ -183,6 +183,7 @@ private fun UserDetails(
 @Composable
 private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
     if (userUiState?.thumbnailUrl != null) {
+        /*
         KamelImage(
              resource = { asyncPainterResource(data = userUiState.thumbnailUrl) },
              contentDescription = "user thumbnail",
@@ -190,6 +191,16 @@ private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
                  .size(100.dp)
                  .clip(CircleShape),
          )
+         */
+        AsyncImage(
+            model =  userUiState.thumbnailUrl,
+            contentDescription = "user thumbnail",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(100.dp)
+                .clip(CircleShape),
+        )
+
     } else {
         Icon(
             imageVector = vectorResource(Res.drawable.ic_user),
@@ -207,8 +218,8 @@ private fun LoginButton(onLogin: () -> Unit) {
         onClick = onLogin,
         contentPadding = PaddingValues(horizontal = 32.dp),
         colors = ButtonDefaults.buttonColors(
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            contentColor = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            containerColor = MaterialTheme.colorSchemeCustom.alwaysBlue
         )
     ) {
         Text(
@@ -318,13 +329,12 @@ private fun MenuList(
                         title = "Delete Account",
                         description = "Warning! this can not be undone",
                         icon = Icons.Filled.Person,
-                        iconTint = MaterialTheme.colorSchemeCustom.alwaysPink,
+                        iconTint = MaterialTheme.colorSchemeCustom.alwaysPink.copy(alpha = 0.5F),
                         onClick = onDeleteAccount
                     )
                 }
             }
         }
-
     }
 }
 
@@ -334,7 +344,7 @@ private fun MenuItem(
     description: String,
     uri: String,
     icon: ImageVector,
-    iconTint: Color = MaterialTheme.colorScheme.onBackground,
+    iconTint: Color = MaterialTheme.colorSchemeCustom.alwaysWhite,
 ) {
     val uriHandler = LocalUriHandler.current
     MenuItem(
@@ -351,7 +361,7 @@ private fun MenuItem(
     title: String,
     description: String,
     icon: ImageVector,
-    iconTint: Color = MaterialTheme.colorScheme.onBackground,
+    iconTint: Color = MaterialTheme.colorSchemeCustom.alwaysWhite,
     onClick: () -> Unit
 ) {
     Row(
@@ -362,7 +372,7 @@ private fun MenuItem(
     ) {
         Surface(
             shape = RoundedCornerShape(12.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh
+            color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5F)
         ) {
             Icon(
                 imageVector = icon,
