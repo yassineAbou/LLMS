@@ -32,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -46,18 +47,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
+import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.ui.util.draggableScrollModifier
 import org.yassineabou.playground.app.ui.view.GoToFirst
 import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
@@ -109,8 +111,9 @@ fun ImagineScreen(
             enabled = ideaText.isNotEmpty(),
             modifier = Modifier
                 .weight(0.1f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .width(400.dp)
+                .padding(horizontal = 16.dp)
+                .align(Alignment.CenterHorizontally),
             onGenerateClick = { navController.navigate(Screen.ImageProcessingScreen.route) }
         )
         if (selectModelClicked) {
@@ -154,28 +157,46 @@ private fun TypeIdeaForm(
                     .weight(0.20f),
             )
 
-            OutlinedTextField(
+            // Wrap OutlinedTextField in a Box to add a custom border
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 16.dp)
-                    .weight(0.65f),
-                value = ideaText,
-                placeholder = { Text(text = "Describe the text you want to create or choose from inspirations") },
-                onValueChange = onIdeaTextChange,
-                trailingIcon = {
-                    if (ideaText.isNotEmpty()) {
-                        IconButton(onClick = { onIdeaTextChange("") }) {
-                            Icon(Icons.Filled.Clear, contentDescription = "Clear Text")
+                    .weight(0.65f)
+                    .border(
+                        width = 2.dp, // Set border thickness
+                        color = MaterialTheme.colorSchemeCustom.alwaysBlue, // Set border color
+                        shape = MaterialTheme.shapes.medium // Match the shape of the OutlinedTextField
+                    )
+                    .padding(4.dp) // Add padding inside the border to avoid overlap
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = ideaText,
+                    placeholder = { Text(text = "Describe the text you want to create or choose from inspirations") },
+                    onValueChange = onIdeaTextChange,
+                    trailingIcon = {
+                        if (ideaText.isNotEmpty()) {
+                            IconButton(onClick = { onIdeaTextChange("") }) {
+                                Icon(Icons.Filled.Clear, contentDescription = "Clear Text")
+                            }
                         }
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = if (ideaText.isNotEmpty()) ImeAction.Done else ImeAction.Default
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = if (ideaText.isNotEmpty()) ImeAction.Done else ImeAction.Default
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent, // Hide the default border
+                        unfocusedBorderColor = Color.Transparent, // Hide the default border
+                        cursorColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set cursor color to blue
+                        focusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set label color to blue when focused
+                        unfocusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f) // Optional: Set label color to semi-transparent blue when unfocused
+                    )
                 )
-            )
+            }
 
             AssistChip(
                 label = {
@@ -280,11 +301,9 @@ private fun Inspirations(
     val coroutineScope = rememberCoroutineScope()
     var showImageDialog by remember { mutableStateOf(false) }
     var dialogUrlExample by remember { mutableStateOf(UrlExample()) }
-    Box(
-        modifier = modifier
-    ) {
-        Column {
 
+    Box(modifier = modifier) {
+        Column {
             Text(
                 text = "Inspirations",
                 style = MaterialTheme.typography.titleLarge,
@@ -294,23 +313,26 @@ private fun Inspirations(
 
             LazyRow(
                 state = scrollState,
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .draggableScrollModifier(scrollState), // Apply the reusable drag modifier for desktop and wasm
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-               items(listInspiration) { inspiration ->
-                   InspirationItem(
-                       url = inspiration.url,
-                       onItemClick = {
-                           dialogUrlExample = inspiration
-                           showImageDialog = true
-                       }
-                   )
-               }
+                items(listInspiration) { inspiration ->
+                    InspirationItem(
+                        url = inspiration.url,
+                        onItemClick = {
+                            dialogUrlExample = inspiration
+                            showImageDialog = true
+                        }
+                    )
+                }
             }
         }
 
-        if (scrollState.firstVisibleItemIndex > 0 ){
+        // Show "Go to First" button if not at the start
+        if (scrollState.firstVisibleItemIndex > 0) {
             GoToFirst(
                 modifier = Modifier
                     .padding(16.dp)
@@ -319,12 +341,13 @@ private fun Inspirations(
                 icon = Icons.AutoMirrored.Filled.ArrowBack,
                 onClick = {
                     coroutineScope.launch {
-                        scrollState.animateScrollToItem(0)
+                        scrollState.animateScrollToItem(0) // Scroll to the first item
                     }
                 }
             )
         }
 
+        // Show image dialog if triggered
         if (showImageDialog) {
             ImageDialog(
                 urlExample = dialogUrlExample,
@@ -352,14 +375,14 @@ private fun InspirationItem(
         WindowWidthSizeClass.Expanded -> 225.dp
         else -> 125.dp
     }
-    KamelImage(
-        resource = { asyncPainterResource(data = url) },
+    AsyncImage(
+        model = url,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .width(imageWidth)
             .clickable { onItemClick() },
-       contentDescription = "InspirationItem"
+        contentDescription = "InspirationItem"
     )
 }
 

@@ -183,15 +183,6 @@ private fun UserDetails(
 @Composable
 private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
     if (userUiState?.thumbnailUrl != null) {
-        /*
-        KamelImage(
-             resource = { asyncPainterResource(data = userUiState.thumbnailUrl) },
-             contentDescription = "user thumbnail",
-             modifier = Modifier
-                 .size(100.dp)
-                 .clip(CircleShape),
-         )
-         */
         AsyncImage(
             model =  userUiState.thumbnailUrl,
             contentDescription = "user thumbnail",
@@ -220,7 +211,7 @@ private fun LoginButton(onLogin: () -> Unit) {
         colors = ButtonDefaults.buttonColors(
             contentColor = MaterialTheme.colorSchemeCustom.alwaysWhite,
             containerColor = MaterialTheme.colorSchemeCustom.alwaysBlue
-        )
+        ),
     ) {
         Text(
             text = "Login",

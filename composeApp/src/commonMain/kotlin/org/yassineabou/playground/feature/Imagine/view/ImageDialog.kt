@@ -31,8 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
+import coil3.compose.AsyncImage
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.view.PyramidText
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
@@ -51,8 +50,8 @@ fun ImageDialog(
         onDismissRequest = onDismiss,
     ) {
         Box {
-            KamelImage(
-                resource = { asyncPainterResource( data = urlExample.url )},
+            AsyncImage(
+                model = urlExample.url,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),
                 contentDescription = "dialog image background"
