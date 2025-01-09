@@ -1,22 +1,27 @@
 package org.yassineabou.playground.feature.Imagine.view
 
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -38,13 +43,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
+import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.ui.util.draggableScrollModifier
 import org.yassineabou.playground.app.ui.view.BottomSheetContent
 import org.yassineabou.playground.app.ui.view.GenTypesButtons
+import org.yassineabou.playground.app.ui.view.InfoIconButton
+import org.yassineabou.playground.app.ui.view.ModelInformation
+import org.yassineabou.playground.app.ui.view.ShimmerPlaceholder
 import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.ImageModel
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
@@ -59,6 +68,8 @@ fun ImageGenTypesBottomSheet(
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val tempSelectedImageModel by imageGenViewModel.tempSelectedImageModel.collectAsState()
+    var isInfoIconClicked by remember { mutableStateOf(false) }
+    var infoImageModel by remember { mutableStateOf(tempSelectedImageModel) }
 
 
     LaunchedEffect(Unit) {
@@ -70,69 +81,104 @@ fun ImageGenTypesBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
     ) {
-        BottomSheetContent(
-            title = {
-                GenTypesButtons(
-                    onDismissRequest = onDismissRequest,
-                    onDone = {
-                        onAuthenticated()
-                        imageGenViewModel.confirmSelectedImageModel()
+        AnimatedVisibility(!isInfoIconClicked) {
+            BottomSheetContent(
+                title = {
+                    GenTypesButtons(
+                        onDismissRequest = onDismissRequest,
+                        onDone = {
+                            onAuthenticated()
+                            imageGenViewModel.confirmSelectedImageModel()
+                        }
+                    )
+                },
+                body = {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        item {
+                            ImageGenTypes(
+                                type = "Generalist",
+                                imageModelsList = ImageGenModelList.generalist,
+                                tempSelectedImageModel = tempSelectedImageModel,
+                                onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                                onInfoClick = { imageModel ->
+                                    isInfoIconClicked = true
+                                    infoImageModel = imageModel
+                                }
+                            )
+                        }
+                        item {
+                            ImageGenTypes(
+                                type = "Realistic",
+                                imageModelsList = ImageGenModelList.realistic,
+                                tempSelectedImageModel = tempSelectedImageModel,
+                                onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                                onInfoClick = { imageModel ->
+                                    isInfoIconClicked = true
+                                    infoImageModel = imageModel
+                                }
+                            )
+                        }
+                        item {
+                            ImageGenTypes(
+                                type = "Anime",
+                                imageModelsList = ImageGenModelList.anime,
+                                tempSelectedImageModel = tempSelectedImageModel,
+                                onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                                onInfoClick = { imageModel ->
+                                    isInfoIconClicked = true
+                                    infoImageModel = imageModel
+                                }
+                            )
+                        }
+                        item {
+                            ImageGenTypes(
+                                type = "3D",
+                                imageModelsList = ImageGenModelList.threeD,
+                                tempSelectedImageModel = tempSelectedImageModel,
+                                onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                                onInfoClick = { imageModel ->
+                                    isInfoIconClicked = true
+                                    infoImageModel = imageModel
+                                }
+                            )
+                        }
+                        item {
+                            ImageGenTypes(
+                                type = "Comic",
+                                imageModelsList = ImageGenModelList.comic,
+                                tempSelectedImageModel = tempSelectedImageModel,
+                                onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                                onInfoClick = { imageModel ->
+                                    isInfoIconClicked = true
+                                    infoImageModel = imageModel
+                                }
+                            )
+                        }
+                        item {
+                            ImageGenTypes(
+                                type = "Furry",
+                                imageModelsList = ImageGenModelList.furry,
+                                tempSelectedImageModel = tempSelectedImageModel,
+                                onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                                onInfoClick = { imageModel ->
+                                    isInfoIconClicked = true
+                                    infoImageModel = imageModel
+                                }
+                            )
+                        }
                     }
-                )
-            },
-            body = {
-               LazyColumn(modifier = Modifier.fillMaxSize()) {
-                   item {
-                       ImageGenTypes(
-                           type = "Generalist",
-                           imageModelsList = ImageGenModelList.generalist,
-                           tempSelectedImageModel = tempSelectedImageModel,
-                           onImageModelSelected = imageGenViewModel::selectTempImageModel
-                       )
-                   }
-                   item {
-                       ImageGenTypes(
-                           type = "Realistic",
-                           imageModelsList = ImageGenModelList.realistic,
-                           tempSelectedImageModel = tempSelectedImageModel,
-                           onImageModelSelected = imageGenViewModel::selectTempImageModel
-                       )
-                   }
-                   item {
-                       ImageGenTypes(
-                           type = "Anime",
-                           imageModelsList = ImageGenModelList.anime,
-                           tempSelectedImageModel = tempSelectedImageModel,
-                           onImageModelSelected = imageGenViewModel::selectTempImageModel
-                       )
-                   }
-                   item {
-                       ImageGenTypes(
-                           type = "3D",
-                           imageModelsList = ImageGenModelList.threeD,
-                           tempSelectedImageModel = tempSelectedImageModel,
-                           onImageModelSelected = imageGenViewModel::selectTempImageModel
-                       )
-                   }
-                   item {
-                       ImageGenTypes(
-                           type = "Comic",
-                           imageModelsList = ImageGenModelList.comic,
-                           tempSelectedImageModel = tempSelectedImageModel,
-                           onImageModelSelected = imageGenViewModel::selectTempImageModel
-                       )
-                   }
-                   item {
-                       ImageGenTypes(
-                           type = "Furry",
-                           imageModelsList = ImageGenModelList.furry,
-                           tempSelectedImageModel = tempSelectedImageModel,
-                           onImageModelSelected = imageGenViewModel::selectTempImageModel
-                       )
-                   }
-               }
-            }
-        )
+                }
+            )
+        }
+        AnimatedVisibility(isInfoIconClicked) {
+            ModelInformation(
+                imageModel = infoImageModel,
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxHeight(0.75f)
+                    .padding(horizontal = 16.dp),
+                onDismissRequest = { isInfoIconClicked = false }
+            )
+        }
     }
 }
 
@@ -142,7 +188,8 @@ private fun ImageGenTypes(
     imageModelsList: List<ImageModel>,
     type: String,
     tempSelectedImageModel: ImageModel,
-    onImageModelSelected: (ImageModel) -> Unit
+    onImageModelSelected: (ImageModel) -> Unit,
+    onInfoClick: (ImageModel) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -156,7 +203,9 @@ private fun ImageGenTypes(
             modifier = Modifier.padding(start = 16.dp, bottom = 4.dp, end = 8.dp)
         )
         LazyRow(
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .draggableScrollModifier(rememberLazyListState()), // Apply the reusable drag modifier for desktop and wasm ,
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -164,7 +213,8 @@ private fun ImageGenTypes(
                 imageGenModel(
                     tempSelectedImageModel = item,
                     isSelected = item == tempSelectedImageModel,
-                    onSelected = { onImageModelSelected(item) }
+                    onSelected = { onImageModelSelected(item) },
+                    onInfoClick = { onInfoClick(item) }
                 )
             }
 
@@ -177,7 +227,8 @@ private fun ImageGenTypes(
 private fun imageGenModel(
     tempSelectedImageModel: ImageModel,
     isSelected: Boolean,
-    onSelected: () -> Unit
+    onSelected: () -> Unit,
+    onInfoClick: () -> Unit
 ) {
     val backgroundColor = if (isSelected) MaterialTheme.colorSchemeCustom.alwaysBlue else Color.Transparent
     val textColor = if (isSelected) MaterialTheme.colorSchemeCustom.alwaysWhite else MaterialTheme.colorScheme.onBackground
@@ -185,14 +236,13 @@ private fun imageGenModel(
         modifier = Modifier
             .border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
             .background(backgroundColor, shape = RoundedCornerShape(16.dp))
-            .clickable(onClick = onSelected)
-            .padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .clickable(onClick = onSelected) // Open detailed view on click
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
             modifier = Modifier
-                .width(150.dp)
-                .height(250.dp)
+                .size(150.dp) // Match the size of TextGenType
                 .clip(RoundedCornerShape(16.dp))
         ) {
             ImageCarousel(
@@ -208,22 +258,22 @@ private fun imageGenModel(
                 )
             }
         }
-        Text(
-            modifier = Modifier.padding(top = 5.dp),
-            text = tempSelectedImageModel.title,
-            color = textColor,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-            text = tempSelectedImageModel.description,
-            maxLines = 1,
-            color = textColor,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .padding(top = 5.dp)
-                .width(175.dp)
-                .basicMarquee(iterations = Int.MAX_VALUE),
-        )
+
+        // Row for Text and InfoIconButton
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween, // Space between Text and InfoIconButton
+            verticalAlignment = Alignment.CenterVertically // Align items vertically in the center
+        ) {
+            Text(
+                text = tempSelectedImageModel.title,
+                color = textColor,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            InfoIconButton(
+                onInfoClick = onInfoClick
+            )
+        }
     }
 }
 
@@ -232,30 +282,69 @@ private fun imageGenModel(
 
 
 @Composable
-private fun ImageCarousel(imageUrlExamples: List<UrlExample>) {
+fun ImageCarousel(imageUrlExamples: List<UrlExample>) {
     var currentExampleIndex by remember { mutableStateOf(0) }
-    var currentExample by remember { mutableStateOf(imageUrlExamples.first()) }
 
+    // Automatically cycle through images every 3 seconds
     LaunchedEffect(key1 = true) {
         while (true) {
-            delay(4000)
+            delay(5000)
             currentExampleIndex = (currentExampleIndex + 1) % imageUrlExamples.size
-            currentExample = imageUrlExamples[currentExampleIndex]
         }
     }
 
+    // Use AnimatedContent for smooth transitions
+    AnimatedContent(
+        targetState = currentExampleIndex,
+        transitionSpec = {
+            // Slide in from the right and slide out to the left
+            slideInHorizontally { width -> width } togetherWith slideOutHorizontally { width -> -width }
+        },
+        label = "Image Carousel"
+    ) { index ->
+        val currentExample = imageUrlExamples[index]
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+        ) {
+            // Use the onState parameter to handle loading and error states
+            var isLoading by remember { mutableStateOf(true) }
+            var hasError by remember { mutableStateOf(false) }
 
-    KamelImage(
-        resource = { asyncPainterResource(data = currentExample.url) },
-        contentDescription = "image url example",
-        contentScale = ContentScale.Crop,
-        animationSpec = tween(1000),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-    )
+            AsyncImage(
+                model = currentExample.url,
+                contentDescription = "Image URL Example",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
+                onState = { state ->
+                    isLoading = state is AsyncImagePainter.State.Loading
+                    hasError = state is AsyncImagePainter.State.Error
+                }
+            )
+
+            // Show shimmer placeholder while loading
+            if (isLoading) {
+                ShimmerPlaceholder()
+            }
+
+            // Show error placeholder if loading fails
+            if (hasError) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.LightGray),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Failed to load image",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        }
+    }
 }
-
 
 
 

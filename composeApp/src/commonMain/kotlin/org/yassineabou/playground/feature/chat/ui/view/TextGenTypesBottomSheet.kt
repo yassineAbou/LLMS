@@ -17,11 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -49,6 +45,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.view.BottomSheetContent
 import org.yassineabou.playground.app.ui.view.GenTypesButtons
+import org.yassineabou.playground.app.ui.view.InfoIconButton
+import org.yassineabou.playground.app.ui.view.ModelInformation
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.model.textGenModelList
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -118,7 +116,7 @@ fun TextGenTypesBottomSheet(
             )
         }
         AnimatedVisibility(isInfoIconClicked) {
-            TextGenInformation(
+            ModelInformation(
                 textModel = infoTextModel,
                 modifier = Modifier.fillMaxWidth()
                     .fillMaxHeight(0.75f)
@@ -161,7 +159,7 @@ private fun TextGenType(
         )
         InfoIconButton(
             modifier = Modifier.align(Alignment.End),
-            onInfoClick = onInfoClick
+            onInfoClick = { onInfoClick(true) }
         )
     }
 }
@@ -189,22 +187,6 @@ private fun ModelProviderImage(
             fontWeight = FontWeight.ExtraBold,
             color = textColor,
             modifier = Modifier.padding(start = 8.dp)
-        )
-    }
-}
-
-@Composable
-private fun InfoIconButton(
-    modifier: Modifier = Modifier,
-    onInfoClick: (Boolean) -> Unit
-) {
-    IconButton(
-        modifier = modifier,
-        onClick = { onInfoClick(true) }
-    ) {
-        Icon(
-            imageVector = Icons.TwoTone.Info,
-            contentDescription = "info",
         )
     }
 }
