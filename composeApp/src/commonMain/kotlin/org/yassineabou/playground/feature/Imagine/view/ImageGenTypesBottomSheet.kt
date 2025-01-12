@@ -242,8 +242,8 @@ private fun imageGenModel(
     ) {
         Box(
             modifier = Modifier
-                .size(150.dp) // Match the size of TextGenType
-                .clip(RoundedCornerShape(16.dp))
+                .size(150.dp)
+                .align(Alignment.CenterHorizontally)// Match the size of TextGenType
         ) {
             ImageCarousel(
                 imageUrlExamples = tempSelectedImageModel.urlExamples
@@ -258,17 +258,15 @@ private fun imageGenModel(
                 )
             }
         }
-
-        // Row for Text and InfoIconButton
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween, // Space between Text and InfoIconButton
-            verticalAlignment = Alignment.CenterVertically // Align items vertically in the center
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = tempSelectedImageModel.title,
                 color = textColor,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
             InfoIconButton(
                 onInfoClick = onInfoClick
@@ -282,7 +280,9 @@ private fun imageGenModel(
 
 
 @Composable
-fun ImageCarousel(imageUrlExamples: List<UrlExample>) {
+fun ImageCarousel(
+    imageUrlExamples: List<UrlExample>
+) {
     var currentExampleIndex by remember { mutableStateOf(0) }
 
     // Automatically cycle through images every 3 seconds

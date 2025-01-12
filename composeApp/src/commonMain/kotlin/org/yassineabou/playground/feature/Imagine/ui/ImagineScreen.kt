@@ -60,6 +60,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.util.draggableScrollModifier
+import org.yassineabou.playground.app.ui.view.CustomIconButton
 import org.yassineabou.playground.app.ui.view.GoToFirst
 import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
@@ -83,7 +84,7 @@ fun ImagineScreen(
             modifier = Modifier
                 .weight(0.1f)
                 .align(alignment = Alignment.Start)
-                .padding(start = 8.dp),
+                .padding(start = 8.dp, top = 16.dp),
             onClick = { navController.navigate(Screen.GeneratedImagesScreen.route) }
         )
         TypeIdeaForm(
@@ -130,17 +131,15 @@ private fun GeneratedImagesIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    IconButton(
+    CustomIconButton(
+        icon = Icons.Outlined.GridView,
+        contentDescription = "Generated images",
         modifier = modifier,
-        onClick = onClick
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.GridView,
-            modifier = Modifier.size(35.dp),
-            contentDescription = "Generated images"
-        )
-    }
+        onClick = onClick,
+    )
 }
+
+
 
 @Composable
 private fun TypeIdeaForm(
