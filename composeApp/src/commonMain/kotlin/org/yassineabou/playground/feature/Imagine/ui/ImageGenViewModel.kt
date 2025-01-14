@@ -1,5 +1,6 @@
 package org.yassineabou.playground.feature.Imagine.ui
 
+import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +19,12 @@ class ImageGenViewModel: ViewModel() {
 
     private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
+
+    private val _windowSize = MutableStateFlow(IntSize.Zero)
+    val windowSize: StateFlow<IntSize> = _windowSize
+
+    private val _isLargeScreen = MutableStateFlow(false)
+    val isLargeScreen: StateFlow<Boolean> = _isLargeScreen
 
 
     fun deletePhoto(index: Int) {
@@ -46,5 +53,15 @@ class ImageGenViewModel: ViewModel() {
     fun setTempSelectedToSelected() {
         _tempSelectedImageModel.value = _selectedImageModel.value
     }
+
+    fun updateWindowSize(newSize: IntSize) {
+        _windowSize.value = newSize
+        _isLargeScreen.value = calculateIsLargeScreen(newSize)
+    }
+
+    private fun calculateIsLargeScreen(size: IntSize): Boolean {
+        return size.width >= 840 // Adjust this threshold as needed
+    }
+
 }
 

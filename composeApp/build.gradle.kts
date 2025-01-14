@@ -76,6 +76,11 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
 
+            implementation("org.jetbrains.compose.material3.adaptive:adaptive:1.0.0-alpha03")
+            implementation("org.jetbrains.compose.material3.adaptive:adaptive-layout:1.0.0-alpha03")
+            implementation("org.jetbrains.compose.material3.adaptive:adaptive-navigation:1.0.0-alpha03")
+
+
             implementation(libs.navigation.compose)
 
             implementation(libs.kotlinx.serialization)
@@ -93,6 +98,7 @@ kotlin {
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
 
             implementation(libs.kamel.image.default)
+
 
         }
         desktopMain.dependencies {

@@ -20,13 +20,19 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dragselectcompose.core.DragSelectState
 import com.dragselectcompose.core.rememberDragSelectState
 import com.dragselectcompose.grid.LazyDragSelectVerticalGrid
@@ -39,37 +45,56 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
+import org.yassineabou.playground.app.ui.view.SnackbarController
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.view.ImageSelectionControls
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneScreen
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel = koinViewModel(),
-    dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id })
+    supportingPaneNavigator: SupportingPaneNavigator? = null,
+    dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id }),
 ) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
     val selectedPhotos = dragSelectState.selected
     val inSelectionMode = dragSelectState.inSelectionMode
     val selectedPhotoCount = dragSelectState.selected.size
+    val windowSizeClass = calculateWindowSizeClass()
+    val windowInfo = LocalWindowInfo.current
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    val controller = SnackbarController.current
+    val columnCount = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> 2
+        WindowWidthSizeClass.Medium -> 3
+        WindowWidthSizeClass.Expanded -> 2
+        else -> 2
+    }
+    val isLargeScreen by remember { mutableStateOf(windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium) }
+
+    LaunchedEffect(windowInfo) {
+        if (isLargeScreen) {
+            controller.showMessage("Hello")
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(4.dp)
     ) {
-        val windowSizeClass = calculateWindowSizeClass()
-        val columnCount = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact -> 2
-            WindowWidthSizeClass.Medium -> 3
-            WindowWidthSizeClass.Expanded -> 5
-            else -> 2
-        }
         AnimatedVisibility(
             visible = !inSelectionMode,
         ) {
             GeneratedImagesTopBar(
                 modifier = Modifier.padding(vertical = 4.dp),
-                onBackPress = { navController.popBackStack() }
+                onBackPress = {
+                    navController.popBackStack()
+                }
             )
         }
         AnimatedVisibility(
@@ -113,7 +138,11 @@ fun GeneratedImagesScreen(
                           image = image,
                           isInSelectionMode = inSelectionMode,
                           onClick = {
+                              if (isLargeScreen) {
+                                  supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(image.id))
+                              } else {
                                   navController.navigate("${Screen.FullScreenImage.route}/${image.id}")
+                              }
                           },
                       )
                 }

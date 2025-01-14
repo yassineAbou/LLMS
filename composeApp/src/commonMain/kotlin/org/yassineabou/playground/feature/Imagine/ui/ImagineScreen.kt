@@ -66,27 +66,65 @@ import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.view.ImageDialog
 import org.yassineabou.playground.feature.Imagine.view.ImageGenTypesBottomSheet
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneLayout
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneScreen
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ImagineScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel = koinViewModel()
 ) {
+    val windowSizeClass = calculateWindowSizeClass()
+    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
+
+    if (isLargeScreen) {
+        // Large screen layout: Use SupportingPaneScaffold
+        SupportingPaneLayout(
+            navController = navController,
+            imageGenViewModel = imageGenViewModel,
+        )
+    } else {
+        // Small screen layout: Only Imagine screen with icon button
+        ImagineContent(
+            navController = navController,
+            imageGenViewModel = imageGenViewModel,
+            showGeneratedImagesButton = true,
+            onNavigateToSupportingPane = { navController.navigate(Screen.GeneratedImagesScreen.route)}
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable
+fun ImagineContent(
+    navController: NavController,
+    imageGenViewModel: ImageGenViewModel,
+    supportingPaneNavigator: SupportingPaneNavigator? = null,
+    showGeneratedImagesButton: Boolean,
+    onNavigateToSupportingPane: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var ideaText by remember { mutableStateOf("") }
     var selectModelClicked by remember { mutableStateOf(false) }
     val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsState()
+    val windowSizeClass = calculateWindowSizeClass()
+    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
 
     Column(
-            modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        GeneratedImagesIconButton(
-            modifier = Modifier
-                .weight(0.1f)
-                .align(alignment = Alignment.Start)
-                .padding(start = 8.dp, top = 16.dp),
-            onClick = { navController.navigate(Screen.GeneratedImagesScreen.route) }
-        )
+        if (showGeneratedImagesButton) {
+            GeneratedImagesIconButton(
+                modifier = Modifier
+                    .weight(0.1f)
+                    .align(alignment = Alignment.Start)
+                    .padding(start = 8.dp, top = 16.dp),
+                onClick = onNavigateToSupportingPane
+            )
+        }
         TypeIdeaForm(
             ideaText = ideaText,
             modifier = Modifier
@@ -115,7 +153,14 @@ fun ImagineScreen(
                 .width(400.dp)
                 .padding(horizontal = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            onGenerateClick = { navController.navigate(Screen.ImageProcessingScreen.route) }
+            onGenerateClick = {
+                if (isLargeScreen) {
+                    supportingPaneNavigator?.navigate(SupportingPaneScreen.ImageProcessing)
+                } else {
+                    navController.navigate(Screen.ImageProcessingScreen.route)
+
+                }
+            }
         )
         if (selectModelClicked) {
             ImageGenTypesBottomSheet(

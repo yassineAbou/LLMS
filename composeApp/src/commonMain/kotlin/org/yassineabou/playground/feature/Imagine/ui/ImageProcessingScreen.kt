@@ -8,6 +8,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,16 +28,21 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.view.BackgroundIndicator
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.view.SupportingPaneScreen
 import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ImageProcessingScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel = koinViewModel(),
+    supportingPaneNavigator: SupportingPaneNavigator? = null,
     ) {
     var remainingSeconds by remember { mutableStateOf(10) }
     var progress by remember { mutableStateOf(0f) }
-
+    val windowSizeClass = calculateWindowSizeClass()
+    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
     LaunchedEffect(key1 = Unit) {
        for (i in 10 downTo 0) {
            remainingSeconds = i
@@ -44,7 +52,11 @@ fun ImageProcessingScreen(
         imageGenViewModel.addImage(
            UrlExample(url = "https://i.imgur.com/ivnreND.png", description = "We're going to work on generating images next. this is just a prototype with fake data")
         )
-        navController.navigate("${Screen.FullScreenImage.route}/${0}")
+        if (isLargeScreen) {
+            supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(0))
+        } else {
+            navController.navigate("${Screen.FullScreenImage.route}/${0}")
+        }
     }
 
     Box(
@@ -66,7 +78,13 @@ fun ImageProcessingScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 113.dp),
-            onClick = { navController.popBackStack() }
+            onClick = {
+                if (isLargeScreen) {
+                    supportingPaneNavigator?.popBackStack()
+                } else {
+                    navController.popBackStack()
+                }
+            }
         ) {
             Text(
                 text = "Cancel",
