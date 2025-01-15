@@ -8,9 +8,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,12 +24,12 @@ import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
+import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
 import org.yassineabou.playground.feature.Imagine.view.BackgroundIndicator
-import org.yassineabou.playground.feature.Imagine.view.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.view.SupportingPaneScreen
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ImageProcessingScreen(
     navController: NavController,
@@ -41,8 +38,7 @@ fun ImageProcessingScreen(
     ) {
     var remainingSeconds by remember { mutableStateOf(10) }
     var progress by remember { mutableStateOf(0f) }
-    val windowSizeClass = calculateWindowSizeClass()
-    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
+    val isLargeScreen = rememberIsLargeScreen()
     LaunchedEffect(key1 = Unit) {
        for (i in 10 downTo 0) {
            remainingSeconds = i
@@ -52,6 +48,7 @@ fun ImageProcessingScreen(
         imageGenViewModel.addImage(
            UrlExample(url = "https://i.imgur.com/ivnreND.png", description = "We're going to work on generating images next. this is just a prototype with fake data")
         )
+
         if (isLargeScreen) {
             supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(0))
         } else {

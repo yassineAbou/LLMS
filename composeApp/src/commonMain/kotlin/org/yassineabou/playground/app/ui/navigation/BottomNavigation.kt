@@ -34,10 +34,10 @@ import com.dragselectcompose.core.rememberDragSelectState
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
+import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
-import org.yassineabou.playground.feature.Imagine.ui.ImagineScreen
 import org.yassineabou.playground.feature.chat.ui.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
@@ -99,7 +99,7 @@ fun BottomNavigation() {
                         SearchHistoryScreen(navController = navController)
                     }
                     composable(Screen.ImagineScreen.route) {
-                        ImagineScreen(navController = navController)
+                        SupportingPaneLayout(navController = navController)
                     }
                     composable(
                         route = Screen.ImageProcessingScreen.route,

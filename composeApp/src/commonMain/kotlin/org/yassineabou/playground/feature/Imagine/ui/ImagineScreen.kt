@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.util.draggableScrollModifier
@@ -64,41 +63,15 @@ import org.yassineabou.playground.app.ui.view.CustomIconButton
 import org.yassineabou.playground.app.ui.view.GoToFirst
 import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
+import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
 import org.yassineabou.playground.feature.Imagine.view.ImageDialog
 import org.yassineabou.playground.feature.Imagine.view.ImageGenTypesBottomSheet
-import org.yassineabou.playground.feature.Imagine.view.SupportingPaneLayout
-import org.yassineabou.playground.feature.Imagine.view.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.view.SupportingPaneScreen
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 @Composable
 fun ImagineScreen(
-    navController: NavController,
-    imageGenViewModel: ImageGenViewModel = koinViewModel()
-) {
-    val windowSizeClass = calculateWindowSizeClass()
-    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
-
-    if (isLargeScreen) {
-        // Large screen layout: Use SupportingPaneScaffold
-        SupportingPaneLayout(
-            navController = navController,
-            imageGenViewModel = imageGenViewModel,
-        )
-    } else {
-        // Small screen layout: Only Imagine screen with icon button
-        ImagineContent(
-            navController = navController,
-            imageGenViewModel = imageGenViewModel,
-            showGeneratedImagesButton = true,
-            onNavigateToSupportingPane = { navController.navigate(Screen.GeneratedImagesScreen.route)}
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Composable
-fun ImagineContent(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
@@ -109,8 +82,7 @@ fun ImagineContent(
     var ideaText by remember { mutableStateOf("") }
     var selectModelClicked by remember { mutableStateOf(false) }
     val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsState()
-    val windowSizeClass = calculateWindowSizeClass()
-    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
+    val isLargeScreen = rememberIsLargeScreen()
 
     Column(
         modifier = modifier.fillMaxSize(),
