@@ -66,7 +66,8 @@ import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
 import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.view.ImageDialog
+import org.yassineabou.playground.feature.Imagine.view.DropDownDialog
+import org.yassineabou.playground.feature.Imagine.view.ImageDialogContent
 import org.yassineabou.playground.feature.Imagine.view.ImageGenTypesBottomSheet
 
 
@@ -365,15 +366,18 @@ private fun Inspirations(
 
         // Show image dialog if triggered
         if (showImageDialog) {
-            ImageDialog(
-                urlExample = dialogUrlExample,
-                modifier = Modifier
-                    .size(400.dp)
-                    .align(Alignment.Center)
-                    .clip(RoundedCornerShape(16.dp)),
-                onIdeaTextChange = onIdeaTextChange,
-                onDismiss = { showImageDialog = false }
-            )
+
+            DropDownDialog(
+                onDismissRequest = {
+                    showImageDialog = false
+                }
+            ) {
+                ImageDialogContent(
+                    urlExample = dialogUrlExample,
+                    onIdeaTextChange = onIdeaTextChange,
+                    onDismiss = { showImageDialog = false }
+                )
+            }
         }
     }
 }

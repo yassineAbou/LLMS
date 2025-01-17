@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,19 +35,13 @@ import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.view.PyramidText
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageDialog(
+fun ImageDialogContent(
     urlExample: UrlExample,
     onIdeaTextChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
 ) {
     val scrollState = rememberScrollState(0)
-    BasicAlertDialog(
-        modifier = modifier,
-        onDismissRequest = onDismiss,
-    ) {
         Box {
             AsyncImage(
                 model = urlExample.url,
@@ -73,7 +66,6 @@ fun ImageDialog(
                  onDismiss = onDismiss
              )
         }
-    }
 }
 
 @Composable fun CloseButton(

@@ -1,5 +1,12 @@
 package org.yassineabou.playground.feature.Imagine.supportingPane
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -42,8 +49,8 @@ fun SupportingPaneLayout(
         supportingPane = {
             SupportingPane(
                 navController = navController,
-                imageGenViewModel = imageGenViewModel,
-                supportingPaneNavigator = supportingPaneNavigator
+                supportingPaneNavigator = supportingPaneNavigator,
+                imageGenViewModel = imageGenViewModel
             )
         }
     )
@@ -105,8 +112,25 @@ fun ThreePaneScaffoldScope.SupportingPane(
     imageGenViewModel: ImageGenViewModel,
     modifier: Modifier = Modifier
 ) {
-    AnimatedPane(modifier = modifier.safeContentPadding()) {
-        when (val currentScreen = supportingPaneNavigator.currentScreen) {
+    val currentScreen = supportingPaneNavigator.currentScreen
+    val isForward = supportingPaneNavigator.isForward
+
+    AnimatedContent(
+        targetState = currentScreen,
+        transitionSpec = {
+            if (isForward) {
+                // Forward animation: slide in from the right, slide out to the left
+                slideInHorizontally { width -> width } + fadeIn() togetherWith
+                        slideOutHorizontally { width -> -width } + fadeOut()
+            } else {
+                // Backward animation: slide in from the left, slide out to the right
+                slideInHorizontally { width -> -width } + fadeIn() togetherWith
+                        slideOutHorizontally { width -> width } + fadeOut()
+            }.using(SizeTransform(clip = false))
+        },
+        modifier = modifier.safeContentPadding()
+    ) { targetScreen ->
+        when (targetScreen) {
             is SupportingPaneScreen.GeneratedImages -> {
                 GeneratedImagesScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
@@ -123,7 +147,7 @@ fun ThreePaneScaffoldScope.SupportingPane(
             }
             is SupportingPaneScreen.FullScreenImage -> {
                 FullScreenImage(
-                    startIndex = currentScreen.index,
+                    startIndex = targetScreen.index,
                     supportingPaneNavigator = supportingPaneNavigator,
                     imageGenViewModel = imageGenViewModel,
                     navController = navController

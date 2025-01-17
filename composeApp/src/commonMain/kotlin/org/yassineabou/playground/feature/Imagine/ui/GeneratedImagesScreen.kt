@@ -75,7 +75,7 @@ fun GeneratedImagesScreen(
             GeneratedImagesTopBar(
                 modifier = Modifier.padding(vertical = 4.dp),
                 onBackPress = {
-                    navController.popBackStack()
+                    navController.navigate(Screen.ImagineScreen.route)
                 }
             )
         }
