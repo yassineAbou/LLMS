@@ -76,7 +76,7 @@ fun ImagineScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
-    showGeneratedImagesButton: Boolean,
+    shouldShowSupportingPaneButton: Boolean,
     onNavigateToSupportingPane: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -89,7 +89,7 @@ fun ImagineScreen(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        if (showGeneratedImagesButton) {
+        if (shouldShowSupportingPaneButton) {
             GeneratedImagesIconButton(
                 modifier = Modifier
                     .weight(0.1f)

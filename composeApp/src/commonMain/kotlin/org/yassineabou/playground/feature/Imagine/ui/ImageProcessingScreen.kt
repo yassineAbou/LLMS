@@ -40,11 +40,11 @@ fun ImageProcessingScreen(
     var progress by remember { mutableStateOf(0f) }
     val isLargeScreen = rememberIsLargeScreen()
     LaunchedEffect(key1 = Unit) {
-       for (i in 10 downTo 0) {
-           remainingSeconds = i
-           progress = 1f * (i / 10f)
-           delay(1.seconds)
-       }
+        for (i in 10 downTo 0) {
+            remainingSeconds = i
+            progress = 1f - (i / 10f) // Invert the progress calculation
+            delay(1.seconds)
+        }
         imageGenViewModel.addImage(
            UrlExample(url = "https://i.imgur.com/ivnreND.png", description = "We're going to work on generating images next. this is just a prototype with fake data")
         )

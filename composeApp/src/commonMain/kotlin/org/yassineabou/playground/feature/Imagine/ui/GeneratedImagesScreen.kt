@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dragselectcompose.core.DragSelectState
@@ -64,6 +65,7 @@ fun GeneratedImagesScreen(
     }
     val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,9 +76,7 @@ fun GeneratedImagesScreen(
         ) {
             GeneratedImagesTopBar(
                 modifier = Modifier.padding(vertical = 4.dp),
-                onBackPress = {
-                    navController.navigate(Screen.ImagineScreen.route)
-                }
+                onBackPress = { navController.navigate(Screen.ImagineScreen.route) }
             )
         }
         AnimatedVisibility(
@@ -120,10 +120,13 @@ fun GeneratedImagesScreen(
                           image = image,
                           isInSelectionMode = inSelectionMode,
                           onClick = {
-                              if (isLargeScreen) {
-                                  supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(image.id))
-                              } else {
-                                  navController.navigate("${Screen.FullScreenImage.route}/${image.id}")
+                              val index = listGeneratedPhotos.indexOfFirst { it.id == image.id }
+                              if (index != -1) {
+                                  if (isLargeScreen) {
+                                      supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(index))
+                                  } else {
+                                      navController.navigate("${Screen.FullScreenImage.route}/${index}")
+                                  }
                               }
                           },
                       )
@@ -140,6 +143,7 @@ private fun GeneratedImagesTopBar(
 ) {
     Row(
         modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         FullScreenBackIcon(
             onBackPress = onBackPress
@@ -147,6 +151,7 @@ private fun GeneratedImagesTopBar(
         Text(
             text = "Generated Images",
             style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(top = 8.dp)
                 .weight(1f)

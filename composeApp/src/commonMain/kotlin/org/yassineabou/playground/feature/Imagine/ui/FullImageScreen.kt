@@ -101,8 +101,9 @@ fun FullScreenImage(
             onInfoClicked = { showInfoBottomSheet = true },
             onDelete = {
                 imageGenViewModel.deletePhoto(pagerState.currentPage)
+                val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
                 coroutineScope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                    pagerState.animateScrollToPage(newPage)
                 }
             }
         )
@@ -132,11 +133,21 @@ private fun ImagePager(
                 .fillMaxWidth()
                 .align(Alignment.Center)
         ) { page ->
-            val image = listGenerated[page]
-            ImageReview(
-                url = image.url,
-                modifier = Modifier.fillMaxSize()
-            )
+            val image = listGenerated.getOrNull(page)
+            if (image != null) {
+                ImageReview(
+                    url = image.url,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                // Handle the case where the image is null (e.g., show a placeholder)
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Image not found")
+                }
+            }
         }
 
         if (PlatformConfig.isDesktop()) {

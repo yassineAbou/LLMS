@@ -50,7 +50,8 @@ fun SupportingPaneLayout(
             SupportingPane(
                 navController = navController,
                 supportingPaneNavigator = supportingPaneNavigator,
-                imageGenViewModel = imageGenViewModel
+                imageGenViewModel = imageGenViewModel,
+                shouldShowSupportingPaneButton = navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden
             )
         }
     )
@@ -81,7 +82,7 @@ fun ThreePaneScaffoldScope.MainPane(
                     navController = navController,
                     imageGenViewModel = imageGenViewModel,
                     supportingPaneNavigator = supportingPaneNavigator,
-                    showGeneratedImagesButton = shouldShowSupportingPaneButton,
+                    shouldShowSupportingPaneButton = shouldShowSupportingPaneButton,
                     onNavigateToSupportingPane = onNavigateToSupportingPane
                 )
             }
@@ -110,6 +111,7 @@ fun ThreePaneScaffoldScope.SupportingPane(
     navController: NavController,
     supportingPaneNavigator: SupportingPaneNavigator,
     imageGenViewModel: ImageGenViewModel,
+    shouldShowSupportingPaneButton: Boolean,
     modifier: Modifier = Modifier
 ) {
     val currentScreen = supportingPaneNavigator.currentScreen
