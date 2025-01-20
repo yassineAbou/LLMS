@@ -19,11 +19,12 @@ class ImageGenViewModel: ViewModel() {
     private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
 
-
     fun deletePhoto(index: Int) {
-        _listGeneratedPhotos.update { list ->
-            list.removeAt(index)
-            list
+        if (_listGeneratedPhotos.value.isNotEmpty()) {
+            _listGeneratedPhotos.update { list ->
+                val newList = list.toMutableList().apply { removeAt(index) }
+                newList
+            }
         }
     }
 
@@ -33,6 +34,15 @@ class ImageGenViewModel: ViewModel() {
             list
         }
     }
+
+    /*
+    fun deleteSelectedPhotos(selectedIds: List<String>) {
+        _listGeneratedPhotos.update { list ->
+            list.filterNot { it.id in selectedIds }.toMutableList()
+        }
+    }
+
+     */
 
     fun selectTempImageModel(imageModel: ImageModel) {
         _tempSelectedImageModel.value = imageModel

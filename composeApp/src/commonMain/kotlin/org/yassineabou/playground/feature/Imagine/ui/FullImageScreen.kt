@@ -27,6 +27,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,10 +40,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
+import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.util.PlatformConfig
@@ -61,7 +60,7 @@ import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLarge
 fun FullScreenImage(
     navController: NavController,
     startIndex: Int,
-    imageGenViewModel: ImageGenViewModel = koinViewModel(),
+    imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
     ) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
@@ -69,6 +68,12 @@ fun FullScreenImage(
     val pagerState = rememberPagerState(pageCount = { listGeneratedPhotos.size }, initialPage = startIndex)
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
+    // Update pagerState when listGeneratedPhotos changes
+    LaunchedEffect(listGeneratedPhotos) {
+        launch {
+            pagerState.animateScrollToPage(minOf(pagerState.currentPage, listGeneratedPhotos.lastIndex))
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -89,13 +94,26 @@ fun FullScreenImage(
             }
         )
 
-        ImagePager(
-            pagerState = pagerState,
-            listGenerated = listGeneratedPhotos,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
+        if (listGeneratedPhotos.isNotEmpty()) {
+            ImagePager(
+                pagerState = pagerState,
+                listGenerated = listGeneratedPhotos,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+        } else {
+            // Handle empty state
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No images available")
+            }
+        }
+
 
         FullScreenBottomBar(
             onInfoClicked = { showInfoBottomSheet = true },
@@ -139,14 +157,6 @@ private fun ImagePager(
                     url = image.url,
                     modifier = Modifier.fillMaxSize()
                 )
-            } else {
-                // Handle the case where the image is null (e.g., show a placeholder)
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Image not found")
-                }
             }
         }
 
@@ -173,8 +183,8 @@ private fun ImagePager(
 
 @Composable
 private fun ImageReview(modifier: Modifier = Modifier, url: String) {
-    KamelImage(
-        resource = { asyncPainterResource(data = url)},
+    AsyncImage(
+        model = url,
         contentDescription = "Wallpaper",
         contentScale = ContentScale.FillBounds,
         modifier = modifier

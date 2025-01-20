@@ -30,6 +30,7 @@ kotlinx-datetime = "0.6.1"
 kotlinx-collections-immutable = "0.3.8"
 
 koin-bom = "4.0.0"
+foundationLayoutAndroid = "1.7.6"
 
 
 [libraries]
@@ -66,6 +67,7 @@ koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel"}
 
 #android
 koin-android = { module = "io.insert-koin:koin-android" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

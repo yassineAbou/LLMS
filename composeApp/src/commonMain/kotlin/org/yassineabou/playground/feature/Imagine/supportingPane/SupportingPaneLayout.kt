@@ -18,7 +18,6 @@ import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
@@ -29,7 +28,7 @@ import org.yassineabou.playground.feature.Imagine.ui.ImagineScreen
 @Composable
 fun SupportingPaneLayout(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel = koinViewModel()
+    imageGenViewModel: ImageGenViewModel
 ) {
     val navigator = rememberSupportingPaneScaffoldNavigator()
     val supportingPaneNavigator = rememberSupportingPaneNavigator()

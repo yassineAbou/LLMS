@@ -28,27 +28,26 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import com.dragselectcompose.core.DragSelectState
 import com.dragselectcompose.core.rememberDragSelectState
 import com.dragselectcompose.grid.LazyDragSelectVerticalGrid
 import com.dragselectcompose.grid.indicator.IndicatorIconDefaults
 import com.dragselectcompose.grid.indicator.SelectedIcon
 import com.dragselectcompose.grid.indicator.UnselectedIcon
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.view.EmptyGeneratedMessage
 import org.yassineabou.playground.feature.Imagine.view.ImageSelectionControls
 
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel = koinViewModel(),
+    imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
     dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id }),
 ) {
@@ -64,7 +63,6 @@ fun GeneratedImagesScreen(
         else -> 2
     }
     val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
-
 
     Column(
         modifier = Modifier
@@ -87,49 +85,66 @@ fun GeneratedImagesScreen(
                 disableSelectionMode = { dragSelectState.disableSelectionMode() },
                 onDownloadClick = { /* Handle download */ },
                 onShareClick = { /* Handle share */ },
-                onDeleteClick = { /* Handle delete */ },
+                onDeleteClick = {
+                    /*
+                    val selectedIds = selectedPhotos.map { it.id }
+                    imageGenViewModel.deleteSelectedPhotos(selectedIds)
+                    dragSelectState.disableSelectionMode()
+
+                     */
+                },
                 onSelectAllClick = { dragSelectState.updateSelected(listGeneratedPhotos) }
             )
         }
-        LazyDragSelectVerticalGrid(
-            modifier = Modifier.fillMaxSize(),
-            columns = GridCells.Fixed(count = columnCount),
-            items = listGeneratedPhotos,
-            state = dragSelectState,
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            items { image ->
-                val isSelected = image in selectedPhotos
-                val selectedModifier = if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray).padding(4.dp) else Modifier
-                SelectableItem(
-                    modifier = selectedModifier,
-                    item = image,
-                    selectedIcon = {
-                        SelectedIcon(
-                             options = IndicatorIconDefaults.selectedIconOptions(
-                             tint = MaterialTheme.colorSchemeCustom.alwaysBlue,
-                             backgroundColor = MaterialTheme.colorSchemeCustom.alwaysWhite
-                             ),
-                             modifier = Modifier.align(Alignment.TopStart)
+
+        if (listGeneratedPhotos.isEmpty()) {
+            EmptyGeneratedMessage(
+                modifier = Modifier.fillMaxSize(),
+                onGenerateClick = {
+                    navController.navigate(Screen.ImagineScreen.route)
+                }
+            )
+        } else {
+            LazyDragSelectVerticalGrid(
+                modifier = Modifier.fillMaxSize(),
+                columns = GridCells.Fixed(count = columnCount),
+                items = listGeneratedPhotos,
+                state = dragSelectState,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                items { image ->
+                    val isSelected = image in selectedPhotos
+                    val selectedModifier = if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray).padding(4.dp) else Modifier
+                    SelectableItem(
+                        modifier = selectedModifier,
+                        item = image,
+                        selectedIcon = {
+                            SelectedIcon(
+                                options = IndicatorIconDefaults.selectedIconOptions(
+                                    tint = MaterialTheme.colorSchemeCustom.alwaysBlue,
+                                    backgroundColor = MaterialTheme.colorSchemeCustom.alwaysWhite
+                                ),
+                                modifier = Modifier.align(Alignment.TopStart)
+                            )
+                        },
+                        unselectedIcon = { UnselectedIcon(Modifier.align(Alignment.TopStart)) }
+                    ) {
+                        ImageItem(
+                            image = image,
+                            isInSelectionMode = inSelectionMode,
+                            onClick = {
+                                val index = listGeneratedPhotos.indexOfFirst { it.id == image.id }
+                                if (index != -1) {
+                                    if (isLargeScreen) {
+                                        supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(index))
+                                    } else {
+                                        navController.navigate("${Screen.FullScreenImage.route}/${index}")
+                                    }
+                                }
+                            },
                         )
-                    },
-                    unselectedIcon = { UnselectedIcon(Modifier.align(Alignment.TopStart)) }
-                ) {
-                      ImageItem(
-                          image = image,
-                          isInSelectionMode = inSelectionMode,
-                          onClick = {
-                              val index = listGeneratedPhotos.indexOfFirst { it.id == image.id }
-                              if (index != -1) {
-                                  if (isLargeScreen) {
-                                      supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(index))
-                                  } else {
-                                      navController.navigate("${Screen.FullScreenImage.route}/${index}")
-                                  }
-                              }
-                          },
-                      )
+                    }
                 }
             }
         }
@@ -166,8 +181,8 @@ fun ImageItem(
     isInSelectionMode: Boolean,
     onClick: () -> Unit
 ) {
-    KamelImage(
-        resource = { asyncPainterResource(data = image.url)},
+    AsyncImage(
+        model = image.url,
         contentScale = ContentScale.FillBounds,
         contentDescription = null,
         modifier = Modifier

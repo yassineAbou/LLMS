@@ -36,6 +36,7 @@ import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
+import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
 import org.yassineabou.playground.feature.chat.ui.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -63,6 +64,7 @@ fun LLMsApp() {
     val isSelectionMode = dragSelectState.inSelectionMode
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val chatViewModel = koinViewModel<ChatViewModel>()
+    val imageGenViewModel = koinViewModel<ImageGenViewModel>()
 
     LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
 
@@ -111,7 +113,7 @@ fun LLMsApp() {
                         SearchHistoryScreen(navController = navController)
                     }
                     composable(Screen.ImagineScreen.route) {
-                        SupportingPaneLayout(navController = navController)
+                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController)
                     }
                     composable(
                         route = Screen.ImageProcessingScreen.route,
@@ -131,7 +133,7 @@ fun LLMsApp() {
                         popExitTransition = { slideOutToRight() }
                     ) { backStackEntry ->
                         val startIndex = backStackEntry.arguments?.getInt("startIndex") ?: 0
-                        FullScreenImage(navController = navController, startIndex = startIndex)
+                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController, startIndex = startIndex)
                     }
                     composable(
                         route = Screen.GeneratedImagesScreen.route,
@@ -140,7 +142,7 @@ fun LLMsApp() {
                         popEnterTransition = { slideInFromLeft() },
                         popExitTransition = { slideOutToRight() }
                     ) {
-                        GeneratedImagesScreen(navController = navController)
+                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
                     }
                     composable(Screen.Profile.route) {
                         ProfileContent(navController = navController)
