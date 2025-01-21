@@ -113,7 +113,10 @@ fun BottomSheetButton(
 @Composable
 fun PrivacyInfoSection(
 ) {
-    Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp).navigationBarsPadding()) {
+    Column(
+        modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp)
+            .navigationBarsPadding()
+    ) {
         InfoText(
             title = "Why do you require to login?",
             description = """
@@ -178,12 +181,12 @@ fun TermsOfServiceAndPrivacyPolicy(
         }
         TextLink(
             text = "Terms",
-            onClick = {  }
+            onClick = { }
         )
         TextSeparator()
         TextLink(
             text = "Privacy Policy",
-            onClick = {  }
+            onClick = { }
         )
         if (trailingItemTitle != null) {
             TextSeparator()

@@ -20,7 +20,7 @@ object ImageGenModelList {
         Illust_Diffusion_XL_Url_Examples,
         Blender_Mix_Pony_Url_Examples,
         DucHaiten_GameArt_Unreal_Pony_Url_Examples,
-       TUNIX_Pony_Url_Examples,
+        TUNIX_Pony_Url_Examples,
         Fustercluck_Url_Examples,
         Cheyenne_Url_Examples,
         Pony_Diffusion_XL_Url_Examples

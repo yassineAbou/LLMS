@@ -63,7 +63,8 @@ fun LoginBottomSheet(
                 actionContent = {
                     BottomSheetButton(
                         text = "Login with Google",
-                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         onAuthenticated = {
@@ -77,7 +78,8 @@ fun LoginBottomSheet(
                     )
                     BottomSheetButton(
                         text = "Login with Apple",
-                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                         contentColor = MaterialTheme.colorScheme.background,
                         containerColor = MaterialTheme.colorScheme.onBackground,
                         onAuthenticated = {
@@ -94,7 +96,7 @@ fun LoginBottomSheet(
                     TermsOfServiceAndPrivacyPolicy(
                         modifier = Modifier.systemBarsPadding().padding(vertical = 16.dp),
                         leadingItemTitle = "Why login?",
-                        onLeadingItemClick = { showWhyLoginContent = true}
+                        onLeadingItemClick = { showWhyLoginContent = true }
                     )
                 }
             )
@@ -102,7 +104,7 @@ fun LoginBottomSheet(
         AnimatedVisibility(
             visible = showWhyLoginContent
         ) {
-            WhyLogin(onBackClick = { showWhyLoginContent = false})
+            WhyLogin(onBackClick = { showWhyLoginContent = false })
         }
     }
 }

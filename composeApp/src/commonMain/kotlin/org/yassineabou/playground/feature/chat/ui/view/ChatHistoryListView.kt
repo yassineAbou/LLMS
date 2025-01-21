@@ -139,7 +139,10 @@ fun ChatHistoryAction(
 fun AiProviderInfo(aiProvider: AIProvider) {
     Row(
         modifier = Modifier
-            .border(BorderStroke(1.dp, MaterialTheme.colorSchemeCustom.alwaysGray), shape = RoundedCornerShape(8.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorSchemeCustom.alwaysGray),
+                shape = RoundedCornerShape(8.dp)
+            )
             .padding(6.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -170,14 +173,16 @@ fun ActionButtons(
         isBookmarkedState = isBookmarked
     }
 
-    val bookmarkTint = if (isBookmarkedState) MaterialTheme.colorSchemeCustom.alwaysBlue else MaterialTheme.colorScheme.onBackground
+    val bookmarkTint =
+        if (isBookmarkedState) MaterialTheme.colorSchemeCustom.alwaysBlue else MaterialTheme.colorScheme.onBackground
 
     Row {
         IconButton(
             onClick = {
                 toggleBookmark()
                 // Here, you might want to update isBookmarkedState directly if 'toggleBookmark' doesn't do this
-                isBookmarkedState = !isBookmarkedState // If 'toggleBookmark' doesn't update the state, do it here
+                isBookmarkedState =
+                    !isBookmarkedState // If 'toggleBookmark' doesn't update the state, do it here
             }
         ) {
             Icon(

@@ -65,7 +65,7 @@ fun ChatScreen(
                 .statusBarsPadding()
                 .fillMaxWidth()
                 .padding(8.dp),
-            onClickHistory = { navController.navigate(Screen.ChatHistoryScreen.route)},
+            onClickHistory = { navController.navigate(Screen.ChatHistoryScreen.route) },
             onNewChatClick = { chatViewModel.startNewChat() },
             onSelect = { selectModelClicked = true }
         )
@@ -127,7 +127,6 @@ private fun ChatMessagesList(
         }
     }
 }
-
 
 
 @Composable

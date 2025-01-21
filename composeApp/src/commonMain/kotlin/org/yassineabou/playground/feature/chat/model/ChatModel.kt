@@ -45,6 +45,7 @@ fun generateFakeThreadData(numThreads: Int): List<ChatHistory> {
         )
     }
 }
+
 fun generateRandomDescription(): String {
     val sentences = listOf(
         "This is a sample sentence for the description.",

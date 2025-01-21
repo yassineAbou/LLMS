@@ -42,35 +42,37 @@ fun ImageDialogContent(
     onDismiss: () -> Unit,
 ) {
     val scrollState = rememberScrollState(0)
-        Box {
-            AsyncImage(
-                model = urlExample.url,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize(),
-                contentDescription = "dialog image background"
-            )
-            CloseButton(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp),
-                onDismiss = onDismiss
-            )
+    Box {
+        AsyncImage(
+            model = urlExample.url,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize(),
+            contentDescription = "dialog image background"
+        )
+        CloseButton(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp),
+            onDismiss = onDismiss
+        )
 
-             DescriptionWithTryButton(
-                 description = urlExample.description,
-                 scrollState = scrollState,
-                 modifier = Modifier
-                     .align(Alignment.BottomCenter)
-                     .padding(16.dp),
-                 onIdeaTextChange = onIdeaTextChange,
-                 onDismiss = onDismiss
-             )
-        }
+        DescriptionWithTryButton(
+            description = urlExample.description,
+            scrollState = scrollState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+            onIdeaTextChange = onIdeaTextChange,
+            onDismiss = onDismiss
+        )
+    }
 }
 
-@Composable fun CloseButton(
+@Composable
+fun CloseButton(
     modifier: Modifier,
-    onDismiss: () -> Unit) {
+    onDismiss: () -> Unit
+) {
     IconButton(
         modifier = modifier,
         onClick = onDismiss

@@ -96,8 +96,8 @@ fun ProfileContent(
 
         if (showBottomSheetState) {
             LoginBottomSheet(
-                onDismissRequest =  { profileViewModel.onDismissBottomSheet() },
-                onAuthenticated = { profileViewModel.onAuthenticated()}
+                onDismissRequest = { profileViewModel.onDismissBottomSheet() },
+                onAuthenticated = { profileViewModel.onAuthenticated() }
             )
         }
     }
@@ -184,7 +184,7 @@ private fun UserDetails(
 private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
     if (userUiState?.thumbnailUrl != null) {
         AsyncImage(
-            model =  userUiState.thumbnailUrl,
+            model = userUiState.thumbnailUrl,
             contentDescription = "user thumbnail",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -384,10 +384,10 @@ private fun TitleDescriptionText(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(  start = 8.dp)
+            .padding(start = 8.dp)
     ) {
         Text(
-            text  = title,
+            text = title,
             style = MaterialTheme.typography.titleMedium,
         )
         Text(

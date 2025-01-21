@@ -8,15 +8,18 @@ import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.ImageModel
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 
-class ImageGenViewModel: ViewModel() {
+class ImageGenViewModel : ViewModel() {
 
-    private val _listGeneratedPhotos: MutableStateFlow<MutableList<UrlExample>> = MutableStateFlow(ImageGenModelList.generated)
+    private val _listGeneratedPhotos: MutableStateFlow<MutableList<UrlExample>> =
+        MutableStateFlow(ImageGenModelList.generated)
     val listGeneratedPhotos: StateFlow<MutableList<UrlExample>> = _listGeneratedPhotos
 
-    private val _tempSelectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
+    private val _tempSelectedImageModel =
+        MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
     val tempSelectedImageModel: StateFlow<ImageModel> = _tempSelectedImageModel
 
-    private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
+    private val _selectedImageModel =
+        MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
 
     fun deletePhoto(index: Int) {
@@ -35,14 +38,15 @@ class ImageGenViewModel: ViewModel() {
         }
     }
 
-    /*
-    fun deleteSelectedPhotos(selectedIds: List<String>) {
+    // Function to delete multiple photos by their IDs
+    fun deleteSelectedPhotos(selectedPhotos: List<UrlExample>) {
         _listGeneratedPhotos.update { list ->
-            list.filterNot { it.id in selectedIds }.toMutableList()
+            val newList = list.toMutableList().apply {
+                removeAll { it in selectedPhotos }
+            }
+            newList
         }
     }
-
-     */
 
     fun selectTempImageModel(imageModel: ImageModel) {
         _tempSelectedImageModel.value = imageModel

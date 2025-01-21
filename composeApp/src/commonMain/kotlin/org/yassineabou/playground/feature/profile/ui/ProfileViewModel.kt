@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.yassineabou.playground.feature.profile.model.UserUiState
 import org.yassineabou.playground.feature.profile.model.prototypeUser
 
-class ProfileViewModel: ViewModel() {
+class ProfileViewModel : ViewModel() {
     private val _userUiState = MutableStateFlow<UserUiState?>(null)
-    val userUiState =  _userUiState.asStateFlow()
+    val userUiState = _userUiState.asStateFlow()
 
     private val _showBottomSheet = MutableStateFlow(false)
     val showBottomSheet = _showBottomSheet.asStateFlow()

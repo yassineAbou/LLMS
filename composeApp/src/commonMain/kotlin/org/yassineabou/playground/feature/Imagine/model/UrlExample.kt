@@ -1,6 +1,6 @@
 package org.yassineabou.playground.feature.Imagine.model
 
-class IdGenerator  {
+class IdGenerator {
 
     private var nextId = 0
 
@@ -44,11 +44,11 @@ val AlbedoBase_XL_Url_Examples = listOf(
         description = "Imagine an ultra-detailed oil painting that thrusts you into the heart of a surreal, dark fantasy dreamscape, masterfully rendered in the iconic style of Frank Frazetta. At the center of this apocalyptic hellscape stands a formidable, muscular figure, shrouded in a dark hood, with enormous black wings unfurled menacingly. His demonic plate armor, intricately designed and exuding malevolence, catches the faint, eerie light. His face, a dark void shrouded in shadow, is featureless except for two fiery red eyes that burn with an infernal intensity. He is engaged in a ferocious battle against a horde of demonic beasts that swarm in from all sides. Each beast, a grotesque amalgamation of nightmare and flesh, falls before the sweeping arcs of his massive, gleaming sword, wielded with a master's precision. In the background, jagged mountains rise ominously, silhouetted against a tempestuous, roiling sky. The ground is a macabre tapestry of decapitated demons, scattered skulls, and winding rivers of blood, completing this nightmarish vista with a visceral sense of dread and awe."
     ),
     UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9791dfd2-b9ef-45b2-8f40-8c79bc60b054/width=450/00291-9.jpeg",
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9791dfd2-b9ef-45b2-8f40-8c79bc60b054/width=450/00291-9.jpeg",
         description = "Picture a high-quality, macro level close-up photograph capturing the enigmatic beauty of a crow's head in sharp detail. The crow's wise eyes are the focal point, deep and reflective, mirroring the entire world within their gaze. They hold an almost mystical quality, reflecting a miniature panorama of the surrounding landscape at sunset. The warm, golden hues of the fading sun bathe the scene, accentuating the intricate textures of the crow's feathers and adding a soft, ethereal glow to the image. The crow is looking directly into the camera, its gaze piercing and direct, creating an intense connection with the viewer. In its eyes, the faraway ocean and islands are glimpsed, subtly blurred in the background, enhancing the sense of depth and isolation. This image is framed with a careful balance of zoom and depth of field, ensuring the crowâ\u0080\u0099s face is in sharp focus while the background fades into a dreamy bokeh, emphasizing the profound and solitary figure of the crow against the vastness of the world."
     ),
     UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4e9d9453-c550-448f-bdab-eba5bcba5e4a/width=450/00295-9.jpeg",
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4e9d9453-c550-448f-bdab-eba5bcba5e4a/width=450/00295-9.jpeg",
         description = "Envision a full body shot of a girl, a breathtaking embodiment of nature's splendor. Her figure is a delicate yet powerful fusion of the earth's elements, each aspect rendered with mesmerizing intricacy. Her hair flows like a cascade of autumn leaves, shimmering with hues of gold and amber, while her skin mimics the rich, fertile earth, textured with subtle hints of green, as if moss and tiny sprouts are emerging from it. Her arms and legs are like elegant vines, adorned with a myriad of tiny flowers, dewdrops, and fresh buds, showcasing the vibrant vitality of spring. Veins of shimmering water course through her, resembling flowing streams that reflect the light in a dance of sparkling blues and whites. Her eyes, deep and expressive, hold the serene azure of the sky, with flecks of white clouds drifting within. Around her, a gentle breeze seems to carry whispers of leaves and petals, adding a dynamic sense of movement to the image. This portrayal captures not just the visual beauty of nature's elements but their essence, creating a harmonious and ethereal representation of a girl who is one with nature."
     ),
     UrlExample(
@@ -76,7 +76,7 @@ val AlbedoBase_XL_Url_Examples = listOf(
         description = "Painting, dreamscape of an Enchanted Library within a giant tree, at Dawn, Whimsical, Solarpunk, Warm Illumination, fluid, Oil on canvas, Focal length 35mm, Lark filter, Fibonacci spiral"
     ),
     UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1bf65792-d27a-4e92-8644-e894ac24f297/width=450/00319-9.jpeg",
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1bf65792-d27a-4e92-8644-e894ac24f297/width=450/00319-9.jpeg",
         description = "serene aesthetic, luxurious minimalist, spacious treehouse with panoramic windows overlooking a solarpunk forest village at sunrise, view from canopy level, earth-toned furnishings, living plant walls, gentle breeze outside with falling leaves, intricate, high resolution, hyper-realistic, bright, hopeful"
     ),
     UrlExample(
@@ -102,10 +102,10 @@ val AlbedoBase_XL_Url_Examples = listOf(
 )
 
 val Blank_Canvas_XL_Url_Examples = listOf(
-     UrlExample(
-         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/39f3e37e-5e2b-4d4d-864d-0d68fdf6851e/width=450/00232-1566567995.jpeg",
-         description = "pixar disney cartoon of a (cute baby quokka in a tuxedo), symmetrical, highly detailed, 8k, digital painting, oil painting, illustration, concept art, sharp focus, volumetric lighting, epic Composition, cgsociety, artstation"
-     ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/39f3e37e-5e2b-4d4d-864d-0d68fdf6851e/width=450/00232-1566567995.jpeg",
+        description = "pixar disney cartoon of a (cute baby quokka in a tuxedo), symmetrical, highly detailed, 8k, digital painting, oil painting, illustration, concept art, sharp focus, volumetric lighting, epic Composition, cgsociety, artstation"
+    ),
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b3b1a981-4f77-4b9e-b12e-77e66d5963e3/width=450/00174-3400376488.jpeg",
         description = "dslr photo of a girl in a fusion of medieval and cyberpunk elements, with a mix of technology and nature, (highres, highly detailed:1.2), cinematic lighting, vibrant colors"
@@ -286,7 +286,7 @@ val Pony_Realism_Url_Example = listOf(
     )
 )
 
-val  Ultraspice_Url_Examples = listOf(
+val Ultraspice_Url_Examples = listOf(
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd741fe9-d930-4681-81f8-9eb3368ea45e/original=true,quality=90/00325-3820806867.jpeg",
         description = "Little hedgehog in the fallen leaves in autumn, close-up, 8k resolution, HD photography, real photo, soft light, ultra-high definition, best quality, extreme details"
@@ -719,7 +719,7 @@ val AM_Pony_XL_Url_Examples = listOf(
 
 val Illust_Diffusion_XL_Url_Examples = listOf(
     UrlExample(
-        url =  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/61e8a376-b4c7-4468-971d-2bcc213c7d2d/original=true,quality=90/image%20(172).jpeg",
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/61e8a376-b4c7-4468-971d-2bcc213c7d2d/original=true,quality=90/image%20(172).jpeg",
         description = "A girl surrounded by black roses, full body, scared, black long hair with blunt bangs, in black dress with frills and lace, smile with face blush, aesthetic, beautiful color, (amazing quality:1.5), by modare, by ask, by ikky, depth of field, chromatic aberration, black theme, perspective, amazing lighting and shadow"
     ),
     UrlExample(
@@ -927,12 +927,11 @@ val TUNIX_Pony_Url_Examples = listOf(
 )
 
 
-
 val Fustercluck_Url_Examples = listOf(
-   UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/66774418-8c69-46e6-8a28-1dd49fc7328b/width=450/00169-2367887771.jpeg",
-       description = "cartoon of (a badass rebel rabbit dressed as a biker gang, leather jacket, mohawk:2.5), looking at viewer, symmetrical, chromatic fantasy, highly detailed, 8k, digital painting, oil painting, illustration, concept art, sharp focus, volumetric lighting, epic Composition, cgsociety, artstation"
-   ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/66774418-8c69-46e6-8a28-1dd49fc7328b/width=450/00169-2367887771.jpeg",
+        description = "cartoon of (a badass rebel rabbit dressed as a biker gang, leather jacket, mohawk:2.5), looking at viewer, symmetrical, chromatic fantasy, highly detailed, 8k, digital painting, oil painting, illustration, concept art, sharp focus, volumetric lighting, epic Composition, cgsociety, artstation"
+    ),
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f1e3da40-72c3-4897-b4cf-4f4a8d92ed3c/width=450/00171-2706813141.jpeg",
         description = "pixar disney cartoon of (a cute baby giraffe in a big city :1.2), looking at viewer, symmetrical, chromatic fantasy, highly detailed, 8k, digital painting, oil painting, illustration, concept art, sharp focus, volumetric lighting, epic Composition, cgsociety, artstation"
@@ -1087,14 +1086,14 @@ val Pony_Diffusion_XL_Url_Examples = listOf(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/da94cb58-2410-4ab1-b0cd-17d76ee0bbe0/original=true,quality=90/00097-878055085.jpeg",
         description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, rei ayanami from evangelion hugging asuka langley from evangelion, duo"
     ),
-   UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2bd1880d-309d-41f6-93de-57e401a19742/original=true,quality=90/00433-1568710691.jpeg",
-       description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, score_9, score_9, sfw, (solo), anthro, male, protogen, high detailed fur, smile"
-   ),
-   UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/410afe7a-13e1-479f-9420-f82277606f41/original=true,quality=90/00079-290733181.jpeg",
-       description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, frankie foster from Foster's Home for Imaginary Friends holding a cup of coffee in a coffee shop"
-   ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2bd1880d-309d-41f6-93de-57e401a19742/original=true,quality=90/00433-1568710691.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, score_9, score_9, sfw, (solo), anthro, male, protogen, high detailed fur, smile"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/410afe7a-13e1-479f-9420-f82277606f41/original=true,quality=90/00079-290733181.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, frankie foster from Foster's Home for Imaginary Friends holding a cup of coffee in a coffee shop"
+    ),
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/07d7eba1-e02f-462c-ad77-a5e91c257a3c/width=450/00405-4054921432.jpeg",
         description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, score_9, a photo of feral pony plushie standing on a real table"
@@ -1130,9 +1129,9 @@ val Pony_Diffusion_XL_Url_Examples = listOf(
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ca18d37e-be8b-4a32-99d4-24e25b061a97/width=450/tmpwcaemsmp.jpeg",
     ),
-   UrlExample(
-       url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4790674c-e16d-4dc7-b384-af4381fcfa3f/width=450/ponydiffwall2.jpeg",
-   )
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4790674c-e16d-4dc7-b384-af4381fcfa3f/width=450/ponydiffwall2.jpeg",
+    )
 )
 
 

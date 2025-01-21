@@ -68,13 +68,19 @@ fun LLMsApp() {
 
     LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
 
-        val routeToCheck = listOf(Screen.FullScreenImage.route, Screen.ImageProcessingScreen.route, Screen.ChatHistoryScreen.route, Screen.GeneratedImagesScreen.route, Screen.SearchHistoryScreen.route)
+        val routeToCheck = listOf(
+            Screen.FullScreenImage.route,
+            Screen.ImageProcessingScreen.route,
+            Screen.ChatHistoryScreen.route,
+            Screen.GeneratedImagesScreen.route,
+            Screen.SearchHistoryScreen.route
+        )
 
-        isFullScreenImage = navBackStackEntry?.destination?.route?.let {currentRoute ->
+        isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
             routeToCheck.any { currentRoute.startsWith(it) }
         } ?: false
 
-        isBottomBarVisible =!isFullScreenImage and !isSelectionMode
+        isBottomBarVisible = !isFullScreenImage and !isSelectionMode
     }
 
 
@@ -113,7 +119,10 @@ fun LLMsApp() {
                         SearchHistoryScreen(navController = navController)
                     }
                     composable(Screen.ImagineScreen.route) {
-                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController)
+                        SupportingPaneLayout(
+                            imageGenViewModel = imageGenViewModel,
+                            navController = navController
+                        )
                     }
                     composable(
                         route = Screen.ImageProcessingScreen.route,
@@ -122,7 +131,10 @@ fun LLMsApp() {
                         popEnterTransition = { slideInFromLeft() },
                         popExitTransition = { slideOutToRight() }
                     ) {
-                        ImageProcessingScreen(navController = navController)
+                        ImageProcessingScreen(
+                            navController = navController,
+                            imageGenViewModel = imageGenViewModel
+                        )
                     }
                     composable(
                         route = "FullScreenImage/{startIndex}",
@@ -133,7 +145,11 @@ fun LLMsApp() {
                         popExitTransition = { slideOutToRight() }
                     ) { backStackEntry ->
                         val startIndex = backStackEntry.arguments?.getInt("startIndex") ?: 0
-                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController, startIndex = startIndex)
+                        FullScreenImage(
+                            imageGenViewModel = imageGenViewModel,
+                            navController = navController,
+                            startIndex = startIndex
+                        )
                     }
                     composable(
                         route = Screen.GeneratedImagesScreen.route,
@@ -142,7 +158,10 @@ fun LLMsApp() {
                         popEnterTransition = { slideInFromLeft() },
                         popExitTransition = { slideOutToRight() }
                     ) {
-                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
+                        GeneratedImagesScreen(
+                            imageGenViewModel = imageGenViewModel,
+                            navController = navController
+                        )
                     }
                     composable(Screen.Profile.route) {
                         ProfileContent(navController = navController)

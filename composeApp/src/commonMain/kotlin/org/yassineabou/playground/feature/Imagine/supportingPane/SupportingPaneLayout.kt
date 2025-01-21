@@ -85,6 +85,7 @@ fun ThreePaneScaffoldScope.MainPane(
                     onNavigateToSupportingPane = onNavigateToSupportingPane
                 )
             }
+
             "ImageProcessingScreen" -> {
                 ImageProcessingScreen(
                     navController = navController,
@@ -92,6 +93,7 @@ fun ThreePaneScaffoldScope.MainPane(
                     supportingPaneNavigator = supportingPaneNavigator
                 )
             }
+
             "FullScreenImage" -> {
                 FullScreenImage(
                     navController = navController,
@@ -139,6 +141,7 @@ fun ThreePaneScaffoldScope.SupportingPane(
                     navController = navController
                 )
             }
+
             is SupportingPaneScreen.ImageProcessing -> {
                 ImageProcessingScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
@@ -146,6 +149,7 @@ fun ThreePaneScaffoldScope.SupportingPane(
                     navController = navController
                 )
             }
+
             is SupportingPaneScreen.FullScreenImage -> {
                 FullScreenImage(
                     startIndex = targetScreen.index,

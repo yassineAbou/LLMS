@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-actual fun getScreenHeight()= LocalWindowInfo.current
+actual fun getScreenHeight() = LocalWindowInfo.current
     .containerSize
     .height
     .dp

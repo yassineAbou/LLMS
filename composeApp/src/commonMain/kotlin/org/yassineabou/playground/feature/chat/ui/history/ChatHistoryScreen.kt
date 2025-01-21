@@ -49,22 +49,22 @@ fun ChatHistoryScreen(
             onBackPress = { navController.popBackStack() },
             onClearHistory = { showClearHistoryDialog = true }
         )
-        HistoryHeaderRow(onHistorySearch = { navController.navigate(Screen.SearchHistoryScreen.route)} )
+        HistoryHeaderRow(onHistorySearch = { navController.navigate(Screen.SearchHistoryScreen.route) })
 
         HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
 
         if (showClearHistoryDialog) {
-           ClearHistoryDialog(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .height(375.dp),
-               onDismiss = { showClearHistoryDialog = false },
-               onConfirm = {
-                   chatViewModel.clearChatHistory()
-                   showClearHistoryDialog = false
-               }
-           )
-       }
+            ClearHistoryDialog(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(375.dp),
+                onDismiss = { showClearHistoryDialog = false },
+                onConfirm = {
+                    chatViewModel.clearChatHistory()
+                    showClearHistoryDialog = false
+                }
+            )
+        }
     }
 }
 

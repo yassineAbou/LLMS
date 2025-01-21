@@ -230,11 +230,17 @@ private fun imageGenModel(
     onSelected: () -> Unit,
     onInfoClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) MaterialTheme.colorSchemeCustom.alwaysBlue else Color.Transparent
-    val textColor = if (isSelected) MaterialTheme.colorSchemeCustom.alwaysWhite else MaterialTheme.colorScheme.onBackground
+    val backgroundColor =
+        if (isSelected) MaterialTheme.colorSchemeCustom.alwaysBlue else Color.Transparent
+    val textColor =
+        if (isSelected) MaterialTheme.colorSchemeCustom.alwaysWhite else MaterialTheme.colorScheme.onBackground
     Column(
         modifier = Modifier
-            .border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(16.dp)
+            )
             .background(backgroundColor, shape = RoundedCornerShape(16.dp))
             .clickable(onClick = onSelected) // Open detailed view on click
             .padding(16.dp),
@@ -274,9 +280,6 @@ private fun imageGenModel(
         }
     }
 }
-
-
-
 
 
 @Composable

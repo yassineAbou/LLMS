@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 
 
-
 @Composable
 fun ImageSelectionControls(
     selectedPhotoCount: Int,

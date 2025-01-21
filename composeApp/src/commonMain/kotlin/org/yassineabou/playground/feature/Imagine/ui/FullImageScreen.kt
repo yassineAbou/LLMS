@@ -1,5 +1,6 @@
 package org.yassineabou.playground.feature.Imagine.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
@@ -46,6 +48,7 @@ import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.util.PlatformConfig
 import org.yassineabou.playground.app.ui.util.isDesktop
+import org.yassineabou.playground.app.ui.util.isWasm
 import org.yassineabou.playground.app.ui.view.BottomSheetContent
 import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
 import org.yassineabou.playground.app.ui.view.PyramidText
@@ -62,16 +65,22 @@ fun FullScreenImage(
     startIndex: Int,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
-    ) {
+) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(pageCount = { listGeneratedPhotos.size }, initialPage = startIndex)
+    val pagerState =
+        rememberPagerState(pageCount = { listGeneratedPhotos.size }, initialPage = startIndex)
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
     // Update pagerState when listGeneratedPhotos changes
     LaunchedEffect(listGeneratedPhotos) {
         launch {
-            pagerState.animateScrollToPage(minOf(pagerState.currentPage, listGeneratedPhotos.lastIndex))
+            pagerState.animateScrollToPage(
+                minOf(
+                    pagerState.currentPage,
+                    listGeneratedPhotos.lastIndex
+                )
+            )
         }
     }
 
@@ -81,8 +90,8 @@ fun FullScreenImage(
     ) {
         FullScreenBackIcon(
             modifier = Modifier
-            .padding(4.dp)
-            .align(Alignment.Start),
+                .padding(4.dp)
+                .align(Alignment.Start),
             onBackPress = {
                 if (isLargeScreen) {
                     supportingPaneNavigator?.navigate(SupportingPaneScreen.GeneratedImages)
@@ -160,12 +169,12 @@ private fun ImagePager(
             }
         }
 
-        if (PlatformConfig.isDesktop()) {
+        if (PlatformConfig.isDesktop() or PlatformConfig.isWasm()) {
             NavigationArrows(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .padding(horizontal = 20.dp),
+                    .align(Alignment.Center),
+                //.padding(horizontal = 20.dp),
                 onPreviousPage = {
                     coroutineScope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
@@ -202,27 +211,49 @@ private fun NavigationArrows(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        // Previous Arrow Button
         IconButton(
-            onClick
-            = onPreviousPage,
+            onClick = onPreviousPage,
             modifier = Modifier.size(48.dp)
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
-                contentDescription = "Left Arrow",
-                tint = MaterialTheme.colorSchemeCustom.alwaysWhite
-            )
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorSchemeCustom.alwaysWhite.copy(alpha = 0.3f), // Semi-transparent white
+                        shape = CircleShape
+                    )
+                    .size(40.dp), // Adjust size as needed
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                    contentDescription = "Left Arrow",
+                    tint = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+            }
         }
 
+        // Next Arrow Button
         IconButton(
             onClick = onNextPage,
             modifier = Modifier.size(48.dp)
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                contentDescription = "Right Arrow",
-                tint = MaterialTheme.colorSchemeCustom.alwaysWhite
-            )
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorSchemeCustom.alwaysWhite.copy(alpha = 0.3f), // Semi-transparent white
+                        shape = CircleShape
+                    )
+                    .size(40.dp), // Adjust size as needed
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                    contentDescription = "Right Arrow",
+                    tint = MaterialTheme.colorSchemeCustom.alwaysWhite
+                )
+            }
         }
     }
 }

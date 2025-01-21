@@ -158,7 +158,6 @@ private fun GeneratedImagesIconButton(
 }
 
 
-
 @Composable
 private fun TypeIdeaForm(
     ideaText: String,
@@ -227,12 +226,11 @@ private fun TypeIdeaForm(
                     .weight(0.15f)
                     .align(Alignment.End)
                     .padding(end = 16.dp),
-                onClick = {  },
+                onClick = { },
             )
         }
     }
 }
-
 
 
 @Composable

@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
@@ -33,21 +32,24 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun ImageProcessingScreen(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel = koinViewModel(),
+    imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
-    ) {
+) {
     var remainingSeconds by remember { mutableStateOf(10) }
     var progress by remember { mutableStateOf(0f) }
     val isLargeScreen = rememberIsLargeScreen()
     LaunchedEffect(key1 = Unit) {
+        imageGenViewModel.addImage(
+            UrlExample(
+                url = "https://i.imgur.com/ivnreND.png",
+                description = "We're going to work on generating images next. this is just a prototype with fake data"
+            )
+        )
         for (i in 10 downTo 0) {
             remainingSeconds = i
             progress = 1f - (i / 10f) // Invert the progress calculation
             delay(1.seconds)
         }
-        imageGenViewModel.addImage(
-           UrlExample(url = "https://i.imgur.com/ivnreND.png", description = "We're going to work on generating images next. this is just a prototype with fake data")
-        )
 
         if (isLargeScreen) {
             supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(0))

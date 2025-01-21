@@ -41,8 +41,7 @@ fun ClearHistoryDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    ,
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(18.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

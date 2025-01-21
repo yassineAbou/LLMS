@@ -43,7 +43,9 @@ fun ChatBubble(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = if (isUser) MaterialTheme.colorScheme.surface else MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f),
+                    color = if (isUser) MaterialTheme.colorScheme.surface else MaterialTheme.colorSchemeCustom.alwaysBlue.copy(
+                        alpha = 0.5f
+                    ),
                 )
                 .padding(16.dp), // Only padding inside the row
             verticalAlignment = Alignment.Top, // Align to the top
@@ -78,7 +80,10 @@ private fun UserIcon() {
     Box(
         modifier = Modifier
             .size(40.dp)
-            .background(MaterialTheme.colorScheme.background, CircleShape) // Background for the icon
+            .background(
+                MaterialTheme.colorScheme.background,
+                CircleShape
+            ) // Background for the icon
             .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {

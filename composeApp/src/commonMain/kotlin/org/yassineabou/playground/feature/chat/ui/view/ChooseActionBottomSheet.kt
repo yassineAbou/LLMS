@@ -31,17 +31,17 @@ fun ChooseActionBottomSheet(
         sheetState = sheetState
     ) {
 
-            BottomSheetContent(
-                title = {
-                    BottomSheetTitle(
-                        text = "Choose Action",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                },
-                body = {
-                    ActionsButtons(onActionSeletced = onActionSeletced)
-                }
-            )
+        BottomSheetContent(
+            title = {
+                BottomSheetTitle(
+                    text = "Choose Action",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
+            body = {
+                ActionsButtons(onActionSeletced = onActionSeletced)
+            }
+        )
     }
 
 }

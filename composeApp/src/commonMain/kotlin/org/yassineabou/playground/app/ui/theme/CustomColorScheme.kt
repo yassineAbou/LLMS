@@ -13,6 +13,7 @@ data class CustomColorScheme(
     val askAnythingBgColor: Color
 )
 
-val LocalCustomColorScheme: ProvidableCompositionLocal<CustomColorScheme> = staticCompositionLocalOf {
-    throw IllegalStateException("CustomColorScheme not provided")
-}
+val LocalCustomColorScheme: ProvidableCompositionLocal<CustomColorScheme> =
+    staticCompositionLocalOf {
+        throw IllegalStateException("CustomColorScheme not provided")
+    }

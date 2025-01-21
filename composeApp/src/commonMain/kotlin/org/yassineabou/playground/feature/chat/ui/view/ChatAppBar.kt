@@ -32,7 +32,7 @@ fun ChatAppBar(
     modifier: Modifier = Modifier,
     onClickHistory: () -> Unit,
     onNewChatClick: () -> Unit,
-    onSelect : () -> Unit
+    onSelect: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -48,7 +48,10 @@ fun ChatAppBar(
                 .align(Alignment.TopCenter)
                 .padding(8.dp)
                 .clickable { onSelect() }
-                .background(color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f), shape = RoundedCornerShape(8.dp))
+                .background(
+                    color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .padding(6.dp)
         )
         NewChatIconButton(

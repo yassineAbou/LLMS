@@ -86,12 +86,8 @@ fun GeneratedImagesScreen(
                 onDownloadClick = { /* Handle download */ },
                 onShareClick = { /* Handle share */ },
                 onDeleteClick = {
-                    /*
-                    val selectedIds = selectedPhotos.map { it.id }
-                    imageGenViewModel.deleteSelectedPhotos(selectedIds)
+                    imageGenViewModel.deleteSelectedPhotos(selectedPhotos)
                     dragSelectState.disableSelectionMode()
-
-                     */
                 },
                 onSelectAllClick = { dragSelectState.updateSelected(listGeneratedPhotos) }
             )
@@ -113,9 +109,13 @@ fun GeneratedImagesScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                items { image ->
+                items(
+                    key = { image -> image.id }
+                ) { image ->
                     val isSelected = image in selectedPhotos
-                    val selectedModifier = if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray).padding(4.dp) else Modifier
+                    val selectedModifier =
+                        if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray)
+                            .padding(4.dp) else Modifier
                     SelectableItem(
                         modifier = selectedModifier,
                         item = image,
@@ -137,7 +137,11 @@ fun GeneratedImagesScreen(
                                 val index = listGeneratedPhotos.indexOfFirst { it.id == image.id }
                                 if (index != -1) {
                                     if (isLargeScreen) {
-                                        supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage(index))
+                                        supportingPaneNavigator?.navigate(
+                                            SupportingPaneScreen.FullScreenImage(
+                                                index
+                                            )
+                                        )
                                     } else {
                                         navController.navigate("${Screen.FullScreenImage.route}/${index}")
                                     }

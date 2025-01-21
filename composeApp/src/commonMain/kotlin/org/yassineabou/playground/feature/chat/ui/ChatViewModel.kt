@@ -42,17 +42,19 @@ class ChatViewModel : ViewModel() {
     private val _currentChatId = MutableStateFlow<String?>(null)
     val currentChatId: StateFlow<String?> get() = _currentChatId
 
-    private val _selectedAIProviders = MutableStateFlow<Map<String, Boolean>>(mapOf(
-        "Meta" to true,
-        "Google" to true,
-        "AnthraciteOrg" to true,
-        "AI21 Lab" to true,
-        "Hugging Face H4" to true,
-        "Alibaba Cloud" to true,
-        "Deep Seek" to true,
-        "TII" to true,
-        "CohereForAI" to true
-    ))
+    private val _selectedAIProviders = MutableStateFlow<Map<String, Boolean>>(
+        mapOf(
+            "Meta" to true,
+            "Google" to true,
+            "AnthraciteOrg" to true,
+            "AI21 Lab" to true,
+            "Hugging Face H4" to true,
+            "Alibaba Cloud" to true,
+            "Deep Seek" to true,
+            "TII" to true,
+            "CohereForAI" to true
+        )
+    )
     val selectedAIProviders: StateFlow<Map<String, Boolean>> = _selectedAIProviders
 
     fun selectTempTextModel(textGenModel: TextModel) {

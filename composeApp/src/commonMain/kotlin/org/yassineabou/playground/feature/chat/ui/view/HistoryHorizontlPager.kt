@@ -42,7 +42,7 @@ fun HistoryHorizontalPager(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 HistoryTabRows(
                     selectedTabIndex = selectedTabIndex,
                     pagerState = pagerState
@@ -100,8 +100,15 @@ fun HistoryPagerContent(
 ) {
     HorizontalPager(state = pagerState) { index ->
         when (index) {
-            0 -> RecentChatHistoryContent(chatViewModel = chatViewModel, navController = navController)
-            1 -> SavedChatHistoryContent(chatViewModel = chatViewModel, navController = navController)
+            0 -> RecentChatHistoryContent(
+                chatViewModel = chatViewModel,
+                navController = navController
+            )
+
+            1 -> SavedChatHistoryContent(
+                chatViewModel = chatViewModel,
+                navController = navController
+            )
         }
     }
 }

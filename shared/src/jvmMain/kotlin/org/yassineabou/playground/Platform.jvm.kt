@@ -1,6 +1,6 @@
 package org.yassineabou.playground
 
-class JVMPlatform: Platform {
+class JVMPlatform : Platform {
     override val name: String = "Java ${System.getProperty("java.version")}"
 }
 
