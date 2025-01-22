@@ -17,11 +17,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +44,7 @@ import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
 import org.yassineabou.playground.feature.Imagine.view.EmptyGeneratedMessage
 import org.yassineabou.playground.feature.Imagine.view.ImageSelectionControls
 
@@ -73,6 +77,7 @@ fun GeneratedImagesScreen(
             visible = !inSelectionMode,
         ) {
             GeneratedImagesTopBar(
+                isLargeScreen = isLargeScreen,
                 modifier = Modifier.padding(vertical = 4.dp),
                 onBackPress = { navController.navigate(Screen.ImagineScreen.route) }
             )
@@ -157,6 +162,7 @@ fun GeneratedImagesScreen(
 
 @Composable
 private fun GeneratedImagesTopBar(
+    isLargeScreen: Boolean,
     modifier: Modifier = Modifier,
     onBackPress: () -> Unit
 ) {
@@ -164,9 +170,11 @@ private fun GeneratedImagesTopBar(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FullScreenBackIcon(
-            onBackPress = onBackPress
-        )
+        if (!isLargeScreen) {
+            FullScreenBackIcon(
+                onBackPress = onBackPress
+            )
+        }
         Text(
             text = "Generated Images",
             style = MaterialTheme.typography.titleLarge,

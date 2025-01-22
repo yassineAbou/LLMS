@@ -64,7 +64,7 @@ fun FullScreenImage(
     navController: NavController,
     startIndex: Int,
     imageGenViewModel: ImageGenViewModel,
-    supportingPaneNavigator: SupportingPaneNavigator? = null,
+    supportingPaneNavigator: SupportingPaneNavigator? = null
 ) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -174,7 +174,6 @@ private fun ImagePager(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                //.padding(horizontal = 20.dp),
                 onPreviousPage = {
                     coroutineScope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
@@ -268,7 +267,7 @@ private fun FullScreenBottomBar(
     val controller = SnackbarController.current
     Row(
         modifier = Modifier
-            .fillMaxWidth()
+             .fillMaxWidth()
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {

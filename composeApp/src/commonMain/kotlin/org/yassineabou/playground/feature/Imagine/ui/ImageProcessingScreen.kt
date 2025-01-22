@@ -34,6 +34,7 @@ fun ImageProcessingScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
+    modifier: Modifier = Modifier
 ) {
     var remainingSeconds by remember { mutableStateOf(10) }
     var progress by remember { mutableStateOf(0f) }
@@ -59,7 +60,7 @@ fun ImageProcessingScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         EstimatedTimer(
             timeText = "EST: ${remainingSeconds}s",

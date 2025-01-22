@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -45,13 +46,15 @@ fun PyramidText(
         ) {
             lines.forEachIndexed { index, line ->
                 val leftPadding = 16.dp * (pyramidDepth - index - 1)
-                Text(
-                    text = line,
-                    modifier = Modifier.padding(start = leftPadding),
-                    textAlign = TextAlign.Center,
-                    style = style,
-                    color = color
-                )
+                SelectionContainer {
+                    Text(
+                        text = line,
+                        modifier = Modifier.padding(start = leftPadding),
+                        textAlign = TextAlign.Center,
+                        style = style,
+                        color = color
+                    )
+                }
             }
         }
     }
