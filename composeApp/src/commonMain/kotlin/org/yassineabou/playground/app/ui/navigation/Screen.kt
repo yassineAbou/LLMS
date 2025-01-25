@@ -6,8 +6,7 @@ sealed class Screen(val route: String) {
     data object ImagineScreen : Screen("ImagineScreen")
     data object GeneratedImagesScreen : Screen("GeneratedImagesScreen")
     data object Profile : Screen("Profile")
-    object FullScreenImage : Screen("FullScreenImage")
+    data object FullScreenImage : Screen("FullScreenImage")
     data object ImageProcessingScreen : Screen("ImageProcessingScreen")
     data object SearchHistoryScreen : Screen("SearchHistoryScreen")
-
 }

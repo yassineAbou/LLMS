@@ -49,8 +49,7 @@ fun SupportingPaneLayout(
             SupportingPane(
                 navController = navController,
                 supportingPaneNavigator = supportingPaneNavigator,
-                imageGenViewModel = imageGenViewModel,
-                shouldShowSupportingPaneButton = navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden
+                imageGenViewModel = imageGenViewModel
             )
         }
     )
@@ -97,7 +96,6 @@ fun ThreePaneScaffoldScope.MainPane(
             "FullScreenImage" -> {
                 FullScreenImage(
                     navController = navController,
-                    startIndex = 0, // Default start index
                     imageGenViewModel = imageGenViewModel,
                     supportingPaneNavigator = supportingPaneNavigator
                 )
@@ -106,13 +104,11 @@ fun ThreePaneScaffoldScope.MainPane(
     }
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun ThreePaneScaffoldScope.SupportingPane(
+fun SupportingPane(
     navController: NavController,
     supportingPaneNavigator: SupportingPaneNavigator,
     imageGenViewModel: ImageGenViewModel,
-    shouldShowSupportingPaneButton: Boolean,
     modifier: Modifier = Modifier
 ) {
     val currentScreen = supportingPaneNavigator.currentScreen
@@ -152,7 +148,6 @@ fun ThreePaneScaffoldScope.SupportingPane(
 
             is SupportingPaneScreen.FullScreenImage -> {
                 FullScreenImage(
-                    startIndex = targetScreen.index,
                     supportingPaneNavigator = supportingPaneNavigator,
                     imageGenViewModel = imageGenViewModel,
                     navController = navController

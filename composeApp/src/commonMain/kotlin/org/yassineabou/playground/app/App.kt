@@ -137,18 +137,15 @@ fun LLMsApp() {
                         )
                     }
                     composable(
-                        route = "FullScreenImage/{startIndex}",
-                        arguments = listOf(navArgument("startIndex") { type = NavType.IntType }),
+                        route = Screen.FullScreenImage.route,
                         enterTransition = { slideInFromRight() },
                         exitTransition = { slideOutToLeft() },
                         popEnterTransition = { slideInFromLeft() },
                         popExitTransition = { slideOutToRight() }
-                    ) { backStackEntry ->
-                        val startIndex = backStackEntry.arguments?.getInt("startIndex") ?: 0
+                    ) {
                         FullScreenImage(
                             imageGenViewModel = imageGenViewModel,
                             navController = navController,
-                            startIndex = startIndex
                         )
                     }
                     composable(

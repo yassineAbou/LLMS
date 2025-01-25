@@ -38,8 +38,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +52,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -83,7 +82,7 @@ fun ImagineScreen(
 ) {
     var ideaText by remember { mutableStateOf("") }
     var selectModelClicked by remember { mutableStateOf(false) }
-    val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsState()
+    val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
     Column(
@@ -132,8 +131,8 @@ fun ImagineScreen(
                     supportingPaneNavigator?.navigate(SupportingPaneScreen.ImageProcessing)
                 } else {
                     navController.navigate(Screen.ImageProcessingScreen.route)
-
                 }
+                imageGenViewModel.startEstimatedTimer()
             }
         )
         if (selectModelClicked) {
@@ -335,7 +334,7 @@ private fun Inspirations(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(listInspiration) { inspiration ->
+                items(items = listInspiration) { inspiration ->
                     InspirationItem(
                         url = inspiration.url,
                         onItemClick = {

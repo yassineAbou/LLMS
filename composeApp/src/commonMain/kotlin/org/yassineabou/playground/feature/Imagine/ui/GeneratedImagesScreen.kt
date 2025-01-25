@@ -48,6 +48,7 @@ import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLarge
 import org.yassineabou.playground.feature.Imagine.view.EmptyGeneratedMessage
 import org.yassineabou.playground.feature.Imagine.view.ImageSelectionControls
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,
@@ -114,9 +115,7 @@ fun GeneratedImagesScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                items(
-                    key = { image -> image.id }
-                ) { image ->
+                items { image ->
                     val isSelected = image in selectedPhotos
                     val selectedModifier =
                         if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray)
@@ -141,14 +140,12 @@ fun GeneratedImagesScreen(
                             onClick = {
                                 val index = listGeneratedPhotos.indexOfFirst { it.id == image.id }
                                 if (index != -1) {
+                                    // Save the index in the ViewModel
+                                    imageGenViewModel.updateCurrentImageIndex(index)
                                     if (isLargeScreen) {
-                                        supportingPaneNavigator?.navigate(
-                                            SupportingPaneScreen.FullScreenImage(
-                                                index
-                                            )
-                                        )
+                                        supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage)
                                     } else {
-                                        navController.navigate("${Screen.FullScreenImage.route}/${index}")
+                                        navController.navigate(Screen.FullScreenImage.route)
                                     }
                                 }
                             },

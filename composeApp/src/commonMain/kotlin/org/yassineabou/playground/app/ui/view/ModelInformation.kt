@@ -27,6 +27,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.feature.Imagine.model.ImageModel
 import org.yassineabou.playground.feature.Imagine.view.ImageCarousel
 import org.yassineabou.playground.feature.chat.model.TextModel
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ModelInformation(
@@ -51,7 +52,7 @@ fun ModelInformation(
                 ) {
                     ImageCarousel(
                         imageUrlExamples = imageModel.urlExamples,
-                        //modifier = Modifier.matchParentSize()
+                        delayTime = 2.seconds
                     )
 
                     // Overlay Title and Description on top of the image

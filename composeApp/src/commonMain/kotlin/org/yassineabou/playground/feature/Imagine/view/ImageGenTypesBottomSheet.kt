@@ -58,6 +58,8 @@ import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.ImageModel
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -284,14 +286,15 @@ private fun imageGenModel(
 
 @Composable
 fun ImageCarousel(
-    imageUrlExamples: List<UrlExample>
+    imageUrlExamples: List<UrlExample>,
+    delayTime: Duration = 5.seconds
 ) {
     var currentExampleIndex by remember { mutableStateOf(0) }
 
     // Automatically cycle through images every 3 seconds
     LaunchedEffect(key1 = true) {
         while (true) {
-            delay(5000)
+            delay(delayTime)
             currentExampleIndex = (currentExampleIndex + 1) % imageUrlExamples.size
         }
     }

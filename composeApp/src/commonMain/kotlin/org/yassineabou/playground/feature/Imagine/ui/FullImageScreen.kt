@@ -28,9 +28,9 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -57,30 +58,25 @@ import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
 import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.Imagine.supportingPane.rememberWindowSizeClass
 
 
 @Composable
 fun FullScreenImage(
     navController: NavController,
-    startIndex: Int,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null
 ) {
-    val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
+    val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsStateWithLifecycle()
+    val currentImageIndex by imageGenViewModel.currentImageIndex.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
-    val pagerState =
-        rememberPagerState(pageCount = { listGeneratedPhotos.size }, initialPage = startIndex)
+    val pagerState = rememberPagerState(pageCount = { listGeneratedPhotos.size }, initialPage = currentImageIndex)
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
-    // Update pagerState when listGeneratedPhotos changes
-    LaunchedEffect(listGeneratedPhotos) {
-        launch {
-            pagerState.animateScrollToPage(
-                minOf(
-                    pagerState.currentPage,
-                    listGeneratedPhotos.lastIndex
-                )
-            )
+
+    LaunchedEffect(currentImageIndex) {
+        if (currentImageIndex != pagerState.currentPage) {
+            pagerState.animateScrollToPage(currentImageIndex)
         }
     }
 
@@ -107,6 +103,9 @@ fun FullScreenImage(
             ImagePager(
                 pagerState = pagerState,
                 listGenerated = listGeneratedPhotos,
+                updateCurrentImageIndex = { index ->
+                    imageGenViewModel.updateCurrentImageIndex(index)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -122,7 +121,6 @@ fun FullScreenImage(
                 Text("No images available")
             }
         }
-
 
         FullScreenBottomBar(
             onInfoClicked = { showInfoBottomSheet = true },
@@ -148,9 +146,11 @@ fun FullScreenImage(
 private fun ImagePager(
     pagerState: PagerState,
     listGenerated: List<UrlExample>,
+    updateCurrentImageIndex: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+
     Box(
         modifier = modifier
     ) {
@@ -176,12 +176,18 @@ private fun ImagePager(
                     .align(Alignment.Center),
                 onPreviousPage = {
                     coroutineScope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        if (pagerState.currentPage > 0) {
+                            updateCurrentImageIndex(pagerState.currentPage - 1)
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        }
                     }
                 },
                 onNextPage = {
                     coroutineScope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        if (pagerState.currentPage < listGenerated.lastIndex) {
+                            updateCurrentImageIndex(pagerState.currentPage + 1)
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
                     }
                 },
             )
@@ -264,7 +270,7 @@ private fun FullScreenBottomBar(
     onInfoClicked: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val controller = SnackbarController.current
+    val snackbarController = SnackbarController.current
     Row(
         modifier = Modifier
              .fillMaxWidth()
@@ -274,7 +280,7 @@ private fun FullScreenBottomBar(
         IconWithLabel(
             icon = Icons.Filled.Download,
             text = "Download",
-            onClick = { controller.showMessage("Image saved to your gallery") }
+            onClick = { snackbarController.showMessage("Image saved to your gallery") }
         )
         if (isInFullScreen) {
             IconWithLabel(
@@ -286,7 +292,7 @@ private fun FullScreenBottomBar(
         IconWithLabel(
             icon = Icons.Filled.Share,
             text = "Share",
-            onClick = { controller.showMessage("Your image has been shared") }
+            onClick = { snackbarController.showMessage("Your image has been shared") }
         )
         IconWithLabel(
             icon = Icons.Filled.Delete,

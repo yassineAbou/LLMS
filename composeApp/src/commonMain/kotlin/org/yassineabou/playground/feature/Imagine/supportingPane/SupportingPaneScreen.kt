@@ -1,7 +1,7 @@
 package org.yassineabou.playground.feature.Imagine.supportingPane
 
 sealed class SupportingPaneScreen {
-    object GeneratedImages : SupportingPaneScreen()
-    object ImageProcessing : SupportingPaneScreen()
-    data class FullScreenImage(val index: Int) : SupportingPaneScreen()
+    data object GeneratedImages : SupportingPaneScreen()
+    data object ImageProcessing : SupportingPaneScreen()
+    data object FullScreenImage : SupportingPaneScreen()
 }
