@@ -1,41 +1,46 @@
 [versions]
+adaptive = "1.0.1"
 agp = "8.6.1"
 
 android-compileSdk = "34"
 android-minSdk = "28"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.3"
+androidx-activityCompose = "1.10.0"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.0"
 androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.8.3"
+androidx-lifecycle = "2.8.4"
 androidx-test-junit = "1.2.1"
+coilCompose = "3.0.4"
 junit = "4.13.2"
 
-compose-plugin = "1.7.0"
+compose-plugin = "1.7.3"
 
 dragselect = "2.4.1"
 
-kamelImageDefault = "1.0.0"
-kotlin = "2.0.21"
+kotlin = "2.1.0"
 
-ktor = "3.0.0"
+ktor = "3.0.2"
 
 navigationCompose = "2.8.0-alpha10"
 
-kotlinx-coroutines = "1.9.0"
-kotlinx-serialization-json = "1.7.3"
+kotlinx-coroutines = "1.10.1"
+kotlinx-serialization-json = "1.8.0"
 kotlinx-datetime = "0.6.1"
 kotlinx-collections-immutable = "0.3.8"
 
-koin-bom = "4.0.0"
+koin-bom = "4.0.2"
 foundationLayoutAndroid = "1.7.6"
 
 
 [libraries]
+adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
+adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
+adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 dragselect = { module = "com.dragselectcompose:dragselect", version.ref = "dragselect" }
-kamel-image-default = { module = "media.kamel:kamel-image-default", version.ref = "kamelImageDefault" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -48,6 +53,9 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }

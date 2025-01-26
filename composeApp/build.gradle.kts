@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -76,9 +77,9 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
 
-            implementation("org.jetbrains.compose.material3.adaptive:adaptive:1.0.0-alpha03")
-            implementation("org.jetbrains.compose.material3.adaptive:adaptive-layout:1.0.0-alpha03")
-            implementation("org.jetbrains.compose.material3.adaptive:adaptive-navigation:1.0.0-alpha03")
+            implementation(libs.adaptive)
+            implementation(libs.adaptive.layout)
+            implementation(libs.adaptive.navigation)
 
 
             implementation(libs.navigation.compose)
@@ -94,16 +95,20 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.dragselect)
-            implementation("io.coil-kt.coil3:coil-compose:3.0.4")
-            implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
-
-            implementation(libs.kamel.image.default)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
 
 
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.ktor.client.java)
+        }
+        appleMain {
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
     }
 }
