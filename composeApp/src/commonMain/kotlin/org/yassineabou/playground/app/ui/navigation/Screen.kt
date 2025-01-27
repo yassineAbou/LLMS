@@ -1,5 +1,7 @@
 package org.yassineabou.playground.app.ui.navigation
 
+import androidx.compose.runtime.saveable.Saver
+
 sealed class Screen(val route: String) {
     data object ChatScreen : Screen("ChatScreen")
     data object ChatHistoryScreen : Screen("ChatHistoryScreen")
@@ -9,4 +11,25 @@ sealed class Screen(val route: String) {
     data object FullScreenImage : Screen("FullScreenImage")
     data object ImageProcessingScreen : Screen("ImageProcessingScreen")
     data object SearchHistoryScreen : Screen("SearchHistoryScreen")
+
+    companion object {
+        fun fromRoute(route: String): Screen {
+            return when (route) {
+                ChatScreen.route -> ChatScreen
+                ChatHistoryScreen.route -> ChatHistoryScreen
+                ImagineScreen.route -> ImagineScreen
+                GeneratedImagesScreen.route -> GeneratedImagesScreen
+                Profile.route -> Profile
+                FullScreenImage.route -> FullScreenImage
+                ImageProcessingScreen.route -> ImageProcessingScreen
+                SearchHistoryScreen.route -> SearchHistoryScreen
+                else -> throw IllegalArgumentException("Unknown route: $route")
+            }
+        }
+    }
+
+    val ScreenSaver: Saver<Screen, String> = Saver(
+        save = { screen -> screen.route }, // Convert Screen to String (route)
+        restore = { route -> Screen.fromRoute(route) } // Convert String (route) back to Screen
+    )
 }
