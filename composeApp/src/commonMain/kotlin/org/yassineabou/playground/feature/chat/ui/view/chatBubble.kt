@@ -33,7 +33,8 @@ import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 fun ChatBubble(
     message: String,
     isUser: Boolean,
-    aiIcon: DrawableResource
+    aiIcon: DrawableResource,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()

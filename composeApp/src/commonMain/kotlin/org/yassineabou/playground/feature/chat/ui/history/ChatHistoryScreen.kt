@@ -17,6 +17,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,44 +31,58 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
+import org.yassineabou.playground.feature.chat.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialog
 import org.yassineabou.playground.feature.chat.ui.view.HistoryHorizontalPager
 
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ChatHistoryScreen(
     navController: NavController,
     chatViewModel: ChatViewModel
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
+    // Get the window size class to determine the screen size
+    val windowSizeClass = calculateWindowSizeClass()
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        HistoryTopBar(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding(),
-            onBackPress = { navController.popBackStack() },
-            onClearHistory = { showClearHistoryDialog = true }
-        )
-        HistoryHeaderRow(onHistorySearch = { navController.navigate(Screen.SearchHistoryScreen.route) })
+    // Check if the screen width is medium or larger
+    val isMediumOrLarger = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
 
-        HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
-
-        if (showClearHistoryDialog) {
-            ClearHistoryDialog(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(375.dp),
-                onDismiss = { showClearHistoryDialog = false },
-                onConfirm = {
-                    chatViewModel.clearChatHistory()
-                    showClearHistoryDialog = false
-                }
+    if (isMediumOrLarger) {
+        // Show ListDetailPane for medium or larger screens
+        ListDetailPane(chatViewModel = chatViewModel)
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            HistoryTopBar(
+                modifier = Modifier.fillMaxWidth().statusBarsPadding(),
+                onBackPress = { navController.popBackStack() },
+                onClearHistory = { showClearHistoryDialog = true }
             )
+            HistoryHeaderRow(onHistorySearch = { navController.navigate(Screen.SearchHistoryScreen.route) })
+
+            HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
+
+            if (showClearHistoryDialog) {
+                ClearHistoryDialog(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(375.dp),
+                    onDismiss = { showClearHistoryDialog = false },
+                    onConfirm = {
+                        chatViewModel.clearChatHistory()
+                        showClearHistoryDialog = false
+                    }
+                )
+            }
         }
     }
+
+
 }
 
 @Composable

@@ -15,6 +15,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 
+
 data class AIProvider(
     val name: String,
     val icon: DrawableResource

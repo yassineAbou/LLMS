@@ -20,6 +20,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,9 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.feature.chat.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.model.ChatMessage
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
@@ -42,74 +47,89 @@ import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
 import org.yassineabou.playground.feature.chat.ui.view.ChooseActionBottomSheet
 import org.yassineabou.playground.feature.chat.ui.view.TextGenTypesBottomSheet
 
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ChatScreen(
     navController: NavController,
     chatViewModel: ChatViewModel
 ) {
-    val selectedTextModel by chatViewModel.selectedTextModel.collectAsState()
-    var selectModelClicked by remember { mutableStateOf(false) }
-    var attachButtonClicked by remember { mutableStateOf(false) }
-    val chatMessages = chatViewModel.currentChatMessages
-    var text by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    // Get the window size class to determine the screen size
+    val windowSizeClass = calculateWindowSizeClass()
 
-        ChatAppBar(
-            title = selectedTextModel.title,
-            image = selectedTextModel.image,
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxWidth()
-                .padding(8.dp),
-            onClickHistory = { navController.navigate(Screen.ChatHistoryScreen.route) },
-            onNewChatClick = { chatViewModel.startNewChat() },
-            onSelect = { selectModelClicked = true }
-        )
+    // Check if the screen width is medium or larger
+    val isMediumOrLarger = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
 
-        ChatMessagesList(
-            chatMessages = chatMessages,
-            selectedTextModel = selectedTextModel
-        )
+    if (isMediumOrLarger) {
+        // Show ListDetailPane for medium or larger screens
+        ListDetailPane(chatViewModel = chatViewModel)
+    } else {
+        // Show single-pane layout for smaller screens
+        val selectedTextModel by chatViewModel.selectedTextModel.collectAsStateWithLifecycle()
+        var selectModelClicked by remember { mutableStateOf(false) }
+        var attachButtonClicked by remember { mutableStateOf(false) }
+        val chatMessages = chatViewModel.currentChatMessages
+        var text by remember { mutableStateOf("") }
+        val keyboardController = LocalSoftwareKeyboardController.current
+        val focusManager = LocalFocusManager.current
 
-        AskAnythingField(
-            modifier = Modifier.align(Alignment.BottomStart),
-            onAttachClick = { /* Handle attachment */ },
-            onSendClick = {
-                if (text.isNotEmpty()) {
-                    chatViewModel.sendMessage(text)
-                    text = ""
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                }
-            },
-            text = text,
-            onTextChange = { text = it }
-        )
-
-        if (selectModelClicked) {
-            TextGenTypesBottomSheet(
-                onDismissRequest = { selectModelClicked = false },
-                onAuthenticated = {
-                    selectModelClicked = false
-                }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            ChatAppBar(
+                title = selectedTextModel.title,
+                image = selectedTextModel.image,
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                onClickHistory = { navController.navigate(Screen.ChatHistoryScreen.route) },
+                onNewChatClick = { chatViewModel.startNewChat() },
+                onSelect = { selectModelClicked = true }
             )
-        }
-        if (attachButtonClicked) {
-            ChooseActionBottomSheet(
-                onActionSeletced = { attachButtonClicked = false },
-                onDismissRequest = { attachButtonClicked = false }
+
+            ChatMessagesList(
+                chatMessages = chatMessages,
+                selectedTextModel = selectedTextModel
             )
+
+            AskAnythingField(
+                modifier = Modifier.align(Alignment.BottomStart),
+                onAttachClick = { attachButtonClicked = true },
+                onSendClick = {
+                    if (text.isNotEmpty()) {
+                        chatViewModel.sendMessage(text)
+                        text = ""
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }
+                },
+                text = text,
+                onTextChange = { text = it }
+            )
+
+            if (selectModelClicked) {
+                TextGenTypesBottomSheet(
+                    onDismissRequest = { selectModelClicked = false },
+                    onAuthenticated = {
+                        selectModelClicked = false
+                    }
+                )
+            }
+            if (attachButtonClicked) {
+                ChooseActionBottomSheet(
+                    onActionSeletced = { attachButtonClicked = false },
+                    onDismissRequest = { attachButtonClicked = false }
+                )
+            }
         }
     }
 }
 
 
+
 @Composable
-private fun ChatMessagesList(
+fun ChatMessagesList(
     chatMessages: List<ChatMessage>,
     selectedTextModel: TextModel,
 ) {
@@ -130,7 +150,7 @@ private fun ChatMessagesList(
 
 
 @Composable
-private fun AskAnythingField(
+fun AskAnythingField(
     modifier: Modifier = Modifier,
     onAttachClick: () -> Unit,
     onSendClick: () -> Unit,
