@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
@@ -26,9 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.feature.chat.model.ChatHistory
 
+/*
 @Composable
 fun ListPaneItem(
     chat: ChatHistory,
@@ -41,11 +46,20 @@ fun ListPaneItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
             .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(12.dp)
+                .heightIn(min = 56.dp, max = 56.dp) // Fixed height for compact size
+        ) {
             // Chat Title and Three-Dot Menu
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -53,7 +67,11 @@ fun ListPaneItem(
             ) {
                 Text(
                     text = chat.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    maxLines = 1, // Show only one line of the title
+                    overflow = TextOverflow.Ellipsis, // Add ellipsis for overflow
                     modifier = Modifier.weight(1f)
                 )
                 Box {
@@ -87,13 +105,8 @@ fun ListPaneItem(
                     }
                 }
             }
-
-            // Chat Description
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = chat.description,
-                style = MaterialTheme.typography.bodyMedium
-            )
         }
     }
 }
+
+ */

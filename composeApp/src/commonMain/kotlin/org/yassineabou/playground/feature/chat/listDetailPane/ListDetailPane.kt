@@ -1,8 +1,10 @@
 package org.yassineabou.playground.feature.chat.listDetailPane
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -15,7 +17,6 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import org.yassineabou.playground.feature.chat.model.ChatHistory
 import org.yassineabou.playground.feature.chat.ui.ChatMessagesList
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -74,15 +75,15 @@ fun ChatListPane(
     windowSizeClass: WindowSizeClass,
     navigateToDetailPane: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+    ) {
         // Top Bar with Icons
-        ListPaneTopBar(
-            onNewChatClick = { chatViewModel.startNewChat() },
-            onClearClick = { chatViewModel.clearChatHistory() },
-            onSearchClick = { /* Handle search */ }
+        NewChatButton(
+            onNewChatClick = { chatViewModel.startNewChat() }
         )
-
-        AIProvidersFilterMenu(chatViewModel)
 
         // List Sections
         ListPaneSections(
