@@ -1,21 +1,18 @@
 package org.yassineabou.playground.feature.chat.listDetailPane
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
@@ -31,19 +28,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import llms.composeapp.generated.resources.Res
+import llms.composeapp.generated.resources.ic_clear
+import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.playground.app.ui.util.fadeInAndExpand
+import org.yassineabou.playground.app.ui.util.fadeOutAndShrink
+import org.yassineabou.playground.feature.Imagine.view.NoContentMessage
 import org.yassineabou.playground.feature.chat.model.ChatHistory
-import org.yassineabou.playground.feature.chat.ui.AskAnythingField
-import org.yassineabou.playground.feature.chat.ui.ChatMessagesList
+import org.yassineabou.playground.feature.chat.ui.chat.ChatContent
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
-import org.yassineabou.playground.feature.chat.ui.view.AIProvidersFilterMenu
-import org.yassineabou.playground.feature.chat.ui.view.ChooseActionBottomSheet
-import org.yassineabou.playground.feature.chat.ui.view.SelectedTextModel
-import org.yassineabou.playground.feature.chat.ui.view.TextGenTypesBottomSheet
+import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialog
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -52,14 +48,6 @@ fun ListDetailPane(
 ) {
     // Use ChatHistory as the type for the navigator
     val navigator = rememberListDetailPaneScaffoldNavigator<ChatHistory>()
-
-    // Handle back navigation
-    /*
-    BackHandler(navigator.canNavigateBack()) {
-        navigator.navigateBack()
-    }
-
-     */
 
     val windowSizeClass = calculateWindowSizeClass()
 
@@ -77,67 +65,12 @@ fun ListDetailPane(
         },
         detailPane = {
             AnimatedPane {
-                // Check if the current destination is the Detail pane
-                //if (navigator.currentDestination?.pane == ListDetailPaneScaffoldRole.Detail) {
-                    //navigator.currentDestination?.content?.let { chat ->
-                        val selectedTextModel by chatViewModel.selectedTextModel.collectAsStateWithLifecycle()
-                        var selectModelClicked by remember { mutableStateOf(false) }
-                        var attachButtonClicked by remember { mutableStateOf(false) }
-                        val chatMessages = chatViewModel.currentChatMessages
-                        var text by remember { mutableStateOf("") }
-                        val keyboardController = LocalSoftwareKeyboardController.current
-                        val focusManager = LocalFocusManager.current
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            SelectedTextModel(
-                                title = selectedTextModel.title,
-                                image = selectedTextModel.image,
-                                modifier = Modifier
-                                    .align(Alignment.TopCenter)
-                                    .padding(8.dp)
-                                    .clickable { selectModelClicked = true  }
-                                    .background(
-                                        color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f),
-                                        shape = RoundedCornerShape(8.dp)
-                                    )
-                                    .padding(6.dp)
-                            )
-
-                            ChatMessagesList(
-                                chatMessages = chatMessages,
-                                selectedTextModel = selectedTextModel
-                            )
-                            AskAnythingField(
-                                modifier = Modifier.align(Alignment.BottomStart),
-                                onAttachClick = { attachButtonClicked = true },
-                                onSendClick = {
-                                    if (text.isNotEmpty()) {
-                                        chatViewModel.sendMessage(text)
-                                        text = ""
-                                        keyboardController?.hide()
-                                        focusManager.clearFocus()
-                                    }
-                                },
-                                text = text,
-                                onTextChange = { text = it }
-                            )
-
-                            if (selectModelClicked) {
-                                TextGenTypesBottomSheet(
-                                    onDismissRequest = { selectModelClicked = false },
-                                    onAuthenticated = {
-                                        selectModelClicked = false
-                                    }
-                                )
-                            }
-                            if (attachButtonClicked) {
-                                ChooseActionBottomSheet(
-                                    onActionSeletced = { attachButtonClicked = false },
-                                    onDismissRequest = { attachButtonClicked = false }
-                                )
-                            }
-                        }
-                   // }
-               // }
+                val selectedTextModel by chatViewModel.selectedTextModel.collectAsStateWithLifecycle()
+                ChatContent(
+                    chatViewModel = chatViewModel,
+                    selectedTextModel = selectedTextModel,
+                    showAppBar = false,
+                )
             }
         }
     )
@@ -149,55 +82,99 @@ fun ChatListPane(
     windowSizeClass: WindowSizeClass,
     navigateToDetailPane: () -> Unit,
 ) {
+    var showClearHistoryDialog by remember { mutableStateOf(false) }
+    val chatHistoryList = chatViewModel.chatHistoryList
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
-        Row {
-            // Top Bar with Icons
-            NewChatButton(
-                onNewChatClick = { chatViewModel.startNewChat() }
+        // Extracted Top Bar
+        ChatListPaneTop(
+            onNewChatClick = { chatViewModel.startNewChat() },
+            onClearClick = {
+                showClearHistoryDialog = true
+            },
+        )
+
+        // Animate between ListPaneSections and EmptyGeneratedMessage
+        AnimatedVisibility(
+            visible = chatHistoryList.isNotEmpty(),
+            enter = fadeInAndExpand(), // Use the descriptive enter animation
+            exit = fadeOutAndShrink()
+        ) {
+            // Show ListPaneSections when chatHistoryList is not empty
+            ListPaneSections(
+                chatViewModel = chatViewModel,
+                windowSizeClass = windowSizeClass,
+                navigateToDetailPane = navigateToDetailPane
             )
-            Spacer(modifier = Modifier.weight(1F))
-            IconButton(
-                modifier = Modifier.padding(top = 12.dp),
-                onClick = {}
-            ) {
-                Icon(
-                    contentDescription = "Clear",
-                    imageVector = Icons.Default.DeleteForever
-                )
-            }
         }
 
-        // List Sections
-        ListPaneSections(
-            chatViewModel = chatViewModel,
-            windowSizeClass = windowSizeClass,
-            navigateToDetailPane = navigateToDetailPane
+        AnimatedVisibility(
+            visible = chatHistoryList.isEmpty(),
+            enter = fadeInAndExpand(), // Use the descriptive enter animation
+            exit = fadeOutAndShrink()
+        ) {
+            // Show EmptyGeneratedMessage when chatHistoryList is empty
+            NoContentMessage(
+                modifier = Modifier.fillMaxSize(),
+                title = "Start a Conversation!",
+                subtitle = "Explore AI-generated responses and have meaningful discussions.",
+                buttonText = "Get Started",
+                onButtonClick = { chatViewModel.startNewChat() }
+            )
+        }
+
+        if (showClearHistoryDialog) {
+            ClearHistoryDialog(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(375.dp),
+                onDismiss = { showClearHistoryDialog = false },
+                onConfirm = {
+                    chatViewModel.clearChatHistory()
+                    showClearHistoryDialog = false
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun ChatListPaneTop(
+    onNewChatClick: () -> Unit,
+    onClearClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Top Bar with Icons
+        NewChatButton(
+            onNewChatClick = onNewChatClick
+        )
+        // Extracted Clear Icon Button
+        ClearIconButton(
+            onClearClick = onClearClick
         )
     }
 }
 
 @Composable
-fun ChatDetailPane(
-    chat: ChatHistory,
-    chatViewModel: ChatViewModel,
-    windowSizeClass: WindowSizeClass
+private fun ClearIconButton(
+    onClearClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Display chat messages
-        if (chat.chatMessages.isNotEmpty()) {
-            ChatMessagesList(
-                chatMessages = chat.chatMessages,
-                selectedTextModel = chatViewModel.selectedTextModel.value
-            )
-        } else {
-            Text(
-                text = "No messages in this chat.",
-                modifier = Modifier.padding(16.dp)
-            )
-        }
+    IconButton(
+        modifier = Modifier.padding(top = 12.dp),
+        onClick = onClearClick
+    ) {
+        Icon(
+            contentDescription = "Clear",
+            painter = painterResource(Res.drawable.ic_clear),
+            tint = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }

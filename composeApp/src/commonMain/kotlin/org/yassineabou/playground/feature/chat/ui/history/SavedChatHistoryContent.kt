@@ -19,7 +19,6 @@ fun SavedChatHistoryContent(
 
     Surface {
         ContentStateAnimator(
-            contentType = "Saved Chats History",
             contentList = savedChatHistoryList.filter { conversation ->
                 selectedAIProviders.value[conversation.aiProvider.name] == true
             },
@@ -36,7 +35,8 @@ fun SavedChatHistoryContent(
                         navController.navigate(Screen.ChatScreen.route)
                     }
                 )
-            }
+            },
+            navigateToChatScreen = { navController.navigate(Screen.ChatScreen.route) }
         )
     }
 }

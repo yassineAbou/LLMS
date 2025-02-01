@@ -1,5 +1,6 @@
 package org.yassineabou.playground.feature.chat.listDetailPane
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.yassineabou.playground.app.ui.util.fadeInAndExpand
+import org.yassineabou.playground.app.ui.util.fadeOutAndShrink
 import org.yassineabou.playground.feature.chat.model.ChatHistory
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
@@ -28,31 +31,42 @@ fun ListPaneSections(
     val selectedItem = remember { mutableStateOf<ChatHistory?>(null) } // Track selected item
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
-        item {
-            SectionHeader(title = "Saved")
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp)
+        ) {
+            item {
+                AnimatedVisibility(
+                    visible = savedChatHistoryList.isNotEmpty(),
+                    enter = fadeInAndExpand(), // Use the descriptive enter animation
+                    exit = fadeOutAndShrink()
+                ) {
+                    SectionHeader(title = "Saved")
+                }
+            }
+            items(savedChatHistoryList) { chat ->
+                ListPaneItem(
+                    chat = chat,
+                    selected = selectedItem.value == chat,
+                    onClick = { selectedItem.value = chat },
+                    onPinClick = { chatViewModel.toggleBookmark(chat) },
+                    onDeleteClick = {chatViewModel.deleteChatHistory(chat) }
+                )
+
+            }
+            item {
+                SectionHeader(title = "Recent")
+            }
+            items(chatHistoryList) { chat ->
+                ListPaneItem(
+                    chat = chat,
+                    selected = selectedItem.value == chat,
+                    onClick = { selectedItem.value = chat },
+                    onPinClick = { chatViewModel.toggleBookmark(chat) },
+                    onDeleteClick = {chatViewModel.deleteChatHistory(chat) }
+                )
+            }
         }
-        items(savedChatHistoryList) { chat ->
-            ListPaneItem(
-                chat = chat,
-                onClick = { selectedItem.value = chat },
-                selected = selectedItem.value == chat
-            )
-        }
-        item {
-            SectionHeader(title = "Recent")
-        }
-        items(chatHistoryList) { chat ->
-            ListPaneItem(
-                chat = chat,
-                onClick = { selectedItem.value = chat },
-                selected = selectedItem.value == chat
-            )
-        }
-    }
 }
 
 @Composable

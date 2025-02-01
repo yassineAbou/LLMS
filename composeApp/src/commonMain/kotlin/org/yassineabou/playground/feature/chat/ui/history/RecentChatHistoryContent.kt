@@ -14,13 +14,11 @@ fun RecentChatHistoryContent(
     chatViewModel: ChatViewModel,
     navController: NavController
 ) {
-
     val chatHistoryList = chatViewModel.chatHistoryList
     val selectedAIProviders = chatViewModel.selectedAIProviders.collectAsState()
 
     Surface {
         ContentStateAnimator(
-            contentType = "Recent Chats History",
             contentList = chatHistoryList.filter { conversation ->
                 selectedAIProviders.value[conversation.aiProvider.name] == true
             },
@@ -37,7 +35,8 @@ fun RecentChatHistoryContent(
                         navController.navigate(Screen.ChatScreen.route)
                     }
                 )
-            }
+            },
+            navigateToChatScreen = { navController.navigate(Screen.ChatScreen.route) }
         )
     }
 }

@@ -1,6 +1,7 @@
-package org.yassineabou.playground.feature.chat.ui
+package org.yassineabou.playground.feature.chat.ui.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -20,11 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,101 +33,100 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.feature.chat.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.model.ChatMessage
 import org.yassineabou.playground.feature.chat.model.TextModel
+import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
 import org.yassineabou.playground.feature.chat.ui.view.ChooseActionBottomSheet
+import org.yassineabou.playground.feature.chat.ui.view.SelectedTextModel
 import org.yassineabou.playground.feature.chat.ui.view.TextGenTypesBottomSheet
 
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun ChatScreen(
-    navController: NavController,
-    chatViewModel: ChatViewModel
+fun ChatContent(
+    chatViewModel: ChatViewModel,
+    selectedTextModel: TextModel,
+    showAppBar: Boolean, // New parameter to control visibility
+    onClickHistory: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
-    // Get the window size class to determine the screen size
-    val windowSizeClass = calculateWindowSizeClass()
+    var text by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    var selectModelClicked by remember { mutableStateOf(false) }
+    var attachButtonClicked by remember { mutableStateOf(false) }
+    val chatMessages = chatViewModel.currentChatMessages
 
-    // Check if the screen width is medium or larger
-    val isMediumOrLarger = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
-
-    if (isMediumOrLarger) {
-        // Show ListDetailPane for medium or larger screens
-        ListDetailPane(chatViewModel = chatViewModel)
-    } else {
-        // Show single-pane layout for smaller screens
-        val selectedTextModel by chatViewModel.selectedTextModel.collectAsStateWithLifecycle()
-        var selectModelClicked by remember { mutableStateOf(false) }
-        var attachButtonClicked by remember { mutableStateOf(false) }
-        val chatMessages = chatViewModel.currentChatMessages
-        var text by remember { mutableStateOf("") }
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val focusManager = LocalFocusManager.current
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        if (showAppBar) {
+            // Show ChatAppBar if showAppBar is true
             ChatAppBar(
                 title = selectedTextModel.title,
                 image = selectedTextModel.image,
                 modifier = Modifier
                     .statusBarsPadding()
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                onClickHistory = { navController.navigate(Screen.ChatHistoryScreen.route) },
+                    .fillMaxWidth(),
+                onClickHistory = onClickHistory,
                 onNewChatClick = { chatViewModel.startNewChat() },
-                onSelect = { selectModelClicked = true }
+                onSelect = { selectModelClicked = true  }
             )
-
-            ChatMessagesList(
-                chatMessages = chatMessages,
-                selectedTextModel = selectedTextModel
+        } else {
+            // Show SelectedTextModel if showAppBar is false
+            SelectedTextModel(
+                title = selectedTextModel.title,
+                image = selectedTextModel.image,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(8.dp)
+                    .clickable { selectModelClicked = true }
+                    .background(
+                        color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(6.dp)
             )
+        }
 
-            AskAnythingField(
-                modifier = Modifier.align(Alignment.BottomStart),
-                onAttachClick = { attachButtonClicked = true },
-                onSendClick = {
-                    if (text.isNotEmpty()) {
-                        chatViewModel.sendMessage(text)
-                        text = ""
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                    }
-                },
-                text = text,
-                onTextChange = { text = it }
+        ChatMessagesList(
+            chatMessages = chatMessages,
+            selectedTextModel = selectedTextModel
+        )
+
+        AskAnythingField(
+            modifier = Modifier.align(Alignment.BottomStart),
+            onAttachClick = { attachButtonClicked = true },
+            onSendClick = {
+                if (text.isNotEmpty()) {
+                    chatViewModel.sendMessage(text)
+                    text = ""
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                }
+            },
+            text = text,
+            onTextChange = { text = it }
+        )
+
+        if (selectModelClicked) {
+            TextGenTypesBottomSheet(
+                onDismissRequest = { selectModelClicked = false },
+                onAuthenticated = { selectModelClicked = false }
             )
+        }
 
-            if (selectModelClicked) {
-                TextGenTypesBottomSheet(
-                    onDismissRequest = { selectModelClicked = false },
-                    onAuthenticated = {
-                        selectModelClicked = false
-                    }
-                )
-            }
-            if (attachButtonClicked) {
-                ChooseActionBottomSheet(
-                    onActionSeletced = { attachButtonClicked = false },
-                    onDismissRequest = { attachButtonClicked = false }
-                )
-            }
+        if (attachButtonClicked) {
+            ChooseActionBottomSheet(
+                onActionSeletced = { attachButtonClicked = false },
+                onDismissRequest = { attachButtonClicked = false }
+            )
         }
     }
 }
 
 
-
 @Composable
-fun ChatMessagesList(
+private fun ChatMessagesList(
     chatMessages: List<ChatMessage>,
     selectedTextModel: TextModel,
 ) {
@@ -147,7 +144,6 @@ fun ChatMessagesList(
         }
     }
 }
-
 
 @Composable
 fun AskAnythingField(

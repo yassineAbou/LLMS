@@ -17,14 +17,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -44,8 +41,7 @@ import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.view.EmptyGeneratedMessage
+import org.yassineabou.playground.feature.Imagine.view.NoContentMessage
 import org.yassineabou.playground.feature.Imagine.view.ImageSelectionControls
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -100,9 +96,12 @@ fun GeneratedImagesScreen(
         }
 
         if (listGeneratedPhotos.isEmpty()) {
-            EmptyGeneratedMessage(
+            NoContentMessage(
                 modifier = Modifier.fillMaxSize(),
-                onGenerateClick = {
+                title = "Let's Create Magic!",
+                subtitle = "Your gallery is empty. Start generating stunning images now!",
+                buttonText = "Generate Images",
+                onButtonClick = {
                     navController.navigate(Screen.ImagineScreen.route)
                 }
             )

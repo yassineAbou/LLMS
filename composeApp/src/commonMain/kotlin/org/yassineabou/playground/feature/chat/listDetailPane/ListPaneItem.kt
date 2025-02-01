@@ -45,8 +45,8 @@ fun ListPaneItem(
     chat: ChatHistory,
     onClick: () -> Unit,
     selected: Boolean,
-    onPinClick: () -> Unit = {},
-    onDeleteClick: () -> Unit = {}
+    onPinClick: () -> Unit ,
+    onDeleteClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -72,6 +72,7 @@ fun ListPaneItem(
             )
             MoreOptionsMenu(
                 expanded = expanded,
+                isBookmarked = chat.isBookmarked,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .width(56.dp),
@@ -99,6 +100,7 @@ private fun ChatDescription(
 @Composable
 private fun MoreOptionsMenu(
     expanded: Boolean,
+    isBookmarked: Boolean,
     modifier: Modifier,
     onToggleExpanded: () -> Unit,
     onPinClick: () -> Unit,
@@ -123,7 +125,7 @@ private fun MoreOptionsMenu(
             onDismissRequest = onToggleExpanded
         ) {
             DropdownMenuItem(
-                text = { Text("Pin") },
+                text = { Text(if (isBookmarked) "Unpin" else "Pin") },
                 onClick = {
                     onPinClick()
                     onToggleExpanded()

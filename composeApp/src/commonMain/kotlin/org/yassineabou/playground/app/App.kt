@@ -4,7 +4,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,7 +36,7 @@ import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
-import org.yassineabou.playground.feature.chat.ui.ChatScreen
+import org.yassineabou.playground.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
 import org.yassineabou.playground.feature.chat.ui.history.SearchHistoryScreen

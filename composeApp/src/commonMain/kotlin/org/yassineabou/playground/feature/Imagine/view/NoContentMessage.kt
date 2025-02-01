@@ -48,9 +48,12 @@ import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
 
 @Composable
-fun EmptyGeneratedMessage(
+fun NoContentMessage(
     modifier: Modifier = Modifier,
-    onGenerateClick: () -> Unit
+    title: String,
+    subtitle: String,
+    buttonText: String,
+    onButtonClick: () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
 
@@ -71,7 +74,7 @@ fun EmptyGeneratedMessage(
                 exit = fadeOut() + slideOutVertically { it / 2 }
             ) {
                 Text(
-                    text = "Let's Create Magic!",
+                    text = title,
                     style = MaterialTheme.typography.displaySmall,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -81,15 +84,15 @@ fun EmptyGeneratedMessage(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Subtitle with Typing Animation
-            TypingText(text = "Your gallery is empty. Start generating stunning images now!")
+            TypingText(text = subtitle)
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Generate Button with Bounce Animation
             if (!isLargeScreen) {
                 BouncingButton(
-                    onClick = onGenerateClick,
-                    text = "Generate Images"
+                    onClick = onButtonClick,
+                    text = buttonText
                 )
             }
         }
