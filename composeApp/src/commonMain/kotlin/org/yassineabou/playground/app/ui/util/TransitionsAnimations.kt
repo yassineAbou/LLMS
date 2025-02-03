@@ -1,16 +1,89 @@
 package org.yassineabou.playground.app.ui.util
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 
-fun slideInFromRight() = slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300))
-fun slideOutToLeft() = slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300))
-fun slideInFromLeft() = slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(300))
-fun slideOutToRight() = slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300))
-fun fadeInAndExpand() = fadeIn(animationSpec = tween(300)) + expandVertically(animationSpec = tween(300))
-fun fadeOutAndShrink() = fadeOut(animationSpec = tween(300)) + shrinkVertically(animationSpec = tween(300))
+
+// Fade animations
+fun fadeInExpand() = fadeIn(animationSpec = tween(300)) + expandVertically(animationSpec = tween(300))
+fun fadeOutShrink() = fadeOut(animationSpec = tween(300)) + shrinkVertically(animationSpec = tween(300))
+
+// Vertical slide animations
+fun slideUpIn(): AnimatedContentTransitionScope<*>.() -> EnterTransition {
+    return {
+        slideIntoContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Up,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+fun slideDownOut(): AnimatedContentTransitionScope<*>.() -> ExitTransition {
+    return {
+        slideOutOfContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Down,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+fun slideDownIn(): AnimatedContentTransitionScope<*>.() -> EnterTransition {
+    return {
+        slideIntoContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Up,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+fun slideUpOut(): AnimatedContentTransitionScope<*>.() -> ExitTransition {
+    return {
+        slideOutOfContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Down,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+// Horizontal slide animations
+fun slideLeftIn(): AnimatedContentTransitionScope<*>.() -> EnterTransition {
+    return {
+        slideIntoContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Start,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+fun slideRightOut(): AnimatedContentTransitionScope<*>.() -> ExitTransition {
+    return {
+        slideOutOfContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.End,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+fun slideRightIn(): AnimatedContentTransitionScope<*>.() -> EnterTransition {
+    return {
+        slideIntoContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.End,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}
+
+fun slideLeftOut(): AnimatedContentTransitionScope<*>.() -> ExitTransition {
+    return {
+        slideOutOfContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Start,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+}

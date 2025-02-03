@@ -4,16 +4,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,45 +24,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClearHistoryDialog(
-    modifier: Modifier = Modifier,
+fun ClearHistoryDialogContent(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    BasicAlertDialog(
-        modifier = modifier,
-        onDismissRequest = { onDismiss() }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth() // Adjusted from fillMaxSize() to avoid unnecessary height expansion
+            .height(375.dp),
+        shape = RoundedCornerShape(16.dp)
     ) {
-        Card(
-            shape = RoundedCornerShape(16.dp)
+        Column(
+            modifier = Modifier
+                .padding(16.dp) // Add padding around the content for better spacing
+                .fillMaxSize(), // Ensure the column takes up the full size of the card
+            verticalArrangement = Arrangement.spacedBy(18.dp), // Add 18.dp vertical spacing
+            horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
         ) {
-            Column(
+            Icon(
+                imageVector = Icons.Filled.Warning,
+                contentDescription = "Warning",
                 modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(18.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Warning,
-                    contentDescription = "Warning",
-                    modifier = Modifier
-                        .padding(top = 55.dp)
-                        .size(70.dp)
-                )
-                Text(
-                    text = "Are you Sure?",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                ConfirmationButtons(
-                    onDismiss = onDismiss,
-                    onConfirm = onConfirm
-                )
-            }
+                    .size(70.dp) // Removed the top padding as it's now managed by the Column
+            )
+            Text(
+                text = "Are you Sure?",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            ConfirmationButtons(
+                onDismiss = onDismiss,
+                onConfirm = onConfirm
+            )
         }
-
     }
 }
 

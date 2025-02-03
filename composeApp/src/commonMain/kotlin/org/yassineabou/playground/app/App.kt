@@ -25,10 +25,14 @@ import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.navigation.Screen.ChatHistoryScreen.ScreenSaver
 import org.yassineabou.playground.app.ui.navigation.listBottomBarItems
 import org.yassineabou.playground.app.ui.theme.AppTheme
-import org.yassineabou.playground.app.ui.util.slideInFromLeft
-import org.yassineabou.playground.app.ui.util.slideInFromRight
-import org.yassineabou.playground.app.ui.util.slideOutToLeft
-import org.yassineabou.playground.app.ui.util.slideOutToRight
+import org.yassineabou.playground.app.ui.util.slideUpIn
+import org.yassineabou.playground.app.ui.util.slideRightIn
+import org.yassineabou.playground.app.ui.util.slideLeftIn
+import org.yassineabou.playground.app.ui.util.slideDownIn
+import org.yassineabou.playground.app.ui.util.slideUpOut
+import org.yassineabou.playground.app.ui.util.slideRightOut
+import org.yassineabou.playground.app.ui.util.slideLeftOut
+import org.yassineabou.playground.app.ui.util.slideDownOut
 import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneLayout
@@ -36,10 +40,9 @@ import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
-import org.yassineabou.playground.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
+import org.yassineabou.playground.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
-import org.yassineabou.playground.feature.chat.ui.history.SearchHistoryScreen
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
 
 @Composable
@@ -75,8 +78,7 @@ fun LLMsApp() {
             Screen.FullScreenImage.route,
             Screen.ImageProcessingScreen.route,
             Screen.ChatHistoryScreen.route,
-            Screen.GeneratedImagesScreen.route,
-            Screen.SearchHistoryScreen.route
+            Screen.GeneratedImagesScreen.route
         )
 
         isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
@@ -135,39 +137,42 @@ fun LLMsApp() {
                 composable(Screen.ChatScreen.route) {
                     ChatScreen(navController = navController, chatViewModel = chatViewModel)
                 }
-                composable(Screen.ChatHistoryScreen.route) {
+                composable(
+                    route = Screen.ChatHistoryScreen.route,
+                    enterTransition = slideUpIn(),
+                    exitTransition = slideDownOut(),
+                    popEnterTransition = slideDownIn(),
+                    popExitTransition = slideUpOut()
+                ) {
                     ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
-                }
-                composable(Screen.SearchHistoryScreen.route) {
-                    SearchHistoryScreen(navController = navController)
                 }
                 composable(Screen.ImagineScreen.route) {
                     SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController)
                 }
                 composable(
                     route = Screen.ImageProcessingScreen.route,
-                    enterTransition = { slideInFromRight() },
-                    exitTransition = { slideOutToLeft() },
-                    popEnterTransition = { slideInFromLeft() },
-                    popExitTransition = { slideOutToRight() }
+                    enterTransition = slideLeftIn(),
+                    exitTransition = slideRightOut(),
+                    popEnterTransition = slideRightIn(),
+                    popExitTransition = slideLeftOut()
                 ) {
                     ImageProcessingScreen(navController = navController, imageGenViewModel = imageGenViewModel)
                 }
                 composable(
                     route = Screen.FullScreenImage.route,
-                    enterTransition = { slideInFromRight() },
-                    exitTransition = { slideOutToLeft() },
-                    popEnterTransition = { slideInFromLeft() },
-                    popExitTransition = { slideOutToRight() }
+                    enterTransition = slideLeftIn(),
+                    exitTransition = slideRightOut(),
+                    popEnterTransition = slideRightIn(),
+                    popExitTransition = slideLeftOut()
                 ) {
                     FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController)
                 }
                 composable(
                     route = Screen.GeneratedImagesScreen.route,
-                    enterTransition = { slideInFromRight() },
-                    exitTransition = { slideOutToLeft() },
-                    popEnterTransition = { slideInFromLeft() },
-                    popExitTransition = { slideOutToRight() }
+                    enterTransition = slideLeftIn(),
+                    exitTransition = slideRightOut(),
+                    popEnterTransition = slideRightIn(),
+                    popExitTransition = slideLeftOut()
                 ) {
                     GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
                 }
@@ -178,4 +183,5 @@ fun LLMsApp() {
         }
     }
 }
+
 

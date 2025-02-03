@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -16,11 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,15 +28,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_clear
 import org.jetbrains.compose.resources.painterResource
-import org.yassineabou.playground.app.ui.util.fadeInAndExpand
-import org.yassineabou.playground.app.ui.util.fadeOutAndShrink
+import org.yassineabou.playground.app.ui.util.fadeInExpand
+import org.yassineabou.playground.app.ui.util.fadeOutShrink
+import org.yassineabou.playground.feature.Imagine.view.DropDownDialog
 import org.yassineabou.playground.feature.Imagine.view.NoContentMessage
 import org.yassineabou.playground.feature.chat.model.ChatHistory
 import org.yassineabou.playground.feature.chat.ui.chat.ChatContent
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
-import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialog
+import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun ListDetailPane(
     chatViewModel: ChatViewModel
@@ -49,7 +45,7 @@ fun ListDetailPane(
     // Use ChatHistory as the type for the navigator
     val navigator = rememberListDetailPaneScaffoldNavigator<ChatHistory>()
 
-    val windowSizeClass = calculateWindowSizeClass()
+    val selectedChatHistory by chatViewModel.selectedChatHistory.collectAsStateWithLifecycle()
 
     ListDetailPaneScaffold(
         directive = navigator.scaffoldDirective,
@@ -57,9 +53,7 @@ fun ListDetailPane(
         listPane = {
             AnimatedPane {
                 ChatListPane(
-                    chatViewModel = chatViewModel,
-                    windowSizeClass = windowSizeClass,
-                    navigateToDetailPane = { navigator.navigateTo(ListDetailPaneScaffoldRole.Detail) }
+                    chatViewModel = chatViewModel
                 )
             }
         },
@@ -78,9 +72,7 @@ fun ListDetailPane(
 
 @Composable
 fun ChatListPane(
-    chatViewModel: ChatViewModel,
-    windowSizeClass: WindowSizeClass,
-    navigateToDetailPane: () -> Unit,
+    chatViewModel: ChatViewModel
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
     val chatHistoryList = chatViewModel.chatHistoryList
@@ -93,28 +85,28 @@ fun ChatListPane(
         ChatListPaneTop(
             onNewChatClick = { chatViewModel.startNewChat() },
             onClearClick = {
-                showClearHistoryDialog = true
+                if (chatHistoryList.isNotEmpty()) { // Check if the list is not empty
+                    showClearHistoryDialog = true
+                }
             },
         )
 
         // Animate between ListPaneSections and EmptyGeneratedMessage
         AnimatedVisibility(
             visible = chatHistoryList.isNotEmpty(),
-            enter = fadeInAndExpand(), // Use the descriptive enter animation
-            exit = fadeOutAndShrink()
+            enter = fadeInExpand(), // Use the descriptive enter animation
+            exit = fadeOutShrink()
         ) {
             // Show ListPaneSections when chatHistoryList is not empty
             ListPaneSections(
-                chatViewModel = chatViewModel,
-                windowSizeClass = windowSizeClass,
-                navigateToDetailPane = navigateToDetailPane
+                chatViewModel = chatViewModel
             )
         }
 
         AnimatedVisibility(
             visible = chatHistoryList.isEmpty(),
-            enter = fadeInAndExpand(), // Use the descriptive enter animation
-            exit = fadeOutAndShrink()
+            enter = fadeInExpand(), // Use the descriptive enter animation
+            exit = fadeOutShrink()
         ) {
             // Show EmptyGeneratedMessage when chatHistoryList is empty
             NoContentMessage(
@@ -127,16 +119,19 @@ fun ChatListPane(
         }
 
         if (showClearHistoryDialog) {
-            ClearHistoryDialog(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(375.dp),
-                onDismiss = { showClearHistoryDialog = false },
-                onConfirm = {
-                    chatViewModel.clearChatHistory()
+            DropDownDialog(
+                onDismissRequest = {
                     showClearHistoryDialog = false
                 }
-            )
+            ) {
+                ClearHistoryDialogContent(
+                    onDismiss = { showClearHistoryDialog = false },
+                    onConfirm = {
+                        chatViewModel.clearChatHistory()
+                        showClearHistoryDialog = false
+                    }
+                )
+            }
         }
     }
 }

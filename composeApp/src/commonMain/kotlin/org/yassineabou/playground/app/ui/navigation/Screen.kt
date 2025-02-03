@@ -10,8 +10,6 @@ sealed class Screen(val route: String) {
     data object Profile : Screen("Profile")
     data object FullScreenImage : Screen("FullScreenImage")
     data object ImageProcessingScreen : Screen("ImageProcessingScreen")
-    data object SearchHistoryScreen : Screen("SearchHistoryScreen")
-
     companion object {
         fun fromRoute(route: String): Screen {
             return when (route) {
@@ -22,7 +20,6 @@ sealed class Screen(val route: String) {
                 Profile.route -> Profile
                 FullScreenImage.route -> FullScreenImage
                 ImageProcessingScreen.route -> ImageProcessingScreen
-                SearchHistoryScreen.route -> SearchHistoryScreen
                 else -> throw IllegalArgumentException("Unknown route: $route")
             }
         }

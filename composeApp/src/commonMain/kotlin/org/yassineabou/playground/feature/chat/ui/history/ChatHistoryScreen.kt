@@ -1,19 +1,14 @@
 package org.yassineabou.playground.feature.chat.ui.history
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,11 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
+import org.yassineabou.playground.feature.Imagine.view.DropDownDialog
 import org.yassineabou.playground.feature.chat.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
-import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialog
+import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent
 import org.yassineabou.playground.feature.chat.ui.view.HistoryHorizontalPager
 
 
@@ -49,6 +44,7 @@ fun ChatHistoryScreen(
 
     // Check if the screen width is medium or larger
     val isMediumOrLarger = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
+    val chatHistoryList = chatViewModel.chatHistoryList // Get the chat history list
 
     if (isMediumOrLarger) {
         // Show ListDetailPane for medium or larger screens
@@ -61,23 +57,31 @@ fun ChatHistoryScreen(
             HistoryTopBar(
                 modifier = Modifier.fillMaxWidth().statusBarsPadding(),
                 onBackPress = { navController.popBackStack() },
-                onClearHistory = { showClearHistoryDialog = true }
+                onClearHistory = {
+                    if (chatHistoryList.isNotEmpty()) {
+                       showClearHistoryDialog = true
+                    }
+                }
             )
-            HistoryHeaderRow(onHistorySearch = { navController.navigate(Screen.SearchHistoryScreen.route) })
+
+            HistoryHeader()
 
             HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
 
             if (showClearHistoryDialog) {
-                ClearHistoryDialog(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(375.dp),
-                    onDismiss = { showClearHistoryDialog = false },
-                    onConfirm = {
-                        chatViewModel.clearChatHistory()
+                DropDownDialog(
+                    onDismissRequest = {
                         showClearHistoryDialog = false
                     }
-                )
+                ) {
+                    ClearHistoryDialogContent(
+                        onDismiss = { showClearHistoryDialog = false },
+                        onConfirm = {
+                            chatViewModel.clearChatHistory()
+                            showClearHistoryDialog = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -111,24 +115,15 @@ private fun HistoryTopBar(
 }
 
 @Composable
-private fun HistoryHeaderRow(
-    modifier: Modifier = Modifier,
-    onHistorySearch: () -> Unit
+private fun HistoryHeader(
+    modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
+    Box(modifier = modifier) {
         Text(
             text = "History",
             style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.W900,
             modifier = Modifier.padding(start = 8.dp)
         )
-        Spacer(modifier = Modifier.weight(1F))
-        IconButton(onClick = onHistorySearch) {
-            Icon(
-                imageVector = Icons.Outlined.Search,
-                contentDescription = "Search",
-                modifier = Modifier.size(40.dp)
-            )
-        }
     }
 }

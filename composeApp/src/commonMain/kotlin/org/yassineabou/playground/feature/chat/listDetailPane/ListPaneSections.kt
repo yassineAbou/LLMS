@@ -8,28 +8,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.yassineabou.playground.app.ui.util.fadeInAndExpand
-import org.yassineabou.playground.app.ui.util.fadeOutAndShrink
-import org.yassineabou.playground.feature.chat.model.ChatHistory
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.yassineabou.playground.app.ui.util.fadeInExpand
+import org.yassineabou.playground.app.ui.util.fadeOutShrink
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 @Composable
 fun ListPaneSections(
-    chatViewModel: ChatViewModel,
-    windowSizeClass: WindowSizeClass,
-    navigateToDetailPane: () -> Unit,
+    chatViewModel: ChatViewModel
 ) {
     val savedChatHistoryList = chatViewModel.savedChatHistoryList
     val chatHistoryList = chatViewModel.chatHistoryList
-    val selectedItem = remember { mutableStateOf<ChatHistory?>(null) } // Track selected item
-
+    val selectedChatHistory by chatViewModel.selectedChatHistory.collectAsStateWithLifecycle()
     LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -38,8 +33,8 @@ fun ListPaneSections(
             item {
                 AnimatedVisibility(
                     visible = savedChatHistoryList.isNotEmpty(),
-                    enter = fadeInAndExpand(), // Use the descriptive enter animation
-                    exit = fadeOutAndShrink()
+                    enter = fadeInExpand(), // Use the descriptive enter animation
+                    exit = fadeOutShrink()
                 ) {
                     SectionHeader(title = "Saved")
                 }
@@ -47,8 +42,10 @@ fun ListPaneSections(
             items(savedChatHistoryList) { chat ->
                 ListPaneItem(
                     chat = chat,
-                    selected = selectedItem.value == chat,
-                    onClick = { selectedItem.value = chat },
+                    selected = chat.id == selectedChatHistory?.id,
+                    onClick = {
+                        chatViewModel.selectChatHistory(chat)
+                    },
                     onPinClick = { chatViewModel.toggleBookmark(chat) },
                     onDeleteClick = {chatViewModel.deleteChatHistory(chat) }
                 )
@@ -60,8 +57,10 @@ fun ListPaneSections(
             items(chatHistoryList) { chat ->
                 ListPaneItem(
                     chat = chat,
-                    selected = selectedItem.value == chat,
-                    onClick = { selectedItem.value = chat },
+                    selected = chat.id == selectedChatHistory?.id,
+                    onClick = {
+                        chatViewModel.selectChatHistory(chat)
+                    },
                     onPinClick = { chatViewModel.toggleBookmark(chat) },
                     onDeleteClick = {chatViewModel.deleteChatHistory(chat) }
                 )

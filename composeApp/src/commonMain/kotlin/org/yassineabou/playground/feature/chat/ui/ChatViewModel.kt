@@ -57,6 +57,9 @@ class ChatViewModel : ViewModel() {
     )
     val selectedAIProviders: StateFlow<Map<String, Boolean>> = _selectedAIProviders
 
+    private val _selectedChatHistory = MutableStateFlow<ChatHistory?>(null)
+    val selectedChatHistory: StateFlow<ChatHistory?> get() = _selectedChatHistory
+
     fun selectTempTextModel(textGenModel: TextModel) {
         _tempSelectedTextModel.value = textGenModel
     }
@@ -124,6 +127,7 @@ class ChatViewModel : ViewModel() {
         // Clear the current chat messages and reset the chat ID
         _currentChatMessages.clear()
         _currentChatId.value = null
+        _selectedChatHistory.value = null // Clear the selected chat history
     }
 
     fun clearChatHistory() {
@@ -156,4 +160,10 @@ class ChatViewModel : ViewModel() {
         _currentChatMessages.addAll(chatHistory.chatMessages)
         _currentChatId.value = chatHistory.id // Track the loaded chat ID
     }
+
+    fun selectChatHistory(chatHistory: ChatHistory) {
+        _selectedChatHistory.value = chatHistory
+        loadChatMessages(chatHistory) // Load the messages for the selected chat
+    }
+
 }
