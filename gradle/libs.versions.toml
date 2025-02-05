@@ -1,7 +1,6 @@
 [versions]
 adaptive = "1.0.1"
 agp = "8.6.1"
-
 android-compileSdk = "34"
 android-minSdk = "28"
 android-targetSdk = "34"
@@ -14,22 +13,15 @@ androidx-lifecycle = "2.8.4"
 androidx-test-junit = "1.2.1"
 coilCompose = "3.0.4"
 junit = "4.13.2"
-
 compose-plugin = "1.7.3"
-
 dragselect = "2.4.1"
-
 kotlin = "2.1.0"
-
 ktor = "3.0.2"
-
 navigationCompose = "2.8.0-alpha10"
-
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization-json = "1.8.0"
 kotlinx-datetime = "0.6.1"
 kotlinx-collections-immutable = "0.3.8"
-
 koin-bom = "4.0.2"
 foundationLayoutAndroid = "1.7.6"
 
@@ -60,23 +52,18 @@ ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
-
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-
-
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
-
-
 koin-android = { module = "io.insert-koin:koin-android" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+
 
 
 

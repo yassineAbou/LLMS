@@ -25,6 +25,7 @@ fun ListPaneSections(
     val savedChatHistoryList = chatViewModel.savedChatHistoryList
     val chatHistoryList = chatViewModel.chatHistoryList
     val selectedChatHistory by chatViewModel.selectedChatHistory.collectAsStateWithLifecycle()
+
     LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -42,7 +43,7 @@ fun ListPaneSections(
             items(savedChatHistoryList) { chat ->
                 ListPaneItem(
                     chat = chat,
-                    selected = chat.id == selectedChatHistory?.id,
+                    selected = chat == selectedChatHistory,
                     onClick = {
                         chatViewModel.selectChatHistory(chat)
                     },
@@ -52,12 +53,18 @@ fun ListPaneSections(
 
             }
             item {
-                SectionHeader(title = "Recent")
+                AnimatedVisibility(
+                    visible = chatHistoryList.isNotEmpty(),
+                    enter = fadeInExpand(), // Use the descriptive enter animation
+                    exit = fadeOutShrink()
+                ) {
+                    SectionHeader(title = "Recent")
+                }
             }
             items(chatHistoryList) { chat ->
                 ListPaneItem(
                     chat = chat,
-                    selected = chat.id == selectedChatHistory?.id,
+                    selected = chat == selectedChatHistory,
                     onClick = {
                         chatViewModel.selectChatHistory(chat)
                     },

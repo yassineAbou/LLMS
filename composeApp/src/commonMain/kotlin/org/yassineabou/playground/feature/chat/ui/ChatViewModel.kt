@@ -111,7 +111,7 @@ class ChatViewModel : ViewModel() {
                 existingChat.description = description
                 existingChat.chatMessages = _currentChatMessages.toList()
             } else {
-                // Add a new chat history item
+                // Add a new chat history item at the beginning of the list
                 val newChat = ChatHistory(
                     title = "Chat ${_chatHistoryList.size + 1}",
                     description = description,
@@ -119,7 +119,7 @@ class ChatViewModel : ViewModel() {
                     id = Uuid.toString(),
                     chatMessages = _currentChatMessages.toList()
                 )
-                _chatHistoryList.add(newChat)
+                _chatHistoryList.add(0, newChat) // Insert at the beginning
                 _currentChatId.value = newChat.id // Track the new chat ID
             }
         }
@@ -141,11 +141,14 @@ class ChatViewModel : ViewModel() {
 
     fun toggleBookmark(conversation: ChatHistory) {
         conversation.isBookmarked = !conversation.isBookmarked
-        // If you want to save this state elsewhere, like in a database or sharedprefs, do it here
         if (conversation.isBookmarked) {
-            _savedChatHistoryList.add(conversation)
+            // Remove from recent list and add to saved list
+            _chatHistoryList.remove(conversation)
+            _savedChatHistoryList.add(0, conversation) // Insert at the beginning
         } else {
-            _savedChatHistoryList.remove(conversation) // If unbookmarked, remove from saved list
+            // Remove from saved list and add back to recent list
+            _savedChatHistoryList.remove(conversation)
+            _chatHistoryList.add(0, conversation) // Insert at the beginning
         }
     }
 

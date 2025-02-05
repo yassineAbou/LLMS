@@ -31,7 +31,7 @@ data class ChatHistory(
     var description: String,
     val aiProvider: AIProvider,
     var isBookmarked: Boolean = false,
-    val id: String,
+    var id: String,
     var chatMessages: List<ChatMessage> = emptyList()
 )
 

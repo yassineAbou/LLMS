@@ -33,8 +33,8 @@ import org.yassineabou.playground.app.ui.util.fadeOutShrink
 import org.yassineabou.playground.feature.Imagine.view.DropDownDialog
 import org.yassineabou.playground.feature.Imagine.view.NoContentMessage
 import org.yassineabou.playground.feature.chat.model.ChatHistory
-import org.yassineabou.playground.feature.chat.ui.chat.ChatContent
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
+import org.yassineabou.playground.feature.chat.ui.chat.ChatContent
 import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -45,15 +45,13 @@ fun ListDetailPane(
     // Use ChatHistory as the type for the navigator
     val navigator = rememberListDetailPaneScaffoldNavigator<ChatHistory>()
 
-    val selectedChatHistory by chatViewModel.selectedChatHistory.collectAsStateWithLifecycle()
-
     ListDetailPaneScaffold(
         directive = navigator.scaffoldDirective,
         value = navigator.scaffoldValue,
         listPane = {
             AnimatedPane {
                 ChatListPane(
-                    chatViewModel = chatViewModel
+                    chatViewModel = chatViewModel,
                 )
             }
         },
@@ -76,6 +74,7 @@ fun ChatListPane(
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
     val chatHistoryList = chatViewModel.chatHistoryList
+    val savedChatHistoryList = chatViewModel.savedChatHistoryList
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,18 +92,18 @@ fun ChatListPane(
 
         // Animate between ListPaneSections and EmptyGeneratedMessage
         AnimatedVisibility(
-            visible = chatHistoryList.isNotEmpty(),
+            visible = chatHistoryList.isNotEmpty() or savedChatHistoryList.isNotEmpty(),
             enter = fadeInExpand(), // Use the descriptive enter animation
             exit = fadeOutShrink()
         ) {
             // Show ListPaneSections when chatHistoryList is not empty
             ListPaneSections(
-                chatViewModel = chatViewModel
+                chatViewModel = chatViewModel,
             )
         }
 
         AnimatedVisibility(
-            visible = chatHistoryList.isEmpty(),
+            visible = chatHistoryList.isEmpty() and savedChatHistoryList.isEmpty(),
             enter = fadeInExpand(), // Use the descriptive enter animation
             exit = fadeOutShrink()
         ) {

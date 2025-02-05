@@ -153,8 +153,8 @@ fun LLMsApp() {
                     route = Screen.ImageProcessingScreen.route,
                     enterTransition = slideLeftIn(),
                     exitTransition = slideRightOut(),
-                    popEnterTransition = slideRightIn(),
-                    popExitTransition = slideLeftOut()
+                    popEnterTransition = slideLeftIn(),
+                    popExitTransition = slideRightOut()
                 ) {
                     ImageProcessingScreen(navController = navController, imageGenViewModel = imageGenViewModel)
                 }
