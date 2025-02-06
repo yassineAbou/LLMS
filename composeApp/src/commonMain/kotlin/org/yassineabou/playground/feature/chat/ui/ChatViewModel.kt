@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -66,20 +67,26 @@ class ChatViewModel : ViewModel() {
 
     fun confirmSelectedTextModel() {
         _selectedTextModel.value = _tempSelectedTextModel.value
-        _tempSelectedTextModel.value = textGenModelList.first()
+        //_tempSelectedTextModel.value = textGenModelList.first()
     }
 
     fun setTempSelectedToSelected() {
         _tempSelectedTextModel.value = _selectedTextModel.value
     }
 
+    // ChatViewModel.kt
     fun sendMessage(message: String, isUser: Boolean = true) {
         _currentChatMessages.add(ChatMessage(message, isUser))
         if (isUser) {
-            // Simulate AI response
+            val fullResponse = generateLongResponse() // Generate the full response once
+            _currentChatMessages.add(ChatMessage("", false)) // Insert a blank message for AI
             viewModelScope.launch {
-                val aiResponse = generateLongResponse() // Generate medium-length response
-                _currentChatMessages.add(ChatMessage(aiResponse, false))
+                val aiIndex = _currentChatMessages.lastIndex // Track the AI message's index
+                for (i in 0 until fullResponse.length) {
+                    val currentText = fullResponse.take(i + 1) // Build text incrementally
+                    _currentChatMessages[aiIndex] = ChatMessage(currentText, false)
+                    delay(5) // Adjust delay for typing speed
+                }
             }
         }
     }
@@ -158,7 +165,7 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    fun loadChatMessages(chatHistory: ChatHistory) {
+    private fun loadChatMessages(chatHistory: ChatHistory) {
         _currentChatMessages.clear()
         _currentChatMessages.addAll(chatHistory.chatMessages)
         _currentChatId.value = chatHistory.id // Track the loaded chat ID

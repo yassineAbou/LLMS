@@ -110,6 +110,7 @@ fun ChatContent(
 
         if (selectModelClicked) {
             TextGenTypesBottomSheet(
+                chatViewModel = chatViewModel,
                 onDismissRequest = { selectModelClicked = false },
                 onAuthenticated = { selectModelClicked = false }
             )

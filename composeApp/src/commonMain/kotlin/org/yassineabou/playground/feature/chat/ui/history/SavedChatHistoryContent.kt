@@ -31,7 +31,7 @@ fun SavedChatHistoryContent(
                     },
                     toggleBookmark = { chatViewModel.toggleBookmark(it) },
                     onClick = { chatHistory ->
-                        chatViewModel.loadChatMessages(chatHistory)
+                        chatViewModel.selectChatHistory(chatHistory)
                         navController.navigate(Screen.ChatScreen.route)
                     }
                 )

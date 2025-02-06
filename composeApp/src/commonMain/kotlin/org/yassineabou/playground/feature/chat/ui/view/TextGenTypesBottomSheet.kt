@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
 import org.yassineabou.playground.app.ui.view.BottomSheetContent
 import org.yassineabou.playground.app.ui.view.GenTypesButtons
@@ -54,12 +53,12 @@ import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun TextGenTypesBottomSheet(
-    textGenViewModel: ChatViewModel = koinViewModel(),
+    chatViewModel: ChatViewModel,
     onDismissRequest: () -> Unit,
     onAuthenticated: () -> Unit
 ) {
-    val tempSelectedTextModel by textGenViewModel.tempSelectedTextModel.collectAsState()
-    val selectedTextModel by textGenViewModel.selectedTextModel.collectAsState()
+    val tempSelectedTextModel by chatViewModel.tempSelectedTextModel.collectAsState()
+    val selectedTextModel by chatViewModel.selectedTextModel.collectAsState()
     var isInfoIconClicked by remember { mutableStateOf(false) }
     var infoTextModel by remember { mutableStateOf(tempSelectedTextModel) }
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -70,7 +69,7 @@ fun TextGenTypesBottomSheet(
     }
 
     LaunchedEffect(Unit) {
-        textGenViewModel.setTempSelectedToSelected()
+        chatViewModel.setTempSelectedToSelected()
     }
 
     ModalBottomSheet(
@@ -84,9 +83,9 @@ fun TextGenTypesBottomSheet(
                         onDismissRequest = onDismissRequest,
                         onDone = {
                             onAuthenticated()
-                            textGenViewModel.confirmSelectedTextModel()
+                            chatViewModel.confirmSelectedTextModel()
                             if (tempSelectedTextModel.title != selectedTextModel.title) {
-                                textGenViewModel.startNewChat()
+                                chatViewModel.startNewChat()
                             }
                         }
                     )
@@ -104,7 +103,7 @@ fun TextGenTypesBottomSheet(
                             TextGenType(
                                 tempSelectedTextModel = item,
                                 isSelected = item == tempSelectedTextModel,
-                                onSelected = { textGenViewModel.selectTempTextModel(item) },
+                                onSelected = { chatViewModel.selectTempTextModel(item) },
                                 onInfoClick = {
                                     isInfoIconClicked = it
                                     infoTextModel = item

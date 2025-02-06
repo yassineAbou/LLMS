@@ -133,23 +133,9 @@ private fun UserMessage(message: String) {
 private fun AiMessage(
     message: String
 ) {
-    // Use rememberSaveable to preserve the state across recompositions
-    var displayedText by rememberSaveable { mutableStateOf("") }
-    var isAnimationComplete by rememberSaveable { mutableStateOf(false) }
 
-    // Use LaunchedEffect to start the animation only once
-    LaunchedEffect(message) {
-        if (!isAnimationComplete) {
-            displayedText = "" // Reset the displayed text
-            for (i in 0..message.length) {
-                displayedText = message.take(i)
-                delay(5L) // Adjust the speed of the animation
-            }
-            isAnimationComplete = true
-        }
-    }
     Text(
-        text = displayedText,
+        text = message,
         color = MaterialTheme.colorSchemeCustom.alwaysWhite,
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(top = 8.dp)
