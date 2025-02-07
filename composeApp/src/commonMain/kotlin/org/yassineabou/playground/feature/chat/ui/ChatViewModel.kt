@@ -1,9 +1,12 @@
 package org.yassineabou.playground.feature.chat.ui
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,6 +46,9 @@ class ChatViewModel : ViewModel() {
     private val _currentChatId = MutableStateFlow<String?>(null)
     val currentChatId: StateFlow<String?> get() = _currentChatId
 
+    private var generationScope: CoroutineScope? = null
+    val isGenerating = mutableStateOf(false)
+
     private val _selectedAIProviders = MutableStateFlow<Map<String, Boolean>>(
         mapOf(
             "Meta" to true,
@@ -74,21 +80,33 @@ class ChatViewModel : ViewModel() {
         _tempSelectedTextModel.value = _selectedTextModel.value
     }
 
-    // ChatViewModel.kt
     fun sendMessage(message: String, isUser: Boolean = true) {
         _currentChatMessages.add(ChatMessage(message, isUser))
         if (isUser) {
-            val fullResponse = generateLongResponse() // Generate the full response once
-            _currentChatMessages.add(ChatMessage("", false)) // Insert a blank message for AI
-            viewModelScope.launch {
-                val aiIndex = _currentChatMessages.lastIndex // Track the AI message's index
-                for (i in 0 until fullResponse.length) {
-                    val currentText = fullResponse.take(i + 1) // Build text incrementally
-                    _currentChatMessages[aiIndex] = ChatMessage(currentText, false)
-                    delay(5) // Adjust delay for typing speed
+            val fullResponse = generateLongResponse()
+            _currentChatMessages.add(ChatMessage("", false))
+
+            generationScope = CoroutineScope(viewModelScope.coroutineContext)
+            generationScope?.launch {
+                isGenerating.value = true
+                try {
+                    val aiIndex = _currentChatMessages.lastIndex
+                    for (i in 0 until fullResponse.length) {
+                        val currentText = fullResponse.take(i + 1)
+                        _currentChatMessages[aiIndex] = ChatMessage(currentText, false)
+                        delay(5)
+                    }
+                } finally {
+                    isGenerating.value = false
+                    generationScope = null
                 }
             }
         }
+    }
+
+    fun stopGeneration() {
+        generationScope?.cancel()
+        isGenerating.value = false
     }
 
     @OptIn(ExperimentalUuidApi::class)

@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.MapsUgc
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.ui.view.CustomIconButton
 
 @Composable
 fun ChatAppBar(
@@ -67,16 +67,12 @@ fun HistoryIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    IconButton(
+    CustomIconButton(
+        icon = Icons.Outlined.History,
+        contentDescription = "History",
         modifier = modifier,
-        onClick = onClick
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.History,
-            modifier = Modifier.size(35.dp),
-            contentDescription = "History"
-        )
-    }
+        onClick = onClick,
+    )
 }
 
 @Composable
@@ -84,16 +80,12 @@ fun NewChatIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    IconButton(
+    CustomIconButton(
+        icon = Icons.Outlined.MapsUgc,
+        contentDescription = "New Chat",
         modifier = modifier,
-        onClick = onClick
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.MapsUgc,
-            modifier = Modifier.size(35.dp),
-            contentDescription = "History"
-        )
-    }
+        onClick = onClick,
+    )
 }
 
 @Composable

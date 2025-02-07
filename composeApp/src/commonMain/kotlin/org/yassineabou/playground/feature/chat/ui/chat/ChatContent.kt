@@ -1,5 +1,6 @@
 package org.yassineabou.playground.feature.chat.ui.chat
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -17,23 +19,31 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.ui.util.slideFadeIn
+import org.yassineabou.playground.app.ui.util.slideFadeOut
 import org.yassineabou.playground.feature.chat.model.ChatMessage
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -97,15 +107,20 @@ fun ChatContent(
             modifier = Modifier.align(Alignment.BottomStart),
             onAttachClick = { attachButtonClicked = true },
             onSendClick = {
-                if (text.isNotEmpty()) {
-                    chatViewModel.sendMessage(text)
-                    text = ""
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
+                if (chatViewModel.isGenerating.value) {
+                    chatViewModel.stopGeneration()
+                } else {
+                    if (text.isNotEmpty()) {
+                        chatViewModel.sendMessage(text)
+                        text = ""
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }
                 }
             },
             text = text,
-            onTextChange = { text = it }
+            onTextChange = { text = it },
+            isGenerating = chatViewModel.isGenerating.value
         )
 
         if (selectModelClicked) {
@@ -125,33 +140,112 @@ fun ChatContent(
     }
 }
 
+// Extracted scroll-to-bottom button component
+@Composable
+private fun ScrollToBottomButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    visibility: Boolean
+) {
+    AnimatedVisibility(
+        visible = visibility,
+        enter = slideFadeIn(),
+        exit = slideFadeOut(),
+        modifier = modifier
+    ) {
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape
+                )
+                .shadow(4.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardDoubleArrowDown,
+                contentDescription = "Scroll to bottom",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }
+}
+
 
 @Composable
 private fun ChatMessagesList(
     chatMessages: List<ChatMessage>,
     selectedTextModel: TextModel,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 70.dp, bottom = 80.dp) // Adjusted padding for app bar and input field
-    ) {
-        items(chatMessages) { message ->
-            ChatBubble(
-                message = message.message,
-                isUser = message.isUser,
-                aiIcon = selectedTextModel.image
-            )
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    // Track scroll position to show/hide button
+    val showScrollButton by remember {
+        derivedStateOf {
+            val layoutInfo = lazyListState.layoutInfo
+            val totalItems = chatMessages.size
+            if (totalItems == 0) false else {
+                val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                lastVisibleItem < totalItems - 1
+            }
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 70.dp, bottom = 80.dp)
+        ) {
+            items(chatMessages) { message ->
+                ChatBubble(
+                    message = message.message,
+                    isUser = message.isUser,
+                    aiIcon = selectedTextModel.image
+                )
+            }
+        }
+
+        ScrollToBottomButton(
+            onClick = {
+                coroutineScope.launch {
+                    lazyListState.animateScrollToItem(chatMessages.lastIndex)
+                }
+            },
+            visibility = showScrollButton,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 100.dp, end = 8.dp)
+        )
+    }
+
+    // Existing auto-scroll logic
+    val lastMessageLength by remember(chatMessages.size) {
+        derivedStateOf { chatMessages.lastOrNull()?.message?.length ?: 0 }
+    }
+
+    LaunchedEffect(chatMessages.size, lastMessageLength) {
+        if (chatMessages.isNotEmpty()) {
+            val lastIndex = chatMessages.lastIndex
+            val scrollThreshold = 3
+            val layoutInfo = lazyListState.layoutInfo
+            val visibleItems = layoutInfo.visibleItemsInfo
+            if ((visibleItems.lastOrNull()?.index ?: 0) >= lastIndex - scrollThreshold) {
+                lazyListState.scrollToItem(lastIndex)
+            }
         }
     }
 }
 
 @Composable
 fun AskAnythingField(
+    text: String,
+    isGenerating: Boolean,
     modifier: Modifier = Modifier,
     onAttachClick: () -> Unit,
     onSendClick: () -> Unit,
-    text: String,
     onTextChange: (String) -> Unit
 ) {
     Box(modifier) {
@@ -190,16 +284,14 @@ fun AskAnythingField(
             singleLine = true
         )
 
-        SendButton(
+        SendStopButton(
+            isGenerating = isGenerating,
             modifier = Modifier
-                .align(Alignment.CenterEnd)
                 .padding(end = 16.dp)
                 .size(40.dp)
-                .background(
-                    color = MaterialTheme.colorSchemeCustom.alwaysBlue,
-                    shape = CircleShape
-                ),
-            onClick = onSendClick
+                .background(MaterialTheme.colorSchemeCustom.alwaysBlue, CircleShape)
+                .align(Alignment.CenterEnd),
+            onClick = onSendClick,
         )
     }
 }
@@ -234,18 +326,21 @@ private fun ClearIcon(
 }
 
 @Composable
-private fun SendButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
+fun SendStopButton(
+    isGenerating: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     IconButton(
         onClick = onClick,
         modifier = modifier
+
     ) {
         Icon(
-            imageVector = Icons.AutoMirrored.Filled.Send,
-            contentDescription = "Send",
-            tint = Color.White,
+            imageVector = if (isGenerating) Icons.Filled.Stop
+            else Icons.AutoMirrored.Filled.Send,
+            contentDescription = if (isGenerating) "Stop generation" else "Send message",
+            tint = MaterialTheme.colorSchemeCustom.alwaysWhite,
             modifier = Modifier.size(20.dp)
         )
     }
