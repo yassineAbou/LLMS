@@ -25,14 +25,14 @@ import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.navigation.Screen.ChatHistoryScreen.ScreenSaver
 import org.yassineabou.playground.app.ui.navigation.listBottomBarItems
 import org.yassineabou.playground.app.ui.theme.AppTheme
-import org.yassineabou.playground.app.ui.util.slideUpIn
-import org.yassineabou.playground.app.ui.util.slideRightIn
-import org.yassineabou.playground.app.ui.util.slideLeftIn
 import org.yassineabou.playground.app.ui.util.slideDownIn
-import org.yassineabou.playground.app.ui.util.slideUpOut
-import org.yassineabou.playground.app.ui.util.slideRightOut
-import org.yassineabou.playground.app.ui.util.slideLeftOut
 import org.yassineabou.playground.app.ui.util.slideDownOut
+import org.yassineabou.playground.app.ui.util.slideLeftIn
+import org.yassineabou.playground.app.ui.util.slideLeftOut
+import org.yassineabou.playground.app.ui.util.slideRightIn
+import org.yassineabou.playground.app.ui.util.slideRightOut
+import org.yassineabou.playground.app.ui.util.slideUpIn
+import org.yassineabou.playground.app.ui.util.slideUpOut
 import org.yassineabou.playground.app.ui.view.SnackbarControllerProvider
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneLayout
@@ -132,7 +132,6 @@ fun LLMsApp() {
             NavHost(
                 navController = navController,
                 startDestination = Screen.ChatScreen.route,
-                //modifier = Modifier.padding(innerPadding)
             ) {
                 composable(Screen.ChatScreen.route) {
                     ChatScreen(navController = navController, chatViewModel = chatViewModel)

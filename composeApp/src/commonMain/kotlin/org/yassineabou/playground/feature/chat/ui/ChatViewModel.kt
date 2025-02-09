@@ -5,8 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,8 +44,10 @@ class ChatViewModel : ViewModel() {
     private val _currentChatId = MutableStateFlow<String?>(null)
     val currentChatId: StateFlow<String?> get() = _currentChatId
 
-    private var generationScope: CoroutineScope? = null
+    private var fullResponse: String = ""
+    private var isGeneratingInternal = false
     val isGenerating = mutableStateOf(false)
+
 
     private val _selectedAIProviders = MutableStateFlow<Map<String, Boolean>>(
         mapOf(
@@ -73,7 +73,6 @@ class ChatViewModel : ViewModel() {
 
     fun confirmSelectedTextModel() {
         _selectedTextModel.value = _tempSelectedTextModel.value
-        //_tempSelectedTextModel.value = textGenModelList.first()
     }
 
     fun setTempSelectedToSelected() {
@@ -81,31 +80,38 @@ class ChatViewModel : ViewModel() {
     }
 
     fun sendMessage(message: String, isUser: Boolean = true) {
+        if (isGeneratingInternal) {
+            stopGeneration() // Stop any ongoing generation before starting a new one
+        }
+
         _currentChatMessages.add(ChatMessage(message, isUser))
         if (isUser) {
-            val fullResponse = generateLongResponse()
+            // Generate a new full response
+            fullResponse = generateLongResponse()
             _currentChatMessages.add(ChatMessage("", false))
 
-            generationScope = CoroutineScope(viewModelScope.coroutineContext)
-            generationScope?.launch {
-                isGenerating.value = true
+            isGenerating.value = true
+            isGeneratingInternal = true
+
+            viewModelScope.launch {
                 try {
                     val aiIndex = _currentChatMessages.lastIndex
-                    for (i in 0 until fullResponse.length) {
+                    for (i in fullResponse.indices) {
+                        if (!isGeneratingInternal) break // Stop if generation is canceled
                         val currentText = fullResponse.take(i + 1)
                         _currentChatMessages[aiIndex] = ChatMessage(currentText, false)
                         delay(5)
                     }
                 } finally {
                     isGenerating.value = false
-                    generationScope = null
+                    isGeneratingInternal = false
                 }
             }
         }
     }
 
     fun stopGeneration() {
-        generationScope?.cancel()
+        isGeneratingInternal = false // Signal to stop generation
         isGenerating.value = false
     }
 
