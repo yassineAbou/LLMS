@@ -42,7 +42,6 @@ fun SupportingPaneLayout(
                 imageGenViewModel = imageGenViewModel,
                 supportingPaneNavigator = supportingPaneNavigator,
                 shouldShowSupportingPaneButton = navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden,
-                onNavigateToSupportingPane = { navigator.navigateTo(SupportingPaneScaffoldRole.Supporting) }
             )
         },
         supportingPane = {
@@ -62,7 +61,6 @@ fun ThreePaneScaffoldScope.MainPane(
     supportingPaneNavigator: SupportingPaneNavigator,
     imageGenViewModel: ImageGenViewModel,
     shouldShowSupportingPaneButton: Boolean,
-    onNavigateToSupportingPane: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isLargeScreen = rememberIsLargeScreen()
@@ -80,8 +78,7 @@ fun ThreePaneScaffoldScope.MainPane(
                     navController = navController,
                     imageGenViewModel = imageGenViewModel,
                     supportingPaneNavigator = supportingPaneNavigator,
-                    shouldShowSupportingPaneButton = shouldShowSupportingPaneButton,
-                    onNavigateToSupportingPane = onNavigateToSupportingPane
+                    shouldShowSupportingPaneButton = shouldShowSupportingPaneButton
                 )
             }
 

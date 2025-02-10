@@ -23,7 +23,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.di.appModule
 import org.yassineabou.playground.app.ui.navigation.Screen
 import org.yassineabou.playground.app.ui.navigation.Screen.ChatHistoryScreen.ScreenSaver
-import org.yassineabou.playground.app.ui.navigation.listBottomBarItems
+import org.yassineabou.playground.app.ui.navigation.listNavigationBarItems
 import org.yassineabou.playground.app.ui.theme.AppTheme
 import org.yassineabou.playground.app.ui.util.slideDownIn
 import org.yassineabou.playground.app.ui.util.slideDownOut
@@ -59,8 +59,8 @@ fun App() {
 @Composable
 fun LLMsApp() {
     val navController = rememberNavController()
-    var isBottomBarVisible by rememberSaveable { (mutableStateOf(true)) }
-    var isFullScreenImage by rememberSaveable { (mutableStateOf(true)) }
+    var isNavigationBarVisible by rememberSaveable { mutableStateOf(true) }
+    var isFullScreenImage by rememberSaveable { mutableStateOf(false) }
     val dragSelectState = rememberDragSelectState<UrlExample>(compareSelector = { it.id })
     val isSelectionMode = dragSelectState.inSelectionMode
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -73,38 +73,36 @@ fun LLMsApp() {
     }
 
     LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
-
         val routeToCheck = listOf(
+            Screen.GeneratedImagesScreen.route,
             Screen.FullScreenImage.route,
             Screen.ImageProcessingScreen.route,
             Screen.ChatHistoryScreen.route,
-            Screen.GeneratedImagesScreen.route
         )
-
         isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
             routeToCheck.any { currentRoute.startsWith(it) }
         } ?: false
-
-        isBottomBarVisible = !isFullScreenImage and !isSelectionMode
+        isNavigationBarVisible = !isFullScreenImage && !isSelectionMode
     }
 
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
-    // Customize the layout type based on window size class
+    // Customize the layout type based on window size class and isBottomBarVisible
     val layoutType = when (windowSizeClass.windowWidthSizeClass) {
-        WindowWidthSizeClass.COMPACT -> NavigationSuiteType.NavigationBar
-        WindowWidthSizeClass.MEDIUM -> NavigationSuiteType.NavigationBar // Force bottom bar for medium
-        WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationRail // Use rail for expanded
-        else -> NavigationSuiteType.NavigationBar // Fallback to bottom bar
+        WindowWidthSizeClass.COMPACT -> {
+            if (isNavigationBarVisible) NavigationSuiteType.NavigationBar else NavigationSuiteType.None
+        }
+        WindowWidthSizeClass.MEDIUM -> {
+            if (isNavigationBarVisible) NavigationSuiteType.NavigationBar else NavigationSuiteType.None
+        }
+        WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationRail
+        else -> NavigationSuiteType.NavigationBar
     }
 
-
-
     SnackbarControllerProvider { host ->
-        // Use NavigationSuiteScaffold for adaptive navigation
         NavigationSuiteScaffold(
             navigationSuiteItems = {
-                listBottomBarItems.forEach { item ->
+                listNavigationBarItems.forEach { item ->
                     item(
                         icon = {
                             Icon(

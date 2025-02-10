@@ -77,7 +77,6 @@ fun ImagineScreen(
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
     shouldShowSupportingPaneButton: Boolean,
-    onNavigateToSupportingPane: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var ideaText by remember { mutableStateOf("") }
@@ -95,7 +94,7 @@ fun ImagineScreen(
                     .weight(0.1f)
                     .align(alignment = Alignment.Start)
                     .padding(start = 8.dp, top = 16.dp),
-                onClick = onNavigateToSupportingPane
+                onClick = { navController.navigate(Screen.GeneratedImagesScreen.route)}
             )
         }
         TypeIdeaForm(

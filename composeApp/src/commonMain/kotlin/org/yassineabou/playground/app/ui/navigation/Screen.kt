@@ -27,6 +27,6 @@ sealed class Screen(val route: String) {
 
     val ScreenSaver: Saver<Screen, String> = Saver(
         save = { screen -> screen.route }, // Convert Screen to String (route)
-        restore = { route -> Screen.fromRoute(route) } // Convert String (route) back to Screen
+        restore = { route -> fromRoute(route) } // Convert String (route) back to Screen
     )
 }
