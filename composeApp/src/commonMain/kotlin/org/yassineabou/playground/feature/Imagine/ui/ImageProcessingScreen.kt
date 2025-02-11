@@ -18,11 +18,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.view.BackgroundIndicator
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.Imagine.ui.view.BackgroundIndicator
 
 @Composable
 fun ImageProcessingScreen(

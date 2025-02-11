@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.chat.model.aiProvidersMap
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 

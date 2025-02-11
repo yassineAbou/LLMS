@@ -8,8 +8,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.feature.chat.listDetailPane.ListDetailPane
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 

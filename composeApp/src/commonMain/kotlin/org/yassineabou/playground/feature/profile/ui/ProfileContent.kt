@@ -58,8 +58,8 @@ import llms.composeapp.generated.resources.ic_play_store
 import llms.composeapp.generated.resources.ic_user
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.profile.model.UserUiState
 import org.yassineabou.playground.feature.profile.ui.view.LoginBottomSheet
 

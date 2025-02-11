@@ -56,19 +56,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.util.draggableScrollModifier
-import org.yassineabou.playground.app.ui.view.CustomIconButton
-import org.yassineabou.playground.app.ui.view.GoToFirst
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.draggableScrollModifier
+import org.yassineabou.playground.app.core.sharedViews.CustomIconButton
+import org.yassineabou.playground.app.core.sharedViews.GoToFirst
 import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.view.DropDownDialog
-import org.yassineabou.playground.feature.Imagine.view.ImageDialogContent
-import org.yassineabou.playground.feature.Imagine.view.ImageGenTypesBottomSheet
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.Imagine.ui.view.DropDownDialog
+import org.yassineabou.playground.feature.Imagine.ui.view.ImageDialogContent
+import org.yassineabou.playground.feature.Imagine.ui.view.ImageGenTypesBottomSheet
 
 
 @Composable

@@ -28,7 +28,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,20 +44,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.util.PlatformConfig
-import org.yassineabou.playground.app.ui.util.isDesktop
-import org.yassineabou.playground.app.ui.util.isWasm
-import org.yassineabou.playground.app.ui.view.BottomSheetContent
-import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
-import org.yassineabou.playground.app.ui.view.PyramidText
-import org.yassineabou.playground.app.ui.view.SnackbarController
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.PlatformConfig
+import org.yassineabou.playground.app.core.util.isDesktop
+import org.yassineabou.playground.app.core.util.isWasm
+import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
+import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
+import org.yassineabou.playground.app.core.sharedViews.PyramidText
+import org.yassineabou.playground.app.core.sharedViews.SnackbarController
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.supportingPane.rememberWindowSizeClass
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
 
 
 @Composable

@@ -14,10 +14,10 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.view.BottomSheetButton
-import org.yassineabou.playground.app.ui.view.BottomSheetContent
-import org.yassineabou.playground.app.ui.view.BottomSheetTitle
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.sharedViews.BottomSheetButton
+import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
+import org.yassineabou.playground.app.core.sharedViews.BottomSheetTitle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

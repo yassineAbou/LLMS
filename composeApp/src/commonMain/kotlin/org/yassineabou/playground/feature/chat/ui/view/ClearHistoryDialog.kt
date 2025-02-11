@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 
 @Composable
 fun ClearHistoryDialogContent(

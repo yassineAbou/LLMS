@@ -41,11 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.view.BottomSheetContent
-import org.yassineabou.playground.app.ui.view.GenTypesButtons
-import org.yassineabou.playground.app.ui.view.InfoIconButton
-import org.yassineabou.playground.app.ui.view.ModelInformation
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
+import org.yassineabou.playground.app.core.sharedViews.GenTypesButtons
+import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
+import org.yassineabou.playground.app.core.sharedViews.ModelInformation
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.model.textGenModelList
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel

@@ -35,14 +35,14 @@ import com.dragselectcompose.grid.LazyDragSelectVerticalGrid
 import com.dragselectcompose.grid.indicator.IndicatorIconDefaults
 import com.dragselectcompose.grid.indicator.SelectedIcon
 import com.dragselectcompose.grid.indicator.UnselectedIcon
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.view.FullScreenBackIcon
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.view.NoContentMessage
-import org.yassineabou.playground.feature.Imagine.view.ImageSelectionControls
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.Imagine.ui.view.NoContentMessage
+import org.yassineabou.playground.feature.Imagine.ui.view.ImageSelectionControls
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable

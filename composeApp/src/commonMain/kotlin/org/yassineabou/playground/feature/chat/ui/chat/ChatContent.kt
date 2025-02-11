@@ -41,9 +41,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.app.ui.theme.colorSchemeCustom
-import org.yassineabou.playground.app.ui.util.slideFadeIn
-import org.yassineabou.playground.app.ui.util.slideFadeOut
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.slideFadeIn
+import org.yassineabou.playground.app.core.util.slideFadeOut
 import org.yassineabou.playground.feature.chat.model.ChatMessage
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel

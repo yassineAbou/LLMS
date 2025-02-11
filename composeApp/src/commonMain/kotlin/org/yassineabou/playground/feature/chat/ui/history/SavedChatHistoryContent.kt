@@ -4,8 +4,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
-import org.yassineabou.playground.app.ui.navigation.Screen
-import org.yassineabou.playground.feature.Imagine.view.ContentStateAnimator
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.feature.Imagine.ui.view.ContentStateAnimator
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatHistoryListView
 
