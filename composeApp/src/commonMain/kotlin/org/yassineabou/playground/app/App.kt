@@ -174,7 +174,7 @@ fun LLMsApp() {
                     GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
                 }
                 composable(Screen.Profile.route) {
-                    ProfileContent(navController = navController)
+                    ProfileContent()
                 }
             }
         }

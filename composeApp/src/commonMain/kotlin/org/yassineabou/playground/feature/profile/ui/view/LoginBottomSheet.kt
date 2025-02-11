@@ -33,8 +33,6 @@ import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetButton
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetTitle
-import org.yassineabou.playground.app.core.sharedViews.PrivacyInfoSection
-import org.yassineabou.playground.app.core.sharedViews.TermsOfServiceAndPrivacyPolicy
 
 @Composable
 fun LoginBottomSheet(

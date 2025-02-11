@@ -7,6 +7,7 @@ import org.yassineabou.playground.feature.profile.model.UserUiState
 import org.yassineabou.playground.feature.profile.model.prototypeUser
 
 class ProfileViewModel : ViewModel() {
+
     private val _userUiState = MutableStateFlow<UserUiState?>(null)
     val userUiState = _userUiState.asStateFlow()
 

@@ -19,8 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -48,7 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_github
@@ -58,15 +55,13 @@ import llms.composeapp.generated.resources.ic_play_store
 import llms.composeapp.generated.resources.ic_user
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.profile.model.UserUiState
 import org.yassineabou.playground.feature.profile.ui.view.LoginBottomSheet
 
 @Composable
 fun ProfileContent(
-    profileViewModel: ProfileViewModel = koinViewModel(),
-    navController: NavController
+    profileViewModel: ProfileViewModel = koinViewModel()
 ) {
     val userUiState by profileViewModel.userUiState.collectAsState()
     val showBottomSheetState by profileViewModel.showBottomSheet.collectAsState()
@@ -88,8 +83,6 @@ fun ProfileContent(
             MenuList(
                 loggedIn = userUiState != null,
                 modifier = Modifier.padding(top = 16.dp),
-                onGeneratedImages = { navController.navigate(Screen.GeneratedImagesScreen.route) },
-                onChatHistory = { navController.navigate(Screen.ChatHistoryScreen.route) },
                 onDeleteAccount = { profileViewModel.onLogout() }
             )
         }
@@ -245,10 +238,9 @@ private fun UserInfo(
 private fun MenuList(
     loggedIn: Boolean,
     modifier: Modifier = Modifier,
-    onGeneratedImages: () -> Unit,
-    onChatHistory: () -> Unit,
     onDeleteAccount: () -> Unit,
 ) {
+    val uriHandler = LocalUriHandler.current
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
@@ -266,50 +258,34 @@ private fun MenuList(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 MenuItem(
-                    title = "Generated Images",
-                    description = "A collection of all your generated images",
-                    icon = Icons.Filled.GridView,
-                    onClick = onGeneratedImages
-                )
-                MenuItem(
-                    title = "Chat History",
-                    description = "A collection of all your chat history",
-                    icon = Icons.Filled.History,
-                    onClick = onChatHistory
-                )
-                HorizontalDivider(
-                    thickness = 1.dp
-                )
-
-                MenuItem(
                     title = "GitHub",
                     description = "Check out all of my open source projects",
-                    uri = "https://github.com/yassineAbou",
-                    icon = vectorResource(Res.drawable.ic_github)
+                    icon = vectorResource(Res.drawable.ic_github),
+                    onClick = { uriHandler.openUri("https://github.com/yassineAbou") }
                 )
                 MenuItem(
                     title = "LinkedIn",
                     description = "Connect with me",
-                    uri = "https://www.linkedin.com/in/yassineabou/",
-                    icon = vectorResource(Res.drawable.ic_linkedIn)
+                    icon = vectorResource(Res.drawable.ic_linkedIn),
+                    onClick = { uriHandler.openUri("https://www.linkedin.com/in/yassineabou/") }
+
                 )
                 MenuItem(
                     title = "Other Apps",
                     description = "Check out all of my other apps",
-                    uri = "https://play.google.com/store/apps/dev?id=8439679079332539766",
-                    icon = vectorResource(Res.drawable.ic_play_store)
+                    icon = vectorResource(Res.drawable.ic_play_store),
+                    onClick = { uriHandler.openUri("https://play.google.com/store/apps/dev?id=8439679079332539766") }
                 )
 
                 HorizontalDivider(
                     thickness = 1.dp
                 )
 
-
                 MenuItem(
                     title = "About",
                     description = "Find out more about this app",
-                    uri = "https://github.com/yassineAbou/LLMS",
                     icon = Icons.Filled.Info,
+                    onClick = { uriHandler.openUri("https://github.com/yassineAbou/LLMS") }
                 )
 
                 if (loggedIn) {
@@ -327,24 +303,6 @@ private fun MenuList(
             }
         }
     }
-}
-
-@Composable
-private fun MenuItem(
-    title: String,
-    description: String,
-    uri: String,
-    icon: ImageVector,
-    iconTint: Color = MaterialTheme.colorSchemeCustom.alwaysWhite,
-) {
-    val uriHandler = LocalUriHandler.current
-    MenuItem(
-        title = title,
-        description = description,
-        icon = icon,
-        iconTint = iconTint,
-        onClick = { uriHandler.openUri(uri) }
-    )
 }
 
 @Composable
@@ -374,6 +332,7 @@ private fun MenuItem(
         }
         TitleDescriptionText(title = title, description = description)
     }
+
 }
 
 @Composable
