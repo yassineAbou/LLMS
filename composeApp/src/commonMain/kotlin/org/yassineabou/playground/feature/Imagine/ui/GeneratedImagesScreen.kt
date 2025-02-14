@@ -137,10 +137,10 @@ fun GeneratedImagesScreen(
                             image = image,
                             isInSelectionMode = inSelectionMode,
                             onClick = {
-                                val index = listGeneratedPhotos.indexOfFirst { it.id == image.id }
-                                if (index != -1) {
+                                val itemIndex = listGeneratedPhotos.indexOf(image)
+                                if (itemIndex != -1) {
                                     // Save the index in the ViewModel
-                                    imageGenViewModel.updateCurrentImageIndex(index)
+                                    imageGenViewModel.updateCurrentImageIndex(itemIndex)
                                     if (isLargeScreen) {
                                         supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage)
                                     } else {

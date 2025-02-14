@@ -45,14 +45,14 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.navigation.Screen
-import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.app.core.util.PlatformConfig
-import org.yassineabou.playground.app.core.util.isDesktop
-import org.yassineabou.playground.app.core.util.isWasm
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.playground.app.core.sharedViews.PyramidText
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.PlatformConfig
+import org.yassineabou.playground.app.core.util.isDesktop
+import org.yassineabou.playground.app.core.util.isWasm
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
@@ -162,6 +162,7 @@ private fun ImagePager(
             if (image != null) {
                 ImageReview(
                     url = image.url,
+                    description = image.description,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -194,13 +195,30 @@ private fun ImagePager(
 }
 
 @Composable
-private fun ImageReview(modifier: Modifier = Modifier, url: String) {
-    AsyncImage(
-        model = url,
-        contentDescription = "Wallpaper",
-        contentScale = ContentScale.FillBounds,
-        modifier = modifier
-    )
+private fun ImageReview(
+    modifier: Modifier = Modifier,
+    url: String,
+    description: String
+) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+        AsyncImage(
+            model = url,
+            contentDescription = "Wallpaper",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Text(
+            text = description,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(start = 16.dp, end = 16.dp, top = 100.dp)
+        )
+    }
 }
 
 

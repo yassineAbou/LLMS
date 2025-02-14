@@ -17,7 +17,7 @@ import kotlin.time.Duration.Companion.seconds
 class ImageGenViewModel : ViewModel() {
 
     // Existing state
-    private val _listGeneratedPhotos: MutableStateFlow<MutableList<UrlExample>> = MutableStateFlow(ImageGenModelList.generated)
+    private val _listGeneratedPhotos: MutableStateFlow<MutableList<UrlExample>> = MutableStateFlow(mutableListOf())
     val listGeneratedPhotos: StateFlow<MutableList<UrlExample>> = _listGeneratedPhotos
 
     private val _tempSelectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
@@ -54,10 +54,12 @@ class ImageGenViewModel : ViewModel() {
                 )
                 delay(1.seconds)
             }
-            // Add the image only if the timer completes
+
+            val randomUrl = ImageGenModelList.inspiration.random().url
+
             addImage(
                 UrlExample(
-                    url = "https://i.imgur.com/ivnreND.png",
+                    url = randomUrl,
                     description = "We're going to work on generating images next. this is just a prototype with fake data"
                 )
             )

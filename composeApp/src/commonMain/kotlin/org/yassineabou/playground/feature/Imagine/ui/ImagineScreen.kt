@@ -136,6 +136,7 @@ fun ImagineScreen(
         )
         if (selectModelClicked) {
             ImageGenTypesBottomSheet(
+                imageGenViewModel = imageGenViewModel,
                 onDismissRequest = { selectModelClicked = false },
                 onAuthenticated = { selectModelClicked = false }
             )

@@ -64,7 +64,7 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageGenTypesBottomSheet(
-    imageGenViewModel: ImageGenViewModel = koinViewModel(),
+    imageGenViewModel: ImageGenViewModel,
     onDismissRequest: () -> Unit,
     onAuthenticated: () -> Unit
 ) {

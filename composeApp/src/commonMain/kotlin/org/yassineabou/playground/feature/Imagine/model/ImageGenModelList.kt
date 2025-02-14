@@ -28,10 +28,6 @@ object ImageGenModelList {
         .flatten()
         .shuffled()
 
-    val generated = inspiration.take(20).mapIndexed { index, urlExample ->
-        urlExample.copy(id = index)
-    }.toMutableList()
-
     val generalist = listOf(
         ImageModel(
             title = "AlbedoBase XL",
