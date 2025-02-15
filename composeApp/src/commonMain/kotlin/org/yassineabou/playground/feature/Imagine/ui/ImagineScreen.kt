@@ -24,8 +24,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -57,10 +55,10 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.navigation.Screen
-import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.app.core.util.draggableScrollModifier
 import org.yassineabou.playground.app.core.sharedViews.CustomIconButton
 import org.yassineabou.playground.app.core.sharedViews.GoToFirst
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.draggableScrollModifier
 import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
 import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
@@ -178,7 +176,7 @@ private fun TypeIdeaForm(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 16.dp)
-                    .weight(0.65f)
+                    .weight(0.80f)
                     .border(
                         width = 2.dp, // Set border thickness
                         color = MaterialTheme.colorSchemeCustom.alwaysBlue, // Set border color
@@ -213,21 +211,6 @@ private fun TypeIdeaForm(
                     )
                 )
             }
-
-            AssistChip(
-                label = {
-                    Text(
-                        text = "Advance",
-                        color = MaterialTheme.colorScheme.background
-                    )
-                },
-                colors = AssistChipDefaults.assistChipColors(containerColor = MaterialTheme.colorScheme.onBackground),
-                modifier = Modifier
-                    .weight(0.15f)
-                    .align(Alignment.End)
-                    .padding(end = 16.dp),
-                onClick = { },
-            )
         }
     }
 }

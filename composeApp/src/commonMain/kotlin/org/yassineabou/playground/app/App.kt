@@ -1,6 +1,8 @@
 package org.yassineabou.playground.app
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
@@ -24,22 +26,15 @@ import org.yassineabou.playground.app.core.di.appModule
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.navigation.Screen.ChatHistoryScreen.ScreenSaver
 import org.yassineabou.playground.app.core.navigation.listNavigationBarItems
-import org.yassineabou.playground.app.core.theme.AppTheme
-import org.yassineabou.playground.app.core.util.slideDownIn
-import org.yassineabou.playground.app.core.util.slideDownOut
-import org.yassineabou.playground.app.core.util.slideLeftIn
-import org.yassineabou.playground.app.core.util.slideLeftOut
-import org.yassineabou.playground.app.core.util.slideRightIn
-import org.yassineabou.playground.app.core.util.slideRightOut
-import org.yassineabou.playground.app.core.util.slideUpIn
-import org.yassineabou.playground.app.core.util.slideUpOut
 import org.yassineabou.playground.app.core.sharedViews.SnackbarControllerProvider
+import org.yassineabou.playground.app.core.theme.AppTheme
+import org.yassineabou.playground.app.core.util.NavTransitions
 import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
+import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
@@ -101,6 +96,7 @@ fun LLMsApp() {
 
     SnackbarControllerProvider { host ->
         NavigationSuiteScaffold(
+            layoutType = layoutType,
             navigationSuiteItems = {
                 listNavigationBarItems.forEach { item ->
                     item(
@@ -125,56 +121,59 @@ fun LLMsApp() {
                     )
                 }
             },
-            layoutType = layoutType
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = Screen.ChatScreen.route,
+            Scaffold(
+                snackbarHost = { SnackbarHost(hostState = host) }
             ) {
-                composable(Screen.ChatScreen.route) {
-                    ChatScreen(navController = navController, chatViewModel = chatViewModel)
-                }
-                composable(
-                    route = Screen.ChatHistoryScreen.route,
-                    enterTransition = slideUpIn(),
-                    exitTransition = slideDownOut(),
-                    popEnterTransition = slideDownIn(),
-                    popExitTransition = slideUpOut()
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.ChatScreen.route,
                 ) {
-                    ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
-                }
-                composable(Screen.ImagineScreen.route) {
-                    SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController)
-                }
-                composable(
-                    route = Screen.ImageProcessingScreen.route,
-                    enterTransition = slideLeftIn(),
-                    exitTransition = slideRightOut(),
-                    popEnterTransition = slideLeftIn(),
-                    popExitTransition = slideRightOut()
-                ) {
-                    ImageProcessingScreen(navController = navController, imageGenViewModel = imageGenViewModel)
-                }
-                composable(
-                    route = Screen.FullScreenImage.route,
-                    enterTransition = slideLeftIn(),
-                    exitTransition = slideRightOut(),
-                    popEnterTransition = slideRightIn(),
-                    popExitTransition = slideLeftOut()
-                ) {
-                    FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController)
-                }
-                composable(
-                    route = Screen.GeneratedImagesScreen.route,
-                    enterTransition = slideLeftIn(),
-                    exitTransition = slideRightOut(),
-                    popEnterTransition = slideRightIn(),
-                    popExitTransition = slideLeftOut()
-                ) {
-                    GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
-                }
-                composable(Screen.Profile.route) {
-                    ProfileContent()
+                    composable(Screen.ChatScreen.route) {
+                        ChatScreen(navController = navController, chatViewModel = chatViewModel)
+                    }
+                    composable(
+                        route = Screen.ChatHistoryScreen.route,
+                        enterTransition = NavTransitions.slideUpIn(),
+                        exitTransition = NavTransitions.slideDownOut(),
+                        popEnterTransition = NavTransitions.slideDownIn(),
+                        popExitTransition = NavTransitions.slideUpOut()
+                    ) {
+                        ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
+                    }
+                    composable(Screen.ImagineScreen.route) {
+                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController)
+                    }
+                    composable(
+                        route = Screen.ImageProcessingScreen.route,
+                        enterTransition = NavTransitions.slideLeftIn(),
+                        exitTransition = NavTransitions.slideRightOut(),
+                        popEnterTransition = NavTransitions.slideLeftIn(),
+                        popExitTransition = NavTransitions.slideRightOut()
+                    ) {
+                        ImageProcessingScreen(navController = navController, imageGenViewModel = imageGenViewModel)
+                    }
+                    composable(
+                        route = Screen.FullScreenImage.route,
+                        enterTransition = NavTransitions.slideLeftIn(),
+                        exitTransition = NavTransitions.slideRightOut(),
+                        popEnterTransition = NavTransitions.slideRightIn(),
+                        popExitTransition = NavTransitions.slideLeftOut()
+                    ) {
+                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController)
+                    }
+                    composable(
+                        route = Screen.GeneratedImagesScreen.route,
+                        enterTransition = NavTransitions.slideLeftIn(),
+                        exitTransition = NavTransitions.slideRightOut(),
+                        popEnterTransition = NavTransitions.slideRightIn(),
+                        popExitTransition = NavTransitions.slideLeftOut()
+                    ) {
+                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
+                    }
+                    composable(Screen.Profile.route) {
+                        ProfileContent()
+                    }
                 }
             }
         }

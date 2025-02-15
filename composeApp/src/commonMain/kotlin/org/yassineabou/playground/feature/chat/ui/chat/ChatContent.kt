@@ -42,8 +42,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.app.core.util.slideFadeIn
-import org.yassineabou.playground.app.core.util.slideFadeOut
+import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.chat.model.ChatMessage
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -149,8 +148,8 @@ private fun ScrollToBottomButton(
 ) {
     AnimatedVisibility(
         visible = visibility,
-        enter = slideFadeIn(),
-        exit = slideFadeOut(),
+        enter = Animations.slideFadeIn(),
+        exit = Animations.slideFadeOut(),
         modifier = modifier
     ) {
         IconButton(

@@ -28,8 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_clear
 import org.jetbrains.compose.resources.painterResource
-import org.yassineabou.playground.app.core.util.fadeInExpand
-import org.yassineabou.playground.app.core.util.fadeOutShrink
+import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.Imagine.ui.view.DropDownDialog
 import org.yassineabou.playground.feature.Imagine.ui.view.NoContentMessage
 import org.yassineabou.playground.feature.chat.model.ChatHistory
@@ -93,8 +92,8 @@ fun ChatListPane(
         // Animate between ListPaneSections and EmptyGeneratedMessage
         AnimatedVisibility(
             visible = chatHistoryList.isNotEmpty() or savedChatHistoryList.isNotEmpty(),
-            enter = fadeInExpand(), // Use the descriptive enter animation
-            exit = fadeOutShrink()
+            enter = Animations.fadeInExpand(), // Use the descriptive enter animation
+            exit = Animations.fadeOutShrink()
         ) {
             // Show ListPaneSections when chatHistoryList is not empty
             ListPaneSections(
@@ -104,8 +103,8 @@ fun ChatListPane(
 
         AnimatedVisibility(
             visible = chatHistoryList.isEmpty() and savedChatHistoryList.isEmpty(),
-            enter = fadeInExpand(), // Use the descriptive enter animation
-            exit = fadeOutShrink()
+            enter = Animations.fadeInExpand(), // Use the descriptive enter animation
+            exit = Animations.fadeOutShrink()
         ) {
             // Show EmptyGeneratedMessage when chatHistoryList is empty
             NoContentMessage(

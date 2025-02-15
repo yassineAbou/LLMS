@@ -10,7 +10,9 @@ sealed class Screen(val route: String) {
     data object Profile : Screen("Profile")
     data object FullScreenImage : Screen("FullScreenImage")
     data object ImageProcessingScreen : Screen("ImageProcessingScreen")
+
     companion object {
+
         fun fromRoute(route: String): Screen {
             return when (route) {
                 ChatScreen.route -> ChatScreen
@@ -23,6 +25,7 @@ sealed class Screen(val route: String) {
                 else -> throw IllegalArgumentException("Unknown route: $route")
             }
         }
+
     }
 
     val ScreenSaver: Saver<Screen, String> = Saver(

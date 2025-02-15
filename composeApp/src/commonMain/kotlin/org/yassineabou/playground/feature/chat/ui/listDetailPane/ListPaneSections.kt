@@ -14,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.yassineabou.playground.app.core.util.fadeInExpand
-import org.yassineabou.playground.app.core.util.fadeOutShrink
+import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 @Composable
@@ -34,8 +33,8 @@ fun ListPaneSections(
             item {
                 AnimatedVisibility(
                     visible = savedChatHistoryList.isNotEmpty(),
-                    enter = fadeInExpand(), // Use the descriptive enter animation
-                    exit = fadeOutShrink()
+                    enter = Animations.fadeInExpand(), // Use the descriptive enter animation
+                    exit = Animations.fadeOutShrink()
                 ) {
                     SectionHeader(title = "Saved")
                 }
@@ -55,8 +54,8 @@ fun ListPaneSections(
             item {
                 AnimatedVisibility(
                     visible = chatHistoryList.isNotEmpty(),
-                    enter = fadeInExpand(), // Use the descriptive enter animation
-                    exit = fadeOutShrink()
+                    enter = Animations.fadeInExpand(), // Use the descriptive enter animation
+                    exit = Animations.fadeOutShrink()
                 ) {
                     SectionHeader(title = "Recent")
                 }
