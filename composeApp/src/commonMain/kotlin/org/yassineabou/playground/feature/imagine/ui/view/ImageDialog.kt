@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package org.yassineabou.playground.feature.Imagine.ui.view
+package org.yassineabou.playground.feature.imagine.ui.view
 
 
 import androidx.compose.foundation.ScrollState
@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.sharedViews.PyramidText
-import org.yassineabou.playground.feature.Imagine.model.UrlExample
+import org.yassineabou.playground.feature.imagine.model.UrlExample
 
 @Composable
 fun ImageDialogContent(

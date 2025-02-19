@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui
+package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -50,13 +50,14 @@ import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.playground.app.core.sharedViews.PyramidText
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.playground.app.core.util.PlatformConfig
 import org.yassineabou.playground.app.core.util.isDesktop
 import org.yassineabou.playground.app.core.util.isWasm
-import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.model.UrlExample
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
 
 
 @Composable
@@ -87,13 +88,13 @@ fun FullScreenImage(
                 .padding(4.dp)
                 .align(Alignment.Start),
             onBackPress = {
-                if (isLargeScreen) {
-                    supportingPaneNavigator?.navigate(SupportingPaneScreen.GeneratedImages)
-                } else {
-                    navController.navigate(Screen.GeneratedImagesScreen.route) {
-                        popUpTo(Screen.ImagineScreen.route)
-                    }
-                }
+                PaneOrScreenNavigator.navigateTo(
+                    supportingPaneNavigator = supportingPaneNavigator,
+                    navController = navController,
+                    isLargeScreen = isLargeScreen,
+                    paneDestination = SupportingPaneScreen.GeneratedImages,
+                    screenRoute = Screen.GeneratedImagesScreen.route
+                )
             }
         )
 

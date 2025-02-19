@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui.view
+package org.yassineabou.playground.feature.imagine.ui.view
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import kotlinx.coroutines.delay
-import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.draggableScrollModifier
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
@@ -54,10 +53,10 @@ import org.yassineabou.playground.app.core.sharedViews.GenTypesButtons
 import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
 import org.yassineabou.playground.app.core.sharedViews.ModelInformation
 import org.yassineabou.playground.app.core.sharedViews.ShimmerPlaceholder
-import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
-import org.yassineabou.playground.feature.Imagine.model.ImageModel
-import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
+import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
+import org.yassineabou.playground.feature.imagine.model.ImageModel
+import org.yassineabou.playground.feature.imagine.model.UrlExample
+import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

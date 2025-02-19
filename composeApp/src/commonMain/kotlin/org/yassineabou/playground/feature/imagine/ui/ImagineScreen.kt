@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui
+package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -58,15 +58,16 @@ import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.CustomIconButton
 import org.yassineabou.playground.app.core.sharedViews.GoToFirst
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.playground.app.core.util.draggableScrollModifier
-import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
-import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.ui.view.DropDownDialog
-import org.yassineabou.playground.feature.Imagine.ui.view.ImageDialogContent
-import org.yassineabou.playground.feature.Imagine.ui.view.ImageGenTypesBottomSheet
+import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
+import org.yassineabou.playground.feature.imagine.model.UrlExample
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
+import org.yassineabou.playground.feature.imagine.ui.view.ImageDialogContent
+import org.yassineabou.playground.feature.imagine.ui.view.ImageGenTypesBottomSheet
 
 
 @Composable
@@ -80,6 +81,7 @@ fun ImagineScreen(
     var ideaText by remember { mutableStateOf("") }
     var selectModelClicked by remember { mutableStateOf(false) }
     val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsStateWithLifecycle()
+    val estimatedTimerState by imageGenViewModel.estimatedTimerState.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
     Column(
@@ -117,18 +119,20 @@ fun ImagineScreen(
             onIdeaTextChange = { ideaText = it },
         )
         CreateImageButton(
-            enabled = ideaText.isNotEmpty(),
+            enabled = ideaText.isNotEmpty() and estimatedTimerState.isTimerCompleted,
             modifier = Modifier
                 .weight(0.1f)
                 .width(400.dp)
                 .padding(horizontal = 16.dp)
                 .align(Alignment.CenterHorizontally),
             onGenerateClick = {
-                if (isLargeScreen) {
-                    supportingPaneNavigator?.navigate(SupportingPaneScreen.ImageProcessing)
-                } else {
-                    navController.navigate(Screen.ImageProcessingScreen.route)
-                }
+                PaneOrScreenNavigator.navigateTo(
+                    supportingPaneNavigator = supportingPaneNavigator,
+                    navController = navController,
+                    isLargeScreen = isLargeScreen,
+                    paneDestination = SupportingPaneScreen.ImageCreationTimer,
+                    screenRoute = Screen.ImageCreationTimerScreen.route
+                )
                 imageGenViewModel.startEstimatedTimer()
             }
         )

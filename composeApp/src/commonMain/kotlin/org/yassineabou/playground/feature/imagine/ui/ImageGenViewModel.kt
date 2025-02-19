@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui
+package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.feature.Imagine.model.EstimatedTimerState
-import org.yassineabou.playground.feature.Imagine.model.ImageGenModelList
-import org.yassineabou.playground.feature.Imagine.model.ImageModel
-import org.yassineabou.playground.feature.Imagine.model.UrlExample
+import org.yassineabou.playground.feature.imagine.model.EstimatedTimerState
+import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
+import org.yassineabou.playground.feature.imagine.model.ImageModel
+import org.yassineabou.playground.feature.imagine.model.UrlExample
 import kotlin.time.Duration.Companion.seconds
 
 class ImageGenViewModel : ViewModel() {
@@ -31,7 +31,7 @@ class ImageGenViewModel : ViewModel() {
         EstimatedTimerState(
             remainingSeconds = 10,
             progress = 0f,
-            isTimerCompleted = false
+            isTimerCompleted = true
         )
     )
     val estimatedTimerState: StateFlow<EstimatedTimerState> = _estimatedTimerState
@@ -78,7 +78,7 @@ class ImageGenViewModel : ViewModel() {
         _estimatedTimerState.value = EstimatedTimerState(
             remainingSeconds = 10,
             progress = 0f,
-            isTimerCompleted = false
+            isTimerCompleted = true
         )
     }
 

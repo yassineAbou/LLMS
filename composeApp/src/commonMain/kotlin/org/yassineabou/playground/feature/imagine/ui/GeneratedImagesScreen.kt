@@ -1,7 +1,7 @@
 @file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 
 
-package org.yassineabou.playground.feature.Imagine.ui
+package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -38,11 +38,12 @@ import com.dragselectcompose.grid.indicator.UnselectedIcon
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
-import org.yassineabou.playground.feature.Imagine.model.UrlExample
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.ui.view.NoContentMessage
-import org.yassineabou.playground.feature.Imagine.ui.view.ImageSelectionControls
+import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
+import org.yassineabou.playground.feature.imagine.model.UrlExample
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.imagine.ui.view.NoContentMessage
+import org.yassineabou.playground.feature.imagine.ui.view.ImageSelectionControls
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -141,11 +142,13 @@ fun GeneratedImagesScreen(
                                 if (itemIndex != -1) {
                                     // Save the index in the ViewModel
                                     imageGenViewModel.updateCurrentImageIndex(itemIndex)
-                                    if (isLargeScreen) {
-                                        supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage)
-                                    } else {
-                                        navController.navigate(Screen.FullScreenImage.route)
-                                    }
+                                    PaneOrScreenNavigator.navigateTo(
+                                        supportingPaneNavigator = supportingPaneNavigator,
+                                        navController = navController,
+                                        isLargeScreen = isLargeScreen,
+                                        paneDestination = SupportingPaneScreen.FullScreenImage,
+                                        screenRoute = Screen.FullScreenImage.route
+                                    )
                                 }
                             },
                         )

@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui.supportingPane
+package org.yassineabou.playground.feature.imagine.ui.supportingPane
 
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass

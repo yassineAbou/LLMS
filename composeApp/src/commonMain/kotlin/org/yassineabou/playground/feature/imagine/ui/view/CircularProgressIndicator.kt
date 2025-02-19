@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui.view
+package org.yassineabou.playground.feature.imagine.ui.view
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState

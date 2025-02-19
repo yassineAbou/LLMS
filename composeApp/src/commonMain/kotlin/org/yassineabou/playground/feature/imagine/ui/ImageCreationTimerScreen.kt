@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui
+package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,34 +10,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.navigation.Screen
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneNavigator
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
-import org.yassineabou.playground.feature.Imagine.ui.view.BackgroundIndicator
+import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.view.BackgroundIndicator
 
 @Composable
-fun ImageProcessingScreen(
+fun ImageCreationTimerScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator? = null,
     modifier: Modifier = Modifier
 ) {
     // Observe timer state from the ViewModel
-    val timerState by imageGenViewModel.estimatedTimerState.collectAsState()
+    val timerState by imageGenViewModel.estimatedTimerState.collectAsStateWithLifecycle()
+    val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
     // Trigger navigation when the timer completes
     LaunchedEffect(key1 = timerState.isTimerCompleted) {
-        if (timerState.isTimerCompleted) {
+        if (timerState.isTimerCompleted and listGeneratedPhotos.isNotEmpty()) {
             if (isLargeScreen) {
                 supportingPaneNavigator?.navigate(SupportingPaneScreen.FullScreenImage)
             } else {
@@ -70,11 +72,12 @@ fun ImageProcessingScreen(
             onClick = {
                 // Stop the timer and reset the state
                 imageGenViewModel.stopEstimatedTimer()
-                if (isLargeScreen) {
-                    supportingPaneNavigator?.popBackStack()
-                } else {
-                    navController.popBackStack()
-                }
+
+                PaneOrScreenNavigator.navigateBack(
+                    supportingPaneNavigator = supportingPaneNavigator,
+                    navController = navController,
+                    isLargeScreen = isLargeScreen
+                )
             }
         ) {
             Text(

@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
-import org.yassineabou.playground.feature.Imagine.ui.view.DropDownDialog
+import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent

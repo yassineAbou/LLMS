@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui.supportingPane
+package org.yassineabou.playground.feature.imagine.ui.supportingPane
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -18,11 +18,12 @@ import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import org.yassineabou.playground.feature.Imagine.ui.FullScreenImage
-import org.yassineabou.playground.feature.Imagine.ui.GeneratedImagesScreen
-import org.yassineabou.playground.feature.Imagine.ui.ImageGenViewModel
-import org.yassineabou.playground.feature.Imagine.ui.ImageProcessingScreen
-import org.yassineabou.playground.feature.Imagine.ui.ImagineScreen
+import org.yassineabou.playground.app.core.navigation.Screen
+import org.yassineabou.playground.feature.imagine.ui.FullScreenImage
+import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
+import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
+import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
+import org.yassineabou.playground.feature.imagine.ui.ImagineScreen
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -64,16 +65,11 @@ fun ThreePaneScaffoldScope.MainPane(
     modifier: Modifier = Modifier,
 ) {
     val isLargeScreen = rememberIsLargeScreen()
-
     val currentScreen = supportingPaneNavigator.currentScreen
 
-    // Determine which screen to show
-    val screenToShow = determineScreenToShow(isLargeScreen, currentScreen)
-
-
     AnimatedPane(modifier = modifier.safeContentPadding()) {
-        when (screenToShow) {
-            "ImagineContent" -> {
+        when {
+            isLargeScreen || currentScreen is SupportingPaneScreen.GeneratedImages -> {
                 ImagineScreen(
                     navController = navController,
                     imageGenViewModel = imageGenViewModel,
@@ -81,21 +77,25 @@ fun ThreePaneScaffoldScope.MainPane(
                     shouldShowSupportingPaneButton = shouldShowSupportingPaneButton
                 )
             }
-
-            "ImageProcessingScreen" -> {
-                ImageProcessingScreen(
-                    navController = navController,
-                    imageGenViewModel = imageGenViewModel,
-                    supportingPaneNavigator = supportingPaneNavigator
-                )
-            }
-
-            "FullScreenImage" -> {
-                FullScreenImage(
-                    navController = navController,
-                    imageGenViewModel = imageGenViewModel,
-                    supportingPaneNavigator = supportingPaneNavigator
-                )
+            else -> {
+                val targetScreen = Screen.fromSupportingPane(currentScreen)
+                when (targetScreen) {
+                    Screen.ImageCreationTimerScreen -> {
+                        ImageCreationTimerScreen(
+                            navController = navController,
+                            imageGenViewModel = imageGenViewModel,
+                            supportingPaneNavigator = supportingPaneNavigator
+                        )
+                    }
+                    Screen.FullScreenImage -> {
+                        FullScreenImage(
+                            navController = navController,
+                            imageGenViewModel = imageGenViewModel,
+                            supportingPaneNavigator = supportingPaneNavigator
+                        )
+                    }
+                    else -> Unit
+                }
             }
         }
     }
@@ -115,11 +115,9 @@ fun SupportingPane(
         targetState = currentScreen,
         transitionSpec = {
             if (isForward) {
-                // Forward animation: slide in from the right, slide out to the left
                 slideInHorizontally { width -> width } + fadeIn() togetherWith
                         slideOutHorizontally { width -> -width } + fadeOut()
             } else {
-                // Backward animation: slide in from the left, slide out to the right
                 slideInHorizontally { width -> -width } + fadeIn() togetherWith
                         slideOutHorizontally { width -> width } + fadeOut()
             }.using(SizeTransform(clip = false))
@@ -134,15 +132,13 @@ fun SupportingPane(
                     navController = navController
                 )
             }
-
-            is SupportingPaneScreen.ImageProcessing -> {
-                ImageProcessingScreen(
+            is SupportingPaneScreen.ImageCreationTimer -> {
+                ImageCreationTimerScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
                     imageGenViewModel = imageGenViewModel,
                     navController = navController
                 )
             }
-
             is SupportingPaneScreen.FullScreenImage -> {
                 FullScreenImage(
                     supportingPaneNavigator = supportingPaneNavigator,
@@ -154,16 +150,4 @@ fun SupportingPane(
     }
 }
 
-@Composable
-fun determineScreenToShow(
-    isLargeScreen: Boolean,
-    currentScreen: SupportingPaneScreen
-): String {
-    return when {
-        isLargeScreen || currentScreen is SupportingPaneScreen.GeneratedImages -> "ImagineContent"
-        currentScreen is SupportingPaneScreen.ImageProcessing -> "ImageProcessingScreen"
-        currentScreen is SupportingPaneScreen.FullScreenImage -> "FullScreenImage"
-        else -> "ImagineContent"
-    }
-}
 

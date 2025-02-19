@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui.view
+package org.yassineabou.playground.feature.imagine.ui.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

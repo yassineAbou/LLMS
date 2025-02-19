@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.navigation.Screen
-import org.yassineabou.playground.feature.Imagine.ui.view.ContentStateAnimator
+import org.yassineabou.playground.feature.imagine.ui.view.ContentStateAnimator
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatHistoryListView
 

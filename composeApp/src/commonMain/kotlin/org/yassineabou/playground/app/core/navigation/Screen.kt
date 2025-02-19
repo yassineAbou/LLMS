@@ -1,6 +1,7 @@
 package org.yassineabou.playground.app.core.navigation
 
 import androidx.compose.runtime.saveable.Saver
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
 
 sealed class Screen(val route: String) {
     data object ChatScreen : Screen("ChatScreen")
@@ -9,7 +10,7 @@ sealed class Screen(val route: String) {
     data object GeneratedImagesScreen : Screen("GeneratedImagesScreen")
     data object Profile : Screen("Profile")
     data object FullScreenImage : Screen("FullScreenImage")
-    data object ImageProcessingScreen : Screen("ImageProcessingScreen")
+    data object ImageCreationTimerScreen : Screen("ImageCreationTimerScreen")
 
     companion object {
 
@@ -21,10 +22,19 @@ sealed class Screen(val route: String) {
                 GeneratedImagesScreen.route -> GeneratedImagesScreen
                 Profile.route -> Profile
                 FullScreenImage.route -> FullScreenImage
-                ImageProcessingScreen.route -> ImageProcessingScreen
+                ImageCreationTimerScreen.route -> ImageCreationTimerScreen
                 else -> throw IllegalArgumentException("Unknown route: $route")
             }
         }
+
+        fun fromSupportingPane(screen: SupportingPaneScreen): Screen {
+            return when (screen) {
+                SupportingPaneScreen.GeneratedImages -> GeneratedImagesScreen
+                SupportingPaneScreen.ImageCreationTimer -> ImageCreationTimerScreen
+                SupportingPaneScreen.FullScreenImage -> FullScreenImage
+            }
+        }
+
 
     }
 

@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.model
+package org.yassineabou.playground.feature.imagine.model
 
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

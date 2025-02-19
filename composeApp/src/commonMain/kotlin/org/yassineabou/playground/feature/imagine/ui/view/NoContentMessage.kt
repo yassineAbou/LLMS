@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.Imagine.ui.view
+package org.yassineabou.playground.feature.imagine.ui.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.feature.Imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
 
 @Composable
 fun NoContentMessage(

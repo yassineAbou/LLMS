@@ -12,7 +12,7 @@ import llms.composeapp.generated.resources.ic_hugging_face_h4
 import llms.composeapp.generated.resources.ic_meta
 import llms.composeapp.generated.resources.ic_tii
 import org.jetbrains.compose.resources.DrawableResource
-import org.yassineabou.playground.feature.Imagine.model.IdGenerator
+import org.yassineabou.playground.feature.imagine.model.IdGenerator
 
 
 data class TextModel(
