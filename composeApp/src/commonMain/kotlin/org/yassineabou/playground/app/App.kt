@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -56,8 +57,6 @@ fun LLMsApp() {
     val navController = rememberNavController()
     var isNavigationBarVisible by rememberSaveable { mutableStateOf(true) }
     var isFullScreenImage by rememberSaveable { mutableStateOf(false) }
-    val dragSelectState = rememberDragSelectState<UrlExample>(compareSelector = { it.id })
-    val isSelectionMode = dragSelectState.inSelectionMode
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val chatViewModel = koinViewModel<ChatViewModel>()
     val imageGenViewModel = koinViewModel<ImageGenViewModel>()
@@ -67,20 +66,8 @@ fun LLMsApp() {
         mutableStateOf(Screen.ChatScreen)
     }
 
-    LaunchedEffect(navBackStackEntry?.destination?.route, isSelectionMode) {
-        val routeToCheck = listOf(
-            Screen.GeneratedImagesScreen.route,
-            Screen.FullScreenImage.route,
-            Screen.ImageCreationTimerScreen.route,
-            Screen.ChatHistoryScreen.route,
-        )
-        isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
-            routeToCheck.any { currentRoute.startsWith(it) }
-        } ?: false
-        isNavigationBarVisible = !isFullScreenImage && !isSelectionMode
-    }
-
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    var isLargeScreen by  remember { mutableStateOf(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) }
 
     // Customize the layout type based on window size class and isBottomBarVisible
     val layoutType = when (windowSizeClass.windowWidthSizeClass) {
@@ -92,6 +79,20 @@ fun LLMsApp() {
         }
         WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationRail
         else -> NavigationSuiteType.NavigationBar
+    }
+
+    LaunchedEffect(navBackStackEntry?.destination?.route) {
+        isLargeScreen =! isLargeScreen
+        val routeToCheck = listOf(
+            Screen.GeneratedImagesScreen.route,
+            Screen.FullScreenImage.route,
+            Screen.ImageCreationTimerScreen.route,
+            Screen.ChatHistoryScreen.route,
+        )
+        isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
+            routeToCheck.any { currentRoute.startsWith(it) }
+        } ?: false
+        isNavigationBarVisible = !isFullScreenImage && !isLargeScreen
     }
 
     SnackbarControllerProvider { host ->

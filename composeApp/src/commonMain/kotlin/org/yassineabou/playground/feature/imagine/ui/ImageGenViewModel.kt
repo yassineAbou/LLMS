@@ -40,11 +40,15 @@ class ImageGenViewModel : ViewModel() {
     private val _currentImageIndex = MutableStateFlow(0)
     val currentImageIndex: StateFlow<Int> = _currentImageIndex
 
+    private val _isImageGenerated = MutableStateFlow(false)
+    val isImageGenerated: StateFlow<Boolean> = _isImageGenerated
+
     // Coroutine job for the timer
     private var timerJob: Job? = null
 
     // Function to start the timer
     fun startEstimatedTimer() {
+        setIsImageGenerated(false)
         timerJob = viewModelScope.launch {
             for (i in 10 downTo 0) {
                 _estimatedTimerState.value = EstimatedTimerState(
@@ -63,6 +67,7 @@ class ImageGenViewModel : ViewModel() {
                     description = "We're going to work on generating images next. this is just a prototype with fake data"
                 )
             )
+            setIsImageGenerated(true)
             _estimatedTimerState.value = _estimatedTimerState.value.copy(isTimerCompleted = true) // Mark timer as completed
         }
     }
@@ -123,5 +128,10 @@ class ImageGenViewModel : ViewModel() {
     fun updateCurrentImageIndex(index: Int) {
         _currentImageIndex.value = index
     }
+
+    fun setIsImageGenerated(value: Boolean) {
+        _isImageGenerated.value = value
+    }
+
 }
 
