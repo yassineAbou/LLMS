@@ -20,7 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.dragselectcompose.core.rememberDragSelectState
 import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.playground.app.core.di.appModule
@@ -30,15 +29,14 @@ import org.yassineabou.playground.app.core.navigation.listNavigationBarItems
 import org.yassineabou.playground.app.core.sharedViews.SnackbarControllerProvider
 import org.yassineabou.playground.app.core.theme.AppTheme
 import org.yassineabou.playground.app.core.util.NavTransitions
-import org.yassineabou.playground.feature.imagine.model.UrlExample
-import org.yassineabou.playground.feature.imagine.ui.FullScreenImage
-import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
-import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
-import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
+import org.yassineabou.playground.feature.imagine.ui.FullScreenImage
+import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
+import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
+import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
 
 @Composable
@@ -92,7 +90,7 @@ fun LLMsApp() {
         isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
             routeToCheck.any { currentRoute.startsWith(it) }
         } ?: false
-        isNavigationBarVisible = !isFullScreenImage && !isLargeScreen
+        isNavigationBarVisible = !isFullScreenImage
     }
 
     SnackbarControllerProvider { host ->

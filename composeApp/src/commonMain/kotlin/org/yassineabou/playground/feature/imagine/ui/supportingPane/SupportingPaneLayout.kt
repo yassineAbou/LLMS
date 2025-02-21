@@ -77,17 +77,30 @@ fun ThreePaneScaffoldScope.MainPane(
                     shouldShowSupportingPaneButton = shouldShowSupportingPaneButton
                 )
             }
+            isLargeScreen && currentScreen is SupportingPaneScreen.ImageCreationTimer  -> {
+                ImageCreationTimerScreen(
+                    navController = navController,
+                    imageGenViewModel = imageGenViewModel,
+                    supportingPaneNavigator = supportingPaneNavigator
+                )
+            }
+            isLargeScreen && currentScreen is SupportingPaneScreen.FullScreenImage  -> {
+                FullScreenImage(
+                    navController = navController,
+                    imageGenViewModel = imageGenViewModel,
+                    supportingPaneNavigator = supportingPaneNavigator
+                )
+            }
             else -> {
-                val targetScreen = Screen.fromSupportingPane(currentScreen)
-                when (targetScreen) {
-                    Screen.ImageCreationTimerScreen -> {
+                when (currentScreen) {
+                    SupportingPaneScreen.ImageCreationTimer -> {
                         ImageCreationTimerScreen(
                             navController = navController,
                             imageGenViewModel = imageGenViewModel,
                             supportingPaneNavigator = supportingPaneNavigator
                         )
                     }
-                    Screen.FullScreenImage -> {
+                    SupportingPaneScreen.FullScreenImage -> {
                         FullScreenImage(
                             navController = navController,
                             imageGenViewModel = imageGenViewModel,

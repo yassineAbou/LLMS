@@ -27,14 +27,6 @@ sealed class Screen(val route: String) {
             }
         }
 
-        fun fromSupportingPane(screen: SupportingPaneScreen): Screen {
-            return when (screen) {
-                SupportingPaneScreen.GeneratedImages -> GeneratedImagesScreen
-                SupportingPaneScreen.ImageCreationTimer -> ImageCreationTimerScreen
-                SupportingPaneScreen.FullScreenImage -> FullScreenImage
-            }
-        }
-
 
     }
 
