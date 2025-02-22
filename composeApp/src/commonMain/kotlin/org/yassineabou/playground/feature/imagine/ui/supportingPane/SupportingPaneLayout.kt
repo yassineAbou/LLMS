@@ -29,10 +29,10 @@ import org.yassineabou.playground.feature.imagine.ui.ImagineScreen
 @Composable
 fun SupportingPaneLayout(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel
+    imageGenViewModel: ImageGenViewModel,
+    supportingPaneNavigator: SupportingPaneNavigator
 ) {
     val navigator = rememberSupportingPaneScaffoldNavigator()
-    val supportingPaneNavigator = rememberSupportingPaneNavigator()
 
     SupportingPaneScaffold(
         directive = navigator.scaffoldDirective,

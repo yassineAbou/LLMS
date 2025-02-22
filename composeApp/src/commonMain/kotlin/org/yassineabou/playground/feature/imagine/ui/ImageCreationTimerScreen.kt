@@ -77,6 +77,7 @@ fun ImageCreationTimerScreen(
         LaunchedEffect(currentWidth) {
             screenWidth = currentWidth
             if (screenWidth > 840.dp && isCurrentDestination) {
+                imageGenViewModel.stopEstimatedTimer()
                 navController.navigate(Screen.ImagineScreen.route)
             }
         }

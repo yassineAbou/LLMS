@@ -37,6 +37,7 @@ import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneLayout
+import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
 import org.yassineabou.playground.feature.profile.ui.ProfileContent
 
 @Composable
@@ -58,6 +59,7 @@ fun LLMsApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val chatViewModel = koinViewModel<ChatViewModel>()
     val imageGenViewModel = koinViewModel<ImageGenViewModel>()
+    val supportingPaneNavigator = rememberSupportingPaneNavigator()
 
     // Track the current destination
     var currentDestination by rememberSaveable(stateSaver = ScreenSaver) {
@@ -141,7 +143,7 @@ fun LLMsApp() {
                         ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
                     }
                     composable(Screen.ImagineScreen.route) {
-                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController)
+                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.ImageCreationTimerScreen.route,
