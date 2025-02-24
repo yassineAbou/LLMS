@@ -3,7 +3,6 @@ package org.yassineabou.playground.feature.imagine.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,13 +39,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import coil3.compose.AsyncImage
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
@@ -61,7 +57,8 @@ import org.yassineabou.playground.app.core.util.isWasm
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.util.NavigateToImagineOnScreenExpansion
 
 
 @Composable
@@ -73,14 +70,12 @@ fun FullScreenImage(
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsStateWithLifecycle()
     val currentImageIndex by imageGenViewModel.currentImageIndex.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(pageCount = { listGeneratedPhotos.size }, initialPage = currentImageIndex)
+    val pagerState = rememberPagerState(
+        pageCount = { listGeneratedPhotos.size },
+        initialPage = currentImageIndex
+    )
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
-    var screenWidth by remember { mutableStateOf(Dp.Unspecified) }
-    val currentDestination by navController.currentBackStackEntryAsState()
-    val isCurrentDestination = remember(currentDestination) {
-        currentDestination?.destination?.route == Screen.FullScreenImage.route
-    }
 
     LaunchedEffect(currentImageIndex) {
         if (currentImageIndex != pagerState.currentPage) {
@@ -88,73 +83,70 @@ fun FullScreenImage(
         }
     }
 
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-        val currentWidth = maxWidth
-        LaunchedEffect(currentWidth) {
-            screenWidth = currentWidth
-            if (screenWidth > 840.dp && isCurrentDestination) {
-                navController.navigate(Screen.ImagineScreen.route)
+    NavigateToImagineOnScreenExpansion(
+        navController = navController,
+        targetRoute = Screen.FullScreenImage.route,
+        onNavigate = { navController.navigate(Screen.ImagineScreen.route) }
+    )
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        FullScreenBackIcon(
+            modifier = Modifier
+                .padding(4.dp)
+                .align(Alignment.Start),
+            onBackPress = {
+                PaneOrScreenNavigator.navigateTo(
+                    supportingPaneNavigator = supportingPaneNavigator,
+                    navController = navController,
+                    isLargeScreen = isLargeScreen,
+                    paneDestination = SupportingPaneScreen.GeneratedImages,
+                    screenRoute = Screen.GeneratedImagesScreen.route
+                )
+            }
+        )
+
+        if (listGeneratedPhotos.isNotEmpty()) {
+            ImagePager(
+                pagerState = pagerState,
+                listGenerated = listGeneratedPhotos,
+                updateCurrentImageIndex = { index ->
+                    imageGenViewModel.updateCurrentImageIndex(index)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+        } else {
+            // Handle empty state
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No images available")
             }
         }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            FullScreenBackIcon(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .align(Alignment.Start),
-                onBackPress = {
-                    PaneOrScreenNavigator.navigateTo(
-                        supportingPaneNavigator = supportingPaneNavigator,
-                        navController = navController,
-                        isLargeScreen = isLargeScreen,
-                        paneDestination = SupportingPaneScreen.GeneratedImages,
-                        screenRoute = Screen.GeneratedImagesScreen.route
-                    )
-                }
-            )
 
-            if (listGeneratedPhotos.isNotEmpty()) {
-                ImagePager(
-                    pagerState = pagerState,
-                    listGenerated = listGeneratedPhotos,
-                    updateCurrentImageIndex = { index ->
-                        imageGenViewModel.updateCurrentImageIndex(index)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-            } else {
-                // Handle empty state
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No images available")
+        FullScreenBottomBar(
+            onInfoClicked = { showInfoBottomSheet = true },
+            onDelete = {
+                imageGenViewModel.deletePhoto(pagerState.currentPage)
+                val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(newPage)
                 }
             }
+        )
 
-            FullScreenBottomBar(
-                onInfoClicked = { showInfoBottomSheet = true },
-                onDelete = {
-                    imageGenViewModel.deletePhoto(pagerState.currentPage)
-                    val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(newPage)
-                    }
-                }
+        if (showInfoBottomSheet) {
+            InfoBottomSheet(
+                description = pagerState.currentPage.let { listGeneratedPhotos[it].description },
+                onDismissRequest = { showInfoBottomSheet = false }
             )
-
-            if (showInfoBottomSheet) {
-                InfoBottomSheet(
-                    description = pagerState.currentPage.let { listGeneratedPhotos[it].description },
-                    onDismissRequest = { showInfoBottomSheet = false }
-                )
-            }
         }
     }
 }
@@ -308,7 +300,7 @@ private fun FullScreenBottomBar(
     val snackbarController = SnackbarController.current
     Row(
         modifier = Modifier
-             .fillMaxWidth()
+            .fillMaxWidth()
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {

@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
 @Composable
 fun NoContentMessage(

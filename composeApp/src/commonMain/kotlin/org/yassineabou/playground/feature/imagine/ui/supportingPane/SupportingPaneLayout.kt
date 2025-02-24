@@ -18,12 +18,12 @@ import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.feature.imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
 import org.yassineabou.playground.feature.imagine.ui.ImagineScreen
+import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable

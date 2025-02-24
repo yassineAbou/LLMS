@@ -64,7 +64,7 @@ import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.playground.feature.imagine.ui.view.ImageDialogContent
 import org.yassineabou.playground.feature.imagine.ui.view.ImageGenTypesBottomSheet
