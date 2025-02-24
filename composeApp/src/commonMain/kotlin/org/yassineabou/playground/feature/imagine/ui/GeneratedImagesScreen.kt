@@ -57,7 +57,7 @@ import org.yassineabou.playground.feature.imagine.ui.view.ImageSelectionControls
 fun GeneratedImagesScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
-    supportingPaneNavigator: SupportingPaneNavigator? = null,
+    supportingPaneNavigator: SupportingPaneNavigator,
     dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id }),
 ) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()

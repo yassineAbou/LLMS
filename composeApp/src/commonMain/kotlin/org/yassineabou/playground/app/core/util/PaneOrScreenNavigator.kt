@@ -7,26 +7,26 @@ import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPa
 object PaneOrScreenNavigator {
 
     fun navigateTo(
-        supportingPaneNavigator: SupportingPaneNavigator?,
+        supportingPaneNavigator: SupportingPaneNavigator,
         navController: NavController,
         isLargeScreen: Boolean,
         paneDestination: SupportingPaneScreen,
         screenRoute: String
     ) {
         if (isLargeScreen) {
-            supportingPaneNavigator?.navigate(paneDestination)
+            supportingPaneNavigator.navigate(paneDestination)
         } else {
             navController.navigate(screenRoute)
         }
     }
 
     fun navigateBack(
-        supportingPaneNavigator: SupportingPaneNavigator?,
+        supportingPaneNavigator: SupportingPaneNavigator,
         navController: NavController,
         isLargeScreen: Boolean
     ) {
         if (isLargeScreen) {
-            supportingPaneNavigator?.popBackStack()
+            supportingPaneNavigator.popBackStack()
         } else {
             navController.popBackStack()
         }

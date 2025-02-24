@@ -152,7 +152,7 @@ fun LLMsApp() {
                         popEnterTransition = NavTransitions.slideLeftIn(),
                         popExitTransition = NavTransitions.slideRightOut()
                     ) {
-                        ImageCreationTimerScreen(navController = navController, imageGenViewModel = imageGenViewModel)
+                        ImageCreationTimerScreen(navController = navController, imageGenViewModel = imageGenViewModel, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.FullScreenImage.route,
@@ -161,7 +161,7 @@ fun LLMsApp() {
                         popEnterTransition = NavTransitions.slideRightIn(),
                         popExitTransition = NavTransitions.slideLeftOut()
                     ) {
-                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController)
+                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.GeneratedImagesScreen.route,
@@ -170,7 +170,7 @@ fun LLMsApp() {
                         popEnterTransition = NavTransitions.slideRightIn(),
                         popExitTransition = NavTransitions.slideLeftOut()
                     ) {
-                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController)
+                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(Screen.Profile.route) {
                         ProfileContent()

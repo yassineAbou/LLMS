@@ -74,7 +74,7 @@ import org.yassineabou.playground.feature.imagine.ui.view.ImageGenTypesBottomShe
 fun ImagineScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
-    supportingPaneNavigator: SupportingPaneNavigator? = null,
+    supportingPaneNavigator: SupportingPaneNavigator,
     shouldShowSupportingPaneButton: Boolean,
     modifier: Modifier = Modifier
 ) {

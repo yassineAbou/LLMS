@@ -68,7 +68,7 @@ import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberIsLa
 fun FullScreenImage(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
-    supportingPaneNavigator: SupportingPaneNavigator? = null
+    supportingPaneNavigator: SupportingPaneNavigator
 ) {
     val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsStateWithLifecycle()
     val currentImageIndex by imageGenViewModel.currentImageIndex.collectAsStateWithLifecycle()
@@ -77,7 +77,6 @@ fun FullScreenImage(
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
     var screenWidth by remember { mutableStateOf(Dp.Unspecified) }
-    // Get current navigation destination
     val currentDestination by navController.currentBackStackEntryAsState()
     val isCurrentDestination = remember(currentDestination) {
         currentDestination?.destination?.route == Screen.FullScreenImage.route
