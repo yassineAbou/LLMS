@@ -14,28 +14,25 @@ import llms.composeapp.generated.resources.ic_github
 import org.yassineabou.playground.feature.chat.model.AIProvider
 import org.yassineabou.playground.feature.chat.model.ChatHistory
 import org.yassineabou.playground.feature.chat.model.ChatMessage
+import org.yassineabou.playground.feature.chat.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.chat.model.aiProvidersMap
 import org.yassineabou.playground.feature.chat.model.generateLongResponse
-import org.yassineabou.playground.feature.chat.model.generatedChatHistoryList
-import org.yassineabou.playground.feature.chat.model.textGenModelList
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class ChatViewModel : ViewModel() {
 
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(textGenModelList.first())
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepSeek.first())
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
 
-    private val _selectedTextModel = MutableStateFlow<TextModel>(textGenModelList.first())
+    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepSeek.first())
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel
 
     private val _currentChatMessages = mutableStateListOf<ChatMessage>()
     val currentChatMessages: SnapshotStateList<ChatMessage> = _currentChatMessages
 
-    private val _chatHistoryList = mutableStateListOf<ChatHistory>().apply {
-        addAll(generatedChatHistoryList) // Assuming this is where default values come from
-    }
+    private val _chatHistoryList = mutableStateListOf<ChatHistory>()
     val chatHistoryList: SnapshotStateList<ChatHistory> = _chatHistoryList
 
     private val _savedChatHistoryList = mutableStateListOf<ChatHistory>()
@@ -51,15 +48,9 @@ class ChatViewModel : ViewModel() {
 
     private val _selectedAIProviders = MutableStateFlow<Map<String, Boolean>>(
         mapOf(
-            "Meta" to true,
-            "Google" to true,
-            "AnthraciteOrg" to true,
-            "AI21 Lab" to true,
-            "Hugging Face H4" to true,
-            "Alibaba Cloud" to true,
             "Deep Seek" to true,
-            "TII" to true,
-            "CohereForAI" to true
+            "Alibaba Cloud" to true,
+            "Meta" to true,
         )
     )
     val selectedAIProviders: StateFlow<Map<String, Boolean>> = _selectedAIProviders
