@@ -43,8 +43,8 @@ import org.yassineabou.playground.feature.chat.model.ChatHistory
 
 @Composable
 fun ChatHistoryListView(
-    historyConversationList: List<ChatHistory>,
-    removeHistoryConversation: (ChatHistory) -> Unit,
+    chatHistoryList: List<ChatHistory>,
+    removeChatHistory: (ChatHistory) -> Unit,
     toggleBookmark: (ChatHistory) -> Unit,
     onClick: (ChatHistory) -> Unit
 ) {
@@ -54,11 +54,11 @@ fun ChatHistoryListView(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(
-            historyConversationList,
+            chatHistoryList,
         ) { conversationItem ->
             ChatHistoryCard(
-                conversation = conversationItem,
-                removeHistoryConversation = { removeHistoryConversation(it) },
+                chatHistory = conversationItem,
+                removeChatHistory = { removeChatHistory(it) },
                 toggleBookmark = { toggleBookmark(it) },
                 onClick = { onClick(it) }
             )
@@ -68,36 +68,36 @@ fun ChatHistoryListView(
 
 @Composable
 fun ChatHistoryCard(
-    conversation: ChatHistory,
-    removeHistoryConversation: (ChatHistory) -> Unit,
+    chatHistory: ChatHistory,
+    removeChatHistory: (ChatHistory) -> Unit,
     toggleBookmark: (ChatHistory) -> Unit,
     onClick: (ChatHistory) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(conversation) },
+            .clickable { onClick(chatHistory) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            ChatHistoryContent(
-                title = conversation.title,
-                content = conversation.description
+            ChatHistoryDetails(
+                title = chatHistory.title,
+                description = chatHistory.description
             )
             ChatHistoryAction(
-                aiProvider = conversation.aiProvider,
-                isBookmarked = conversation.isBookmarked,
-                deleteConversationFromHistory = { removeHistoryConversation(conversation) },
-                toggleBookmark = { toggleBookmark(conversation) },
+                aiProvider = chatHistory.aiProvider,
+                isBookmarked = chatHistory.isBookmarked,
+                deleteConversationFromHistory = { removeChatHistory(chatHistory) },
+                toggleBookmark = { toggleBookmark(chatHistory) },
             )
         }
     }
 }
 
 @Composable
-fun ChatHistoryContent(
+fun ChatHistoryDetails(
     title: String,
-    content: String
+    description: String
 ) {
     Column {
         Text(
@@ -106,7 +106,7 @@ fun ChatHistoryContent(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = content,
+            text = description,
             style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -165,10 +165,9 @@ fun ActionButtons(
     toggleBookmark: () -> Unit,
     deleteConversationFromHistory: () -> Unit,
 ) {
-    // Use a mutable state that updates with the passed 'isBookmarked'
+
     var isBookmarkedState by remember { mutableStateOf(isBookmarked) }
 
-    // Update the state whenever 'isBookmarked' changes
     LaunchedEffect(isBookmarked) {
         isBookmarkedState = isBookmarked
     }
@@ -180,15 +179,13 @@ fun ActionButtons(
         IconButton(
             onClick = {
                 toggleBookmark()
-                // Here, you might want to update isBookmarkedState directly if 'toggleBookmark' doesn't do this
-                isBookmarkedState =
-                    !isBookmarkedState // If 'toggleBookmark' doesn't update the state, do it here
+                isBookmarkedState = !isBookmarkedState
             }
         ) {
             Icon(
                 imageVector = Icons.Filled.Bookmark,
                 contentDescription = "Save",
-                tint = bookmarkTint, // Apply the tint
+                tint = bookmarkTint,
             )
         }
         IconButton(onClick = deleteConversationFromHistory) {

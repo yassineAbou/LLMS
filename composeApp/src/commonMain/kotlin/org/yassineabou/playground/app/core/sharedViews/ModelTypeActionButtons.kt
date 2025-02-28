@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 
 @Composable
-fun GenTypesButtons(onDismissRequest: () -> Unit, onDone: () -> Unit) {
+fun ModelTypeActionButtons(onDismissRequest: () -> Unit, onDone: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)

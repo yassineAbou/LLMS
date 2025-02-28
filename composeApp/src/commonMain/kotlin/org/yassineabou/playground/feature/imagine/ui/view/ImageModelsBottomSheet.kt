@@ -49,7 +49,7 @@ import kotlinx.coroutines.delay
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.draggableScrollModifier
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
-import org.yassineabou.playground.app.core.sharedViews.GenTypesButtons
+import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
 import org.yassineabou.playground.app.core.sharedViews.ModelInformation
 import org.yassineabou.playground.app.core.sharedViews.ShimmerPlaceholder
@@ -85,7 +85,7 @@ fun ImageModelsBottomSheet(
         AnimatedVisibility(!isInfoIconClicked) {
             BottomSheetContent(
                 title = {
-                    GenTypesButtons(
+                    ModelTypeActionButtons(
                         onDismissRequest = onDismissRequest,
                         onDone = {
                             onAuthenticated()

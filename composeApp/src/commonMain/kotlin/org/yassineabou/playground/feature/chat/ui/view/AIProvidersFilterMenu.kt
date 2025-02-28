@@ -115,7 +115,7 @@ private fun DropdownHeader() {
 }
 
 @Composable
-fun AIProviderItem(
+private fun AIProviderItem(
     name: String,
     iconRes: DrawableResource,
     isSelected: Boolean,

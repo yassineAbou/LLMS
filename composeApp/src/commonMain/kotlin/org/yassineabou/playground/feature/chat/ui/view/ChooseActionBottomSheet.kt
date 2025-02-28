@@ -23,7 +23,7 @@ import org.yassineabou.playground.app.core.sharedViews.BottomSheetTitle
 @Composable
 fun ChooseActionBottomSheet(
     onDismissRequest: () -> Unit,
-    onActionSeletced: () -> Unit
+    onActionSelected: () -> Unit
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
@@ -39,7 +39,7 @@ fun ChooseActionBottomSheet(
                 )
             },
             body = {
-                ActionsButtons(onActionSeletced = onActionSeletced)
+                ActionsButtons(onActionSelected = onActionSelected)
             }
         )
     }
@@ -48,7 +48,7 @@ fun ChooseActionBottomSheet(
 
 
 @Composable
-fun ActionsButtons(onActionSeletced: () -> Unit) {
+fun ActionsButtons(onActionSelected: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(16.dp)
@@ -59,7 +59,7 @@ fun ActionsButtons(onActionSeletced: () -> Unit) {
             style = MaterialTheme.typography.titleMedium,
             containerColor = MaterialTheme.colorSchemeCustom.askAnythingBgColor,
             contentColor = MaterialTheme.colorScheme.onBackground,
-            onAuthenticated = onActionSeletced
+            onAuthenticated = onActionSelected
         )
         BottomSheetButton(
             text = "Go to Gallery",
@@ -67,7 +67,7 @@ fun ActionsButtons(onActionSeletced: () -> Unit) {
             style = MaterialTheme.typography.titleMedium,
             containerColor = MaterialTheme.colorSchemeCustom.askAnythingBgColor,
             contentColor = MaterialTheme.colorScheme.onBackground,
-            onAuthenticated = onActionSeletced
+            onAuthenticated = onActionSelected
         )
     }
 }

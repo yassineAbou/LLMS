@@ -49,7 +49,7 @@ fun ListDetailPane(
         value = navigator.scaffoldValue,
         listPane = {
             AnimatedPane {
-                ChatListPane(
+                HistoryListPane(
                     chatViewModel = chatViewModel,
                 )
             }
@@ -68,7 +68,7 @@ fun ListDetailPane(
 }
 
 @Composable
-fun ChatListPane(
+private fun HistoryListPane(
     chatViewModel: ChatViewModel
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
@@ -80,7 +80,7 @@ fun ChatListPane(
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         // Extracted Top Bar
-        ChatListPaneTop(
+        HistoryListPaneTop(
             onNewChatClick = { chatViewModel.startNewChat() },
             onClearClick = {
                 if (chatHistoryList.isNotEmpty()) { // Check if the list is not empty
@@ -135,7 +135,7 @@ fun ChatListPane(
 }
 
 @Composable
-fun ChatListPaneTop(
+private fun HistoryListPaneTop(
     onNewChatClick: () -> Unit,
     onClearClick: () -> Unit
 ) {

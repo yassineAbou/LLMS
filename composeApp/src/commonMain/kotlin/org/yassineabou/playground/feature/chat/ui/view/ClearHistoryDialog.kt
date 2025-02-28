@@ -31,22 +31,21 @@ fun ClearHistoryDialogContent(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth() // Adjusted from fillMaxSize() to avoid unnecessary height expansion
+            .fillMaxWidth()
             .height(375.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp) // Add padding around the content for better spacing
-                .fillMaxSize(), // Ensure the column takes up the full size of the card
-            verticalArrangement = Arrangement.spacedBy(18.dp), // Add 18.dp vertical spacing
-            horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 imageVector = Icons.Filled.Warning,
                 contentDescription = "Warning",
-                modifier = Modifier
-                    .size(70.dp) // Removed the top padding as it's now managed by the Column
+                modifier = Modifier.size(70.dp)
             )
             Text(
                 text = "Are you Sure?",

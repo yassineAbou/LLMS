@@ -20,73 +20,78 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
+import org.yassineabou.playground.feature.chat.model.ChatHistory
 import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent
 import org.yassineabou.playground.feature.chat.ui.view.HistoryHorizontalPager
+import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ChatHistoryScreen(
     navController: NavController,
     chatViewModel: ChatViewModel
 ) {
-    var showClearHistoryDialog by remember { mutableStateOf(false) }
-    // Get the window size class to determine the screen size
-    val windowSizeClass = calculateWindowSizeClass()
 
-    // Check if the screen width is medium or larger
-    val isMediumOrLarger = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
-    val chatHistoryList = chatViewModel.chatHistoryList // Get the chat history list
+    val isLargeScreen = rememberIsLargeScreen()
 
-    if (isMediumOrLarger) {
-        // Show ListDetailPane for medium or larger screens
+    if (isLargeScreen) {
         ListDetailPane(chatViewModel = chatViewModel)
     } else {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            HistoryTopBar(
-                modifier = Modifier.fillMaxWidth().statusBarsPadding(),
-                onBackPress = { navController.popBackStack() },
-                onClearHistory = {
-                    if (chatHistoryList.isNotEmpty()) {
-                       showClearHistoryDialog = true
-                    }
+        ChatHistoryContent(navController = navController, chatViewModel = chatViewModel)
+    }
+}
+
+@Composable
+private fun ChatHistoryContent(
+    navController: NavController,
+    chatViewModel: ChatViewModel
+) {
+    var showClearHistoryDialog by remember { mutableStateOf(false) }
+    val chatHistoryList = chatViewModel.chatHistoryList
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        HistoryTopBar(
+            modifier = Modifier.fillMaxWidth().statusBarsPadding(),
+            onBackPress = { navController.popBackStack() },
+            onClearHistory = {
+                if (chatHistoryList.isNotEmpty()) {
+                    showClearHistoryDialog = true
                 }
-            )
+            }
+        )
 
-            HistoryHeader()
+        HistoryHeader()
 
-            HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
+        HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
 
-            if (showClearHistoryDialog) {
-                DropDownDialog(
-                    onDismissRequest = {
+        if (showClearHistoryDialog) {
+            DropDownDialog(
+                onDismissRequest = {
+                    showClearHistoryDialog = false
+                }
+            ) {
+                ClearHistoryDialogContent(
+                    onDismiss = { showClearHistoryDialog = false },
+                    onConfirm = {
+                        chatViewModel.clearChatHistory()
                         showClearHistoryDialog = false
                     }
-                ) {
-                    ClearHistoryDialogContent(
-                        onDismiss = { showClearHistoryDialog = false },
-                        onConfirm = {
-                            chatViewModel.clearChatHistory()
-                            showClearHistoryDialog = false
-                        }
-                    )
-                }
+                )
             }
         }
     }
-
-
 }
 
 @Composable

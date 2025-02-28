@@ -132,7 +132,7 @@ fun ChatContent(
 
         if (attachButtonClicked) {
             ChooseActionBottomSheet(
-                onActionSeletced = { attachButtonClicked = false },
+                onActionSelected = { attachButtonClicked = false },
                 onDismissRequest = { attachButtonClicked = false }
             )
         }

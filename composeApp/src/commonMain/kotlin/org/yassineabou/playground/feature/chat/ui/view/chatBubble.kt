@@ -15,15 +15,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
@@ -33,13 +27,12 @@ import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 fun ChatBubble(
     message: String,
     isUser: Boolean,
-    aiIcon: DrawableResource,
-    onClick: () -> Unit = {}
+    aiIcon: DrawableResource
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        // Background color for the entire row
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,14 +41,14 @@ fun ChatBubble(
                         alpha = 0.5f
                     ),
                 )
-                .padding(16.dp), // Only padding inside the row
-            verticalAlignment = Alignment.Top, // Align to the top
+                .padding(16.dp),
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Icon for AI or User
+
             ChatBubbleIcon(isUser = isUser, aiIcon = aiIcon)
 
-            // Message text with typewriter animation for AI messages
+
             ChatBubbleMessage(
                 message = message,
                 isUser = isUser

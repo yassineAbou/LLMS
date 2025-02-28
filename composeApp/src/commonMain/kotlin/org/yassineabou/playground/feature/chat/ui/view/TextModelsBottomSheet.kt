@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -43,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
-import org.yassineabou.playground.app.core.sharedViews.GenTypesButtons
+import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
 import org.yassineabou.playground.app.core.sharedViews.ModelInformation
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
@@ -76,7 +74,7 @@ fun TextModelsBottomSheet(
         AnimatedVisibility(!isInfoIconClicked) {
             BottomSheetContent(
                 title = {
-                    GenTypesButtons(
+                    ModelTypeActionButtons(
                         onDismissRequest = onDismissRequest,
                         onDone = {
                             onAuthenticated()

@@ -24,8 +24,8 @@ fun SavedChatHistoryContent(
             },
             contentComposable = { list ->
                 ChatHistoryListView(
-                    historyConversationList = list,
-                    removeHistoryConversation = {
+                    chatHistoryList = list,
+                    removeChatHistory = {
                         chatViewModel.deleteChatHistory(it)
                         chatViewModel.toggleBookmark(it)
                     },
