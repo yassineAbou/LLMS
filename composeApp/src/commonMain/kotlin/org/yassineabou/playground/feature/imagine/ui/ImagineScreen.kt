@@ -67,7 +67,7 @@ import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPa
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.playground.feature.imagine.ui.view.ImageDialogContent
-import org.yassineabou.playground.feature.imagine.ui.view.ImageGenTypesBottomSheet
+import org.yassineabou.playground.feature.imagine.ui.view.ImageModelsBottomSheet
 
 
 @Composable
@@ -137,7 +137,7 @@ fun ImagineScreen(
             }
         )
         if (selectModelClicked) {
-            ImageGenTypesBottomSheet(
+            ImageModelsBottomSheet(
                 imageGenViewModel = imageGenViewModel,
                 onDismissRequest = { selectModelClicked = false },
                 onAuthenticated = { selectModelClicked = false }

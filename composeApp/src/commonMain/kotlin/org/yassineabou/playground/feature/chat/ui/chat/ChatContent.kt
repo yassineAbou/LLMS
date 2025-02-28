@@ -50,7 +50,7 @@ import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
 import org.yassineabou.playground.feature.chat.ui.view.ChooseActionBottomSheet
 import org.yassineabou.playground.feature.chat.ui.view.SelectedTextModel
-import org.yassineabou.playground.feature.chat.ui.view.TextGenTypesBottomSheet
+import org.yassineabou.playground.feature.chat.ui.view.TextModelsBottomSheet
 
 @Composable
 fun ChatContent(
@@ -123,7 +123,7 @@ fun ChatContent(
         )
 
         if (selectModelClicked) {
-            TextGenTypesBottomSheet(
+            TextModelsBottomSheet(
                 chatViewModel = chatViewModel,
                 onDismissRequest = { selectModelClicked = false },
                 onAuthenticated = { selectModelClicked = false }

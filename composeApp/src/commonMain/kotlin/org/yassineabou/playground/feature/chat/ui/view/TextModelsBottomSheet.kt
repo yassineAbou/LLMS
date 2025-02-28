@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -51,7 +54,7 @@ import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextGenTypesBottomSheet(
+fun TextModelsBottomSheet(
     chatViewModel: ChatViewModel,
     onDismissRequest: () -> Unit,
     onAuthenticated: () -> Unit
@@ -86,10 +89,13 @@ fun TextGenTypesBottomSheet(
                 },
                 body = {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(bottom = 16.dp)
                     ) {
                         item {
-                            TextGenTypes(
+                            TextModelType(
                                 type = "DeepSeek",
                                 textModelsList = TextGenModelList.deepSeek,
                                 tempSelectedTextModel = tempSelectedTextModel,
@@ -101,7 +107,7 @@ fun TextGenTypesBottomSheet(
                             )
                         }
                         item {
-                            TextGenTypes(
+                            TextModelType(
                                 type = "Alibaba Cloud",
                                 textModelsList = TextGenModelList.alibabaCloud,
                                 tempSelectedTextModel = tempSelectedTextModel,
@@ -113,7 +119,7 @@ fun TextGenTypesBottomSheet(
                             )
                         }
                         item {
-                            TextGenTypes(
+                            TextModelType(
                                 type = "Meta",
                                 textModelsList = TextGenModelList.meta,
                                 tempSelectedTextModel = tempSelectedTextModel,
@@ -141,7 +147,7 @@ fun TextGenTypesBottomSheet(
 }
 
 @Composable
-private fun TextGenTypes(
+private fun TextModelType(
     textModelsList: List<TextModel>,
     type: String,
     tempSelectedTextModel: TextModel,
@@ -167,7 +173,7 @@ private fun TextGenTypes(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(textModelsList) { item ->
-                TextGenModel(
+                TextModelItem(
                     tempSelectedTextModel = item,
                     isSelected = item == tempSelectedTextModel,
                     onSelected = { onTextModelSelected(item) },
@@ -182,7 +188,7 @@ private fun TextGenTypes(
 
 
 @Composable
-private fun TextGenModel(
+private fun TextModelItem(
     tempSelectedTextModel: TextModel,
     isSelected: Boolean,
     onSelected: () -> Unit,
@@ -227,7 +233,8 @@ private fun ModelInformation(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundColor)
+            .background(backgroundColor),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
             painter = painterResource(image),
@@ -235,10 +242,8 @@ private fun ModelInformation(
             modifier = Modifier.size(40.dp)
         )
         InfoIconButton(
-            modifier = Modifier.padding(start = 30.dp),
             onInfoClick = { onInfoClick(true) }
         )
-
     }
 }
 

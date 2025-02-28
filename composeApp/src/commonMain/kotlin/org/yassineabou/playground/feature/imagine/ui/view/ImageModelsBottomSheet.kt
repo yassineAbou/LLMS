@@ -62,7 +62,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageGenTypesBottomSheet(
+fun ImageModelsBottomSheet(
     imageGenViewModel: ImageGenViewModel,
     onDismissRequest: () -> Unit,
     onAuthenticated: () -> Unit
@@ -96,7 +96,7 @@ fun ImageGenTypesBottomSheet(
                 body = {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         item {
-                            ImageGenTypes(
+                            ImageModelType(
                                 type = "Generalist",
                                 imageModelsList = ImageGenModelList.generalist,
                                 tempSelectedImageModel = tempSelectedImageModel,
@@ -108,7 +108,7 @@ fun ImageGenTypesBottomSheet(
                             )
                         }
                         item {
-                            ImageGenTypes(
+                            ImageModelType(
                                 type = "Realistic",
                                 imageModelsList = ImageGenModelList.realistic,
                                 tempSelectedImageModel = tempSelectedImageModel,
@@ -120,7 +120,7 @@ fun ImageGenTypesBottomSheet(
                             )
                         }
                         item {
-                            ImageGenTypes(
+                            ImageModelType(
                                 type = "Anime",
                                 imageModelsList = ImageGenModelList.anime,
                                 tempSelectedImageModel = tempSelectedImageModel,
@@ -132,7 +132,7 @@ fun ImageGenTypesBottomSheet(
                             )
                         }
                         item {
-                            ImageGenTypes(
+                            ImageModelType(
                                 type = "3D",
                                 imageModelsList = ImageGenModelList.threeD,
                                 tempSelectedImageModel = tempSelectedImageModel,
@@ -144,7 +144,7 @@ fun ImageGenTypesBottomSheet(
                             )
                         }
                         item {
-                            ImageGenTypes(
+                            ImageModelType(
                                 type = "Comic",
                                 imageModelsList = ImageGenModelList.comic,
                                 tempSelectedImageModel = tempSelectedImageModel,
@@ -156,7 +156,7 @@ fun ImageGenTypesBottomSheet(
                             )
                         }
                         item {
-                            ImageGenTypes(
+                            ImageModelType(
                                 type = "Furry",
                                 imageModelsList = ImageGenModelList.furry,
                                 tempSelectedImageModel = tempSelectedImageModel,
@@ -185,7 +185,7 @@ fun ImageGenTypesBottomSheet(
 
 
 @Composable
-private fun ImageGenTypes(
+private fun ImageModelType(
     imageModelsList: List<ImageModel>,
     type: String,
     tempSelectedImageModel: ImageModel,
@@ -211,7 +211,7 @@ private fun ImageGenTypes(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(imageModelsList) { item ->
-                imageGenModel(
+                imageModelItem(
                     tempSelectedImageModel = item,
                     isSelected = item == tempSelectedImageModel,
                     onSelected = { onImageModelSelected(item) },
@@ -225,7 +225,7 @@ private fun ImageGenTypes(
 }
 
 @Composable
-private fun imageGenModel(
+private fun imageModelItem(
     tempSelectedImageModel: ImageModel,
     isSelected: Boolean,
     onSelected: () -> Unit,
