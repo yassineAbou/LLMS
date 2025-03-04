@@ -1,18 +1,15 @@
 package org.yassineabou.playground.feature.chat.ui.chat
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.navigation.Screen
-import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
+import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ChatScreen(
     navController: NavController,

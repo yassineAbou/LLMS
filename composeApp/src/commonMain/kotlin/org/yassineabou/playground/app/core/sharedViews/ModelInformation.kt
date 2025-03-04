@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.feature.imagine.model.ImageModel
-import org.yassineabou.playground.feature.imagine.ui.view.ImageCarousel
+import org.yassineabou.playground.feature.imagine.ui.view.ImageExamplesCarousel
 import org.yassineabou.playground.feature.chat.model.TextModel
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,7 +50,7 @@ fun ModelInformation(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                 ) {
-                    ImageCarousel(
+                    ImageExamplesCarousel(
                         imageUrlExamples = imageModel.urlExamples,
                         delayTime = 2.seconds
                     )

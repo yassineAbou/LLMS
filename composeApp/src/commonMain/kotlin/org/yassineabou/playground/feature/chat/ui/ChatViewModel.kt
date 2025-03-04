@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import llms.composeapp.generated.resources.Res
+import llms.composeapp.generated.resources.ic_deep_seek
 import llms.composeapp.generated.resources.ic_github
 import org.yassineabou.playground.feature.chat.model.AIProvider
 import org.yassineabou.playground.feature.chat.model.ChatHistory
@@ -47,16 +48,6 @@ class ChatViewModel : ViewModel() {
     // Generation State
     private var fullResponse: String = ""
     val isGenerating = mutableStateOf(false)
-
-    // AI Provider Selection
-    private val _selectedAIProviders = MutableStateFlow<Map<String, Boolean>>(
-        mapOf(
-            "Deep Seek" to true,
-            "Alibaba Cloud" to true,
-            "Meta" to true,
-        )
-    )
-    val selectedAIProviders: StateFlow<Map<String, Boolean>> = _selectedAIProviders
 
     private val _selectedChatHistory = MutableStateFlow<ChatHistory?>(null)
     val selectedChatHistory: StateFlow<ChatHistory?> get() = _selectedChatHistory
@@ -153,7 +144,7 @@ class ChatViewModel : ViewModel() {
     @OptIn(ExperimentalUuidApi::class)
     private fun createNewChatHistory(description: String) {
         val aiProvider = _selectedTextModel.value.provider
-        val aiProviderIcon = aiProvidersMap[aiProvider] ?: Res.drawable.ic_github
+        val aiProviderIcon = aiProvidersMap[aiProvider] ?: Res.drawable.ic_deep_seek
 
         val newChat = ChatHistory(
             title = "Chat ${_chatHistoryList.size + 1}",
@@ -216,14 +207,6 @@ class ChatViewModel : ViewModel() {
     fun selectChatHistory(chatHistory: ChatHistory) {
         _selectedChatHistory.value = chatHistory
         loadChatMessages(chatHistory)
-    }
-    //endregion
-
-    //region AI Provider Management
-    fun toggleAIProvider(providerName: String) {
-        _selectedAIProviders.value = _selectedAIProviders.value.toMutableMap().apply {
-            this[providerName] = !this[providerName]!!
-        }
     }
     //endregion
 

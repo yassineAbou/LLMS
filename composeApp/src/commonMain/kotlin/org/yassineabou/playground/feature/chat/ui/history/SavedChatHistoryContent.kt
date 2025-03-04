@@ -15,13 +15,10 @@ fun SavedChatHistoryContent(
     navController: NavController
 ) {
     val savedChatHistoryList = chatViewModel.savedChatHistoryList
-    val selectedAIProviders = chatViewModel.selectedAIProviders.collectAsState()
 
     Surface {
         ContentStateAnimator(
-            contentList = savedChatHistoryList.filter { conversation ->
-                selectedAIProviders.value[conversation.aiProvider.name] == true
-            },
+            contentList = savedChatHistoryList,
             contentComposable = { list ->
                 ChatHistoryListView(
                     chatHistoryList = list,

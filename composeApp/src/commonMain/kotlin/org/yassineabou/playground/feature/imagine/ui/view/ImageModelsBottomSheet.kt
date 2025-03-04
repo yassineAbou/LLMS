@@ -252,9 +252,13 @@ private fun imageModelItem(
                 .size(150.dp)
                 .align(Alignment.CenterHorizontally)// Match the size of TextGenType
         ) {
+            ImageModelExample(urlExample = tempSelectedImageModel.urlExamples.random())
+            /*
             ImageCarousel(
                 imageUrlExamples = tempSelectedImageModel.urlExamples
             )
+
+             */
             if (tempSelectedImageModel.isNsfw) {
                 Text(
                     text = "NSFW",
@@ -282,70 +286,45 @@ private fun imageModelItem(
     }
 }
 
-
 @Composable
-fun ImageCarousel(
-    imageUrlExamples: List<UrlExample>,
-    delayTime: Duration = 5.seconds
-) {
-    var currentExampleIndex by remember { mutableStateOf(0) }
+private fun ImageModelExample(urlExample: UrlExample) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+    ) {
+        // Use the onState parameter to handle loading and error states
+        var isLoading by remember { mutableStateOf(true) }
+        var hasError by remember { mutableStateOf(false) }
 
-    // Automatically cycle through images every 3 seconds
-    LaunchedEffect(key1 = true) {
-        while (true) {
-            delay(delayTime)
-            currentExampleIndex = (currentExampleIndex + 1) % imageUrlExamples.size
-        }
-    }
-
-    // Use AnimatedContent for smooth transitions
-    AnimatedContent(
-        targetState = currentExampleIndex,
-        transitionSpec = {
-            // Slide in from the right and slide out to the left
-            slideInHorizontally { width -> width } togetherWith slideOutHorizontally { width -> -width }
-        },
-        label = "Image Carousel"
-    ) { index ->
-        val currentExample = imageUrlExamples[index]
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-        ) {
-            // Use the onState parameter to handle loading and error states
-            var isLoading by remember { mutableStateOf(true) }
-            var hasError by remember { mutableStateOf(false) }
-
-            AsyncImage(
-                model = currentExample.url,
-                contentDescription = "Image URL Example",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds,
-                onState = { state ->
-                    isLoading = state is AsyncImagePainter.State.Loading
-                    hasError = state is AsyncImagePainter.State.Error
-                }
-            )
-
-            // Show shimmer placeholder while loading
-            if (isLoading) {
-                ShimmerPlaceholder()
+        AsyncImage(
+            model = urlExample.url,
+            contentDescription = urlExample.description,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds,
+            onState = { state ->
+                isLoading = state is AsyncImagePainter.State.Loading
+                hasError = state is AsyncImagePainter.State.Error
             }
+        )
 
-            // Show error placeholder if loading fails
-            if (hasError) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.LightGray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Failed to load image",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+        // Show shimmer placeholder while loading
+        if (isLoading) {
+            ShimmerPlaceholder()
+        }
+
+        // Show error placeholder if loading fails
+        if (hasError) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Failed to load image",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
-import org.yassineabou.playground.app.core.sharedViews.PyramidText
+import org.yassineabou.playground.app.core.sharedViews.PyramidTextFormat
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
@@ -362,7 +362,7 @@ private fun InfoBottomSheet(
     ) {
         BottomSheetContent(
             body = {
-                PyramidText(
+                PyramidTextFormat(
                     text = description
                 )
             }

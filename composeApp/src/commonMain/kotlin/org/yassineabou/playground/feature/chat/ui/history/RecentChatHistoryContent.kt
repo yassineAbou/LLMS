@@ -3,6 +3,9 @@ package org.yassineabou.playground.feature.chat.ui.history
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.feature.imagine.ui.view.ContentStateAnimator
@@ -15,13 +18,9 @@ fun RecentChatHistoryContent(
     navController: NavController
 ) {
     val chatHistoryList = chatViewModel.chatHistoryList
-    val selectedAIProviders = chatViewModel.selectedAIProviders.collectAsState()
-
     Surface {
         ContentStateAnimator(
-            contentList = chatHistoryList.filter { conversation ->
-                selectedAIProviders.value[conversation.aiProvider.name] == true
-            },
+            contentList =  chatHistoryList,
             contentComposable = { list ->
                 ChatHistoryListView(
                     chatHistoryList = list,

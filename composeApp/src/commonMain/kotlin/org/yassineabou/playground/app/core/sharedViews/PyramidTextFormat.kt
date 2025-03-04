@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun PyramidText(
+fun PyramidTextFormat(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,

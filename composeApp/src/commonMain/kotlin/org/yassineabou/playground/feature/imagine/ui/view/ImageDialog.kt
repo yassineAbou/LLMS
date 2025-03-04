@@ -32,7 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.app.core.sharedViews.PyramidText
+import org.yassineabou.playground.app.core.sharedViews.PyramidTextFormat
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 
 @Composable
@@ -101,7 +101,7 @@ fun DescriptionWithTryButton(
         modifier = modifier
     ) {
         Box(modifier = Modifier.height(100.dp)) {
-            PyramidText(
+            PyramidTextFormat(
                 text = description,
                 color = MaterialTheme.colorSchemeCustom.alwaysWhite,
                 style = MaterialTheme.typography.labelMedium,

@@ -33,23 +33,17 @@ fun HistoryHorizontalPager(
 ) {
     val pagerState = rememberPagerState(pageCount = { 2 })
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
+
     Surface(
         color = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = modifier
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                HistoryTabRows(
-                    selectedTabIndex = selectedTabIndex,
-                    pagerState = pagerState
-                )
-
-                AIProvidersFilterMenu(chatViewModel)
-            }
+            HistoryTabRows(
+                selectedTabIndex = selectedTabIndex,
+                pagerState = pagerState
+            )
 
             HistoryPagerContent(
                 pagerState = pagerState,
