@@ -115,16 +115,25 @@ class ChatViewModel : ViewModel() {
     //endregion
 
     //region Chat Management
-    fun startNewChat() {
-        if (_currentChatMessages.isEmpty()) return
+    fun finalizeCurrentChat() {
+        if (currentChatMessages.isNotEmpty()) {
+            startNewChat(forceNew = false)
+        }
+    }
 
-        val existingChat = findExistingChat()
+    fun startNewChat(forceNew: Boolean = false) {
+        // Prevent creating new history if no messages
+        if (currentChatMessages.isEmpty()) {
+            resetCurrentChat()
+            return
+        }
+
         val description = generateChatDescription()
 
-        if (existingChat != null) {
-            updateExistingChat(existingChat, description)
-        } else {
+        if (forceNew || _currentChatId.value == null) {
             createNewChatHistory(description)
+        } else {
+            findExistingChat()?.let { updateExistingChat(it, description) }
         }
 
         resetCurrentChat()
@@ -143,13 +152,10 @@ class ChatViewModel : ViewModel() {
 
     @OptIn(ExperimentalUuidApi::class)
     private fun createNewChatHistory(description: String) {
-        val aiProvider = _selectedTextModel.value.provider
-        val aiProviderIcon = aiProvidersMap[aiProvider] ?: Res.drawable.ic_deep_seek
-
         val newChat = ChatHistory(
             title = "Chat ${_chatHistoryList.size + 1}",
             description = description,
-            aiProvider = AIProvider(aiProvider, aiProviderIcon),
+            textModel = _selectedTextModel.value,
             id = Uuid.toString(),
             chatMessages = _currentChatMessages.toList()
         )
@@ -159,11 +165,18 @@ class ChatViewModel : ViewModel() {
     }
 
     private fun updateExistingChat(existingChat: ChatHistory, description: String) {
-        existingChat.description = description
-        existingChat.chatMessages = _currentChatMessages.toList()
+        val updatedChat = existingChat.copy(
+            description = description,
+            chatMessages = _currentChatMessages.toList()
+        )
+
+        val index = _chatHistoryList.indexOfFirst { it.id == existingChat.id }
+        if (index != -1) {
+            _chatHistoryList[index] = updatedChat
+        }
     }
 
-    private fun resetCurrentChat() {
+    fun resetCurrentChat() {
         _currentChatMessages.clear()
         _currentChatId.value = null
         _selectedChatHistory.value = null
@@ -207,6 +220,8 @@ class ChatViewModel : ViewModel() {
     fun selectChatHistory(chatHistory: ChatHistory) {
         _selectedChatHistory.value = chatHistory
         loadChatMessages(chatHistory)
+        _selectedTextModel.value = chatHistory.textModel
+        _tempSelectedTextModel.value = chatHistory.textModel
     }
     //endregion
 

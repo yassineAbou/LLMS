@@ -20,7 +20,7 @@ data class ChatMessage(
 data class ChatHistory(
     val title: String,
     var description: String,
-    val aiProvider: AIProvider,
+    val textModel: TextModel,
     var isBookmarked: Boolean = false,
     var id: String,
     var chatMessages: List<ChatMessage> = emptyList()

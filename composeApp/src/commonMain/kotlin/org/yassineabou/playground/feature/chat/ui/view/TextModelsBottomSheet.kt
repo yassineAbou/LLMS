@@ -77,11 +77,24 @@ fun TextModelsBottomSheet(
                     ModelTypeActionButtons(
                         onDismissRequest = onDismissRequest,
                         onDone = {
-                            onAuthenticated()
-                            chatViewModel.confirmSelectedTextModel()
-                            if (tempSelectedTextModel.title != selectedTextModel.title) {
-                                chatViewModel.startNewChat()
+                            val modelChanged = tempSelectedTextModel != selectedTextModel
+                            if (modelChanged) {
+                                // Only finalize if there's existing content
+                                if (chatViewModel.currentChatMessages.isNotEmpty()) {
+                                    chatViewModel.finalizeCurrentChat()
+                                }
+                                chatViewModel.confirmSelectedTextModel()
+
+                                // Only start new chat if there was previous content
+                                if (chatViewModel.currentChatMessages.isNotEmpty()) {
+                                    chatViewModel.startNewChat(forceNew = true)
+                                } else {
+                                    chatViewModel.resetCurrentChat()
+                                }
+                            } else {
+                                chatViewModel.confirmSelectedTextModel()
                             }
+                            onAuthenticated()
                         }
                     )
                 },
@@ -180,7 +193,6 @@ private fun TextModelType(
             }
 
         }
-
     }
 }
 

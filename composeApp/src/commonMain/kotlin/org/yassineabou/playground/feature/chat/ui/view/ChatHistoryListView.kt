@@ -39,6 +39,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.chat.model.AIProvider
 import org.yassineabou.playground.feature.chat.model.ChatHistory
+import org.yassineabou.playground.feature.chat.model.TextModel
 
 
 @Composable
@@ -85,7 +86,7 @@ fun ChatHistoryCard(
                 description = chatHistory.description
             )
             ChatHistoryAction(
-                aiProvider = chatHistory.aiProvider,
+                textModel = chatHistory.textModel,
                 isBookmarked = chatHistory.isBookmarked,
                 deleteConversationFromHistory = { removeChatHistory(chatHistory) },
                 toggleBookmark = { toggleBookmark(chatHistory) },
@@ -115,7 +116,7 @@ fun ChatHistoryDetails(
 
 @Composable
 fun ChatHistoryAction(
-    aiProvider: AIProvider,
+    textModel: TextModel,
     isBookmarked: Boolean,
     toggleBookmark: () -> Unit,
     deleteConversationFromHistory: () -> Unit,
@@ -126,7 +127,7 @@ fun ChatHistoryAction(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AiProviderInfo(aiProvider = aiProvider)
+        AiProviderInfo(textModel = textModel)
         ActionButtons(
             isBookmarked = isBookmarked,
             toggleBookmark = toggleBookmark,
@@ -136,7 +137,7 @@ fun ChatHistoryAction(
 }
 
 @Composable
-fun AiProviderInfo(aiProvider: AIProvider) {
+fun AiProviderInfo(textModel: TextModel) {
     Row(
         modifier = Modifier
             .border(
@@ -148,12 +149,12 @@ fun AiProviderInfo(aiProvider: AIProvider) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(resource = aiProvider.icon),
+            painter = painterResource(resource = textModel.image),
             contentDescription = "",
             modifier = Modifier.size(20.dp)
         )
         Text(
-            text = aiProvider.name,
+            text = textModel.provider,
             style = MaterialTheme.typography.titleSmall,
         )
     }
