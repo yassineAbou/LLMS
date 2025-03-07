@@ -9,18 +9,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_deep_seek
-import llms.composeapp.generated.resources.ic_github
-import org.yassineabou.playground.feature.chat.model.AIProvider
 import org.yassineabou.playground.feature.chat.model.ChatHistory
 import org.yassineabou.playground.feature.chat.model.ChatMessage
 import org.yassineabou.playground.feature.chat.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.model.TextModel
-import org.yassineabou.playground.feature.chat.model.aiProvidersMap
 import org.yassineabou.playground.feature.chat.model.generateLongResponse
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 class ChatViewModel : ViewModel() {
 
@@ -150,16 +143,14 @@ class ChatViewModel : ViewModel() {
         } else fullDescription
     }
 
-    @OptIn(ExperimentalUuidApi::class)
+
     private fun createNewChatHistory(description: String) {
         val newChat = ChatHistory(
             title = "Chat ${_chatHistoryList.size + 1}",
             description = description,
             textModel = _selectedTextModel.value,
-            id = Uuid.toString(),
             chatMessages = _currentChatMessages.toList()
         )
-
         _chatHistoryList.add(0, newChat)
         _currentChatId.value = newChat.id
     }
@@ -169,11 +160,8 @@ class ChatViewModel : ViewModel() {
             description = description,
             chatMessages = _currentChatMessages.toList()
         )
-
-        val index = _chatHistoryList.indexOfFirst { it.id == existingChat.id }
-        if (index != -1) {
-            _chatHistoryList[index] = updatedChat
-        }
+        _chatHistoryList.remove(selectedChatHistory.value)
+       _chatHistoryList.add(0, updatedChat)
     }
 
     fun resetCurrentChat() {

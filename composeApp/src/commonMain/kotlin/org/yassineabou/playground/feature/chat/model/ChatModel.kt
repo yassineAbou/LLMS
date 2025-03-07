@@ -1,35 +1,21 @@
 package org.yassineabou.playground.feature.chat.model
 
-import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_alibaba_cloud
-import llms.composeapp.generated.resources.ic_deep_seek
-import llms.composeapp.generated.resources.ic_meta
-import org.jetbrains.compose.resources.DrawableResource
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
-
-data class AIProvider(
-    val name: String,
-    val icon: DrawableResource
-)
 
 data class ChatMessage(
     val message: String,
     val isUser: Boolean
 )
 
-data class ChatHistory(
+data class ChatHistory @OptIn(ExperimentalUuidApi::class) constructor(
     val title: String,
     var description: String,
     val textModel: TextModel,
     var isBookmarked: Boolean = false,
-    var id: String,
+    var id: String = Uuid.toString(),
     var chatMessages: List<ChatMessage> = emptyList()
-)
-
-val aiProvidersMap = mapOf(
-    "Deep Seek" to Res.drawable.ic_deep_seek,
-    "Alibaba Cloud" to Res.drawable.ic_alibaba_cloud,
-    "Meta" to Res.drawable.ic_meta,
 )
 
 fun generateLongResponse(): String {
