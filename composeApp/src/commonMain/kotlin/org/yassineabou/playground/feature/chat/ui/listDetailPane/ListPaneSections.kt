@@ -68,7 +68,7 @@ fun ListPaneSections(
                         chatViewModel.selectChatHistory(chat)
                     },
                     onPinClick = { chatViewModel.toggleBookmark(chat) },
-                    onDeleteClick = {chatViewModel.deleteChatHistory(chat) }
+                    onDeleteClick = { chatViewModel.deleteChatHistory(chat) }
                 )
             }
         }

@@ -58,7 +58,6 @@ fun TextModelsBottomSheet(
     onAuthenticated: () -> Unit
 ) {
     val tempSelectedTextModel by chatViewModel.tempSelectedTextModel.collectAsState()
-    val selectedTextModel by chatViewModel.selectedTextModel.collectAsState()
     var isInfoIconClicked by remember { mutableStateOf(false) }
     var infoTextModel by remember { mutableStateOf(tempSelectedTextModel) }
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -77,23 +76,7 @@ fun TextModelsBottomSheet(
                     ModelTypeActionButtons(
                         onDismissRequest = onDismissRequest,
                         onDone = {
-                            val modelChanged = tempSelectedTextModel != selectedTextModel
-                            if (modelChanged) {
-                                // Only finalize if there's existing content
-                                if (chatViewModel.currentChatMessages.isNotEmpty()) {
-                                    chatViewModel.finalizeCurrentChat()
-                                }
-                                chatViewModel.confirmSelectedTextModel()
-
-                                // Only start new chat if there was previous content
-                                if (chatViewModel.currentChatMessages.isNotEmpty()) {
-                                    chatViewModel.startNewChat(forceNew = true)
-                                } else {
-                                    chatViewModel.resetCurrentChat()
-                                }
-                            } else {
-                                chatViewModel.confirmSelectedTextModel()
-                            }
+                            chatViewModel.handleModelSelectionChange()
                             onAuthenticated()
                         }
                     )
@@ -121,6 +104,18 @@ fun TextModelsBottomSheet(
                             TextModelType(
                                 type = "Alibaba Cloud",
                                 textModelsList = TextGenModelList.alibabaCloud,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Mistral",
+                                textModelsList = TextGenModelList.mistral,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->
