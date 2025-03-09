@@ -17,6 +17,76 @@ data class UrlExample(
     val description: String = ""
 )
 
+val Flux_1_Compact_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/705f60c9-72b8-4927-836a-8dd7ba6ff7b7/original=true,quality=90/FLUX[time(Ymd)]_00002_.jpeg",
+        description = "reflection, man, solo, male focus, black hair, tree"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b6b3c47b-b8cd-421d-82be-bcaacec926e6/original=true,quality=90/FLUX[time(Ymd)]_00005_.jpeg",
+        description = "building, house, scenery, no humans, nature, forest"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a417f6de-5509-473c-9c2c-95eeecd955cd/original=true,quality=90/FLUX[time(Ymd)]_00008_.jpeg",
+        description = "partial nudity, horns, male, man, solo, main focus"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/aa337518-06f5-4ab3-b2cc-87796b15c296/original=true,quality=90/FLUX[time(Ymd)]_00014_.jpeg",
+        description = "outdoors, building, no humans, tree, road"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/eac0d612-2e7b-4e9b-b716-dc2704f14eb1/original=true,quality=90/FLUX[time(Ymd)]_00018_.jpeg",
+        description = "tree, car, ground vehicle, motor vehicle, vehicle focus, night"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a39ec587-55b9-4899-9188-62585fd692a9/original=true,quality=90/FLUX[time(Ymd)]_00022_.jpeg",
+        description = "woman, solo, green theme, door, standing, barefoot"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/29902c11-96d7-430c-a59a-bb0a8f2a396e/original=true,quality=90/FLUX[time(Ymd)]_00024_.jpeg",
+        description = "hat, holding, dual wielding, cartoon, handgun, cowboy hat"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ea98b800-be0e-4c46-9840-ded24908a557/original=true,quality=90/FLUX[time(Ymd)]_00080_.jpeg",
+        description = "cloud, cloud sky, sky, cloak, monochrome, solo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8fdd558c-ed7c-480d-98ec-6eb5bae9eac8/original=true,quality=90/FLUX[time(Ymd)]_00081_.jpeg",
+        description = "sexy attire, woman, horns, red eyes, breasts, solo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8fdd558c-ed7c-480d-98ec-6eb5bae9eac8/original=true,quality=90/FLUX[time(Ymd)]_00081_.jpeg",
+        description = "sexy attire, woman, horns, red eyes, breasts, solo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b3624fe7-55c3-4644-895a-a97fa9654e77/original=true,quality=90/FLUX[time(Ymd)]_00087_.jpeg",
+        description = "man, armor, weapon, male focus, male, shadow"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/67090e46-554e-4e02-bece-20da2f187134/original=true,quality=90/FLUX[time(Ymd)]_00092_.jpeg",
+        description = "cartoon, street, outdoors, road, no humans, solo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/25a98fd5-028a-4a89-9051-9ecbb16be7f9/original=true,quality=90/FLUX[time(Ymd)]_00093_.jpeg",
+        description = "forest, cartoon, backpack, bag, rock, no humans"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1dc6e3f7-6453-4f10-96a0-d8c5c7f2c534/original=true,quality=90/FLUX[time(Ymd)]_00098_.jpeg",
+        description = "sexy attire, woman, solo, flower, day, poke ball"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/63f34ca8-0105-4240-8244-96c3decf6f2f/original=true,quality=90/FLUX[time(Ymd)]_00101_.jpeg",
+        description = "bird, animal, flower, no humans, nature, blurry"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1b55696b-c8b9-49b9-9b8f-df2cb62e68fa/original=true,quality=90/FLUX[time(Ymd)]_00102_.jpeg",
+        description = "umbrella, motor vehicle, day, ground vehicle, holding, shadow"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/844c0c3d-d957-4e5c-af7b-5889d8e00c38/original=true,quality=90/FLUX[time(Ymd)]_00107_.jpeg",
+        description = "weapon related violence, hat, holding, handgun, cowboy hat, no humans"
+    ),
+)
 
 val AlbedoBase_XL_Url_Examples = listOf(
     UrlExample(

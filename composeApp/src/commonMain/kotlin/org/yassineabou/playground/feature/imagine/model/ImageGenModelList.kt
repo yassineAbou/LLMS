@@ -4,6 +4,7 @@ object ImageGenModelList {
 
 
     val inspiration = listOf(
+        Flux_1_Compact_Url_Examples,
         AlbedoBase_XL_Url_Examples,
         Blank_Canvas_XL_Url_Examples,
         DreamShaper_XL_Url_Examples,
@@ -29,6 +30,12 @@ object ImageGenModelList {
         .shuffled()
 
     val generalist = listOf(
+        ImageModel(
+            title = "Flux.1 Compact",
+            isNsfw = true,
+            description = "FLUX.1 [schnell] is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions. For more information, please read our blog post. https://blackforestlabs.ai/",
+            urlExamples = Flux_1_Compact_Url_Examples.shuffled()
+        ),
         ImageModel(
             title = "AlbedoBase XL",
             description = "SDXL Model that doesn't require a refiner.",
