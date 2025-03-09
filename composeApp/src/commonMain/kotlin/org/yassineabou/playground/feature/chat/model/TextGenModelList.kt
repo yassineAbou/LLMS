@@ -73,30 +73,28 @@ object TextGenModelList {
 
     val meta = listOf(
         TextModel(
-            title = "Llama-3.2-3B",
+            title = "Llama-3.2-90B",
             provider = "Meta",
-            description = "The Llama 3.2 collection of multilingual large language models (LLMs) is a collection of pretrained and instruction-tuned generative models in 1B and 3B sizes (text in/text out). The Llama 3.2 instruction-tuned text only models are optimized for multilingual dialogue use cases, including agentic retrieval and summarization tasks. They outperform many of the available open source and closed chat models on common industry benchmarks.",
-            image = Res.drawable.ic_meta,
-        ),
-        TextModel(
-            title = " Llama-3.2-1B",
-            provider = "Meta",
-            description = "The Meta Llama 3.2 collection of multilingual large language models (LLMs) is a collection of pretrained and instruction-tuned generative models in 1B and 3B sizes (text in/text out). The Llama 3.2 instruction-tuned text only models are optimized for multilingual dialogue use cases, including agentic retrieval and summarization tasks. They outperform many of the available open source and closed chat models on common industry benchmarks.",
+            description = "Flagship 90B vision-language model for complex image understanding and multilingual QA. Delivers top-tier performance in multimodal reasoning tasks.",
             image = Res.drawable.ic_meta,
         ),
         TextModel(
             title = "Llama-3.2-11B",
             provider = "Meta",
-            description = "The Llama 3.2-Vision collection of multimodal large language models (LLMs) is a collection of pretrained and instruction-tuned image reasoning generative models in 11B and 90B sizes (text + images in / text out). The Llama 3.2-Vision instruction-tuned models are optimized for visual recognition, image reasoning, captioning, and answering general questions about an image. The models outperform many of the available open source and closed multimodal models on common industry benchmarks.",
+            description = "Multimodal 11B model processing text+images for visual recognition, reasoning, and captioning. Excels in vision-language tasks with SOTA benchmark results.",
             image = Res.drawable.ic_meta,
         ),
         TextModel(
-            title = "Llama-3.2-90B",
+            title = "Llama-3.2-3B",
             provider = "Meta",
-            description = "The Llama 3.2-Vision collection of multimodal large language models (LLMs) is a collection of pretrained and instruction-tuned image reasoning generative models in 11B and 90B sizes (text + images in / text out). The Llama 3.2-Vision instruction-tuned models are optimized for visual recognition, image reasoning, captioning, and answering general questions about an image. The models outperform many of the available open source and closed multimodal models on common industry benchmarks.",
+            description = "Compact 3B parameter model optimized for multilingual dialogue (agentic retrieval, summarization). Outperforms open/closed models in benchmarks. Text-only version for conversational AI applications.",
             image = Res.drawable.ic_meta,
-        )
-
-
+        ),
+        TextModel(
+            title = "Llama-3.2-1B",
+            provider = "Meta",
+            description = "Lightweight 1B version for efficient multilingual chat applications. Instruction-tuned for dialogue tasks with strong benchmark performance across language understanding metrics.",
+            image = Res.drawable.ic_meta,
+        ),
     )
 }

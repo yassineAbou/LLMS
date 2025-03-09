@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material3.Button
@@ -20,13 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.feature.chat.model.TextModel
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.ui.view.ImageExamplesCarousel
-import org.yassineabou.playground.feature.chat.model.TextModel
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -39,83 +40,121 @@ fun ModelInformation(
     Box(
         modifier = modifier
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // Display Image Carousel if imageModel is provided
-            if (imageModel != null && imageModel.urlExamples.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                ) {
-                    ImageExamplesCarousel(
-                        imageUrlExamples = imageModel.urlExamples,
-                        delayTime = 2.seconds
-                    )
+        ModelContent(
+            imageModel = imageModel,
+            textModel = textModel
+        )
+        GotItButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            onDismissRequest = onDismissRequest
+        )
 
-                    // Overlay Title and Description on top of the image
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            text = imageModel.title,
-                            color = Color.White,
-                            fontWeight = FontWeight.Medium,
-                            style = MaterialTheme.typography.displaySmall
-                        )
-                        Text(
-                            text = imageModel.description,
-                            modifier = Modifier.padding(top = 16.dp),
-                            color = Color.White,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                }
+    }
+}
+
+@Composable
+private fun ModelContent(
+    imageModel: ImageModel?,
+    textModel: TextModel?
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        when {
+            imageModel?.urlExamples?.isNotEmpty() == true -> {
+                ImageCarouselWithOverlay(imageModel)
             }
-
-            // Display Image from textModel if no imageModel is provided
-            if (textModel?.image != null && imageModel == null) {
-                Image(
-                    painter = painterResource(textModel.image),
-                    contentDescription = "Text Model",
-                    modifier = Modifier.size(65.dp)
-                )
-            }
-
-            // Display Title and Description for textModel (if no imageModel is provided)
-            if (imageModel == null) {
-                val title = textModel?.title
-                if (title != null) {
-                    Text(
-                        text = title,
-                        fontWeight = FontWeight.Medium,
-                        style = MaterialTheme.typography.displaySmall
-                    )
-                }
-
-                val description = textModel?.description
-                if (description != null) {
-                    Text(
-                        text = description,
-                        fontWeight = FontWeight.Medium,
-                    )
-                }
+            textModel?.image != null -> {
+                TextModelImagePreview(textModel.image)
             }
         }
 
-        // Got It Button (always at the bottom)
-        GotItButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter) // Center the button at the bottom
-                .padding(bottom = 32.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp), // Add horizontal padding
-            onDismissRequest = onDismissRequest
+        if (imageModel == null) {
+            TextModelMetadata(textModel)
+        }
+    }
+}
+
+@Composable
+private fun ImageCarouselWithOverlay(imageModel: ImageModel) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.medium)
+    ) {
+        ImageExamplesCarousel(
+            imageUrlExamples = imageModel.urlExamples,
+            delayTime = 2.seconds
         )
+
+        ImageCarouselTextOverlay(
+            title = imageModel.title,
+            description = imageModel.description,
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(16.dp)
+        )
+    }
+}
+
+@Composable
+private fun ImageCarouselTextOverlay(
+    title: String,
+    description: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            fontWeight = FontWeight.Medium
+        )
+        Text(
+            text = description,
+            modifier = Modifier.padding(top = 8.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+private fun TextModelImagePreview(imageRes: DrawableResource) {
+    Image(
+        painter = painterResource(imageRes),
+        contentDescription = "Model Preview Image",
+        modifier = Modifier.size(65.dp),
+        contentScale = ContentScale.Fit
+    )
+}
+
+@Composable
+private fun TextModelMetadata(textModel: TextModel?) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        textModel?.title?.let { modelTitle ->
+            Text(
+                text = modelTitle,
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        textModel?.description?.let { modelDescription ->
+            Text(
+                text = modelDescription,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
 
