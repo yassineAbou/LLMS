@@ -55,7 +55,7 @@ object ImageGenModelList {
         )
     )
 
-
+    // TODO: add new models: CyberRealistic Pony, White Pony Diffusion 4, NatViS,
     val realistic = listOf(
         ImageModel(
             title = "Pony Realism",
@@ -88,7 +88,7 @@ object ImageGenModelList {
         )
     )
 
-
+    // TODO: add new models : Prefect Pony XL, Nova Anime XL, noob_v_pencil-XL, HolyMix ILXL, NTR MIX IL-Noob XL
     val anime = listOf(
         ImageModel(
             title = "AAM XL",
@@ -161,6 +161,7 @@ object ImageGenModelList {
         )
     )
 
+    // TODO: add new models: Nova Furry XL
     val furry = listOf(
         ImageModel(
             title = "Pony Diffusion XL",
