@@ -1,5 +1,7 @@
 package org.yassineabou.playground.feature.imagine.model
 
+import io.ktor.http.Url
+
 class IdGenerator {
 
     private var nextId = 0
@@ -367,6 +369,68 @@ val Ultraspice_Url_Examples = listOf(
     )
 )
 
+val NatViS_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/61ae6a70-173f-4e47-912b-22cfb54d6702/original=true,quality=90/00397-1845171737.jpeg",
+        description = "Candid Photo, 1996 \\(year\\), A hooters waitress, 1girl, blonde hair with blue highlights, multicolored hair, pale skin, hooters outfit, hooters outfit 1990s, orange shorts, white tank top, [thighs], holding tray, indoors, restaurant, cleavage, looking at viewer, detailed skin, Photographed on a Contax T2, 38mm F2.8, film grain, ISO 200, Roscosum 1/4 CTO color gel, analog, solo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fe7d04aa-29e1-4fc6-ad90-283064c35018/original=true,quality=90/00071-3269296941.jpeg",
+        description = "Movie Still frame of a woman, pale skin, short hair, clothed, hazel eyes, looking at viewer, cowboy shot, solo, cinematic lighting, vibrant colors, high contrast, soft pink color gel, dreamlike"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/85701ba6-249c-40da-9f93-6c5de4cf0f1f/original=true,quality=90/00187-487307721.jpeg",
+        description = "An expressionist photograph of a topless woman holding a white featureless porcelain mask up to her face, partially obscuring it. She is standing in front of two white mannequins that are blank. The woman's expression is serious and her blue eyes look directly at the viewer. high-key lighting, solo. The woman has blonde hair cut in a bob that frames her face. The image focuses on the woman with a slight bokeh effect."
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5719e480-388d-4dc1-9fb7-b75507e77c4a/original=true,quality=90/00999-3030726072.jpeg",
+        description = "A candid photograph from the 1990s of a effortlessly beautiful South Korean woman, wearing a white t-shirt, tied in a not, navel, denim booty shorts, torn shorts. She is sitting inside an Internet Café, Seoul, South Korea, the image was taken 1996 \\(year\\). Punk aesthetic, bangs, moody, beautiful eyes, film grain, artificial lighting, pale skin, looking at viewer, old computers, Doom \\(1993\\) retro video game displayed on CRT monitor"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f1a589fe-4a67-4e88-b7f7-fc915344474e/original=true,quality=90/00389-3784217498.jpeg",
+        description = "Polaroid photo of a beautiful female Tiefling from Dungeons & Dragons. She has pointy ears and (red skin). colored skin, demon horns, dark hair, undercut, looking at viewer, looking at viewer, film grain, expired film, photographed on a Polaroid SX-70, with PX 680 Color Shade film, nostalgic, film grain, timeless"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0d1924b5-b439-4207-bd74-f3b162c1437d/original=true,quality=90/00194-2868401586.jpeg",
+        description = "A portrait of a king in full armor, including a crown, cape, and breastplate. He is holding a sword in both hands and staring at the viewer with a fierce expression. He is standing in front of a mirror, which reflects his image. The background is a dark throne room."
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/815f8266-9e25-4024-9e18-bec8e6204eef/original=true,quality=90/00273-3551383987.jpeg",
+        description = "1980's film still, a gorgeous hippie high elf, getting high, 1girl, elegant white dress, circlet, looking down, looking away, inhaling, Glass Bong \\(drug\\), marijuana, bloodshot eyes, white hair, stoned, upper body, Photographed on a Nikon F3, 35mm F/4 lens, flash on, Kodak royal gold 400 color negative film, film grain, light leak, film sprockets, Pale Gold lighting color gel, solo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/555fe826-38de-478b-a62d-d576f11f31d3/original=true,quality=90/00087-1641550222.jpeg",
+        description = "A cute Gentoo penguin, walking on a blanket of fresh snow, its black and white plumage contrasting sharply against the white expanse. Its orange beak is slightly open, and it's looking at the viewer. National Geographic, high resolution."
+    )
+)
+
+val Cyberrealistic_Pony_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7e411eac-c506-4b7b-a39b-a4bebb971de0/original=true,quality=90/00085-2632448521.jpeg",
+        description = "score_9, score_8_up, score_7_up, cinematic film still, beautiful woman, no make up, winter outfit, blush, black hair, head tilt, hair blowing in the wind, arctic circle snow drift, snowing, snowflakes, cold, chill bumps, approaching perfection, dynamic, highly detailed, smooth, sharp focus, intricate details, shallow depth of field, vignette, high budget, bokeh, cinemascope, moody, epic, gorgeous, film grain, grainy"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/96768644-4d9d-4316-b687-82eb1d26f693/original=true,quality=90/00098-263378190.jpeg",
+        description = "score_9, score_8_up, score_7_up, (masterpiece, best quality, ultra-detailed, realistic), 1girl, solo, 25 years old, perfect face, close view, (adult), sexy, multi coloured hair, spiked hair, ear piercing, spiked collar, colourful hoodie, winter, blush, shy smile, portrait, face focus, depth of field, looking at viewer"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0654d660-b4f2-4d5a-ad15-b8255a6aff77/original=true,quality=90/00108-2360068551.jpeg",
+        description = "score_9, score_8_up, score_7_up, (masterpiece, best quality, ultra-detailed, realistic), perfect face, Cyberpunk Tokyo, neon lighting, neon bodysuit, long hair, detailed blue eyes, looking at viewer, eyeshadow, multi-coloured hair, specular highlights, neon theme, bioluminescent, fluorescent, silhouette"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ac444e35-4d67-45ac-b8fb-80d216db2269/original=true,quality=90/00094-1993054392.jpeg",
+        description = "score_9, score_8_up, score_7_up, (masterpiece, best quality, ultra-detailed, realistic), 1girl, solo, 25 years old, perfect face, adult, sexy, black hair, black eyes, African black skin detailed face, face focus, eyes, wearing African clothes, African head wrap clothe"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c5ddbb37-a2a7-4756-9771-ee2cfa071988/original=true,quality=90/00087-3844786932.jpeg",
+        description = "score_9, score_8_up, score_7_up, (masterpiece, best quality, ultra-detailed, realistic), 1girl, leggings, short pleated skirt, black boots, punk clothing, leaning against wall, neon lighting, dark alley, rich textures, dynamic angle, moody atmosphere"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9933c260-9b7a-4bfe-9f95-dfd6025d7f63/original=true,quality=90/00097-3412839506.jpeg",
+        description = "score_9, score_8_up, score_7_up, (masterpiece, best quality, ultra-detailed, realistic), rainforest in a cloudy day, concrete obelisk in the center"
+    )
+)
+
 val ICBINP_XL_Url_Examples = listOf(
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/727f5218-e33b-4da2-8bcf-7129ae4a9e5b/original=true,quality=90/00132-1077380802.jpeg",
@@ -664,6 +728,198 @@ val AAM_XL_Url_Examples = listOf(
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b0ff3d89-6c6a-4448-bf19-a16982591c2d/original=true,quality=90/31073689-2540058663-1girl,%20mecha%20suit,%20samurai%20face%20mask,%20menpo,%20upper%20body,%20underboob,%20portrait,%20white%20orange%20armor,%20blonde%20shimmering%20hair,%208K,%20RA.jpeg",
         description = "1girl, mecha suit, samurai face mask, menpo, upper body, underboob, portrait, white orange armor, blonde shimmering hair, 8K, RAW, best quality, masterpiece, ultra high res, colorful, (medium wide shot), (dynamic perspective), sharp focus , (depth of field, bokeh:1.3), extremely detailed eyes and face, beautiful detailed eyes,large breasts,black gold, trimmed gear,In a futuristic weapons factory, ((masterpiece, best quality)), niji, from side, upper body, hips"
+    )
+)
+
+val Nova_Anime_XL_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/011a0c22-11ab-441d-8633-28256c55f22f/original=true,quality=90/00002_428649103.jpeg",
+        description = "masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, colorful, dynamic from below dutch angle, highest detailed, upper body, fashion photography of busty cute girl, (cute:1.2), intense long pink hair, long hair, cosmic eyes, dynamic pose, bokeh, serafuku with big red ribbon, moonlight passing through hair, perfect night, fantasy background, looking at viewer, light smile, hand, reaching, light particles, (face focus:0.7), BREAK, detailed background, detailed foreground, extremely detailed eyes, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, depth of field, volumetric lighting"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c4b2cd8f-4550-45d8-a788-df946408af19/original=true,quality=90/00002_101724454.jpeg",
+        description = "masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, (dappled sunlight:1.2), rim light, backlit, dramatic shadow, 1girl, blonde hair, blue eyes, shiny eyes, medium breasts, white dress, forest, flowers, butterfly, looking at viewer, upper body, close-up, dutch angle, shiny skin, BREAK, dramatic shadow, depth of field, detailed eyes and skin, detailed hair, vignetting, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, volumetric lighting"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/447afc86-9bd8-4bcc-af12-c5461df7ac29/original=true,quality=90/00000_3989362287.jpeg",
+        description = "rim light, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres,  newest, scenery, 1girl, toga himiko, teeth, open mouth, pink blood on face, smile, tongue out, double bun, crazy eyes, pink blood, hands on own cheek, upper body, school uniform, (pink:0.7) colorful background, detailed background, backlighting, from above, dutch angle, close-up, photorealistic, dutch angle, (colorful:1.2), rainbow, light particles, from above, BREAK, extremely detailed, detailed face eyes skin and hair, delicate hair, shiny skin, masterpiece, best quality, amazing quality, very aesthetic, absurdres, high resolution, ultra-detailed, newest, scenery, volumetric lighting"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/36023458-bb0d-4f0d-921f-bd2768df7f73/original=true,quality=90/00001_376831015.jpeg",
+        description = "masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, rim light, sky, cloud, (dappled sunlight:1.2), sunset, 1girl, ia_(vocaloid), off-shoulder (detouched sleeve:1.2) crop top black shirt over black tank top, pink skirt, floating clothes, small breasts, cleavage, falling, upside down, smile, open mouth, blush, on back, (dynamic falling pose:1.2), light particles, (wide shot:1.2), looking at viewer, close-up, (colorful:1.3), from below, (face focus:1.2), dutch angle, floating hair, humid skin, fine fabric emphasis, BREAK, detailed hair, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres,  newest, scenery, volumetric lighting"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2c1a93dc-ef34-4bb7-9a12-ee8784d83685/original=true,quality=90/00001_3449743747.jpeg",
+        description = "masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, BREAK, 1girl, solo, elf girl, long pointy elf ears, pixie, sitting on log, thick thighs, forest, blue eyes,from above,looking up,looking at viewer, ground,blonde hair,(dappled sunlight:1.2),blurry, boots,leaf, dutch angle, portrait, fine fabric emphasis, glowing outline, BREAK, detailed eyes, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, depth of field, volumetric lighting"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/150863c2-c828-4005-9b9e-6652f09a9041/original=true,quality=90/00003_3682827997.jpeg",
+        description = "masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, 1girl, black leggings, thick thighs, crop top shirt, open jacket, off-shoulder, platinum blonde,bob cut,cowboy shot,from below, dutch angle, shiny dark eyes,looking away, hands in jacket pockets, chewing gum, face focus, fine fabric emphasis, dynamic walking pose, navel, wide shot, shiny skin, cyberpunk, BREAK, detailed eyes, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, depth of field, volumetric lighting"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8c4313eb-c1d8-436e-b4eb-04a495c9ea74/original=true,quality=90/00000_721664149.jpeg",
+        description = "masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, official art, 1girl, frown, smug, (grin:1.2), large breasts, wide hips, short black hair with sideswept bangs, purple eyes, hair over one eye, hand gripping glowing thin sword, skindentation purple bodysuit, glowing purple cape, armored detailed purple gauntlets, overgrown stone temple, purple night sky with moon, fine fabric emphasis, dynamic angle, dynamic action pose, (face focus:1.2), close-up, portrait, motion blur, motion lines, BREAK, detailed eyes, masterpiece, best quality, amazing quality, very aesthetic, high resolution, ultra-detailed, absurdres, newest, scenery, depth of field, volumetric lighting"
+    )
+)
+
+val HolyMix_ILXL_URl_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/68d888d5-5180-44d0-bc34-faf7318722ff/original=true,quality=90/20241118_092503_059986-1290481901.jpeg",
+        description = "masterpiece, best quality, 2girls, rotational symmetry, smile, nekomata okayu \\(1st costume\\), inugami inugami korone \\(1st costume\\), holding hands, (multicolored background, colorful:1.2)"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/60e96232-04d3-4ae4-a8f9-9208ebd954a4/original=true,quality=90/20241118_062637_427717-613632263.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, full body, from above, day, clouds, flying, green hair, very short hair, pom pom hair ornament, two-tone eyes, elf, pointy ears, medium breasts, wide sleeves, frilled shirt, smile, teeth"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/98788ab2-6c1c-4caa-b511-9f4bdb2cba95/original=true,quality=90/20241118_055442_121044-746052776.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, cowboy shot, leaning on wall, dutch angle, graffiti, urban, holding blue lollipop, looking away, hoshimachi suisei \\(school uniform\\), white hoodie, hood up, eyeliner, open clothes, black serafuku, black skirt, yellow bow, hand in pocket, blue tongue"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9690fb6c-4f01-4a89-8f26-3bb6190a1eeb/original=true,quality=90/20241118_055228_197140-3326784647.jpeg",
+        description = "masterpiece, best quality, split, heaven and hell, cavern, clouds, multicolored background, multicolored lights, magic, black hole, 1girl, solo, standing, full body, armored dress, dark purple hair"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a0a78a99-ac78-4aea-9338-16f04b4f6ba7/original=true,quality=90/20241118_074656_896826-1196157054.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, lake, shiny, bioluminescence, angel, huge wings, (mechanical arms, mechanical legs:1.2), white bodysuit, rainbow halo"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/43eb0076-f2c8-4798-8aad-1466b80543c4/original=true,quality=90/20241118_082451_634388-1119915104.jpeg",
+        description = "masterpiece, best quality, 1boy, short hair, (muscular man:0.7), white hair, clock eyes, heterochromia, black skin, colored skin, outstretched arm, magic, blue theme"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6c0814eb-c261-4e71-9564-86475b3d3727/original=true,quality=90/20241118_065723_345000-2966105735.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, mermaid, from behind, full body, underwater castle, atlantis, looking away, floating, fish, coral"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e5d60b47-7a56-4d6b-b288-42aca957711d/original=true,quality=90/20241118_065342_871589-3582663151.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, cowboy shot, red hair, maid, maid headdress, kitchen, cooking, food, thinking, looking away, hand on chin, plate of cookies"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ecad7cb5-1be3-44fe-a3b1-5b4444d77863/original=true,quality=90/1000051418.jpeg",
+        description = "masterpiece, best quality, color wheel challenge, 4girls, smile, shirakami fubuki \\(1st costume\\), ookami mio \\(1st costume\\), nekomata okayu \\(1st costume\\), inugami korone \\(1st costume\\),"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ea8419f3-2513-4606-900c-5ab49cd948b4/original=true,quality=90/1000051034.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, full body, (lineart, greyscale, monochrome:1.4), shirakami fubuki \\(1st costume\\), salute, serious, fox tail, (white background, simple background)"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/c394b604-b168-44ab-86ff-e58eefbf9cba/original=true,quality=90/20241118_071953_606061-145725793.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, diamond \\(houseki no kuni\\), light smile, outstretched arm, cavern, crystals, rainbow"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/31ae5dff-4be6-46a5-bed2-22c2f576a7e2/original=true,quality=90/20241118_055646_850702-69.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, cowboy shot, japanese shrine, autumn, smile, nakiri ayame \\(1st costume\\), hand on own cheek"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/32e75848-edb2-4381-9680-b7bc21e45ada/original=true,quality=90/20241118_073101_483202-1794128442.jpeg",
+        description = "masterpiece, best quality, 2girls, fujiwara chika, shinomiya kaguya, huuchiin academy school uniform"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f6b58c5f-542e-43cf-9c46-9cb519142ab7/original=true,quality=90/20241118_064732_809222-1034409499.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, bathroom, cowboy shot, mizuhara chizuru, long hair, brown hair, brown eyes, pink bathrobe"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/a088d189-4956-47ea-8fc7-b342614d02cc/original=true,quality=90/20241118_073215_872371-2631129063.jpeg",
+        description = "masterpiece, best quality, 1girl, solo, standing, hu tao \\(genshin impact\\), symbol-shaped pupils, flower-shaped pupils, hat, red flower, red eyes, cherry blossoms, leaning on rail, cliffs, clouds"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/af7413ee-43f2-4609-8715-84f2fead0484/original=true,quality=90/20241118_070734_097081-134359964.jpeg",
+        description = "masterpiece, best quality, classroom, 1girl, solo, dutch angle, from above, full body, shushing, index finger raised, finger to mouth, wink, monika \\(doki doki literature club\\)"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/04501b35-aa81-46dd-b43d-6628424f3a93/original=true,quality=90/20241118_064344_323087-3507517789.jpeg",
+        description = "masterpiece, best quality, girl, solo, pa-san, colored inner hair, ear piercing, chin piercing, hime cut, choker, black coat, grey undershirt, sleeves past fingers, expressionless, backstage, head rest, head on table, outstretched arm, purple smartphone"
+    )
+)
+
+val Noob_V_Pencil_XL_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/original=true,quality=90/00000-20241211153415-1954655588-30-5.jpeg",
+        description = "colorful, 1girl, solo, teen, happy, close-up, from below, magic, casting spell, holding fire, (light trail, electricity, light particles:2.0), wizard, wizard hat, white hair, short hair, glowing red eyes, black background, multicolored background, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d9787213-5ee0-44c7-b8a1-20e57d1d3d47/original=true,quality=90/00000-20241211172927-2836610052-30-5.jpeg",
+        description = "colorful, dragon, from side, galaxy, multicolored background, plaid, plaid skirt, profile, skirt, space, sparkle, star \\(sky\\), masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ba8162d2-535b-46e7-9759-c5fa5c7d62f3/original=true,quality=90/00000-20241211172052-3802977472-30-5.jpeg",
+        description = "1girl, solo, colorful, eye focus, eyelashes, glowing, head tilt, long hair, looking at viewer, red ribbon, ribbon, star \\(sky\\), star \\(symbol\\), v over mouth, smile, closed mouth, black hair, portrait, close-up, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/02bdaeca-b9fe-4c90-bc0a-d8019c0c743e/original=true,quality=90/00000-20241211172724-640633783-30-5.jpeg",
+        description = "1girl, solo, colorful, flower, leaf, looking at viewer, pink flower, plant, red flower, twintails, upper body, white flower, long sleeves, vines, black hair, hair ornament, dress, long hair, expressionless, very long hair, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/58c807ed-0ce4-46e4-afd1-4f98f1b36da2/original=true,quality=90/00000-20241211173345-3752518646-30-5.jpeg",
+        description = "colorful, 1girl, jacket, long sleeves, plaid, plaid jacket, profile, scarf, silhouette, sleeves past wrists, snowing, short hair, hand up, red theme, skirt, solo, looking afar, from side, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f4371fdc-91fe-447f-81d4-6398f46844c3/original=true,quality=90/00000-20241211173704-2699127224-30-5.jpeg",
+        description = "colorful, 1girl, dolphin, fish, flying fish, holding, holding toy, lace trim, lace-trimmed ribbon, legs, legs together, limited palette, long hair, ribbon, semi-transparent, stuffed animal, stuffed toy, toy, tropical fish, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6e178c40-65b2-4d74-b68f-914e65cd54fd/original=true,quality=90/00000-20241211173848-2887109441-30-5.jpeg",
+        description = "colorful, 1girl, crossed legs, elf, fairy, flower, green hair, leaf, pointy ears, sitting, skirt, tree, wings, grass, looking down, nature, head rest, solo, forest, short sleeves, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/fbd22a66-7cf6-44a6-8356-4a8a83bfa74e/original=true,quality=90/00000-20241210232132-2575274102-30-5.jpeg",
+        description = "colorful, dragon, elbow gloves, gloves, glowing, gold, leaning forward, sash, sword, weapon, holding weapon, holding sword, open mouth, looking at viewer, standing, claws, holding, smile, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e4d70980-b4f0-42c9-a920-d9632d7ac05a/original=true,quality=90/00000-20241211174154-320846718-30-5.jpeg",
+        description = "1girl, solo, colorful, simple background, halo, heart, knife, long hair, oversized object, shirt, sleeveless, sleeveless shirt, two-tone hair, white hair, smile, sidelocks, multicolored hair, necktie, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b04ce4de-84fb-4d30-8ed6-416d27bc4eb6/original=true,quality=90/00000-20241211174308-4057190042-30-5.jpeg",
+        description = "colorful, 1girl, dress, freckles, hair focus, hair lift, long hair, looking at viewer, navel, puffy short sleeves, puffy sleeves, red dress, short sleeves, very long hair, hand on own hip, open mouth, medium breasts, :d, smile, multicolored clothe, multicolored dress, breasts, solo, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1da6e3e9-6d6b-4a42-9567-87e49d7b4497/original=true,quality=90/00000-20241211174425-2964130954-30-5.jpeg",
+        description = "1girl, solo, colorful, simple background, dress, frills, ghost, hairband, hugging doll, hugging object, mary janes, pantyhose, shoes, looking at viewer, white pantyhose, long sleeves, blonde hair, short hair, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/66a0d194-8185-4051-800c-9f9a9a159ede/original=true,quality=90/00000-20241211174547-497554682-30-5.jpeg",
+        description = "1girl, solo, colorful, simple background, drill, fang, horse, long hair, long sleeves, looking at viewer, open mouth, red hair, smile, teeth, white background, twintails, animal ear, upper body, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/033ca84e-b971-4ebf-b37b-c5dcbed19b8c/original=true,quality=90/00000-20241211192022-2155797233-30-5.jpeg",
+        description = "colorful, 1girl, colorful, colorful, cyberpunk, ladder, looking at viewer, moon, multicolored hair, two-tone hair, pink theme, long hair, solo, closed mouth, limited palette, full moon, building, smile, outdoor, city lights, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/8fe1c57d-84fa-4ac3-a8a9-74111455f9dc/original=true,quality=90/00000-20241211192546-193005251-30-5.jpeg",
+        description = "colorful, 1girl, dress, floating, flower, light, levitation, pastel colors, petals, pink flower, purple dress, star \\(symbol\\), surreal, white flower, purple footwear, blue flower, abstract background, long hair, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bf027a26-2056-40f6-9acc-fffec6c0c484/original=true,quality=90/00000-20241211192422-1208656061-30-5.jpeg",
+        description = "1girl, solo, colorful, dress, expressionless, floating hair, faux traditional media, flower, from side, halo, holding, long hair, looking up, painterly, profile, upper body, abstract background, multicolored background, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/7be8ead5-8298-4007-9832-4126490d641e/original=true,quality=90/00000-20241211191815-1289385658-30-5.jpeg",
+        description = "1girl, solo, colorful, simple background, head tilt, long hair, looking at viewer, shoes, sleeves past fingers, sleeves past wrists, smile, upper body, hand up, no nose, aqua footwear, orange hair, heart, abstract, sneakers, shirt, grey shirt, heart in mouth, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bcc02ed9-8d1a-4f92-b12e-4276f99599ec/original=true,quality=90/00000-20241211193002-1003841429-30-5.jpeg",
+        description = "colorful, 1girl, flower, hand on own face, japanese clothes, kimono, leaf, lily pad, long sleeves, looking at viewer, no arms, pond, chibi, pink hair, sitting, solo, white background, water, waving, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0459529e-6bec-4c69-bb40-529fdbd67f87/original=true,quality=90/00000-20241211193243-2913549597-30-5.jpeg",
+        description = "colorful, furry, heart, paw pose, simple background, smile, sweater, tail, tiger ears, tiger tail, black footwear, hands on own hips, :3, tiger girl, looking at viewer, white background, fang, chibi, animal ear, standing, animal ear fluff, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1a8c9dc6-dfd2-403c-8659-0b50a52aa8ae/original=true,quality=90/00000-20241211193406-3360966542-30-5.jpeg",
+        description = "colorful, colorful, heart, mittens, multicolored clothes, multicolored scarf, scarf, striped clothes, striped scarf, waves, winter clothes, no humans, sparkle, star ornament, blue background, bootie, boots, pink footwear, beanie, masterpiece, best quality, newest, very awa"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/18eb8cf2-ccdd-4fc5-aea6-e42da30b0f7e/original=true,quality=90/00000-20241211193117-2339164909-30-5.jpeg",
+        description = "colorful, 1g, dragon, eastern dragon, flag, head wings, japanese clothes, karaginu mo, kikumon, ribbon, unmoving pattern, wings, haori himo, white background, no humans, layered clothes, kanzashi, hair ornament, masterpiece, best quality, newest, very awa"
+    )
+)
+
+val Prefect_Pony_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/387a3ea7-a788-44d0-905f-6556a25e1343/original=true,quality=90/00022-1709835912.jpeg",
+        description = "score_9,score_8_up,score_7_up, 1girl, alternate costume, beanie, black choker, black hair, black hat, black sweater, bow, brown eyes, buttons, choker, collared shirt, covered mouth, cross, cross earrings, earrings, floral background, hair between eyes, hat, hat bow, jewelry, long hair, looking at viewer, mask, mouth mask, pink background, portrait, prototype design, red bow, shirt, sidelocks, solo, spiked ear piercing, spikes, studded choker, sweater, twintails, white shirt"
     )
 )
 
@@ -1223,6 +1479,33 @@ val Pony_Diffusion_XL_Url_Examples = listOf(
     UrlExample(
         url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f1d3824f-5dae-4139-86cc-ad755fb93463/width=450/00310-3475198511.jpeg",
         description = "score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, feral pony, show accurate"
+    )
+)
+
+val Nova_Furry_Pony_Url_Examples = listOf(
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/2540b065-c468-40d1-b3f7-e0af99397c8d/original=true,quality=90/00002_2931328619.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, source_furry,BREAK,detailed face eyes and fur, 1girl, solo, rabbit girl, clothed, body fur, white rabbit, white fur, detailed fluffy fur, looking at viewer, red eyes, black dress, upper body"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/bd36409f-567c-4fa9-87b5-c5d529aebc4d/original=true,quality=90/00001_3282896328.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, source_furry, BREAK,1girl, detailed face eyes, detailed fluffy fur, 1girl, dark ambient, glow, (detailed fire background, blue fire AND red fire:1.1), anthro furry female fox, orange flame hair, glowing gradient orange yellow eyes, enface portrait, small, medium breasts, looking at viewer, intimidating, smirk, black headband, black collar with white spikes, flame hot red leather jacket, white shirt, highly detailed, absurdres, cinematic lighting, fluffy"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/52a48066-82fd-4376-a7ce-56376c5a2ae6/original=true,quality=90/00003_2197116381.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, source_furry,BREAK,(detailed face eyes and fur:1.2), wolf furry girl,blonde,long hair,looking at viewer,crossed bangs,blue eyes,high detail eyes, black skirt, crop-top off-shoulder (red shirt:1.2), (high detail grey fur:1.2),punk collar, fur paws, white background, (dynamic angle, dynamic pose:1.2), floating hair, open mouth, fangs"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b79bbb07-765b-46f5-8297-53dd53cf37af/original=true,quality=90/00001_869371990.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, source_furry,BREAK,detailed face eyes and fur, silver anthro furry canine female sitting on the stone in the middle of lake, clothed, blue dress,water around, white long hair, wet fur, back,looking at viewer, ears, post impressionism, classic"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3a708789-36da-4441-8ca4-201a38e1c6a9/original=true,quality=90/00002_2442382010.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, source_furry,BREAK,detailed face eyes and fur, 1boy, cute, solo, close-up portrait, dog wearing steampunk lab coat in a 19th century pharmacy shop interior, orange eyes, steampunk art, global illumination, pose, smile, high detailed, cinematic, complex background"
+    ),
+    UrlExample(
+        url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/39f45a86-43f1-41a0-a8f9-d6cf2736b5df/original=true,quality=90/00000_2360655035.jpeg",
+        description = "score_9, score_8_up, score_7_up, score_6_up, source_furry,BREAK,detailed face eyes and fur, looking at viewer, furry cat girl,maid,brown hair,caracalcat,caracal,ningmao"
     )
 )
 
