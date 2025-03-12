@@ -27,11 +27,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -166,21 +161,10 @@ fun ActionButtons(
     deleteConversationFromHistory: () -> Unit,
 ) {
 
-    var isBookmarkedState by remember { mutableStateOf(isBookmarked) }
-
-    LaunchedEffect(isBookmarked) {
-        isBookmarkedState = isBookmarked
-    }
-
-    val bookmarkTint =
-        if (isBookmarkedState) MaterialTheme.colorSchemeCustom.alwaysBlue else MaterialTheme.colorScheme.onBackground
-
+    val bookmarkTint = if (isBookmarked) MaterialTheme.colorSchemeCustom.alwaysBlue else MaterialTheme.colorScheme.onBackground
     Row {
         IconButton(
-            onClick = {
-                toggleBookmark()
-                isBookmarkedState = !isBookmarkedState
-            }
+            onClick = { toggleBookmark() }
         ) {
             Icon(
                 imageVector = Icons.Filled.Bookmark,
