@@ -37,6 +37,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,7 +84,7 @@ fun ImagineScreen(
     var selectModelClicked by remember { mutableStateOf(false) }
     val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsStateWithLifecycle()
     val estimatedTimerState by imageGenViewModel.estimatedTimerState.collectAsStateWithLifecycle()
-    val loadedInspiration by imageGenViewModel.loadedInspiration
+    val loadedInspiration by imageGenViewModel.loadedInspiration.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
     Column(
@@ -308,18 +309,27 @@ private fun Inspirations(
     var showImageDialog by remember { mutableStateOf(false) }
     var dialogUrlExample by remember { mutableStateOf(UrlExample()) }
 
-    LaunchedEffect(scrollState, loadedInspiration.size) {
-        snapshotFlow {
-            scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-        }
-            .collect { lastVisibleIndex ->
-                if (lastVisibleIndex != null &&
-                    lastVisibleIndex >= loadedInspiration.size - 5 &&
+    val shouldLoadMore by remember(scrollState, loadedInspiration) {
+        derivedStateOf {
+            val layoutInfo = scrollState.layoutInfo
+            val visibleItems = layoutInfo.visibleItemsInfo
+
+            if (loadedInspiration.isEmpty()) return@derivedStateOf false
+
+            val lastVisibleIndex = visibleItems.lastOrNull()?.index ?: 0
+            val totalItemsCount = loadedInspiration.size // Directly use the input list size
+
+            // Trigger load when reaching last 2 items (pageSize = 5 in ViewModel)
+            lastVisibleIndex >= totalItemsCount - 2 &&
                     !scrollState.isScrollInProgress
-                ) {
-                    loadNextPage()
-                }
-            }
+        }
+    }
+
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) {
+            loadNextPage()
+        }
     }
 
     Box(modifier = modifier) {

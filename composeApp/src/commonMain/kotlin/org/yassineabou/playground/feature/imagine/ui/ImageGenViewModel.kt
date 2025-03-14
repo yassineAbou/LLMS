@@ -33,10 +33,10 @@ class ImageGenViewModel : ViewModel() {
     // Pagination for inspiration
     private val fullInspirationList = ImageGenModelList.inspiration
     private var currentPage = 0
-    private val pageSize = 10 // Adjust based on performance needs
+    private val pageSize = 5 // Adjust based on performance needs
 
-    private val _loadedInspiration = mutableStateOf<List<UrlExample>>(emptyList())
-    val loadedInspiration: State<List<UrlExample>> = _loadedInspiration
+    private val _loadedInspiration = MutableStateFlow<List<UrlExample>>(emptyList())
+    val loadedInspiration: StateFlow<List<UrlExample>> = _loadedInspiration
 
 
     // Timer state
@@ -70,8 +70,10 @@ class ImageGenViewModel : ViewModel() {
         val end = min(start + pageSize, fullInspirationList.size)
         val nextPageItems = fullInspirationList.subList(start, end)
 
-        // Update state directly
-        _loadedInspiration.value += nextPageItems
+        // Fix 2: Update using update operator for StateFlow
+        _loadedInspiration.update { currentList ->
+            currentList + nextPageItems
+        }
         currentPage++
     }
 
