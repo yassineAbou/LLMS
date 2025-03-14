@@ -36,11 +36,13 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,7 +62,6 @@ import org.yassineabou.playground.app.core.sharedViews.GoToFirst
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.playground.app.core.util.draggableScrollModifier
-import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
@@ -82,6 +83,7 @@ fun ImagineScreen(
     var selectModelClicked by remember { mutableStateOf(false) }
     val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsStateWithLifecycle()
     val estimatedTimerState by imageGenViewModel.estimatedTimerState.collectAsStateWithLifecycle()
+    val loadedInspiration by imageGenViewModel.loadedInspiration
     val isLargeScreen = rememberIsLargeScreen()
 
     Column(
@@ -112,11 +114,12 @@ fun ImagineScreen(
             changeSelectModelClicked = { selectModelClicked = it }
         )
         Inspirations(
-            listInspiration = ImageGenModelList.inspiration,
+            loadedInspiration = loadedInspiration,
+            onIdeaTextChange = { ideaText = it },
+            loadNextPage = { imageGenViewModel.loadNextInspirationPage() },
             modifier = Modifier
                 .weight(0.38f)
                 .fillMaxWidth(),
-            onIdeaTextChange = { ideaText = it },
         )
         CreateImageButton(
             enabled = ideaText.isNotEmpty() and estimatedTimerState.isTimerCompleted,
@@ -295,7 +298,8 @@ private fun ImageModel(
 
 @Composable
 private fun Inspirations(
-    listInspiration: List<UrlExample>,
+    loadedInspiration: List<UrlExample>,
+    loadNextPage: () -> Unit,
     onIdeaTextChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -303,6 +307,20 @@ private fun Inspirations(
     val coroutineScope = rememberCoroutineScope()
     var showImageDialog by remember { mutableStateOf(false) }
     var dialogUrlExample by remember { mutableStateOf(UrlExample()) }
+
+    LaunchedEffect(scrollState, loadedInspiration.size) {
+        snapshotFlow {
+            scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+        }
+            .collect { lastVisibleIndex ->
+                if (lastVisibleIndex != null &&
+                    lastVisibleIndex >= loadedInspiration.size - 5 &&
+                    !scrollState.isScrollInProgress
+                ) {
+                    loadNextPage()
+                }
+            }
+    }
 
     Box(modifier = modifier) {
         Column {
@@ -321,7 +339,10 @@ private fun Inspirations(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(items = listInspiration) { inspiration ->
+                items(
+                    items = loadedInspiration,
+                    key = { item -> item.id }
+                ) { inspiration ->
                     InspirationItem(
                         url = inspiration.url,
                         onItemClick = {
@@ -366,6 +387,7 @@ private fun Inspirations(
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable

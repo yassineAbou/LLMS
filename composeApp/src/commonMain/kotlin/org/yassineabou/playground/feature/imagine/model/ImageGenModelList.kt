@@ -1,5 +1,8 @@
 package org.yassineabou.playground.feature.imagine.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 object ImageGenModelList {
 
 

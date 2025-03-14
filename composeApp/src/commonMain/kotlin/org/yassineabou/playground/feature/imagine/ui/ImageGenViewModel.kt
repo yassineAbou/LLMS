@@ -1,5 +1,7 @@
 package org.yassineabou.playground.feature.imagine.ui
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -12,6 +14,7 @@ import org.yassineabou.playground.feature.imagine.model.EstimatedTimerState
 import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.model.UrlExample
+import kotlin.math.min
 import kotlin.time.Duration.Companion.seconds
 
 class ImageGenViewModel : ViewModel() {
@@ -25,6 +28,16 @@ class ImageGenViewModel : ViewModel() {
 
     private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
+
+
+    // Pagination for inspiration
+    private val fullInspirationList = ImageGenModelList.inspiration
+    private var currentPage = 0
+    private val pageSize = 10 // Adjust based on performance needs
+
+    private val _loadedInspiration = mutableStateOf<List<UrlExample>>(emptyList())
+    val loadedInspiration: State<List<UrlExample>> = _loadedInspiration
+
 
     // Timer state
     private val _estimatedTimerState = MutableStateFlow(
@@ -45,6 +58,22 @@ class ImageGenViewModel : ViewModel() {
 
     // Coroutine job for the timer
     private var timerJob: Job? = null
+
+    init {
+        loadNextInspirationPage()
+    }
+
+    fun loadNextInspirationPage() {
+        val start = currentPage * pageSize
+        if (start >= fullInspirationList.size) return
+
+        val end = min(start + pageSize, fullInspirationList.size)
+        val nextPageItems = fullInspirationList.subList(start, end)
+
+        // Update state directly
+        _loadedInspiration.value += nextPageItems
+        currentPage++
+    }
 
     // Function to start the timer
     fun startEstimatedTimer() {

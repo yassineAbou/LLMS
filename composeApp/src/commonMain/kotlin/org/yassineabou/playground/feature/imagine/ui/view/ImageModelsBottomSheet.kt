@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -95,7 +96,7 @@ fun ImageModelsBottomSheet(
                 },
                 body = {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        item {
+                        item(key = "Generalist") {
                             ImageModelType(
                                 type = "Generalist",
                                 imageModelsList = ImageGenModelList.generalist,
@@ -107,7 +108,7 @@ fun ImageModelsBottomSheet(
                                 }
                             )
                         }
-                        item {
+                        item(key = "Realistic") {
                             ImageModelType(
                                 type = "Realistic",
                                 imageModelsList = ImageGenModelList.realistic,
@@ -119,7 +120,7 @@ fun ImageModelsBottomSheet(
                                 }
                             )
                         }
-                        item {
+                        item(key = "Anime") {
                             ImageModelType(
                                 type = "Anime",
                                 imageModelsList = ImageGenModelList.anime,
@@ -131,7 +132,7 @@ fun ImageModelsBottomSheet(
                                 }
                             )
                         }
-                        item {
+                        item(key = "3D") {
                             ImageModelType(
                                 type = "3D",
                                 imageModelsList = ImageGenModelList.threeD,
@@ -143,7 +144,7 @@ fun ImageModelsBottomSheet(
                                 }
                             )
                         }
-                        item {
+                        item(key = "Comic") {
                             ImageModelType(
                                 type = "Comic",
                                 imageModelsList = ImageGenModelList.comic,
@@ -155,7 +156,7 @@ fun ImageModelsBottomSheet(
                                 }
                             )
                         }
-                        item {
+                        item(key = "Furry") {
                             ImageModelType(
                                 type = "Furry",
                                 imageModelsList = ImageGenModelList.furry,
@@ -210,7 +211,10 @@ private fun ImageModelType(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(imageModelsList) { item ->
+            items(
+                key = { item -> item.id },
+                items = imageModelsList
+            ) { item ->
                 imageModelItem(
                     tempSelectedImageModel = item,
                     isSelected = item == tempSelectedImageModel,
@@ -252,13 +256,9 @@ private fun imageModelItem(
                 .size(150.dp)
                 .align(Alignment.CenterHorizontally)// Match the size of TextGenType
         ) {
-            ImageModelExample(urlExample = tempSelectedImageModel.urlExamples.random())
-            /*
-            ImageCarousel(
-                imageUrlExamples = tempSelectedImageModel.urlExamples
-            )
 
-             */
+            ImageModelExample(urlExample = tempSelectedImageModel.urlExamples.random())
+
             if (tempSelectedImageModel.isNsfw) {
                 Text(
                     text = "NSFW",

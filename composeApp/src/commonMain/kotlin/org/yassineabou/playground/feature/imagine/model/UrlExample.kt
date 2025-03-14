@@ -1,6 +1,8 @@
 package org.yassineabou.playground.feature.imagine.model
 
-import io.ktor.http.Url
+import androidx.compose.runtime.Immutable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class IdGenerator {
 
@@ -13,8 +15,9 @@ class IdGenerator {
 
 }
 
-data class UrlExample(
-    val id: Int = IdGenerator().generatedId(),
+@Immutable
+data class UrlExample @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: String = Uuid.random().toString(),
     val url: String = "",
     val description: String = ""
 )

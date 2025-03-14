@@ -160,7 +160,6 @@ fun ActionButtons(
     toggleBookmark: () -> Unit,
     deleteConversationFromHistory: () -> Unit,
 ) {
-
     val bookmarkTint = if (isBookmarked) MaterialTheme.colorSchemeCustom.alwaysBlue else MaterialTheme.colorScheme.onBackground
     Row {
         IconButton(
