@@ -1,56 +1,30 @@
 <div align="center">  
- <img src="https://imgur.com/9atzLry.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
+ <img src="https://i.imgur.com/aBVZRPL.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
  <h1 style="display: inline-block; margin: 0; vertical-align: middle; text-align: center; width: 100%;">LLMS</h1>  
 </div>
 
 <p align="center">
-<img src="https://img.shields.io/badge/AI Horde-DC143C?logo=ai" alt="AI Horde">
+<img src="https://img.shields.io/badge/AI%20Horde-FF2222?logo=ai" alt="AI Horde">
 <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=kotlin&logoColor=white" alt="Kotlin">
 <img src="https://img.shields.io/badge/Kotlin%20Multiplatform-7F52FF?style=flat&logo=kotlin&logoColor=white" alt="Kotlin Multiplatform">
-<img src="https://img.shields.io/badge/Compose%20Multiplatform-3b71e8?logo=jetpack-compose&logoColor=white&color=3b71e8" alt="Compose Multiplatform">
-<img src="https://img.shields.io/badge/Ktor-00BFFF?logo=ktor&logoColor=white" alt="Ktor">
-<img src="https://img.shields.io/badge/Swift-FA7343?logo=swift&logoColor=white&color=FA7343" alt="Swift">
-<img src="https://img.shields.io/badge/Swift%20UI-FA7343?logo=swift&logoColor=white&color=blue" alt="Swift UI">
-<img src="https://img.shields.io/badge/Android%20Studio-A4C639?logo=android-studio&logoColor=white" alt="Android Studio" style="background-color:#A4C639;">
-<img src="https://img.shields.io/badge/Xcode-007ACC?logo=xcode&logoColor=white" alt="Xcode" style="background-color:#007ACC;">
-  <img src="https://img.shields.io/badge/Android-3DDC84?logo=android" alt="Android">
-  <img src="https://img.shields.io/badge/iOS-000000?logo=apple" alt="iOS">
-  <img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" alt="Linux">
-  <img src="https://img.shields.io/badge/Windows-0078D6?logo=windows" alt="Windows">
-<img src="https://img.shields.io/badge/macOS-C0C0C0?logo=apple" alt="macOS">
+<img src="https://img.shields.io/badge/Compose%20Multiplatform-4285F4?logo=jetpack-compose&logoColor=white" alt="Compose Multiplatform">
+<img src="https://img.shields.io/badge/Ktor-0099FF?logo=ktor&logoColor=white" alt="Ktor">
+<img src="https://img.shields.io/badge/WebAssembly-654FF0?logo=webassembly&logoColor=white" alt="WebAssembly">
+<img src="https://img.shields.io/badge/Android-3DDC84?logo=android" alt="Android">
+<img src="https://img.shields.io/badge/iOS-000000?logo=apple" alt="iOS">
+<img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" alt="Linux">
+<img src="https://img.shields.io/badge/Windows-0078D6?logo=windows" alt="Windows">
+<img src="https://img.shields.io/badge/macOS-808080?logo=apple" alt="macOS">
+</p>
 
+Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync across your devices.
 
-Discover the power of AI with our Kotlin Multiplatform app, where you can choose from many text and
-image models to boost your creativity. Pick the model that fits you, create unique texts or images,
-and keep everything safe and in sync on your devices
+## 🎨 Demo
+https://github.com/user-attachments/assets/288ee937-de49-4e9e-8d08-5b3558b1d9a9
 
-## 🌟 Features
+https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
 
-⚠️ **Note:** New models provided by Horde AI will be added as they become available. This ensures
-that the app remains up-to-date with the latest advancements in AI technology.
-
-### 📝 Text LLM Models
-
-- **Default Model:** The most advanced open source text model is chosen by default for generating
-  text.
-- **Selection:** Choose from a diverse range of open-source text models.
-- **Customization:** Enhance your experience by setting the maximum token context (512 to 2048
-  tokens) and controlling the output length (from 16 to 128 tokens).
-
-### 🖼️ Image Models
-
-- **Default Model:** The latest advanced generalistic image model is set as the default option for
-  image generation.
-- **Selection:** Explore image models across categories like Generalist, Anime, Furry, and Artistic.
-- **Customization:** Generate images using text prompts or existing images. Adjust settings such as
-  width, height, and apply specific filters like NSFW or exclude certain elements using negative
-  prompts.
-
-### 💾 Data Management
-
-- **Storage:** All generated texts and images are securely saved on your device.
-- **Synchronization:** Log in to synchronize your data across devices, ensuring no loss of data even
-  if the app is uninstalled.
+https://github.com/user-attachments/assets/69332b7b-be4d-4165-bec2-507f10e156f8
 
 ## 🤖 Horde AI Integration
 
@@ -60,27 +34,6 @@ generation workers. For more details, visit their [website](https://stablehorde.
 To interact with the models provided by Horde AI, the application utilizes the Horde AI REST API.
 For more information on how to use this API, please visit
 the [API documentation](https://stablehorde.net/api/).
-
-## 📚 Available Models
-
-- **Text Models**: Access a wide range of text
-  models  [here](https://github.com/Haidra-Org/AI-Horde-text-model-reference).
-- **Image Models**: Explore image models across various
-  categories  [here](https://github.com/Haidra-Org/AI-Horde-image-model-reference)
-
-## 🎮 Interactive Examples
-
-⚠️ **Note:** The IDs shown in the videos are for demonstration purposes only. Please visit and sign
-up at Horde AI to create your own unique ID.
-
-- **Chat with Llama 3-70B**: How would you use AI to help you be more creative every day?
-
-https://github.com/user-attachments/assets/454ce90c-2f63-4482-ba25-a9c902c43dc5
-
-- **Generate Image using AlbedoBase XL (SDXL)**: a dog takes a selfie in the forest, in the style of
-  fisheye effects, somber mood, strong facial expression, tilt shif.
-
-https://github.com/user-attachments/assets/476cc53f-f2e4-4d74-b45d-ab62f2482ef7
 
 ## 📈 Progress
 
