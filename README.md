@@ -20,11 +20,13 @@
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync across your devices.
 
 ## 🎨 Demo
-https://github.com/user-attachments/assets/288ee937-de49-4e9e-8d08-5b3558b1d9a9
+https://github.com/user-attachments/assets/6f407768-673f-4d4e-9382-eba3baa88875
 
 https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
 
-https://github.com/user-attachments/assets/69332b7b-be4d-4165-bec2-507f10e156f8
+https://github.com/user-attachments/assets/23265b4f-7d04-4bd1-94e8-598c73f2b17a
+
+
 
 ## 🤖 Horde AI Integration
 
