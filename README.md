@@ -19,6 +19,14 @@
 
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync across your devices.
 
+#### ✅ Available Releases  
+- Android app  
+- WebAssembly (check **About** section)  
+
+#### ⌛ Pending Releases  
+- macOS/iOS versions (*they will be available after creating Apple Developer account*)
+- .msi/.exe (Windows) and .deb (Linux) must be built on their respective operating systems. 🤝Contributions are welcome! See [build guidance here](https://stackoverflow.com/questions/78611814/how-to-take-output-for-desktop-and-web-in-compose-multiplatform) 
+
 ## 🎨 Demo
 https://github.com/user-attachments/assets/6f407768-673f-4d4e-9382-eba3baa88875
 
@@ -33,7 +41,7 @@ https://github.com/user-attachments/assets/23265b4f-7d04-4bd1-94e8-598c73f2b17a
 Horde AI is a powerful, crowdsourced platform that combines a distributed cluster of image and text
 generation workers. For more details, visit their [website](https://stablehorde.net/).
 
-To interact with the models provided by Horde AI, the application utilizes the Horde AI REST API.
+To interact with the models provided by Horde AI, the application uses the Horde AI REST API.
 For more information on how to use this API, please visit
 the [API documentation](https://stablehorde.net/api/).
 
@@ -43,12 +51,12 @@ Our development process is divided into three key steps:
 
 #### 1. Prototype with Fake Data 🚧
 
-- Status: 🔜 In Progress
+- Status: 🎯 Done
 - Building a basic prototype with fake data to test the app's structure and functionality.
 
 #### 2. Connect with Horde AI REST API 🌐
 
-- Status: ⏰ Not Started
+- Status: 🔄 in progress
 - Integrating the app with Horde AI's REST API to enable AI-powered features and data processing.
 
 #### 3. Implement User Authentication 🔒
@@ -72,7 +80,11 @@ Our development process is divided into three key steps:
 
 ## 📦 Libraries
 
-⚠️ **Note:** Libraries used will be listed here once the project is done
+- [Material 3 Adaptive](https://www.jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html#across-platforms) (creates adaptive UIs that will adapt themselves automatically)
+- [Compose Navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) (Navigates between composables with built-in infrastructure and features)
+- [Koin](https://insert-koin.io/docs/reference/koin-compose/compose/) (Dependency injection)
+- [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) (asynchronous or non-blocking)
+- [Coil](https://github.com/coil-kt/coil) (Image loading)
 
 ## 🤝 Contribution
 
@@ -88,7 +100,7 @@ Thank you for your interest in contributing to our project!
 ## 📜 License
 
 ```
-Copyright 2024 Yassine Abou 
+Copyright 2025 Yassine Abou 
   
 Licensed under the Apache License, Version 2.0 (the "License");  
 you may not use this file except in compliance with the License.  
