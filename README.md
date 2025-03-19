@@ -86,6 +86,35 @@ Our development process is divided into three key steps:
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) (asynchronous or non-blocking)
 - [Coil](https://github.com/coil-kt/coil) (Image loading)
 
+## Package Structure
+```  
+app/
+├── core/
+│   ├── di
+│   ├── navigation
+│   ├── sharedViews
+│   ├── theme
+│   └── util
+└── feature/
+    ├── chat/
+    │   ├── model
+    │   └── ui/
+    │       ├── chat
+    │       ├── history
+    │       ├── listDetailPane
+    │       └── view
+    ├── imagine/
+    │   ├── model
+    │   └── ui/
+    │       ├── supportingPane
+    │       ├── util
+    │       └── view
+    └── profile/
+        ├── model
+        └── ui/
+            └── view
+``` 
+
 ## 🤝 Contribution
 
 We welcome contributions to our project! Please follow these guidelines when submitting changes:
