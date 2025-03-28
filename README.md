@@ -19,13 +19,14 @@
 
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync across your devices.
 
-#### ✅ Available Releases  
+#### ✅ Available Releases
+- Macos
 - Android app  
 - WebAssembly (check **About** section)  
 
 #### ⌛ Pending Releases  
-- macOS/iOS versions (*they will be available after creating Apple Developer account*)
-- .msi/.exe (Windows) and .deb (Linux) must be built on their respective operating systems. 🤝Contributions are welcome! See [build guidance here](https://stackoverflow.com/questions/78611814/how-to-take-output-for-desktop-and-web-in-compose-multiplatform) 
+- iOS versions (*It will be available after creating Apple Developer account*)
+- .msi/.exe (Windows) and .deb (Linux) must be built on their respective operating systems. 🤝Contributions are welcome! See [guidance here](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-native-distribution.html#minification-and-obfuscation)
 
 ## 🎨 Demo
 https://github.com/user-attachments/assets/6f407768-673f-4d4e-9382-eba3baa88875
@@ -84,7 +85,7 @@ Our development process is divided into three key steps:
 - [Compose Navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) (Navigates between composables with built-in infrastructure and features)
 - [Koin](https://insert-koin.io/docs/reference/koin-compose/compose/) (Dependency injection)
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) (asynchronous or non-blocking)
-- [Coil](https://github.com/coil-kt/coil) (Image loading)
+- [Sketch](https://github.com/panpf/sketch) (Image loading)
 
 ## Package Structure
 ```  
