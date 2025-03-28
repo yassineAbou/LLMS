@@ -42,7 +42,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
+import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
@@ -215,7 +215,7 @@ private fun ImageReview(
         modifier = modifier.fillMaxSize()
     ) {
         AsyncImage(
-            model = url,
+            uri = url,
             contentDescription = "Wallpaper",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()

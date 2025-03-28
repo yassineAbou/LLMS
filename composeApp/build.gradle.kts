@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
-
 }
 
 kotlin {
@@ -63,7 +62,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.koin.android)
-            implementation(libs.ktor.client.android)
+            //implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -99,19 +98,15 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.dragselect)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor3)
 
-
+            implementation("io.github.panpf.sketch4:sketch-compose:4.0.4")
+            implementation("io.github.panpf.sketch4:sketch-http:4.0.4")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.ktor.client.java)
         }
         appleMain {
             dependencies {
-                implementation(libs.ktor.client.darwin)
             }
         }
     }

@@ -28,13 +28,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
 import com.dragselectcompose.core.DragSelectState
 import com.dragselectcompose.core.rememberDragSelectState
 import com.dragselectcompose.grid.LazyDragSelectVerticalGrid
 import com.dragselectcompose.grid.indicator.IndicatorIconDefaults
 import com.dragselectcompose.grid.indicator.SelectedIcon
 import com.dragselectcompose.grid.indicator.UnselectedIcon
+import com.github.panpf.sketch.AsyncImage
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
@@ -201,7 +201,7 @@ fun ImageItem(
     onClick: () -> Unit
 ) {
     AsyncImage(
-        model = image.url,
+        uri = image.url,
         contentScale = ContentScale.FillBounds,
         contentDescription = null,
         modifier = Modifier

@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import com.github.panpf.sketch.AsyncImage
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.sharedViews.PyramidTextFormat
 import org.yassineabou.playground.feature.imagine.model.UrlExample
@@ -44,7 +44,7 @@ fun ImageDialogContent(
     val scrollState = rememberScrollState(0)
     Box {
         AsyncImage(
-            model = urlExample.url,
+            uri = urlExample.url,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize(),
             contentDescription = "dialog image background"

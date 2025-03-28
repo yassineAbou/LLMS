@@ -46,7 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import com.github.panpf.sketch.AsyncImage
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_github
 import llms.composeapp.generated.resources.ic_linkedIn
@@ -177,7 +177,7 @@ private fun UserDetails(
 private fun UserThumbnailOrIcon(userUiState: UserUiState?) {
     if (userUiState?.thumbnailUrl != null) {
         AsyncImage(
-            model = userUiState.thumbnailUrl,
+            uri = userUiState.thumbnailUrl,
             contentDescription = "user thumbnail",
             contentScale = ContentScale.Crop,
             modifier = Modifier

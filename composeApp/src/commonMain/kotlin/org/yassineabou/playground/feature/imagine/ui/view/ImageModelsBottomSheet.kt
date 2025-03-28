@@ -1,10 +1,6 @@
 package org.yassineabou.playground.feature.imagine.ui.view
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,22 +39,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
-import kotlinx.coroutines.delay
-import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.app.core.util.draggableScrollModifier
+import com.github.panpf.sketch.AsyncImage
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
-import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
 import org.yassineabou.playground.app.core.sharedViews.ModelInformation
-import org.yassineabou.playground.app.core.sharedViews.ShimmerPlaceholder
+import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
+import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.draggableScrollModifier
 import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -293,40 +283,13 @@ private fun ImageModelExample(urlExample: UrlExample) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
     ) {
-        // Use the onState parameter to handle loading and error states
-        var isLoading by remember { mutableStateOf(true) }
-        var hasError by remember { mutableStateOf(false) }
-
         AsyncImage(
-            model = urlExample.url,
+            uri = urlExample.url,
             contentDescription = urlExample.description,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds,
-            onState = { state ->
-                isLoading = state is AsyncImagePainter.State.Loading
-                hasError = state is AsyncImagePainter.State.Error
-            }
+
         )
-
-        // Show shimmer placeholder while loading
-        if (isLoading) {
-            ShimmerPlaceholder()
-        }
-
-        // Show error placeholder if loading fails
-        if (hasError) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.LightGray),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Failed to load image",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
     }
 }
 
