@@ -38,7 +38,6 @@ import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
-import org.yassineabou.playground.feature.profile.ui.ProfileContent
 
 @Composable
 fun App() {
@@ -171,9 +170,6 @@ fun LLMsApp() {
                         popExitTransition = NavTransitions.slideLeftOut()
                     ) {
                         GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
-                    }
-                    composable(Screen.Profile.route) {
-                        ProfileContent()
                     }
                 }
             }

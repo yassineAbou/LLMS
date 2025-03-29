@@ -62,7 +62,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.koin.android)
-            //implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -99,8 +98,8 @@ kotlin {
 
             implementation(libs.dragselect)
 
-            implementation("io.github.panpf.sketch4:sketch-compose:4.0.4")
-            implementation("io.github.panpf.sketch4:sketch-http:4.0.4")
+            implementation(libs.sketch.compose)
+            implementation(libs.sketch.http)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

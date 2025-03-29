@@ -15,8 +15,6 @@ sealed class Screen(val route: String) {
 
     data object GeneratedImagesScreen : Screen("GeneratedImagesScreen")
 
-    data object Profile : Screen("Profile")
-
     data object FullScreenImage : Screen("FullScreenImage")
     
     data object ImageCreationTimerScreen : Screen("ImageCreationTimerScreen")
@@ -29,7 +27,6 @@ sealed class Screen(val route: String) {
                 ChatHistoryScreen.route -> ChatHistoryScreen
                 ImagineScreen.route -> ImagineScreen
                 GeneratedImagesScreen.route -> GeneratedImagesScreen
-                Profile.route -> Profile
                 FullScreenImage.route -> FullScreenImage
                 ImageCreationTimerScreen.route -> ImageCreationTimerScreen
                 else -> throw IllegalArgumentException("Unknown route: $route")
