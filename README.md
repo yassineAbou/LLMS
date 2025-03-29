@@ -17,25 +17,38 @@
 <img src="https://img.shields.io/badge/macOS-808080?logo=apple" alt="macOS">
 </p>
 
-Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images, and keep everything safe and in sync across your devices.
+Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images.
 
-#### ✅ Available Releases
-- Macos
-- Android app  
-- WebAssembly (check **About** section)  
+## Releases
+### ✅ Available Releases
+- **Android app**
+   
+  Download the latest version directly from the Release section
 
-#### ⌛ Pending Releases  
-- iOS versions (*It will be available after creating Apple Developer account*)
-- .msi/.exe (Windows) and .deb (Linux) must be built on their respective operating systems. 🤝Contributions are welcome! See [guidance here](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-native-distribution.html#minification-and-obfuscation)
+- **WebAssembly**
+  
+  Check the about section
+
+- **Desktop(macOS/Windows/Linux)**:
+  
+  1- Build the release by running this command:  
+     ```bash
+     ./gradlew packageReleaseDistributionForCurrentOS
+     ```
+  2- Find binaries in:  
+     ```bash
+     composeApp/build/compose/binaries/
+     ```
+### ⌛ Pending Releases
+- **iOS**:
+  
+  *Coming soon after Apple Developer account creation*
+
 
 ## 🎨 Demo
 https://github.com/user-attachments/assets/6f407768-673f-4d4e-9382-eba3baa88875
 
 https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
-
-https://github.com/user-attachments/assets/23265b4f-7d04-4bd1-94e8-598c73f2b17a
-
-
 
 ## 🤖 Horde AI Integration
 
@@ -60,10 +73,6 @@ Our development process is divided into three key steps:
 - Status: 🔄 in progress
 - Integrating the app with Horde AI's REST API to enable AI-powered features and data processing.
 
-#### 3. Implement User Authentication 🔒
-
-- Status: ⏰ Not Started
-- Securing the app with user authentication to enable personalized features and data.
 
 ## 🏗️ Architecture
 
@@ -110,10 +119,7 @@ app/
     │       ├── supportingPane
     │       ├── util
     │       └── view
-    └── profile/
-        ├── model
-        └── ui/
-            └── view
+    
 ``` 
 
 ## 🤝 Contribution
