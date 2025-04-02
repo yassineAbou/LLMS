@@ -3,6 +3,7 @@ package org.yassineabou.playground.feature.chat.model
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_alibaba_cloud
 import llms.composeapp.generated.resources.ic_deep_seek
+import llms.composeapp.generated.resources.ic_google
 import llms.composeapp.generated.resources.ic_meta
 import llms.composeapp.generated.resources.ic_mistral
 
@@ -54,6 +55,27 @@ object TextGenModelList {
             description = "Qwen2.5-7B is a causal language model with 7.61 billion parameters, pretrained on over 29 languages and various domains. It supports long-context, multilingual, and instruction-following generation, and can be fine-tuned for various tasks.",
             image = Res.drawable.ic_alibaba_cloud
         )
+    )
+
+    val google = listOf(
+        TextModel(
+            title = "Gemma-3-4B-It",
+            provider = "Google",
+            description = "Instruction-tuned 4B multimodal model with a 128K context window. Handles text/image input and generates text output across 140+ languages. Optimized for tasks like question answering and summarization while maintaining efficiency for deployment on consumer hardware.",
+            image = Res.drawable.ic_google,
+        ),
+        TextModel(
+            title = "Gemma-3-12B-It",
+            provider = "Google",
+            description = "Instruction-tuned 12B variant offering enhanced reasoning capabilities. Supports multimodal inputs (text/image) and multilingual output. Ideal for complex tasks like code generation and logical reasoning while retaining deployability on resource-constrained systems.",
+            image = Res.drawable.ic_google,
+        ),
+        TextModel(
+            title = "Gemma-3-27B-It",
+            provider = "Google",
+            description = "Largest instruction-tuned variant in the Gemma-3 family (27B parameters). Excels at advanced multimodal reasoning and long-context tasks (128K tokens). Supports 140+ languages and maintains usability on consumer-grade hardware despite its increased size.",
+            image = Res.drawable.ic_google,
+        ),
     )
 
     val mistral = listOf(

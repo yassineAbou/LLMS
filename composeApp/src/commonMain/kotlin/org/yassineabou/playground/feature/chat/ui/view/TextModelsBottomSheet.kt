@@ -114,6 +114,18 @@ fun TextModelsBottomSheet(
                         }
                         item {
                             TextModelType(
+                                type = "Google",
+                                textModelsList = TextGenModelList.google,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
                                 type = "Mistral",
                                 textModelsList = TextGenModelList.mistral,
                                 tempSelectedTextModel = tempSelectedTextModel,
