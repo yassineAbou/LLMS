@@ -62,6 +62,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -79,34 +80,37 @@ kotlin {
             implementation(compose.material3AdaptiveNavigationSuite)
             implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
 
-            implementation(libs.adaptive)
-            implementation(libs.adaptive.layout)
-            implementation(libs.adaptive.navigation)
-
-
-            implementation(libs.navigation.compose)
-
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.kotlinx.coroutines.core)
-
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-            implementation(libs.dragselect)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.adaptive)
+            implementation(libs.adaptive.layout)
+            implementation(libs.adaptive.navigation)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.sketch.compose)
             implementation(libs.sketch.http)
+
+            implementation(libs.dragselect)
+
+            implementation(libs.navigation.compose)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.cio)
         }
-        appleMain {
-            dependencies {
-            }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }

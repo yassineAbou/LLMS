@@ -39,6 +39,8 @@ import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
 
+// ./gradlew kotlinUpgradeYarnLock
+
 @Composable
 fun App() {
     KoinApplication(application = {
