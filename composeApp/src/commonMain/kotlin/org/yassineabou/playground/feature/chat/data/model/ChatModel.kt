@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.chat.model
+package org.yassineabou.playground.feature.chat.data.model
 
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

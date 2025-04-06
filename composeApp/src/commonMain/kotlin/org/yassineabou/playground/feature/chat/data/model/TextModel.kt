@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.chat.model
+package org.yassineabou.playground.feature.chat.data.model
 
 import org.jetbrains.compose.resources.DrawableResource
 import org.yassineabou.playground.feature.imagine.model.IdGenerator

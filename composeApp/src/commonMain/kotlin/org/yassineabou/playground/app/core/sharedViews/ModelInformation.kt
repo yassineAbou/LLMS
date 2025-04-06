@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.feature.chat.model.TextModel
+import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.ui.view.ImageExamplesCarousel
 import kotlin.time.Duration.Companion.seconds

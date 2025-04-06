@@ -12,27 +12,22 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
-import org.yassineabou.playground.feature.chat.model.ChatHistory
-import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
-import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
+import org.yassineabou.playground.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent
 import org.yassineabou.playground.feature.chat.ui.view.HistoryHorizontalPager
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
+import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
 
 
 @Composable

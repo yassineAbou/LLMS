@@ -1,8 +1,6 @@
 package org.yassineabou.playground.feature.chat.ui.view
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -20,7 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.feature.chat.model.historyTabRows
+import org.yassineabou.playground.feature.chat.data.model.historyTabRows
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.history.RecentChatHistoryContent
 import org.yassineabou.playground.feature.chat.ui.history.SavedChatHistoryContent

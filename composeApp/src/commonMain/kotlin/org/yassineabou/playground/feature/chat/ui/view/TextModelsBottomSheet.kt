@@ -46,8 +46,8 @@ import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
 import org.yassineabou.playground.app.core.sharedViews.ModelInformation
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.draggableScrollModifier
-import org.yassineabou.playground.feature.chat.model.TextGenModelList
-import org.yassineabou.playground.feature.chat.model.TextModel
+import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
+import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

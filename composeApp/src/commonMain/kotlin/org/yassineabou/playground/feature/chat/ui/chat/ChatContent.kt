@@ -43,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
-import org.yassineabou.playground.feature.chat.model.ChatMessage
-import org.yassineabou.playground.feature.chat.model.TextModel
+import org.yassineabou.playground.feature.chat.data.model.ChatMessage
+import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble

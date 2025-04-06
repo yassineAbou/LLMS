@@ -31,7 +31,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.playground.feature.imagine.ui.view.NoContentMessage
-import org.yassineabou.playground.feature.chat.model.ChatHistory
+import org.yassineabou.playground.feature.chat.data.model.ChatHistory
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.chat.ChatContent
 import org.yassineabou.playground.feature.chat.ui.view.ClearHistoryDialogContent

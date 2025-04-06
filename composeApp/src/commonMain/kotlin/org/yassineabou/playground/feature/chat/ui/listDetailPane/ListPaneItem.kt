@@ -28,14 +28,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.feature.chat.model.ChatHistory
+import org.yassineabou.playground.feature.chat.data.model.ChatHistory
 
 @Composable
 fun ListPaneItem(
     chat: ChatHistory,
     selected: Boolean,
     onClick: () -> Unit,
-    onPinClick: () -> Unit ,
+    onPinClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }

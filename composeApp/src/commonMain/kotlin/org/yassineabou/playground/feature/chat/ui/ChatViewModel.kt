@@ -9,13 +9,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.feature.chat.model.ChatHistory
-import org.yassineabou.playground.feature.chat.model.ChatMessage
-import org.yassineabou.playground.feature.chat.model.TextGenModelList
-import org.yassineabou.playground.feature.chat.model.TextModel
-import org.yassineabou.playground.feature.chat.model.generateLongResponse
+import org.yassineabou.playground.feature.chat.data.model.ChatHistory
+import org.yassineabou.playground.feature.chat.data.model.ChatMessage
+import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
+import org.yassineabou.playground.feature.chat.data.model.TextModel
+import org.yassineabou.playground.feature.chat.data.model.generateLongResponse
+import org.yassineabou.playground.feature.chat.data.network.AIHordeRepository
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewModel() {
 
     // region State Properties
     // ========================================================================================

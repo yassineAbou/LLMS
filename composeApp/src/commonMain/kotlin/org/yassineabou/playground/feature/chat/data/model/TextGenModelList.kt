@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.chat.model
+package org.yassineabou.playground.feature.chat.data.model
 
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_alibaba_cloud
