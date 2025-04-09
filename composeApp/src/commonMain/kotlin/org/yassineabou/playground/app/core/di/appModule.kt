@@ -20,6 +20,7 @@ val provideDataModule = module {
             install(ContentNegotiation) {
                 json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
             }
+
         }
     }
     single<AIHordeApi> { KtorAIHordeApi(get()) }

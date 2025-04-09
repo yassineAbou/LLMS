@@ -3,7 +3,6 @@ package org.yassineabou.playground.feature.chat.data.model
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-
 data class ChatMessage(
     val message: String,
     val isUser: Boolean

@@ -104,6 +104,8 @@ kotlin {
 
             implementation(libs.navigation.compose)
 
+            implementation("co.touchlab:kermit:2.0.4")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -5,15 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ClientRequestException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.yassineabou.playground.feature.chat.data.model.ApiError
 import org.yassineabou.playground.feature.chat.data.model.ChatHistory
 import org.yassineabou.playground.feature.chat.data.model.ChatMessage
 import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
-import org.yassineabou.playground.feature.chat.data.model.generateLongResponse
 import org.yassineabou.playground.feature.chat.data.network.AIHordeRepository
 
 class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewModel() {
@@ -38,6 +42,7 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     /** Current active chat conversation messages */
     private val _currentChatMessages = mutableStateListOf<ChatMessage>()
     val currentChatMessages: SnapshotStateList<ChatMessage> = _currentChatMessages
+    
 
     // ========================================================================================
     //                            Chat History State
@@ -63,11 +68,11 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     //                          Response Generation State
     // ========================================================================================
 
-    /** Full response being generated (simulated) */
-    private var fullResponse: String = ""
-
     /** Flag indicating if response generation is in progress */
     val isGenerating = mutableStateOf(false)
+
+    /** API Key management - Replace with secure storage implementation */
+    private var apiKey: String = "0000000000"
     // endregion
 
     // region Text Model Management
@@ -143,29 +148,65 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     // ========================================================================================
 
     private fun initiateResponseGeneration() {
-        fullResponse = generateLongResponse()
+        val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
+        val modelTitle = _selectedTextModel.value.title
+
         _currentChatMessages.add(ChatMessage("", false))
         isGenerating.value = true
 
         viewModelScope.launch {
             try {
-                generateResponseIncrementally(_currentChatMessages.lastIndex)
+                val result = aiHordeRepository.generateText(
+                    apiKey = apiKey,
+                    prompt = userMessage,
+                   // modelTitle = "gpt2"
+                )
+
+                when {
+                    result.isSuccess -> {
+                        val fullResponse = result.getOrNull() ?: ""
+                        simulateTypingEffect(fullResponse, _currentChatMessages.lastIndex)
+                    }
+                    result.isFailure -> {
+                        handleGenerationError(result.exceptionOrNull())
+                    }
+                }
+            } catch (e: Exception) {
+                handleGenerationError(e)
             } finally {
-                resetGenerationState()
+                isGenerating.value = false
             }
         }
     }
 
-    private suspend fun generateResponseIncrementally(aiMessageIndex: Int) {
-        for (i in fullResponse.indices) {
+    private suspend fun simulateTypingEffect(response: String, aiMessageIndex: Int) {
+        for (i in response.indices) {
             if (!isGenerating.value) break
-            _currentChatMessages[aiMessageIndex] = ChatMessage(fullResponse.take(i + 1), false)
-            delay(5)
+            _currentChatMessages[aiMessageIndex] =
+                ChatMessage(response.take(i + 1), false)
+            delay(50) // Natural typing speed
         }
     }
 
-    private fun resetGenerationState() {
-        isGenerating.value = false
+    private suspend fun handleGenerationError(exception: Throwable?) {
+        val errorMessage = when (exception) {
+            is ClientRequestException -> {
+                // Use Default dispatcher for JSON parsing
+                withContext(Dispatchers.Default) {
+                    val error = exception.response.body<ApiError>()
+                    "API Error (${error?.errorCode}): ${error?.message}"
+                }
+            }
+            else -> exception?.message ?: "Unknown error occurred"
+        }
+
+        // Update UI state on Main dispatcher
+        withContext(Dispatchers.Main) {
+            _currentChatMessages.apply {
+                removeLast()
+                add(ChatMessage("Error: $errorMessage", false))
+            }
+        }
     }
     // endregion
 
