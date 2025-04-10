@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,11 +41,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.chat.data.model.ChatMessage
 import org.yassineabou.playground.feature.chat.data.model.TextModel
+import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
@@ -66,6 +69,7 @@ fun ChatContent(
     var selectModelClicked by remember { mutableStateOf(false) }
     var attachButtonClicked by remember { mutableStateOf(false) }
     val chatMessages = chatViewModel.currentChatMessages
+    val textGenerationState by  chatViewModel.textGenerationState.collectAsStateWithLifecycle()
 
     Box(modifier = modifier.fillMaxSize()) {
         if (showAppBar) {
@@ -99,7 +103,8 @@ fun ChatContent(
 
         ChatMessagesList(
             chatMessages = chatMessages,
-            selectedTextModel = selectedTextModel
+            selectedTextModel = selectedTextModel,
+            textGenerationState = textGenerationState
         )
 
         AskAnythingField(
@@ -173,6 +178,7 @@ private fun ScrollToBottomButton(
 
 @Composable
 private fun ChatMessagesList(
+    textGenerationState: TextGenerationState,
     chatMessages: List<ChatMessage>,
     selectedTextModel: TextModel,
 ) {
@@ -198,11 +204,19 @@ private fun ChatMessagesList(
                 .fillMaxSize()
                 .padding(top = 70.dp, bottom = 80.dp)
         ) {
-            items(chatMessages) { message ->
+            itemsIndexed(chatMessages) { index, message ->
+                val isLastMessage = index == chatMessages.lastIndex
+                val isLoading = isLastMessage && textGenerationState is TextGenerationState.Loading
+                val errorMessage = if (isLastMessage && textGenerationState is TextGenerationState.Failure) {
+                    textGenerationState.message
+                } else null
+
                 ChatBubble(
                     message = message.message,
                     isUser = message.isUser,
-                    aiIcon = selectedTextModel.image
+                    aiIcon = selectedTextModel.image,
+                    isLoading = isLoading,
+                    errorMessage = errorMessage
                 )
             }
         }

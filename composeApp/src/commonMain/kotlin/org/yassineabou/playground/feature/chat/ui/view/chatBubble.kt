@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,7 +30,9 @@ import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 fun ChatBubble(
     message: String,
     isUser: Boolean,
-    aiIcon: DrawableResource
+    aiIcon: DrawableResource,
+    isLoading: Boolean,
+    errorMessage: String?
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
@@ -48,11 +53,15 @@ fun ChatBubble(
 
             ChatBubbleIcon(isUser = isUser, aiIcon = aiIcon)
 
+            when {
+                isLoading -> LoadingIndicator()
+                errorMessage != null -> ErrorMessage(errorMessage)
+                else -> ChatBubbleMessage(
+                    message = message,
+                    isUser = isUser
+                )
+            }
 
-            ChatBubbleMessage(
-                message = message,
-                isUser = isUser
-            )
         }
     }
 }
@@ -99,9 +108,54 @@ private fun AiProviderIcon(aiIcon: DrawableResource) {
 }
 
 @Composable
+private fun LoadingIndicator() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            strokeWidth = 2.dp,
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite
+        )
+        Text(
+            text = "Generating...",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite
+        )
+    }
+}
+
+@Composable
+private fun ErrorMessage(message: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.errorContainer,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(12.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.ErrorOutline,
+            contentDescription = "Error",
+            tint = MaterialTheme.colorScheme.error
+        )
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+@Composable
 private fun ChatBubbleMessage(
     message: String,
-    isUser: Boolean
+    isUser: Boolean,
 ) {
     if (isUser) {
         UserMessage(message = message)
@@ -126,7 +180,6 @@ private fun UserMessage(message: String) {
 private fun AiMessage(
     message: String
 ) {
-
     Text(
         text = message,
         color = MaterialTheme.colorSchemeCustom.alwaysWhite,
