@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -18,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
 import androidx.compose.material.icons.filled.Stop
@@ -51,7 +49,6 @@ import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
-import org.yassineabou.playground.feature.chat.ui.view.ChooseActionBottomSheet
 import org.yassineabou.playground.feature.chat.ui.view.SelectedTextModel
 import org.yassineabou.playground.feature.chat.ui.view.TextModelsBottomSheet
 
@@ -67,9 +64,9 @@ fun ChatContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     var selectModelClicked by remember { mutableStateOf(false) }
-    var attachButtonClicked by remember { mutableStateOf(false) }
     val chatMessages = chatViewModel.currentChatMessages
     val textGenerationState by  chatViewModel.textGenerationState.collectAsStateWithLifecycle()
+    val isGenerating = chatViewModel.isGenerating.value
 
     Box(modifier = modifier.fillMaxSize()) {
         if (showAppBar) {
@@ -104,12 +101,12 @@ fun ChatContent(
         ChatMessagesList(
             chatMessages = chatMessages,
             selectedTextModel = selectedTextModel,
-            textGenerationState = textGenerationState
+            textGenerationState = textGenerationState,
+            isGenerating = isGenerating
         )
 
         AskAnythingField(
             modifier = Modifier.align(Alignment.BottomStart),
-            onAttachClick = { attachButtonClicked = true },
             onSendClick = {
                 if (chatViewModel.isGenerating.value) {
                     chatViewModel.stopGeneration()
@@ -132,13 +129,6 @@ fun ChatContent(
                 chatViewModel = chatViewModel,
                 onDismissRequest = { selectModelClicked = false },
                 onAuthenticated = { selectModelClicked = false }
-            )
-        }
-
-        if (attachButtonClicked) {
-            ChooseActionBottomSheet(
-                onActionSelected = { attachButtonClicked = false },
-                onDismissRequest = { attachButtonClicked = false }
             )
         }
     }
@@ -181,6 +171,7 @@ private fun ChatMessagesList(
     textGenerationState: TextGenerationState,
     chatMessages: List<ChatMessage>,
     selectedTextModel: TextModel,
+    isGenerating: Boolean
 ) {
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -207,16 +198,14 @@ private fun ChatMessagesList(
             itemsIndexed(chatMessages) { index, message ->
                 val isLastMessage = index == chatMessages.lastIndex
                 val isLoading = isLastMessage && textGenerationState is TextGenerationState.Loading
-                val errorMessage = if (isLastMessage && textGenerationState is TextGenerationState.Failure) {
-                    textGenerationState.message
-                } else null
+                val isLastAiMessage = isLastMessage && !message.isUser
 
                 ChatBubble(
                     message = message.message,
                     isUser = message.isUser,
                     aiIcon = selectedTextModel.image,
                     isLoading = isLoading,
-                    errorMessage = errorMessage
+                    isGenerating = if (isLastAiMessage) isGenerating else false
                 )
             }
         }
@@ -257,7 +246,6 @@ fun AskAnythingField(
     text: String,
     isGenerating: Boolean,
     modifier: Modifier = Modifier,
-    onAttachClick: () -> Unit,
     onSendClick: () -> Unit,
     onTextChange: (String) -> Unit
 ) {
@@ -283,9 +271,6 @@ fun AskAnythingField(
                     color = MaterialTheme.colorScheme.onBackground
                 )
             },
-            leadingIcon = {
-                AttachIcon(onAttachClick = onAttachClick)
-            },
             trailingIcon = {
                 if (text.isNotEmpty()) {
                     ClearIcon(
@@ -307,18 +292,6 @@ fun AskAnythingField(
             onClick = onSendClick,
         )
     }
-}
-
-@Composable
-private fun AttachIcon(
-    onAttachClick: () -> Unit
-) = IconButton(onAttachClick) {
-    Icon(
-        imageVector = Icons.Filled.AttachFile,
-        contentDescription = "Attachment",
-        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.size(20.dp)
-    )
 }
 
 @Composable

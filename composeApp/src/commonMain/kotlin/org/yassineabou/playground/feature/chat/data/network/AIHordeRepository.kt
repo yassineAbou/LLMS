@@ -1,6 +1,7 @@
 package org.yassineabou.playground.feature.chat.data.network
 
 import co.touchlab.kermit.Logger
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import org.yassineabou.playground.feature.chat.data.model.GenerationParams
 import org.yassineabou.playground.feature.chat.data.model.GenerationRequest
@@ -44,4 +45,5 @@ class AIHordeRepository(private val aiHordeApi: AIHordeApi) {
             }
         }
     }
+
 }

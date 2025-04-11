@@ -38,7 +38,7 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     /** Current active chat conversation messages */
     private val _currentChatMessages = mutableStateListOf<ChatMessage>()
     val currentChatMessages: SnapshotStateList<ChatMessage> = _currentChatMessages
-    
+
 
     // ========================================================================================
     //                            Chat History State
@@ -139,7 +139,18 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
      * Stops ongoing response generation
      */
     fun stopGeneration() {
-        isGenerating.value = false
+        if (isGenerating.value) {
+            isGenerating.value = false
+            if (textGenerationState.value is TextGenerationState.Loading) {
+                _textGenerationState.value = TextGenerationState.Failure()
+                val aiMessageIndex = _currentChatMessages.lastIndex
+                _currentChatMessages[aiMessageIndex] = ChatMessage(
+                    message = (textGenerationState.value as TextGenerationState.Failure).message,
+                    isUser = false
+                )
+                _textGenerationState.value = TextGenerationState.Success("")
+            }
+        }
     }
 
     // ========================================================================================
@@ -170,10 +181,15 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
                     },
                     onFailure = { exception ->
                         _textGenerationState.value = TextGenerationState.Failure()
+                        _currentChatMessages[aiMessageIndex] = ChatMessage(
+                            message = (textGenerationState.value as TextGenerationState.Failure).message,
+                            isUser = false
+                        )
                     }
                 )
             } finally {
                 isGenerating.value = false  // Add this
+                _textGenerationState.value = TextGenerationState.Success("")
             }
         }
     }

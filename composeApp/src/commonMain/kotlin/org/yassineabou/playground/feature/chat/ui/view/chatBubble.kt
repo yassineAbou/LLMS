@@ -1,20 +1,23 @@
 package org.yassineabou.playground.feature.chat.ui.view
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.Autorenew
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.app.core.util.Animations
 
 
 @Composable
@@ -32,21 +36,21 @@ fun ChatBubble(
     isUser: Boolean,
     aiIcon: DrawableResource,
     isLoading: Boolean,
-    errorMessage: String?
+    isGenerating: Boolean
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp)
                 .background(
                     color = if (isUser) MaterialTheme.colorScheme.surface else MaterialTheme.colorSchemeCustom.alwaysBlue.copy(
                         alpha = 0.5f
                     ),
                 )
-                .padding(16.dp),
+            ,
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -55,10 +59,10 @@ fun ChatBubble(
 
             when {
                 isLoading -> LoadingIndicator()
-                errorMessage != null -> ErrorMessage(errorMessage)
                 else -> ChatBubbleMessage(
                     message = message,
-                    isUser = isUser
+                    isUser = isUser,
+                    isGenerating = isGenerating
                 )
             }
 
@@ -80,6 +84,7 @@ private fun ChatBubbleIcon(
 
 @Composable
 private fun UserIcon() {
+
     Box(
         modifier = Modifier
             .size(40.dp)
@@ -87,7 +92,7 @@ private fun UserIcon() {
                 MaterialTheme.colorScheme.background,
                 CircleShape
             ) // Background for the icon
-            .padding(8.dp),
+            .padding(end = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -100,11 +105,18 @@ private fun UserIcon() {
 
 @Composable
 private fun AiProviderIcon(aiIcon: DrawableResource) {
-    Image(
-        painter = painterResource(aiIcon),
-        contentDescription = "AI Icon",
-        modifier = Modifier.size(30.dp)
-    )
+    Box(
+        modifier = Modifier
+            .size(30.dp)
+            .padding(start = 4.dp, top = 4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(aiIcon),
+            contentDescription = "AI Icon"
+        )
+    }
+
 }
 
 @Composable
@@ -127,41 +139,17 @@ private fun LoadingIndicator() {
 }
 
 @Composable
-private fun ErrorMessage(message: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.errorContainer,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(12.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Default.ErrorOutline,
-            contentDescription = "Error",
-            tint = MaterialTheme.colorScheme.error
-        )
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.error
-        )
-    }
-}
-
-@Composable
 private fun ChatBubbleMessage(
     message: String,
     isUser: Boolean,
+    isGenerating: Boolean
 ) {
     if (isUser) {
         UserMessage(message = message)
     } else {
         AiMessage(
-            message = message
+            message = message,
+            isGenerating = isGenerating
         )
     }
 }
@@ -178,12 +166,48 @@ private fun UserMessage(message: String) {
 
 @Composable
 private fun AiMessage(
-    message: String
+    message: String,
+    isGenerating: Boolean
 ) {
-    Text(
-        text = message,
-        color = MaterialTheme.colorSchemeCustom.alwaysWhite,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 8.dp)
-    )
+    Column(
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = message,
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        AnimatedVisibility(
+            visible = !isGenerating,
+            enter = Animations.slideFadeIn(),
+            exit = Animations.slideFadeOut()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(
+                    onClick = { /* Handle copy action */ }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ContentCopy,
+                        contentDescription = "Copy",
+                        tint = MaterialTheme.colorSchemeCustom.alwaysWhite
+                    )
+                }
+                IconButton(
+                    onClick = { /* Handle copy action */ }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Autorenew,
+                        contentDescription = "Regenerate",
+                        tint = MaterialTheme.colorSchemeCustom.alwaysWhite
+                    )
+                }
+            }
+        }
+    }
 }
