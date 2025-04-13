@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ContentCopy
@@ -23,9 +24,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.playground.app.core.sharedViews.SnackbarController
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
 
@@ -169,16 +173,21 @@ private fun AiMessage(
     message: String,
     isGenerating: Boolean
 ) {
+    val clipboardManager = LocalClipboardManager.current
+    val snackbarController = SnackbarController.current
+
     Column(
         modifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = message,
-            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
-            style = MaterialTheme.typography.titleMedium
-        )
+        SelectionContainer {
+            Text(
+                text = message,
+                color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
 
         AnimatedVisibility(
             visible = !isGenerating,
@@ -190,7 +199,10 @@ private fun AiMessage(
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(
-                    onClick = { /* Handle copy action */ }
+                    onClick = {
+                        clipboardManager.setText(AnnotatedString(message))
+                        snackbarController.showMessage("Copied to clipboard")
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Default.ContentCopy,
@@ -198,9 +210,7 @@ private fun AiMessage(
                         tint = MaterialTheme.colorSchemeCustom.alwaysWhite
                     )
                 }
-                IconButton(
-                    onClick = { /* Handle copy action */ }
-                ) {
+                IconButton(onClick = { } ) {
                     Icon(
                         imageVector = Icons.Default.Autorenew,
                         contentDescription = "Regenerate",
