@@ -86,60 +86,12 @@ fun TextModelsBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight()
-                            .padding(bottom = 16.dp)
+                            .padding(bottom = 60.dp)
                     ) {
                         item {
                             TextModelType(
-                                type = "DeepSeek",
-                                textModelsList = TextGenModelList.deepSeek,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Alibaba Cloud",
-                                textModelsList = TextGenModelList.alibabaCloud,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Google",
-                                textModelsList = TextGenModelList.google,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Mistral",
-                                textModelsList = TextGenModelList.mistral,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Meta",
-                                textModelsList = TextGenModelList.meta,
+                                type = "Gemma",
+                                textModelsList = TextGenModelList.gemma,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->

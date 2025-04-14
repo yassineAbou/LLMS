@@ -9,6 +9,6 @@ data class TextModel(
     val title: String,
     val image: DrawableResource,
     val description: String,
-    val provider: String
+    val name: String
 )
 

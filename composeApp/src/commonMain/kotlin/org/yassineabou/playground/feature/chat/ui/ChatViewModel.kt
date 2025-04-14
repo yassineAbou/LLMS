@@ -24,11 +24,11 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     // ========================================================================================
 
     /** Holds the temporarily selected model before confirmation */
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepSeek.first())
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.gemma.first())
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
 
     /** Currently active text model used for generation */
-    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepSeek.first())
+    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.gemma.first())
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel
 
     // ========================================================================================
