@@ -210,13 +210,6 @@ private fun AiMessage(
                         tint = MaterialTheme.colorSchemeCustom.alwaysWhite
                     )
                 }
-                IconButton(onClick = { } ) {
-                    Icon(
-                        imageVector = Icons.Default.Autorenew,
-                        contentDescription = "Regenerate",
-                        tint = MaterialTheme.colorSchemeCustom.alwaysWhite
-                    )
-                }
             }
         }
     }
