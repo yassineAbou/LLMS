@@ -5,18 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.feature.chat.data.model.ChatHistory
-import org.yassineabou.playground.feature.chat.data.model.ChatMessage
+import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
-import org.yassineabou.playground.feature.chat.data.network.AIHordeRepository
+import org.yassineabou.playground.feature.chat.data.network.ChutesAiRepository
 import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
+import kotlin.coroutines.cancellation.CancellationException
 
-class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewModel() {
+class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewModel() {
 
     // region State Properties
     // ========================================================================================
@@ -24,11 +24,11 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     // ========================================================================================
 
     /** Holds the temporarily selected model before confirmation */
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.gemma.first())
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepseek.first())
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
 
     /** Currently active text model used for generation */
-    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.gemma.first())
+    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepseek.first())
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel
 
     // ========================================================================================
@@ -36,8 +36,8 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     // ========================================================================================
 
     /** Current active chat conversation messages */
-    private val _currentChatMessages = mutableStateListOf<ChatMessage>()
-    val currentChatMessages: SnapshotStateList<ChatMessage> = _currentChatMessages
+    private val _currentChatMessages = mutableStateListOf<ChatMessageModel>()
+    val currentChatMessages: SnapshotStateList<ChatMessageModel> = _currentChatMessages
 
 
     // ========================================================================================
@@ -68,7 +68,7 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
     val isGenerating = mutableStateOf(false)
 
     /** API Key management - Replace with secure storage implementation */
-    private var apiKey: String = "0000000000"
+    private var apiKey: String = ""
 
     private val _textGenerationState = MutableStateFlow<TextGenerationState>(TextGenerationState.Success(""))
     val textGenerationState: MutableStateFlow<TextGenerationState> = _textGenerationState
@@ -131,7 +131,7 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
      */
     fun sendMessage(message: String, isUser: Boolean = true) {
         if (isGenerating.value) stopGeneration()
-        _currentChatMessages.add(ChatMessage(message, isUser))
+        _currentChatMessages.add(ChatMessageModel(message, isUser))
         if (isUser) initiateResponseGeneration()
     }
 
@@ -144,7 +144,7 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
             if (textGenerationState.value is TextGenerationState.Loading) {
                 _textGenerationState.value = TextGenerationState.Failure()
                 val aiMessageIndex = _currentChatMessages.lastIndex
-                _currentChatMessages[aiMessageIndex] = ChatMessage(
+                _currentChatMessages[aiMessageIndex] = ChatMessageModel(
                     message = (textGenerationState.value as TextGenerationState.Failure).message,
                     isUser = false
                 )
@@ -159,9 +159,9 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
 
     private fun initiateResponseGeneration() {
         val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
-        val modelTitle = _selectedTextModel.value.title
+        val chutesName = _selectedTextModel.value.chutesName
 
-        _currentChatMessages.add(ChatMessage("", false))
+        _currentChatMessages.add(ChatMessageModel("", false))
         val aiMessageIndex = _currentChatMessages.lastIndex
 
         isGenerating.value = true  // Add this
@@ -170,36 +170,35 @@ class ChatViewModel(private val aiHordeRepository: AIHordeRepository) : ViewMode
             _textGenerationState.value = TextGenerationState.Loading
 
             try {
-                aiHordeRepository.generateText(
+                chutesAiRepository.streamChat(
                     apiKey = apiKey,
                     prompt = userMessage,
-                    //modelTitle = modelTitle  // Uncomment this
-                ).fold(
-                    onSuccess = { generatedText ->
-                        _textGenerationState.value = TextGenerationState.Success(generatedText)
-                        simulateTypingEffect(generatedText, aiMessageIndex)
-                    },
-                    onFailure = { exception ->
-                        _textGenerationState.value = TextGenerationState.Failure()
-                        _currentChatMessages[aiMessageIndex] = ChatMessage(
-                            message = (textGenerationState.value as TextGenerationState.Failure).message,
-                            isUser = false
-                        )
-                    }
-                )
+                    model = chutesName
+                ).collect { chunk ->
+                    val currentMessage = _currentChatMessages[aiMessageIndex]
+                    _currentChatMessages[aiMessageIndex] = currentMessage.copy(
+                        message = currentMessage.message + chunk
+                    )
+                }
+
+                // Stream completed successfully
+                _textGenerationState.value = TextGenerationState.Success("")
+            } catch (e: Exception) {
+                if (e !is CancellationException) {
+                    // Handle errors only if not cancelled
+                    val errorMessage = e.message ?: "Generation failed"
+                    _textGenerationState.value = TextGenerationState.Failure(errorMessage)
+                    // Update message with error indicator
+                    _currentChatMessages[aiMessageIndex] = ChatMessageModel(
+                        message = "⚠️ $errorMessage",
+                        isUser = false
+                    )
+                    _textGenerationState.value = TextGenerationState.Success("")
+                }
             } finally {
-                isGenerating.value = false  // Add this
+                isGenerating.value = false
                 _textGenerationState.value = TextGenerationState.Success("")
             }
-        }
-    }
-
-    private suspend fun simulateTypingEffect(response: String, aiMessageIndex: Int) {
-        for (i in response.indices) {
-            if (!isGenerating.value) break
-            _currentChatMessages[aiMessageIndex] =
-                ChatMessage(response.take(i + 1), false)
-            delay(12) // Natural typing speed
         }
     }
 

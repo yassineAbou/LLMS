@@ -43,7 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
-import org.yassineabou.playground.feature.chat.data.model.ChatMessage
+import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
@@ -169,7 +169,7 @@ private fun ScrollToBottomButton(
 @Composable
 private fun ChatMessagesList(
     textGenerationState: TextGenerationState,
-    chatMessages: List<ChatMessage>,
+    chatMessages: List<ChatMessageModel>,
     selectedTextModel: TextModel,
     isGenerating: Boolean
 ) {

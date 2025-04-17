@@ -86,12 +86,84 @@ fun TextModelsBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight()
-                            .padding(bottom = 60.dp)
+                            .padding(bottom = 12.dp)
                     ) {
+                        item {
+                            TextModelType(
+                                type = "Deepseek",
+                                textModelsList = TextGenModelList.deepseek,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Qwen",
+                                textModelsList = TextGenModelList.qwen,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
                         item {
                             TextModelType(
                                 type = "Gemma",
                                 textModelsList = TextGenModelList.gemma,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Open R1",
+                                textModelsList = TextGenModelList.openR1,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Mistral",
+                                textModelsList = TextGenModelList.mistral,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Llama",
+                                textModelsList = TextGenModelList.llama,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Others",
+                                textModelsList = TextGenModelList.others,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->

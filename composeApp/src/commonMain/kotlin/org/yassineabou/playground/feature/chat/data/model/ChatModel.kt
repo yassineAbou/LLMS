@@ -3,7 +3,7 @@ package org.yassineabou.playground.feature.chat.data.model
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-data class ChatMessage(
+data class ChatMessageModel(
     val message: String,
     val isUser: Boolean
 )
@@ -14,7 +14,7 @@ data class ChatHistory @OptIn(ExperimentalUuidApi::class) constructor(
     val textModel: TextModel,
     var isBookmarked: Boolean = false,
     var id: String = Uuid.toString(),
-    var chatMessages: List<ChatMessage> = emptyList()
+    var chatMessages: List<ChatMessageModel> = emptyList()
 )
 
 fun generateLongResponse(): String {
