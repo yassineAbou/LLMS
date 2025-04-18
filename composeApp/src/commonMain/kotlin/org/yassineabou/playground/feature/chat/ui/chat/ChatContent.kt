@@ -66,7 +66,7 @@ fun ChatContent(
     var selectModelClicked by remember { mutableStateOf(false) }
     val chatMessages = chatViewModel.currentChatMessages
     val textGenerationState by  chatViewModel.textGenerationState.collectAsStateWithLifecycle()
-    val isGenerating = chatViewModel.isGenerating.value
+    val isLoading = textGenerationState is TextGenerationState.Loading
 
     Box(modifier = modifier.fillMaxSize()) {
         if (showAppBar) {
@@ -102,13 +102,13 @@ fun ChatContent(
             chatMessages = chatMessages,
             selectedTextModel = selectedTextModel,
             textGenerationState = textGenerationState,
-            isGenerating = isGenerating
+            regenerateResponse = { index -> chatViewModel.regenerateResponse(index) }
         )
 
         AskAnythingField(
             modifier = Modifier.align(Alignment.BottomStart),
             onSendClick = {
-                if (chatViewModel.isGenerating.value) {
+                if (isLoading) {
                     chatViewModel.stopGeneration()
                 } else {
                     if (text.isNotEmpty()) {
@@ -121,7 +121,7 @@ fun ChatContent(
             },
             text = text,
             onTextChange = { text = it },
-            isGenerating = chatViewModel.isGenerating.value
+            isLoading = isLoading
         )
 
         if (selectModelClicked) {
@@ -171,7 +171,7 @@ private fun ChatMessagesList(
     textGenerationState: TextGenerationState,
     chatMessages: List<ChatMessageModel>,
     selectedTextModel: TextModel,
-    isGenerating: Boolean
+    regenerateResponse: (Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -196,16 +196,20 @@ private fun ChatMessagesList(
                 .padding(top = 70.dp, bottom = 80.dp)
         ) {
             itemsIndexed(chatMessages) { index, message ->
-                val isLastMessage = index == chatMessages.lastIndex
-                val isLoading = isLastMessage && textGenerationState is TextGenerationState.Loading
-                val isLastAiMessage = isLastMessage && !message.isUser
+                val isLoading = when (textGenerationState) {
+                    is TextGenerationState.Loading -> {
+                        // Only show loading for the specific AI message index
+                        !message.isUser && textGenerationState.id == index
+                    }
+                    else -> false
+                }
 
                 ChatBubble(
                     message = message.message,
                     isUser = message.isUser,
                     aiIcon = selectedTextModel.image,
                     isLoading = isLoading,
-                    isGenerating = if (isLastAiMessage) isGenerating else false
+                    regenerateResponse = { regenerateResponse(index) }
                 )
             }
         }
@@ -244,7 +248,7 @@ private fun ChatMessagesList(
 @Composable
 fun AskAnythingField(
     text: String,
-    isGenerating: Boolean,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
     onSendClick: () -> Unit,
     onTextChange: (String) -> Unit
@@ -283,7 +287,7 @@ fun AskAnythingField(
         )
 
         SendStopButton(
-            isGenerating = isGenerating,
+            isGenerating = isLoading,
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(40.dp)

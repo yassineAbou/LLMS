@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
@@ -39,7 +40,7 @@ fun ChatBubble(
     isUser: Boolean,
     aiIcon: DrawableResource,
     isLoading: Boolean,
-    isGenerating: Boolean
+    regenerateResponse: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
@@ -65,7 +66,8 @@ fun ChatBubble(
                 else -> ChatBubbleMessage(
                     message = message,
                     isUser = isUser,
-                    isGenerating = isGenerating
+                    isLoading = isLoading,
+                    regenerateResponse = regenerateResponse
                 )
             }
 
@@ -145,14 +147,16 @@ private fun LoadingIndicator() {
 private fun ChatBubbleMessage(
     message: String,
     isUser: Boolean,
-    isGenerating: Boolean
+    isLoading: Boolean,
+    regenerateResponse: () -> Unit
 ) {
     if (isUser) {
         UserMessage(message = message)
     } else {
         AiMessage(
             message = message,
-            isGenerating = isGenerating
+            isLoading = isLoading,
+            regenerateResponse = regenerateResponse
         )
     }
 }
@@ -170,7 +174,8 @@ private fun UserMessage(message: String) {
 @Composable
 private fun AiMessage(
     message: String,
-    isGenerating: Boolean
+    isLoading: Boolean,
+    regenerateResponse: () -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
     val snackbarController = SnackbarController.current
@@ -189,7 +194,7 @@ private fun AiMessage(
         }
 
         AnimatedVisibility(
-            visible = !isGenerating,
+            visible = !isLoading,
             enter = Animations.slideFadeIn(),
             exit = Animations.slideFadeOut()
         ) {
@@ -206,6 +211,15 @@ private fun AiMessage(
                     Icon(
                         imageVector = Icons.Default.ContentCopy,
                         contentDescription = "Copy",
+                        tint = MaterialTheme.colorSchemeCustom.alwaysWhite
+                    )
+                }
+                IconButton(
+                    onClick = regenerateResponse
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Autorenew,
+                        contentDescription = "Regenerate",
                         tint = MaterialTheme.colorSchemeCustom.alwaysWhite
                     )
                 }

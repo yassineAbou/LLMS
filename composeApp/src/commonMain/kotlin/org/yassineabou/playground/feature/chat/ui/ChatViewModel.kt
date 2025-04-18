@@ -1,7 +1,6 @@
 package org.yassineabou.playground.feature.chat.ui
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -63,9 +62,6 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
     // ========================================================================================
     //                          Response Generation State
     // ========================================================================================
-
-    /** Flag indicating if response generation is in progress */
-    val isGenerating = mutableStateOf(false)
 
     /** API Key management - Replace with secure storage implementation */
     private var apiKey: String = ""
@@ -130,7 +126,7 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
      * @param isUser Flag indicating if the message is from the user
      */
     fun sendMessage(message: String, isUser: Boolean = true) {
-        if (isGenerating.value) stopGeneration()
+        if (_textGenerationState.value is TextGenerationState.Loading) stopGeneration()
         _currentChatMessages.add(ChatMessageModel(message, isUser))
         if (isUser) initiateResponseGeneration()
     }
@@ -139,18 +135,27 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
      * Stops ongoing response generation
      */
     fun stopGeneration() {
-        if (isGenerating.value) {
-            isGenerating.value = false
-            if (textGenerationState.value is TextGenerationState.Loading) {
-                _textGenerationState.value = TextGenerationState.Failure()
-                val aiMessageIndex = _currentChatMessages.lastIndex
-                _currentChatMessages[aiMessageIndex] = ChatMessageModel(
-                    message = (textGenerationState.value as TextGenerationState.Failure).message,
-                    isUser = false
-                )
-                _textGenerationState.value = TextGenerationState.Success("")
-            }
-        }
+         val loadingState = textGenerationState.value as TextGenerationState.Loading
+         val aiMessageIndex = loadingState.id
+
+         // Update state and message
+         _textGenerationState.value = TextGenerationState.Failure()
+         _currentChatMessages[aiMessageIndex] = ChatMessageModel(
+             message = (textGenerationState.value as TextGenerationState.Failure).message,
+             isUser = false
+         )
+         _textGenerationState.value = TextGenerationState.Success("")
+    }
+
+    fun regenerateResponse(index: Int) {
+        val userMessage = _currentChatMessages[index - 1].message
+        val currentMessage = _currentChatMessages[index]
+        _currentChatMessages[index] = currentMessage.copy(message = "")
+        performResponseGeneration(
+            messageIndex = index,
+            prompt = userMessage,
+            initialMessage = ""
+        )
     }
 
     // ========================================================================================
@@ -159,46 +164,57 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
 
     private fun initiateResponseGeneration() {
         val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
-        val chutesName = _selectedTextModel.value.chutesName
-
         _currentChatMessages.add(ChatMessageModel("", false))
-        val aiMessageIndex = _currentChatMessages.lastIndex
+        performResponseGeneration(
+            messageIndex = _currentChatMessages.lastIndex,
+            prompt = userMessage,
+            initialMessage = ""
+        )
+    }
 
-        isGenerating.value = true  // Add this
+    private fun performResponseGeneration(
+        messageIndex: Int,
+        prompt: String,
+        initialMessage: String
+    ) {
+        val chutesName = _selectedTextModel.value.chutesName
+        val currentMessage = _currentChatMessages[messageIndex]
+
+        // Initialize message state
+        _currentChatMessages[messageIndex] = currentMessage.copy(message = initialMessage)
 
         viewModelScope.launch {
-            _textGenerationState.value = TextGenerationState.Loading
+            _textGenerationState.value = TextGenerationState.Loading(messageIndex)
 
             try {
                 chutesAiRepository.streamChat(
                     apiKey = apiKey,
-                    prompt = userMessage,
+                    prompt = prompt,
                     model = chutesName
                 ).collect { chunk ->
-                    val currentMessage = _currentChatMessages[aiMessageIndex]
-                    _currentChatMessages[aiMessageIndex] = currentMessage.copy(
-                        message = currentMessage.message + chunk
-                    )
+                    if (textGenerationState.value is TextGenerationState.Loading) {
+                        _currentChatMessages[messageIndex] = _currentChatMessages[messageIndex].copy(
+                            message = _currentChatMessages[messageIndex].message + chunk
+                        )
+                    }
                 }
-
-                // Stream completed successfully
                 _textGenerationState.value = TextGenerationState.Success("")
             } catch (e: Exception) {
-                if (e !is CancellationException) {
-                    // Handle errors only if not cancelled
-                    val errorMessage = e.message ?: "Generation failed"
-                    _textGenerationState.value = TextGenerationState.Failure(errorMessage)
-                    // Update message with error indicator
-                    _currentChatMessages[aiMessageIndex] = ChatMessageModel(
-                        message = "⚠️ $errorMessage",
-                        isUser = false
-                    )
-                    _textGenerationState.value = TextGenerationState.Success("")
-                }
+                handleGenerationError(e, messageIndex)
             } finally {
-                isGenerating.value = false
                 _textGenerationState.value = TextGenerationState.Success("")
             }
+        }
+    }
+
+    private fun handleGenerationError(e: Exception, messageIndex: Int) {
+        if (e !is CancellationException) {
+            val errorMessage = e.message ?: "Generation failed"
+            _textGenerationState.value = TextGenerationState.Failure(errorMessage)
+            _currentChatMessages[messageIndex] = ChatMessageModel(
+                message = "⚠️ $errorMessage",
+                isUser = false
+            )
         }
     }
 
