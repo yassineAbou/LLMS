@@ -195,18 +195,17 @@ private fun ChatMessagesList(
                 .fillMaxSize()
                 .padding(top = 70.dp, bottom = 80.dp)
         ) {
-            itemsIndexed(chatMessages) { index, message ->
+            itemsIndexed(chatMessages) { index, chatMessage ->
                 val isLoading = when (textGenerationState) {
                     is TextGenerationState.Loading -> {
                         // Only show loading for the specific AI message index
-                        !message.isUser && textGenerationState.id == index
+                        !chatMessage.isUser && textGenerationState.id == index
                     }
                     else -> false
                 }
 
                 ChatBubble(
-                    message = message.message,
-                    isUser = message.isUser,
+                    chatMessage = chatMessage,
                     aiIcon = selectedTextModel.image,
                     isLoading = isLoading,
                     regenerateResponse = { regenerateResponse(index) }
@@ -229,7 +228,7 @@ private fun ChatMessagesList(
 
     // Existing auto-scroll logic
     val lastMessageLength by remember(chatMessages.size) {
-        derivedStateOf { chatMessages.lastOrNull()?.message?.length ?: 0 }
+        derivedStateOf { chatMessages.lastOrNull()?.rawMessage?.length ?: 0 }
     }
 
     LaunchedEffect(chatMessages.size, lastMessageLength) {

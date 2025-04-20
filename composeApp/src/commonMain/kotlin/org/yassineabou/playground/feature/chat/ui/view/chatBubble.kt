@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ContentCopy
@@ -32,12 +31,12 @@ import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
+import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
 
 
 @Composable
 fun ChatBubble(
-    message: String,
-    isUser: Boolean,
+    chatMessage: ChatMessageModel,
     aiIcon: DrawableResource,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
@@ -50,7 +49,7 @@ fun ChatBubble(
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp)
                 .background(
-                    color = if (isUser) MaterialTheme.colorScheme.surface else MaterialTheme.colorSchemeCustom.alwaysBlue.copy(
+                    color = if (chatMessage.isUser) MaterialTheme.colorScheme.surface else MaterialTheme.colorSchemeCustom.alwaysBlue.copy(
                         alpha = 0.5f
                     ),
                 )
@@ -59,13 +58,12 @@ fun ChatBubble(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            ChatBubbleIcon(isUser = isUser, aiIcon = aiIcon)
+            ChatBubbleIcon(isUser = chatMessage.isUser, aiIcon = aiIcon)
 
             when {
                 isLoading -> LoadingIndicator()
                 else -> ChatBubbleMessage(
-                    message = message,
-                    isUser = isUser,
+                    chatMessage = chatMessage,
                     isLoading = isLoading,
                     regenerateResponse = regenerateResponse
                 )
@@ -145,16 +143,15 @@ private fun LoadingIndicator() {
 
 @Composable
 private fun ChatBubbleMessage(
-    message: String,
-    isUser: Boolean,
+    chatMessage: ChatMessageModel,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
-    if (isUser) {
-        UserMessage(message = message)
+    if (chatMessage.isUser) {
+        UserMessage(displayContent = chatMessage.displayContent)
     } else {
         AiMessage(
-            message = message,
+            displayContent = chatMessage.displayContent,
             isLoading = isLoading,
             regenerateResponse = regenerateResponse
         )
@@ -162,9 +159,9 @@ private fun ChatBubbleMessage(
 }
 
 @Composable
-private fun UserMessage(message: String) {
+private fun UserMessage(displayContent: AnnotatedString) {
     Text(
-        text = message,
+        text = displayContent,
         color = MaterialTheme.colorScheme.onSurface,
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(top = 8.dp) // Add top padding to align with the icon
@@ -173,7 +170,7 @@ private fun UserMessage(message: String) {
 
 @Composable
 private fun AiMessage(
-    message: String,
+    displayContent: AnnotatedString,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
@@ -185,13 +182,12 @@ private fun AiMessage(
             .padding(top = 8.dp)
             .fillMaxWidth()
     ) {
-        SelectionContainer {
-            Text(
-                text = message,
-                color = MaterialTheme.colorSchemeCustom.alwaysWhite,
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
+
+       Text(
+           text = displayContent,
+           color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+           style = MaterialTheme.typography.titleMedium
+       )
 
         AnimatedVisibility(
             visible = !isLoading,
@@ -204,7 +200,7 @@ private fun AiMessage(
             ) {
                 IconButton(
                     onClick = {
-                        clipboardManager.setText(AnnotatedString(message))
+                        clipboardManager.setText(displayContent)
                         snackbarController.showMessage("Copied to clipboard")
                     }
                 ) {

@@ -14,6 +14,7 @@ androidx-test-junit = "1.2.1"
 junit = "4.13.2"
 compose-plugin = "1.7.3"
 dragselect = "2.4.1"
+kermit = "2.0.4"
 kotlin = "2.1.0"
 ktor = "3.1.0"
 navigationCompose = "2.8.0-alpha10"
@@ -31,6 +32,7 @@ adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", versi
 adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
 adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
 dragselect = { module = "com.dragselectcompose:dragselect", version.ref = "dragselect" }
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

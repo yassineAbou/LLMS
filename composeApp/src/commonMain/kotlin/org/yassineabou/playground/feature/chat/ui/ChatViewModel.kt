@@ -2,6 +2,7 @@ package org.yassineabou.playground.feature.chat.ui
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,10 +13,14 @@ import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.data.network.ChutesAiRepository
+import org.yassineabou.playground.feature.chat.data.network.GitHubMarkdownRepository
 import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
 import kotlin.coroutines.cancellation.CancellationException
 
-class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewModel() {
+class ChatViewModel(
+    private val chutesAiRepository: ChutesAiRepository,
+    private val gitHubMarkdownRepository: GitHubMarkdownRepository
+) : ViewModel() {
 
     // region State Properties
     // ========================================================================================
@@ -127,7 +132,13 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
      */
     fun sendMessage(message: String, isUser: Boolean = true) {
         if (_textGenerationState.value is TextGenerationState.Loading) stopGeneration()
-        _currentChatMessages.add(ChatMessageModel(message, isUser))
+        _currentChatMessages.add(
+            ChatMessageModel(
+                rawMessage = message,
+                isUser = isUser,
+                renderState = if (isUser) ChatMessageModel.RenderState.STABLE else ChatMessageModel.RenderState.PENDING
+            )
+        )
         if (isUser) initiateResponseGeneration()
     }
 
@@ -141,16 +152,17 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
          // Update state and message
          _textGenerationState.value = TextGenerationState.Failure()
          _currentChatMessages[aiMessageIndex] = ChatMessageModel(
-             message = (textGenerationState.value as TextGenerationState.Failure).message,
-             isUser = false
+             rawMessage = (textGenerationState.value as TextGenerationState.Failure).message,
+             isUser = false,
+             renderState = ChatMessageModel.RenderState.ERROR
          )
          _textGenerationState.value = TextGenerationState.Success("")
     }
 
     fun regenerateResponse(index: Int) {
-        val userMessage = _currentChatMessages[index - 1].message
+        val userMessage = _currentChatMessages[index - 1].rawMessage
         val currentMessage = _currentChatMessages[index]
-        _currentChatMessages[index] = currentMessage.copy(message = "")
+        _currentChatMessages[index] = currentMessage.copy(rawMessage = "")
         performResponseGeneration(
             messageIndex = index,
             prompt = userMessage,
@@ -163,8 +175,14 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
     // ========================================================================================
 
     private fun initiateResponseGeneration() {
-        val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
-        _currentChatMessages.add(ChatMessageModel("", false))
+        val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.rawMessage ?: ""
+        _currentChatMessages.add(
+            ChatMessageModel(
+                rawMessage = "",
+                isUser = false,
+                renderState = ChatMessageModel.RenderState.STREAMING
+            )
+        )
         performResponseGeneration(
             messageIndex = _currentChatMessages.lastIndex,
             prompt = userMessage,
@@ -181,7 +199,7 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
         val currentMessage = _currentChatMessages[messageIndex]
 
         // Initialize message state
-        _currentChatMessages[messageIndex] = currentMessage.copy(message = initialMessage)
+        _currentChatMessages[messageIndex] = currentMessage.copy(rawMessage = initialMessage)
 
         viewModelScope.launch {
             _textGenerationState.value = TextGenerationState.Loading(messageIndex)
@@ -193,12 +211,10 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
                     model = chutesName
                 ).collect { chunk ->
                     if (textGenerationState.value is TextGenerationState.Loading) {
-                        _currentChatMessages[messageIndex] = _currentChatMessages[messageIndex].copy(
-                            message = _currentChatMessages[messageIndex].message + chunk
-                        )
+                        updateStreamingMessage(messageIndex, chunk)
                     }
                 }
-                _textGenerationState.value = TextGenerationState.Success("")
+                renderFinalMessage(messageIndex)
             } catch (e: Exception) {
                 handleGenerationError(e, messageIndex)
             } finally {
@@ -212,15 +228,45 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
             val errorMessage = e.message ?: "Generation failed"
             _textGenerationState.value = TextGenerationState.Failure(errorMessage)
             _currentChatMessages[messageIndex] = ChatMessageModel(
-                message = "⚠️ $errorMessage",
-                isUser = false
+                rawMessage = "⚠️ $errorMessage",
+                isUser = false,
+                renderState = ChatMessageModel.RenderState.ERROR,
             )
         }
     }
 
     // endregion
 
-    // region Chat History Management
+    // ========================================================================================
+    //                          Markdown Rendering Methods
+    // ========================================================================================
+
+    private fun updateStreamingMessage(index: Int, chunk: String) {
+        _currentChatMessages[index] = _currentChatMessages[index].copy(
+            rawMessage = _currentChatMessages[index].rawMessage + chunk
+        )
+    }
+
+    private suspend fun renderFinalMessage(index: Int) {
+        try {
+            val rawContent = _currentChatMessages[index].rawMessage
+            val html = gitHubMarkdownRepository.renderMarkdown(rawContent)
+            val annotatedText = gitHubMarkdownRepository.parseHtmlToAnnotatedString(html)
+
+            _currentChatMessages[index] = _currentChatMessages[index].copy(
+                renderedContent = annotatedText,
+                renderState = ChatMessageModel.RenderState.STABLE
+            )
+        } catch (e: Exception) {
+            _currentChatMessages[index] = _currentChatMessages[index].copy(
+                renderState = ChatMessageModel.RenderState.ERROR,
+                renderedContent = AnnotatedString("Error rendering message: ${e.message}")
+            )
+        }
+        _textGenerationState.value = TextGenerationState.Success("")
+    }
+
+    // endregion
     // ========================================================================================
     //                          Public Chat Methods
     // ========================================================================================
@@ -313,7 +359,7 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
     }
 
     private fun generateChatDescription(): String {
-        val fullDescription = _currentChatMessages.joinToString("\n") { it.message }
+        val fullDescription = _currentChatMessages.joinToString("\n") { it.rawMessage }
         return if (fullDescription.length > 150) "${fullDescription.take(150)}..." else fullDescription
     }
 

@@ -1,12 +1,28 @@
 package org.yassineabou.playground.feature.chat.data.model
 
+import androidx.compose.ui.text.AnnotatedString
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 data class ChatMessageModel(
-    val message: String,
-    val isUser: Boolean
-)
+    val rawMessage: String,
+    val renderedContent: AnnotatedString? = null,
+    val isUser: Boolean,
+    val renderState: RenderState
+) {
+    enum class RenderState {
+        PENDING,    // Initial state for AI messages
+        STREAMING,  // Receiving raw content
+        STABLE,     // Final rendered state
+        ERROR       // Rendering failed
+    }
+
+    val displayContent: AnnotatedString
+        get() = when (renderState) {
+            RenderState.STABLE -> renderedContent ?: AnnotatedString(rawMessage)
+            else -> AnnotatedString(rawMessage)
+        }
+}
 
 data class ChatHistory @OptIn(ExperimentalUuidApi::class) constructor(
     val title: String,

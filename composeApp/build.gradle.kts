@@ -105,7 +105,7 @@ kotlin {
 
             implementation(libs.navigation.compose)
 
-            implementation("co.touchlab:kermit:2.0.4")
+            implementation(libs.kermit)
 
         }
         desktopMain.dependencies {
