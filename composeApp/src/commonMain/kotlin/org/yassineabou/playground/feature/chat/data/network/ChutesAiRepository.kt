@@ -11,10 +11,6 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
         apiKey: String,
         prompt: String, // Keep simple prompt input for ease of use
         model: String, // Pass the model identifier
-        // Or accept a list of ChatMessage for more complex conversations
-        // messages: List<ChatMessage>,
-        maxTokens: Int? = 1024,
-        temperature: Double? = 0.7
     ): Flow<String> {
         // Create the request object
         // If using simple prompt, create the initial message list
@@ -24,8 +20,6 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
             model = model,
             messages = messages,
             stream = true, // Ensure streaming is enabled
-            maxTokens = maxTokens,
-            temperature = temperature
             // Add any other parameters you need
         )
 

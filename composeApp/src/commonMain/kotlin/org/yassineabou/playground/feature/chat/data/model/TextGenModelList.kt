@@ -36,21 +36,7 @@ object TextGenModelList {
             description = "DeepSeek-V3 is a 671B parameter MoE model (37B activated per token) that achieves state-of-the-art open-source performance across language, math and code tasks while maintaining reasonable compute requirements through...",
             image = Res.drawable.ic_deepseek,
             provider = "DeepSeek"
-        ),
-        TextModel(
-            title = "DeepSeek R1 Zero",
-            chutesName = "deepseek-ai/DeepSeek-R1-Zero",
-            description = "eepSeek-R1 is a 671B parameter (37B activated) reasoning-focused language model trained via reinforcement learning that excels at mathematical, coding, and general reasoning tasks, with performance comparable to...",
-            image = Res.drawable.ic_deepseek,
-            provider = "DeepSeek"
-        ),
-        TextModel(
-            title = "DeepSeek V3 Base",
-            chutesName = "deepseek-ai/DeepSeek-V3-Base",
-            description = "DeepSeek-V3 is a 671B parameter MoE language model (37B active parameters per token) that excels at coding, math, and reasoning tasks while maintaining strong performance across general knowledge and multilingual...",
-            image = Res.drawable.ic_deepseek,
-            provider = "DeepSeek"
-        ),
+        )
     )
 
     val qwen = listOf(
@@ -210,7 +196,4 @@ object TextGenModelList {
             provider = "Others"
         )
     )
-
-
-
 }

@@ -15,8 +15,8 @@ data class ChatCompletionRequest(
     val messages: List<ChatMessage>,
     val stream: Boolean = true,
     @SerialName("max_tokens")
-    val maxTokens: Int? = 1024,
-    val temperature: Double? = 0.7
+    val maxTokens: Int? = 1000,
+    val temperature: Double? = 0.5
 )
 
 @Serializable
@@ -33,7 +33,7 @@ data class ChatCompletionChunk(
 @Serializable
 data class StreamChoice(
     val index: Int,
-    @SerialName("message") // Changed from delta to message [[5]]
+    @SerialName("message")
     val delta: DeltaMessage,
     val logprobs: Nothing? = null,
     @SerialName("finish_reason")
@@ -49,7 +49,7 @@ data class DeltaMessage(
     @SerialName("reasoning_content")
     val reasoningContent: String? = null,
     @SerialName("tool_calls")
-    val toolCalls: Nothing? = null
+    val toolCalls: List<String>? = null
 )
 
 @Serializable

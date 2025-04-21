@@ -88,16 +88,25 @@ class KtorChutesApi(
         try {
             val chunk = json.decodeFromString<ChatCompletionChunk>(dataJson)
             chunk.choices.forEach { choice ->
-                choice.delta.content?.let { emit(it) }
+                choice.delta.content?.let { rawContent ->
+                    val cleanedContent = rawContent
+                        .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "") // Remove reasoning blocks
+                        .replace(Regex("(<sep>.*|◁.*?▷)"), "") // Remove other tags
+                        .trim()
+
+                    if (cleanedContent.isNotBlank()) {
+                        emit(cleanedContent)
+                    }
+                }
                 if (choice.finishReason != null) {
-                    Logger.e  { "Stream completed with reason: ${choice.finishReason}" }
+                    Logger.e { "Stream completed with reason: ${choice.finishReason}" }
                     return
                 }
             }
         } catch (e: SerializationException) {
-            Logger.e  { "Serialization error parsing chunk: $dataJson" }
+            Logger.e { "Serialization error parsing chunk: $dataJson" }
         } catch (e: Exception) {
-            Logger.e  { "Unexpected error processing chunk" }
+            Logger.e { "Unexpected error processing chunk" }
         }
     }
 }
