@@ -195,13 +195,13 @@ class ChatViewModel(
         prompt: String,
         initialMessage: String
     ) {
+        viewModelScope.launch {
         val chutesName = _selectedTextModel.value.chutesName
         val currentMessage = _currentChatMessages[messageIndex]
 
         // Initialize message state
         _currentChatMessages[messageIndex] = currentMessage.copy(rawMessage = initialMessage)
 
-        viewModelScope.launch {
             _textGenerationState.value = TextGenerationState.Loading(messageIndex)
 
             try {
