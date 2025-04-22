@@ -11,9 +11,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.yassineabou.playground.feature.chat.data.network.ChutesAiApi
 import org.yassineabou.playground.feature.chat.data.network.ChutesAiRepository
-import org.yassineabou.playground.feature.chat.data.network.GitHubMarkdownApi
-import org.yassineabou.playground.feature.chat.data.network.GitHubMarkdownApiImpl
-import org.yassineabou.playground.feature.chat.data.network.GitHubMarkdownRepository
 import org.yassineabou.playground.feature.chat.data.network.KtorChutesApi
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
@@ -52,7 +49,6 @@ val provideDataModule = module {
             json = get() // Inject shared JSON instance [[5]]
         )
     }
-    single<GitHubMarkdownApi> { GitHubMarkdownApiImpl(get()) }
 
     // 4. Repository Implementation
     single<ChutesAiRepository> {
@@ -60,17 +56,12 @@ val provideDataModule = module {
             chutesAiApi = get()
         )
     }
-    single<GitHubMarkdownRepository> {
-        GitHubMarkdownRepository(
-            api = get()
-        )
-    }
 }
 
 
 val provideViewModelModule = module {
     viewModel { ImageGenViewModel() }
-    viewModel { ChatViewModel(get(), get()) }
+    viewModel { ChatViewModel(get()) }
 }
 
 fun appModule() = listOf(provideDataModule, provideViewModelModule)

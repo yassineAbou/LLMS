@@ -228,7 +228,7 @@ private fun ChatMessagesList(
 
     // Existing auto-scroll logic
     val lastMessageLength by remember(chatMessages.size) {
-        derivedStateOf { chatMessages.lastOrNull()?.rawMessage?.length ?: 0 }
+        derivedStateOf { chatMessages.lastOrNull()?.message?.length ?: 0 }
     }
 
     LaunchedEffect(chatMessages.size, lastMessageLength) {

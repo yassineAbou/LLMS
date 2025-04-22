@@ -107,6 +107,8 @@ kotlin {
 
             implementation(libs.kermit)
 
+            implementation(libs.multiplatform.markdown.renderer.m3)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -183,7 +185,6 @@ compose.desktop {
                 iconFile.set(project.file("src/commonMain/composeResources/drawable/linux.png"))
             }
         }
-
 
         buildTypes.release.proguard {
             configurationFiles.from(project.file("compose-desktop.pro"))

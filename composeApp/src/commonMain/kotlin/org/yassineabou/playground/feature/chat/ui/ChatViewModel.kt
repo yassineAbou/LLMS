@@ -13,14 +13,10 @@ import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.data.network.ChutesAiRepository
-import org.yassineabou.playground.feature.chat.data.network.GitHubMarkdownRepository
 import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
 import kotlin.coroutines.cancellation.CancellationException
 
-class ChatViewModel(
-    private val chutesAiRepository: ChutesAiRepository,
-    private val gitHubMarkdownRepository: GitHubMarkdownRepository
-) : ViewModel() {
+class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewModel() {
 
     // region State Properties
     // ========================================================================================
@@ -132,12 +128,7 @@ class ChatViewModel(
      */
     fun sendMessage(message: String, isUser: Boolean = true) {
         if (_textGenerationState.value is TextGenerationState.Loading) stopGeneration()
-        _currentChatMessages.add(
-            ChatMessageModel(
-                rawMessage = message,
-                isUser = isUser,
-                renderState = if (isUser) ChatMessageModel.RenderState.STABLE else ChatMessageModel.RenderState.PENDING
-            )
+        _currentChatMessages.add(ChatMessageModel(message = message, isUser = isUser)
         )
         if (isUser) initiateResponseGeneration()
     }
@@ -152,17 +143,16 @@ class ChatViewModel(
          // Update state and message
          _textGenerationState.value = TextGenerationState.Failure()
          _currentChatMessages[aiMessageIndex] = ChatMessageModel(
-             rawMessage = (textGenerationState.value as TextGenerationState.Failure).message,
+             message = (textGenerationState.value as TextGenerationState.Failure).message,
              isUser = false,
-             renderState = ChatMessageModel.RenderState.ERROR
          )
          _textGenerationState.value = TextGenerationState.Success("")
     }
 
     fun regenerateResponse(index: Int) {
-        val userMessage = _currentChatMessages[index - 1].rawMessage
+        val userMessage = _currentChatMessages[index - 1].message
         val currentMessage = _currentChatMessages[index]
-        _currentChatMessages[index] = currentMessage.copy(rawMessage = "")
+        _currentChatMessages[index] = currentMessage.copy(message = "")
         performResponseGeneration(
             messageIndex = index,
             prompt = userMessage,
@@ -175,12 +165,11 @@ class ChatViewModel(
     // ========================================================================================
 
     private fun initiateResponseGeneration() {
-        val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.rawMessage ?: ""
+        val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
         _currentChatMessages.add(
             ChatMessageModel(
-                rawMessage = "",
-                isUser = false,
-                renderState = ChatMessageModel.RenderState.STREAMING
+                message = "",
+                isUser = false
             )
         )
         performResponseGeneration(
@@ -200,7 +189,7 @@ class ChatViewModel(
         val currentMessage = _currentChatMessages[messageIndex]
 
         // Initialize message state
-        _currentChatMessages[messageIndex] = currentMessage.copy(rawMessage = initialMessage)
+        _currentChatMessages[messageIndex] = currentMessage.copy(message = initialMessage)
 
             _textGenerationState.value = TextGenerationState.Loading(messageIndex)
 
@@ -211,10 +200,12 @@ class ChatViewModel(
                     model = chutesName
                 ).collect { chunk ->
                     if (textGenerationState.value is TextGenerationState.Loading) {
-                        updateStreamingMessage(messageIndex, chunk)
+                        _currentChatMessages[messageIndex] = _currentChatMessages[messageIndex].copy(
+                            message = _currentChatMessages[messageIndex].message + chunk
+                        )
                     }
                 }
-                renderFinalMessage(messageIndex)
+                _textGenerationState.value = TextGenerationState.Success("")
             } catch (e: Exception) {
                 handleGenerationError(e, messageIndex)
             } finally {
@@ -228,43 +219,13 @@ class ChatViewModel(
             val errorMessage = e.message ?: "Generation failed"
             _textGenerationState.value = TextGenerationState.Failure(errorMessage)
             _currentChatMessages[messageIndex] = ChatMessageModel(
-                rawMessage = "⚠️ $errorMessage",
+                message = "⚠️ $errorMessage",
                 isUser = false,
-                renderState = ChatMessageModel.RenderState.ERROR,
             )
         }
     }
 
     // endregion
-
-    // ========================================================================================
-    //                          Markdown Rendering Methods
-    // ========================================================================================
-
-    private fun updateStreamingMessage(index: Int, chunk: String) {
-        _currentChatMessages[index] = _currentChatMessages[index].copy(
-            rawMessage = _currentChatMessages[index].rawMessage + chunk
-        )
-    }
-
-    private suspend fun renderFinalMessage(index: Int) {
-        try {
-            val rawContent = _currentChatMessages[index].rawMessage
-            val html = gitHubMarkdownRepository.renderMarkdown(rawContent)
-            val annotatedText = gitHubMarkdownRepository.parseHtmlToAnnotatedString(html)
-
-            _currentChatMessages[index] = _currentChatMessages[index].copy(
-                renderedContent = annotatedText,
-                renderState = ChatMessageModel.RenderState.STABLE
-            )
-        } catch (e: Exception) {
-            _currentChatMessages[index] = _currentChatMessages[index].copy(
-                renderState = ChatMessageModel.RenderState.ERROR,
-                renderedContent = AnnotatedString("Error rendering message: ${e.message}")
-            )
-        }
-        _textGenerationState.value = TextGenerationState.Success("")
-    }
 
     // endregion
     // ========================================================================================
@@ -359,7 +320,7 @@ class ChatViewModel(
     }
 
     private fun generateChatDescription(): String {
-        val fullDescription = _currentChatMessages.joinToString("\n") { it.rawMessage }
+        val fullDescription = _currentChatMessages.joinToString("\n") { it.message }
         return if (fullDescription.length > 150) "${fullDescription.take(150)}..." else fullDescription
     }
 

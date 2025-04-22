@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ContentCopy
@@ -25,7 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.mikepenz.markdown.m3.Markdown
+import com.mikepenz.markdown.m3.markdownColor
+import com.mikepenz.markdown.m3.markdownTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
@@ -148,10 +155,10 @@ private fun ChatBubbleMessage(
     regenerateResponse: () -> Unit
 ) {
     if (chatMessage.isUser) {
-        UserMessage(displayContent = chatMessage.displayContent)
+        UserMessage(message = chatMessage.message)
     } else {
         AiMessage(
-            displayContent = chatMessage.displayContent,
+            message = chatMessage.message,
             isLoading = isLoading,
             regenerateResponse = regenerateResponse
         )
@@ -159,18 +166,20 @@ private fun ChatBubbleMessage(
 }
 
 @Composable
-private fun UserMessage(displayContent: AnnotatedString) {
-    Text(
-        text = displayContent,
-        color = MaterialTheme.colorScheme.onSurface,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 8.dp) // Add top padding to align with the icon
-    )
+private fun UserMessage(message: String) {
+    SelectionContainer {
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+    }
 }
 
 @Composable
 private fun AiMessage(
-    displayContent: AnnotatedString,
+    message: String,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
@@ -182,12 +191,35 @@ private fun AiMessage(
             .padding(top = 8.dp)
             .fillMaxWidth()
     ) {
-
-       Text(
-           text = displayContent,
-           color = MaterialTheme.colorSchemeCustom.alwaysWhite,
-           style = MaterialTheme.typography.titleMedium
-       )
+        Markdown(
+            content = message.trimIndent(),
+            colors = markdownColor(
+                text = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            ),
+            typography = markdownTypography(
+                // Header hierarchy
+                h1 = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                h2 = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    textDecoration = TextDecoration.Underline // Add underline
+                ),
+                h3 = MaterialTheme.typography.titleMedium.copy(
+                    fontStyle = FontStyle.Italic // Italic text
+                ),
+                h4 = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium // Moderate boldness
+                ),
+                h5 = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Normal // Base weight
+                ),
+                h6 = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Light, // Light weight
+                    fontStyle = FontStyle.Italic // Combined with italics
+                )
+            )
+        )
 
         AnimatedVisibility(
             visible = !isLoading,
@@ -200,7 +232,7 @@ private fun AiMessage(
             ) {
                 IconButton(
                     onClick = {
-                        clipboardManager.setText(displayContent)
+                        clipboardManager.setText(AnnotatedString(message))
                         snackbarController.showMessage("Copied to clipboard")
                     }
                 ) {
