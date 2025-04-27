@@ -45,7 +45,7 @@ import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.playground.feature.chat.data.model.TextModel
-import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
+import org.yassineabou.playground.feature.chat.data.model.TextGenerationState
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
@@ -281,8 +281,7 @@ fun AskAnythingField(
                         onClick = { onTextChange("") }
                     )
                 }
-            },
-            singleLine = true
+            }
         )
 
         SendStopButton(

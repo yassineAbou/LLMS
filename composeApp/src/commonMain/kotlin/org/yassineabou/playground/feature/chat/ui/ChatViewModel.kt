@@ -2,113 +2,85 @@ package org.yassineabou.playground.feature.chat.ui
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiEndPoint.API_KEY
 import org.yassineabou.playground.feature.chat.data.model.ChatHistory
 import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
-import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
-import org.yassineabou.playground.feature.chat.data.network.ChutesAiRepository
-import org.yassineabou.playground.feature.chat.data.network.TextGenerationState
+import org.yassineabou.playground.feature.chat.data.model.textGenModelList
+import org.yassineabou.playground.feature.chat.data.model.TextGenerationState
+import org.yassineabou.playground.feature.chat.data.repository.ChutesAiRepository
 import kotlin.coroutines.cancellation.CancellationException
 
-class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewModel() {
+class ChatViewModel(
+    private val chutesAiRepository: ChutesAiRepository
+) : ViewModel() {
 
-    // region State Properties
     // ========================================================================================
-    //                          Text Model Selection State
+    //                                  State Properties
     // ========================================================================================
 
-    /** Holds the temporarily selected model before confirmation */
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepseek.first())
+    // region Text Model Selection State
+    // ========================================================================================
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(textGenModelList.first())
+    private val _selectedTextModel = MutableStateFlow<TextModel>(textGenModelList.first())
+
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
-
-    /** Currently active text model used for generation */
-    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.deepseek.first())
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel
+    // endregion
 
+    // region Chat Message State
     // ========================================================================================
-    //                              Chat Message State
-    // ========================================================================================
-
-    /** Current active chat conversation messages */
     private val _currentChatMessages = mutableStateListOf<ChatMessageModel>()
     val currentChatMessages: SnapshotStateList<ChatMessageModel> = _currentChatMessages
+    // endregion
 
-
+    // region Chat History State
     // ========================================================================================
-    //                            Chat History State
-    // ========================================================================================
-
-    /** List of recent chat conversations */
     private val _chatHistoryList = mutableStateListOf<ChatHistory>()
-    val chatHistoryList: SnapshotStateList<ChatHistory> = _chatHistoryList
-
-    /** List of bookmarked/saved chats */
     private val _savedChatHistoryList = mutableStateListOf<ChatHistory>()
-    val savedChatHistoryList: SnapshotStateList<ChatHistory> = _savedChatHistoryList
-
-    /** ID of the currently active chat session */
     private val _currentChatId = MutableStateFlow<String?>(null)
-    val currentChatId: StateFlow<String?> get() = _currentChatId
-
-    /** Currently selected chat history item */
     private val _selectedChatHistory = MutableStateFlow<ChatHistory?>(null)
+
+    val chatHistoryList: SnapshotStateList<ChatHistory> = _chatHistoryList
+    val savedChatHistoryList: SnapshotStateList<ChatHistory> = _savedChatHistoryList
+    val currentChatId: StateFlow<String?> get() = _currentChatId
     val selectedChatHistory: MutableStateFlow<ChatHistory?> get() = _selectedChatHistory
+    // endregion
 
+    // region Response Generation State
     // ========================================================================================
-    //                          Response Generation State
-    // ========================================================================================
-
-    /** API Key management - Replace with secure storage implementation */
-    private var apiKey: String = ""
-
-    private val _textGenerationState = MutableStateFlow<TextGenerationState>(TextGenerationState.Success(""))
+    private val _textGenerationState = MutableStateFlow<TextGenerationState>(TextGenerationState.Success)
     val textGenerationState: MutableStateFlow<TextGenerationState> = _textGenerationState
     // endregion
 
-    // region Text Model Management
     // ========================================================================================
-    //                          Public Model Selection Methods
+    //                                  Model Management
     // ========================================================================================
 
-    /**
-     * Updates the temporary selected text model
-     * @param textGenModel The new model to set as temporary selection
-     */
+    // region Model Selection Methods
+    // ========================================================================================
     fun selectTempTextModel(textGenModel: TextModel) {
         _tempSelectedTextModel.value = textGenModel
     }
 
-    /**
-     * Confirms the temporary model as the active model
-     */
     fun confirmSelectedTextModel() {
         _selectedTextModel.value = _tempSelectedTextModel.value
     }
 
-    /**
-     * Resets temporary selection to match current active model
-     */
     fun setTempSelectedToSelected() {
         _tempSelectedTextModel.value = _selectedTextModel.value
     }
 
-    /**
-     * Handles model selection changes and manages chat transitions
-     */
     fun handleModelSelectionChange() {
         val modelChanged = tempSelectedTextModel.value != selectedTextModel.value
         if (modelChanged) handleModelChangeWorkflow() else confirmSelectedTextModel()
     }
 
-    /**
-     * Manages workflow when changing models mid-conversation
-     */
     private fun handleModelChangeWorkflow() {
         if (currentChatMessages.isNotEmpty()) finalizeCurrentChat()
         confirmSelectedTextModel()
@@ -116,37 +88,28 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
     }
     // endregion
 
-    // region Message Handling & Generation
     // ========================================================================================
-    //                          Public Message Methods
+    //                                  Message Handling
     // ========================================================================================
 
-    /**
-     * Adds a new message to the chat and initiates AI response
-     * @param message The text message content
-     * @param isUser Flag indicating if the message is from the user
-     */
+    // region Public Message Methods
+    // ========================================================================================
     fun sendMessage(message: String, isUser: Boolean = true) {
         if (_textGenerationState.value is TextGenerationState.Loading) stopGeneration()
-        _currentChatMessages.add(ChatMessageModel(message = message, isUser = isUser)
-        )
+        _currentChatMessages.add(ChatMessageModel(message = message, isUser = isUser))
         if (isUser) initiateResponseGeneration()
     }
 
-    /**
-     * Stops ongoing response generation
-     */
     fun stopGeneration() {
-         val loadingState = textGenerationState.value as TextGenerationState.Loading
-         val aiMessageIndex = loadingState.id
+        val loadingState = textGenerationState.value as TextGenerationState.Loading
+        val aiMessageIndex = loadingState.id
 
-         // Update state and message
-         _textGenerationState.value = TextGenerationState.Failure()
-         _currentChatMessages[aiMessageIndex] = ChatMessageModel(
-             message = (textGenerationState.value as TextGenerationState.Failure).message,
-             isUser = false,
-         )
-         _textGenerationState.value = TextGenerationState.Success("")
+        _textGenerationState.value = TextGenerationState.Failure()
+        _currentChatMessages[aiMessageIndex] = ChatMessageModel(
+            message = (textGenerationState.value as TextGenerationState.Failure).message,
+            isUser = false,
+        )
+        _textGenerationState.value = TextGenerationState.Success
     }
 
     fun regenerateResponse(index: Int) {
@@ -159,19 +122,13 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
             initialMessage = ""
         )
     }
+    // endregion
 
+    // region Response Generation Implementation
     // ========================================================================================
-    //                          Private Generation Methods
-    // ========================================================================================
-
     private fun initiateResponseGeneration() {
         val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
-        _currentChatMessages.add(
-            ChatMessageModel(
-                message = "",
-                isUser = false
-            )
-        )
+        _currentChatMessages.add(ChatMessageModel(message = "", isUser = false))
         performResponseGeneration(
             messageIndex = _currentChatMessages.lastIndex,
             prompt = userMessage,
@@ -185,17 +142,15 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
         initialMessage: String
     ) {
         viewModelScope.launch {
-        val chutesName = _selectedTextModel.value.chutesName
-        val currentMessage = _currentChatMessages[messageIndex]
+            val chutesName = _selectedTextModel.value.chutesName
+            val currentMessage = _currentChatMessages[messageIndex]
 
-        // Initialize message state
-        _currentChatMessages[messageIndex] = currentMessage.copy(message = initialMessage)
-
+            _currentChatMessages[messageIndex] = currentMessage.copy(message = initialMessage)
             _textGenerationState.value = TextGenerationState.Loading(messageIndex)
 
             try {
                 chutesAiRepository.streamChat(
-                    apiKey = apiKey,
+                    apiKey = API_KEY,
                     prompt = prompt,
                     model = chutesName
                 ).collect { chunk ->
@@ -205,11 +160,11 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
                         )
                     }
                 }
-                _textGenerationState.value = TextGenerationState.Success("")
+                _textGenerationState.value = TextGenerationState.Success
             } catch (e: Exception) {
                 handleGenerationError(e, messageIndex)
             } finally {
-                _textGenerationState.value = TextGenerationState.Success("")
+                _textGenerationState.value = TextGenerationState.Success
             }
         }
     }
@@ -224,25 +179,18 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
             )
         }
     }
-
     // endregion
 
-    // endregion
     // ========================================================================================
-    //                          Public Chat Methods
+    //                                  Chat History Management
     // ========================================================================================
 
-    /**
-     * Finalizes current chat before model changes
-     */
-    fun finalizeCurrentChat() {
+    // region Public Chat Methods
+    // ========================================================================================
+    private fun finalizeCurrentChat() {
         if (currentChatMessages.isNotEmpty()) startNewChat(forceNew = false)
     }
 
-    /**
-     * Starts a new chat session
-     * @param forceNew Creates new history even when continuing existing chat
-     */
     fun startNewChat(forceNew: Boolean = false) {
         if (currentChatMessages.isEmpty()) {
             resetCurrentChat()
@@ -257,33 +205,20 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
         resetCurrentChat()
     }
 
-    /**
-     * Clears current chat state
-     */
     fun resetCurrentChat() {
         _currentChatMessages.clear()
         _currentChatId.value = null
         _selectedChatHistory.value = null
     }
 
-    /**
-     * Delete chat history item
-     */
     fun deleteChatHistory(chatHistory: ChatHistory) {
         _chatHistoryList.remove(chatHistory)
-
-        // Select first item if list not empty, else clear selection
-        if (_chatHistoryList.isNotEmpty()) {
-            selectChatHistory(_chatHistoryList.first())
-        } else {
-            _selectedChatHistory.value = null
+        _selectedChatHistory.value = _chatHistoryList.firstOrNull() ?: run {
             resetCurrentChat()
+            null
         }
     }
 
-    /**
-     * Deletes all chat history
-     */
     fun clearChatHistory() {
         _chatHistoryList.clear()
         _savedChatHistoryList.clear()
@@ -291,30 +226,21 @@ class ChatViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewMo
         resetCurrentChat()
     }
 
-    /**
-     * Toggles bookmark status for a chat
-     * @param chatHistory The chat history item to modify
-     */
     fun toggleBookmark(chatHistory: ChatHistory) {
         chatHistory.isBookmarked = !chatHistory.isBookmarked
         if (chatHistory.isBookmarked) moveToSaved(chatHistory) else moveToRecent(chatHistory)
     }
 
-    /**
-     * Loads a chat history into current session
-     * @param chatHistory The history item to load
-     */
     fun selectChatHistory(chatHistory: ChatHistory) {
         _selectedChatHistory.value = chatHistory
         loadChatMessages(chatHistory)
         _selectedTextModel.value = chatHistory.textModel
         _tempSelectedTextModel.value = chatHistory.textModel
     }
+    // endregion
 
+    // region History Implementation
     // ========================================================================================
-    //                          Private History Methods
-    // ========================================================================================
-
     private fun findExistingChat() = _currentChatId.value?.let { id ->
         _chatHistoryList.find { it.id == id }
     }

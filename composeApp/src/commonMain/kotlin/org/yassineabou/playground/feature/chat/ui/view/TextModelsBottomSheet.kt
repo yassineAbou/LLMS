@@ -7,18 +7,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -41,13 +39,12 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
-import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
 import org.yassineabou.playground.app.core.sharedViews.ModelInformation
+import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
-import org.yassineabou.playground.app.core.util.draggableScrollModifier
-import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
+import org.yassineabou.playground.feature.chat.data.model.textGenModelList
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,97 +79,15 @@ fun TextModelsBottomSheet(
                     )
                 },
                 body = {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(bottom = 12.dp)
-                    ) {
-                        item {
-                            TextModelType(
-                                type = "Deepseek",
-                                textModelsList = TextGenModelList.deepseek,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
+                    TextModelType(
+                        textModelsList = textGenModelList,
+                        tempSelectedTextModel = tempSelectedTextModel,
+                        onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                        onInfoClick = { textModel ->
+                            isInfoIconClicked = true
+                            infoTextModel = textModel
                         }
-                        item {
-                            TextModelType(
-                                type = "Qwen",
-                                textModelsList = TextGenModelList.qwen,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Gemma",
-                                textModelsList = TextGenModelList.gemma,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Open R1",
-                                textModelsList = TextGenModelList.openR1,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Mistral",
-                                textModelsList = TextGenModelList.mistral,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Llama",
-                                textModelsList = TextGenModelList.llama,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Others",
-                                textModelsList = TextGenModelList.others,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                    }
+                    )
                 }
             )
         }
@@ -191,40 +106,27 @@ fun TextModelsBottomSheet(
 @Composable
 private fun TextModelType(
     textModelsList: List<TextModel>,
-    type: String,
     tempSelectedTextModel: TextModel,
     onTextModelSelected: (TextModel) -> Unit,
     onInfoClick: (TextModel) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-    ) {
-        Text(
-            text = type,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp, end = 8.dp)
-        )
-        LazyRow(
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .draggableScrollModifier(rememberLazyListState()), // Apply the reusable drag modifier for desktop and wasm ,
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(textModelsList) { item ->
-                TextModelItem(
-                    tempSelectedTextModel = item,
-                    isSelected = item == tempSelectedTextModel,
-                    onSelected = { onTextModelSelected(item) },
-                    onInfoClick =  { onInfoClick(item) }
-                )
-            }
-
-        }
-    }
+     LazyVerticalGrid(
+         columns = GridCells.Adaptive(minSize = 150.dp),
+         verticalArrangement = Arrangement.spacedBy(12.dp),
+         horizontalArrangement = Arrangement.spacedBy(12.dp),
+         modifier =  Modifier
+             .fillMaxSize()
+             .padding(vertical = 8.dp, horizontal = 16.dp)
+     ) {
+         items(textModelsList) { item ->
+             TextModelItem(
+                 tempSelectedTextModel = item,
+                 isSelected = item == tempSelectedTextModel,
+                 onSelected = { onTextModelSelected(item) },
+                 onInfoClick = { onInfoClick(item) }
+             )
+         }
+     }
 }
 
 

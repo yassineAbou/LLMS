@@ -1,6 +1,5 @@
-package org.yassineabou.playground.feature.chat.data.network
+package org.yassineabou.playground.feature.chat.data.dataSource.remote
 
-import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.accept
 import io.ktor.client.request.header
@@ -18,6 +17,8 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiEndPoint.CHUTES_API_URL
+import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiEndPoint.STREAM_PREFIX
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionRequest
 
@@ -31,10 +32,6 @@ class KtorChutesApi(
     private val json: Json
 ) : ChutesAiApi {
 
-    companion object {
-        private const val CHUTES_API_URL = "https://llm.chutes.ai/v1/chat/completions"
-        private const val STREAM_PREFIX = "data: "
-    }
 
     override fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
         try {
@@ -46,7 +43,7 @@ class KtorChutesApi(
             }.execute { response ->
                 if (!response.status.isSuccess()) {
                     val errorBody = response.bodyAsText()
-                    Logger.e {("API request failed: ${response.status} - $errorBody") }
+                    //Logger.e {("API request failed: ${response.status} - $errorBody") }
                     throw Exception("API request failed: ${response.status} - $errorBody")
                 }
 
@@ -72,14 +69,14 @@ class KtorChutesApi(
                                 // Handle cases where server sends raw JSON without SSE formatting [[7]]
                                 processChunk(line)
                             } catch (e: Exception) {
-                                Logger.e  { "Failed to parse unexpected line format: $line" }
+                                //Logger.e  { "Failed to parse unexpected line format: $line" }
                             }
                         }
                     }
                 }
             }
         } catch (e: Exception) {
-           Logger.e { "Global exception during streaming" }
+           //Logger.e { "Global exception during streaming" }
             throw e // Re-throw after logging [[3]]
         }
     }
@@ -99,14 +96,14 @@ class KtorChutesApi(
                     }
                 }
                 if (choice.finishReason != null) {
-                    Logger.e { "Stream completed with reason: ${choice.finishReason}" }
+                    //Logger.e { "Stream completed with reason: ${choice.finishReason}" }
                     return
                 }
             }
         } catch (e: SerializationException) {
-            Logger.e { "Serialization error parsing chunk: $dataJson" }
+            //Logger.e { "Serialization error parsing chunk: $dataJson" }
         } catch (e: Exception) {
-            Logger.e { "Unexpected error processing chunk" }
+            //Logger.e { "Unexpected error processing chunk" }
         }
     }
 }

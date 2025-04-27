@@ -148,7 +148,7 @@ fun AiProviderInfo(textModel: TextModel) {
             modifier = Modifier.size(20.dp)
         )
         Text(
-            text = textModel.provider,
+            text = textModel.title,
             style = MaterialTheme.typography.titleSmall,
         )
     }

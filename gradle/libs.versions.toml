@@ -15,16 +15,16 @@ junit = "4.13.2"
 compose-plugin = "1.7.3"
 dragselect = "2.4.1"
 kermit = "2.0.4"
-kotlin = "2.1.0"
+kotlin = "2.1.20"
 ktor = "3.1.0"
 multiplatformMarkdownRendererM3 = "0.33.0"
 navigationCompose = "2.8.0-alpha10"
-kotlinx-coroutines = "1.10.1"
+kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.6.2"
 kotlinx-collections-immutable = "0.3.8"
-koin-bom = "4.0.2"
+koin-bom = "4.0.4"
 foundationLayoutAndroid = "1.7.8"
-sketch= "4.0.4"
+sketch= "4.0.5"
 
 
 
@@ -53,6 +53,7 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatformMarkdownRendererM3" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

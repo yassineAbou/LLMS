@@ -1,13 +1,14 @@
-package org.yassineabou.playground.feature.chat.data.network
+package org.yassineabou.playground.feature.chat.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiApi
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.playground.feature.chat.data.model.ChatMessage
 
 class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
 
     // Function now returns a Flow<String>
-    suspend fun streamChat(
+    fun streamChat(
         apiKey: String,
         prompt: String, // Keep simple prompt input for ease of use
         model: String, // Pass the model identifier

@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.chat.data.model
+package org.yassineabou.playground.feature.chat.ui.view
 
 data class HistoryTabsRow(val title: String)
 

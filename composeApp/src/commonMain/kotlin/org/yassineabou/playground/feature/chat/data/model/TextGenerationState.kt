@@ -1,7 +1,7 @@
-package org.yassineabou.playground.feature.chat.data.network
+package org.yassineabou.playground.feature.chat.data.model
 
 sealed class TextGenerationState {
     data class Loading(val id:  Int) : TextGenerationState()
-    data class Success(val text: String) : TextGenerationState()
+    data object Success : TextGenerationState()
     data class Failure(val message: String = "The current content is empty, please regenerate") : TextGenerationState()
 }

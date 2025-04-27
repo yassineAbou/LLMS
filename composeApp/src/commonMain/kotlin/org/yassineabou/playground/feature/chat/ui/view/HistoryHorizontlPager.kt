@@ -18,7 +18,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.feature.chat.data.model.historyTabRows
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.history.RecentChatHistoryContent
 import org.yassineabou.playground.feature.chat.ui.history.SavedChatHistoryContent
