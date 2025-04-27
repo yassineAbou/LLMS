@@ -4,7 +4,7 @@
 </div>
 
 <p align="center">
-<img src="https://img.shields.io/badge/AI%20Horde-FF2222?logo=ai" alt="AI Horde">
+<img src="https://img.shields.io/badge/Chutes%20AI-000000?logo=ai&logoColor=white&color=000000" alt="Chutes AI">
 <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=kotlin&logoColor=white" alt="Kotlin">
 <img src="https://img.shields.io/badge/Kotlin%20Multiplatform-7F52FF?style=flat&logo=kotlin&logoColor=white" alt="Kotlin Multiplatform">
 <img src="https://img.shields.io/badge/Compose%20Multiplatform-4285F4?logo=jetpack-compose&logoColor=white" alt="Compose Multiplatform">
@@ -50,28 +50,48 @@ https://github.com/user-attachments/assets/6f407768-673f-4d4e-9382-eba3baa88875
 
 https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
 
-## 🤖 Horde AI Integration
+## 🤖 Chutes AI Integration
 
-Horde AI is a powerful, crowdsourced platform that combines a distributed cluster of image and text
-generation workers. For more details, visit their [website](https://stablehorde.net/).
+**Chutes AI** is a serverless AI compute platform that lets you deploy, run, and scale any AI model in seconds. This project uses **FREE** models provided by Chutes AI.  
 
-To interact with the models provided by Horde AI, the application uses the Horde AI REST API.
-For more information on how to use this API, please visit
-the [API documentation](https://stablehorde.net/api/).
+### 🔧 Setup  
+1. **Get an API Key**:  
+   - Sign up at [chutes.ai](https://chutes.ai/) and paste your API key in `ChutesAiEndPoint.kt`:  
+     ```kotlin  
+     object ChutesAiEndPoint {  
+         val API_KEY = "YOUR_API_KEY_HERE"  
+     }  
+     ```  
+
+2. **Customize Models**:  
+   - Add new or custom models by editing:
+     
+     - **Text models**: `TextGenModelList.kt`  
+       ```kotlin  
+       TextModel(  
+           title = "DeepSeek V3 0324",  
+           chutesName = "deepseek-ai/DeepSeek-V3-0324",  
+           description = "DeepSeek-V3-0324 is...",  
+           image = Res.drawable.ic_deepseek  
+       ),  
+       ```
+       
+     - **Image models**: `ImageGenModelList.kt`  
 
 ## 📈 Progress
 
-Our development process is divided into three key steps:
+Our development process is divided into four key steps:
 
 #### 1. Prototype with Fake Data 🚧
-
 - Status: 🎯 Done
-- Building a basic prototype with fake data to test the app's structure and functionality.
 
-#### 2. Connect with Horde AI REST API 🌐
-
+#### 2. Connect with Chutes AI REST API (Text Models) 📝 
+- Status: 🎯 Done 
+#### 3. Connect with Chutes AI REST API (Image Models) 🖼️  
 - Status: 🔄 in progress
-- Integrating the app with Horde AI's REST API to enable AI-powered features and data processing.
+
+#### 4. Save Chat History & Generated Images Locally 💾  
+- Status: ➡️ Next 
 
 
 ## 🏗️ Architecture
@@ -81,8 +101,6 @@ Our development process is divided into three key steps:
 
 - **Layers**: All data handling, business logic, and presentation layers are implemented
   using [kotlin multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)
-
-- **backend**: The backend is developed using [Ktor framework](https://ktor.io/).
 
 <p align="center">
   <img src="https://miro.medium.com/v2/resize:fit:2552/1*0MUE4D4nlEITAUyOTZ1zcg.png" alt="Kotlin Multiplatform" width="250">
@@ -95,30 +113,37 @@ Our development process is divided into three key steps:
 - [Koin](https://insert-koin.io/docs/reference/koin-compose/compose/) (Dependency injection)
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) (asynchronous or non-blocking)
 - [Sketch](https://github.com/panpf/sketch) (Image loading)
+- [Ktor Client](https://ktor.io/docs/full-stack-development-with-kotlin-multiplatform.html) (HTTP client)
+- [Markdown renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) (Markdown renderer)
+- [Drag Select](https://github.com/jordond/drag-select-compose) (adding Google Photos style drag-to-select multi-selection to a LazyGrid)
 
 ## Package Structure
 ```  
-app/
-├── core/
-│   ├── di
-│   ├── navigation
-│   ├── sharedViews
-│   ├── theme
-│   └── util
-└── feature/
-    ├── chat/
-    │   ├── model
-    │   └── ui/
-    │       ├── chat
-    │       ├── history
-    │       ├── listDetailPane
-    │       └── view
-    ├── imagine/
-    │   ├── model
-    │   └── ui/
-    │       ├── supportingPane
-    │       ├── util
-    │       └── view
+app/  
+├── core/  
+│   ├── di  
+│   ├── navigation  
+│   ├── sharedViews  
+│   ├── theme  
+│   └── util  
+└── feature/  
+    ├── chat/  
+    │   ├── data  
+    │   │   ├── local  
+    │   │   └── remote  
+    │   ├── model  
+    │   ├── repository  
+    │   └── ui  
+    │       ├── chat  
+    │       ├── history  
+    │       ├── listDetailPane  
+    │       └── view  
+    ├── imagine/  
+    │   ├── model  
+    │   └── ui  
+    │       ├── supportingPane  
+    │       ├── util  
+    │       └── view  
     
 ``` 
 
