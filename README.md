@@ -46,7 +46,9 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
 
 
 ## 🎨 Demo
-https://github.com/user-attachments/assets/6f407768-673f-4d4e-9382-eba3baa88875
+
+https://github.com/user-attachments/assets/cd1b0aa6-f41d-473d-a95a-0dd0d0753c40
+
 
 https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
 
