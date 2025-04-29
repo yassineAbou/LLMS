@@ -141,9 +141,9 @@ private fun LoadingIndicator() {
             color = MaterialTheme.colorSchemeCustom.alwaysWhite
         )
         Text(
-            text = "Generating...",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorSchemeCustom.alwaysWhite
+            text = "Pet project with free models. Responses may take a few seconds. Thanks for patience...",
+            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }
