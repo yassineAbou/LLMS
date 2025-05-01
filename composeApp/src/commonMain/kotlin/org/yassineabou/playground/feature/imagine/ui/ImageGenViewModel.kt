@@ -23,10 +23,10 @@ class ImageGenViewModel : ViewModel() {
     private val _listGeneratedPhotos: MutableStateFlow<MutableList<UrlExample>> = MutableStateFlow(mutableListOf())
     val listGeneratedPhotos: StateFlow<MutableList<UrlExample>> = _listGeneratedPhotos
 
-    private val _tempSelectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
+    private val _tempSelectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.newImageModel.first())
     val tempSelectedImageModel: StateFlow<ImageModel> = _tempSelectedImageModel
 
-    private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.realistic.first())
+    private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.newImageModel.first())
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
 
 

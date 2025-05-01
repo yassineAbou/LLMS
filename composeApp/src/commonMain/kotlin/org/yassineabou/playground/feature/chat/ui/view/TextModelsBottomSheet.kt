@@ -1,19 +1,15 @@
 package org.yassineabou.playground.feature.chat.ui.view
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -36,11 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
-import org.yassineabou.playground.app.core.sharedViews.InfoIconButton
-import org.yassineabou.playground.app.core.sharedViews.ModelInformation
+import org.yassineabou.playground.app.core.sharedViews.ModelDetails
+import org.yassineabou.playground.app.core.sharedViews.ModelHeader
 import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.chat.data.model.TextModel
@@ -92,10 +86,12 @@ fun TextModelsBottomSheet(
             )
         }
         AnimatedVisibility(isInfoIconClicked) {
-            ModelInformation(
-                textModel = infoTextModel,
+            ModelDetails(
+                title = tempSelectedTextModel.title,
+                description = tempSelectedTextModel.description,
+                image = tempSelectedTextModel.image,
                 modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.63f)
+                    .fillMaxHeight(0.5f)
                     .padding(horizontal = 16.dp),
                 onDismissRequest = { isInfoIconClicked = false }
             )
@@ -153,7 +149,7 @@ private fun TextModelItem(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        ModelInformation(
+        ModelHeader(
             image = tempSelectedTextModel.image,
             backgroundColor = backgroundColor,
             onInfoClick =  { onInfoClick(true) }
@@ -167,26 +163,4 @@ private fun TextModelItem(
     }
 }
 
-@Composable
-private fun ModelInformation(
-    backgroundColor: Color,
-    image: DrawableResource,
-    onInfoClick: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Image(
-            painter = painterResource(image),
-            contentDescription = "Text Model",
-            modifier = Modifier.size(40.dp)
-        )
-        InfoIconButton(
-            onInfoClick = { onInfoClick(true) }
-        )
-    }
-}
 

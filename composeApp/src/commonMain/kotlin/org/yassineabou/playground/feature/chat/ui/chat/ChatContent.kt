@@ -41,15 +41,15 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.yassineabou.playground.app.core.sharedViews.SelectedModel
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
-import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.data.model.TextGenerationState
+import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
 import org.yassineabou.playground.feature.chat.ui.view.ChatBubble
-import org.yassineabou.playground.feature.chat.ui.view.SelectedTextModel
 import org.yassineabou.playground.feature.chat.ui.view.TextModelsBottomSheet
 
 @Composable
@@ -83,7 +83,7 @@ fun ChatContent(
             )
         } else {
             // Show SelectedTextModel if showAppBar is false
-            SelectedTextModel(
+            SelectedModel(
                 title = selectedTextModel.title,
                 image = selectedTextModel.image,
                 modifier = Modifier

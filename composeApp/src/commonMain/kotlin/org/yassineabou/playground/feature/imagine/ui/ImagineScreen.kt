@@ -1,5 +1,6 @@
 package org.yassineabou.playground.feature.imagine.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,9 +58,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
+import llms.composeapp.generated.resources.Res
+import llms.composeapp.generated.resources.ic_nvidia
+import org.jetbrains.compose.resources.DrawableResource
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.CustomIconButton
 import org.yassineabou.playground.app.core.sharedViews.GoToFirst
+import org.yassineabou.playground.app.core.sharedViews.SelectedModel
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.playground.app.core.util.draggableScrollModifier
@@ -92,27 +97,50 @@ fun ImagineScreen(
         verticalArrangement = Arrangement.Center
     ) {
         if (shouldShowSupportingPaneButton) {
-            GeneratedImagesIconButton(
+            ImagineAppBar(
+                title = selectedImageModel.title,
+                image = Res.drawable.ic_nvidia,
                 modifier = Modifier
                     .weight(0.1f)
+                    .fillMaxSize()
                     .align(alignment = Alignment.Start)
-                    .padding(start = 8.dp, top = 16.dp),
-                onClick = { navController.navigate(Screen.GeneratedImagesScreen.route)}
+                    .padding(start = 8.dp),
+                onClick = { navController.navigate(Screen.GeneratedImagesScreen.route)},
+                onSelect = { selectModelClicked = true  }
             )
+        } else {
+            Box(
+                modifier = Modifier
+                    .weight(0.1f)
+                    .fillMaxSize()
+            ) {
+                SelectedModel(
+                    title = selectedImageModel.title,
+                    image = Res.drawable.ic_nvidia,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(8.dp)
+                        .clickable { selectModelClicked = true }
+                        .background(
+                            color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(6.dp)
+                )
+            }
         }
         TypeIdeaForm(
             ideaText = ideaText,
             modifier = Modifier
                 .weight(0.26F)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorSchemeCustom.alwaysBlue,
+                    shape = MaterialTheme.shapes.medium
+                ),
             onIdeaTextChange = { ideaText = it },
-        )
-        SelectImageModels(
-            modelName = selectedImageModel.title,
-            modifier = Modifier
-                .weight(0.14f)
-                .fillMaxWidth(),
-            changeSelectModelClicked = { selectModelClicked = it }
         )
         Inspirations(
             loadedInspiration = loadedInspiration,
@@ -151,16 +179,37 @@ fun ImagineScreen(
 }
 
 @Composable
-private fun GeneratedImagesIconButton(
+private fun ImagineAppBar(
+    title: String,
+    image: DrawableResource,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onSelect: () -> Unit
 ) {
-    CustomIconButton(
-        icon = Icons.Outlined.GridView,
-        contentDescription = "Generated images",
-        modifier = modifier,
-        onClick = onClick,
-    )
+    Box(modifier = modifier) {
+
+        CustomIconButton(
+            icon = Icons.Outlined.GridView,
+            contentDescription = "Generated images",
+            modifier = Modifier.align(Alignment.TopStart),
+            onClick = onClick,
+        )
+
+        SelectedModel(
+            title = title,
+            image = image,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(8.dp)
+                .clickable { onSelect() }
+                .background(
+                    color = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(6.dp)
+        )
+    }
+
 }
 
 
@@ -172,54 +221,32 @@ private fun TypeIdeaForm(
 ) {
     val focusManager = LocalFocusManager.current
     Box(modifier = modifier) {
-        Column {
-            IdeaSelectionHeader(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.20f),
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = ideaText,
+            placeholder = { Text(text = "Describe the text you want to create or choose from inspirations") },
+            onValueChange = onIdeaTextChange,
+            trailingIcon = {
+                if (ideaText.isNotEmpty()) {
+                    IconButton(onClick = { onIdeaTextChange("") }) {
+                        Icon(Icons.Filled.Clear, contentDescription = "Clear Text")
+                    }
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = if (ideaText.isNotEmpty()) ImeAction.Done else ImeAction.Default
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus() }
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent, // Hide the default border
+                unfocusedBorderColor = Color.Transparent, // Hide the default border
+                cursorColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set cursor color to blue
+                focusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set label color to blue when focused
+                unfocusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f) // Optional: Set label color to semi-transparent blue when unfocused
             )
-
-            // Wrap OutlinedTextField in a Box to add a custom border
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
-                    .weight(0.80f)
-                    .border(
-                        width = 2.dp, // Set border thickness
-                        color = MaterialTheme.colorSchemeCustom.alwaysBlue, // Set border color
-                        shape = MaterialTheme.shapes.medium // Match the shape of the OutlinedTextField
-                    )
-                    .padding(4.dp) // Add padding inside the border to avoid overlap
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = ideaText,
-                    placeholder = { Text(text = "Describe the text you want to create or choose from inspirations") },
-                    onValueChange = onIdeaTextChange,
-                    trailingIcon = {
-                        if (ideaText.isNotEmpty()) {
-                            IconButton(onClick = { onIdeaTextChange("") }) {
-                                Icon(Icons.Filled.Clear, contentDescription = "Clear Text")
-                            }
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = if (ideaText.isNotEmpty()) ImeAction.Done else ImeAction.Default
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { focusManager.clearFocus() }
-                    ),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Transparent, // Hide the default border
-                        unfocusedBorderColor = Color.Transparent, // Hide the default border
-                        cursorColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set cursor color to blue
-                        focusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set label color to blue when focused
-                        unfocusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f) // Optional: Set label color to semi-transparent blue when unfocused
-                    )
-                )
-            }
-        }
+        )
     }
 }
 
