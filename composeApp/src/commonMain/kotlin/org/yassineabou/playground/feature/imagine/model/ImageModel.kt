@@ -8,9 +8,7 @@ import kotlin.uuid.Uuid
 @Immutable
 data class ImageModel @OptIn(ExperimentalUuidApi::class) constructor(
     val id: String = Uuid.random().toString(),
-    val urlExamples: List<UrlExample>,
     val title: String,
     val description: String,
-    val isNsfw: Boolean = false,
     val image: DrawableResource,
 )

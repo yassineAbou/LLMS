@@ -144,7 +144,7 @@ fun FullScreenImage(
 
         if (showInfoBottomSheet) {
             InfoBottomSheet(
-                description = pagerState.currentPage.let { listGeneratedPhotos[it].description },
+                description = pagerState.currentPage.let { listGeneratedPhotos[it].prompt },
                 onDismissRequest = { showInfoBottomSheet = false }
             )
         }
@@ -173,7 +173,7 @@ private fun ImagePager(
             if (image != null) {
                 ImageReview(
                     url = image.url,
-                    description = image.description,
+                    description = image.prompt,
                     modifier = Modifier.fillMaxSize()
                 )
             }

@@ -1,7 +1,5 @@
 package org.yassineabou.playground.feature.imagine.ui
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -95,7 +93,7 @@ class ImageGenViewModel : ViewModel() {
             addImage(
                 UrlExample(
                     url = randomUrl,
-                    description = "We're going to work on generating images next. this is just a prototype with fake data"
+                    prompt = "We're going to work on generating images next. this is just a prototype with fake data"
                 )
             )
             setIsImageGenerated(true)

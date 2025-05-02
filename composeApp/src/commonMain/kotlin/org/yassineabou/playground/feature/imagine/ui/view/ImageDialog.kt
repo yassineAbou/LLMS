@@ -57,7 +57,7 @@ fun ImageDialogContent(
         )
 
         DescriptionWithTryButton(
-            description = urlExample.description,
+            description = urlExample.prompt,
             scrollState = scrollState,
             modifier = Modifier
                 .align(Alignment.BottomCenter)

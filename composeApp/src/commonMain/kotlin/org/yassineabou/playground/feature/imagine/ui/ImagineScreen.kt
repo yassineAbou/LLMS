@@ -58,8 +58,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
-import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_nvidia
 import org.jetbrains.compose.resources.DrawableResource
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.CustomIconButton
@@ -99,7 +97,7 @@ fun ImagineScreen(
         if (shouldShowSupportingPaneButton) {
             ImagineAppBar(
                 title = selectedImageModel.title,
-                image = Res.drawable.ic_nvidia,
+                image = selectedImageModel.image,
                 modifier = Modifier
                     .weight(0.1f)
                     .fillMaxSize()
@@ -116,7 +114,7 @@ fun ImagineScreen(
             ) {
                 SelectedModel(
                     title = selectedImageModel.title,
-                    image = Res.drawable.ic_nvidia,
+                    image = selectedImageModel.image,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .padding(8.dp)
