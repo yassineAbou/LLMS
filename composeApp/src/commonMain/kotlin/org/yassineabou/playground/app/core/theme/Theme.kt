@@ -91,7 +91,8 @@ private val lightCustomColorScheme = CustomColorScheme(
     alwaysBlue = blue100,
     alwaysBlack = Color.Black,
     alwaysGray = Color.LightGray,
-    askAnythingBgColor = gray100
+    askAnythingBgColor = gray100,
+    alwaysOrange = orange100
 )
 
 private val darkCustomColorScheme = CustomColorScheme(
@@ -100,7 +101,8 @@ private val darkCustomColorScheme = CustomColorScheme(
     alwaysBlue = blue100,
     alwaysBlack = Color.Black,
     alwaysGray = Color.LightGray,
-    askAnythingBgColor = gray200
+    askAnythingBgColor = gray200,
+    alwaysOrange = orange100
 )
 
 @Composable

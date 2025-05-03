@@ -82,7 +82,7 @@ class ImageGenViewModel : ViewModel() {
             for (i in 10 downTo 0) {
                 _estimatedTimerState.value = EstimatedTimerState(
                     remainingSeconds = i,
-                    progress = 1f - (i / 10f), // Invert the progress calculation
+                    progress = 1f - (i /10), // Invert the progress calculation
                     isTimerCompleted = false
                 )
                 delay(1.seconds)

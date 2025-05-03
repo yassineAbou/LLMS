@@ -1,6 +1,7 @@
 package org.yassineabou.playground.feature.chat.ui.view
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +35,7 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.playground.app.core.sharedViews.LoadingContent
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
@@ -48,6 +49,11 @@ fun ChatBubble(
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
+    val backgroundColor = when {
+        chatMessage.isUser -> MaterialTheme.colorScheme.surface
+        isLoading -> MaterialTheme.colorSchemeCustom.alwaysBlack
+        else -> MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f)
+    }
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -55,12 +61,7 @@ fun ChatBubble(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp)
-                .background(
-                    color = if (chatMessage.isUser) MaterialTheme.colorScheme.surface else MaterialTheme.colorSchemeCustom.alwaysBlue.copy(
-                        alpha = 0.5f
-                    ),
-                )
-            ,
+                .background(backgroundColor),
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -68,7 +69,14 @@ fun ChatBubble(
             ChatBubbleIcon(isUser = chatMessage.isUser, aiIcon = aiIcon)
 
             when {
-                isLoading -> LoadingIndicator()
+                isLoading -> {
+                    LoadingContent(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .animateContentSize()
+                    )
+                }
                 else -> ChatBubbleMessage(
                     chatMessage = chatMessage,
                     isLoading = isLoading,
@@ -127,25 +135,6 @@ private fun AiProviderIcon(aiIcon: DrawableResource) {
         )
     }
 
-}
-
-@Composable
-private fun LoadingIndicator() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(20.dp),
-            strokeWidth = 2.dp,
-            color = MaterialTheme.colorSchemeCustom.alwaysWhite
-        )
-        Text(
-            text = "Pet project with free models. Responses may take a few seconds. Thanks for patience...",
-            color = MaterialTheme.colorSchemeCustom.alwaysWhite,
-            style = MaterialTheme.typography.bodySmall
-        )
-    }
 }
 
 @Composable

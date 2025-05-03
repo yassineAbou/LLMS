@@ -10,6 +10,7 @@ data class CustomColorScheme(
     val alwaysBlue: Color,
     val alwaysBlack: Color,
     val alwaysGray: Color,
+    val alwaysOrange: Color,
     val askAnythingBgColor: Color
 )
 
