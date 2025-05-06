@@ -25,6 +25,7 @@ kotlinx-collections-immutable = "0.3.8"
 koin-bom = "4.0.4"
 foundationLayoutAndroid = "1.7.8"
 sketch= "4.0.5"
+encoding-bom = "2.4.0"
 
 
 
@@ -67,7 +68,9 @@ koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
 koin-android = { module = "io.insert-koin:koin-android" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 sketch-compose = { module = "io.github.panpf.sketch4:sketch-compose", version.ref = "sketch" }
-sketch-http = { module = "io.github.panpf.sketch4:sketch-http", version.ref = "sketch" }
+sketch-http-ktor3 = { module = "io.github.panpf.sketch4:sketch-http-ktor3", version.ref = "sketch" }
+encoding-bom = { module = "io.matthewnelson.encoding:bom", version.ref = "encoding-bom" }
+encoding-base64 = { module = "io.matthewnelson.encoding:base64" }
 
 
 

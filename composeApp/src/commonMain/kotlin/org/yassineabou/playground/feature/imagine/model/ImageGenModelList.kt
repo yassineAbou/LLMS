@@ -14,22 +14,43 @@ object ImageGenModelList {
         ImageModel(
             title = "Hidream",
             description = "No description provided",
-            image = Res.drawable.ic_hi_dream
+            image = Res.drawable.ic_hi_dream,
+            chutesName = "hidream",
+            defaultParams = mapOf(
+                "guidance_scale" to 5f,
+                "num_inference_steps" to 50
+            )
         ),
         ImageModel(
             title = "Chroma",
             description = "No description provided",
-            image = Res.drawable.ic_chroma
+            image = Res.drawable.ic_chroma,
+            chutesName = "chroma",
+            defaultParams = mapOf(
+                "cfg" to 4.5f,
+                "steps" to 30
+            )
         ),
         ImageModel(
             title = "StableFlow",
             description = "Training free image editing with FLUX.1 [dev]",
-            image = Res.drawable.ic_snapchat
+            image = Res.drawable.ic_snapchat,
+            chutesName = "stable-flow",
+            defaultParams = mapOf(
+                "cfg" to 4.5f,
+                "steps" to 30
+            )
         ),
         ImageModel(
             title = "Infiniteyou",
             description = "No description provided",
-            image = Res.drawable.ic_bytedance
+            image = Res.drawable.ic_bytedance,
+            chutesName = "infiniteyou",
+            defaultParams = mapOf(
+                "steps" to 30,
+                "infusenet_guidance_start" to 0f,
+                "infusenet_guidance_end" to 1f
+            )
         ),
     )
 

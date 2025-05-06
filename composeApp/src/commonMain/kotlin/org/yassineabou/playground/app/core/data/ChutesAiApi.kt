@@ -1,4 +1,4 @@
-package org.yassineabou.playground.feature.chat.data.dataSource.remote
+package org.yassineabou.playground.app.core.data
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.accept
@@ -17,13 +17,15 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiEndPoint.CHUTES_API_URL
-import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiEndPoint.STREAM_PREFIX
+import org.yassineabou.playground.app.core.data.ChutesAiEndPoint.CHAT_BASE_URL
+import org.yassineabou.playground.app.core.data.ChutesAiEndPoint.STREAM_PREFIX
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionRequest
+import org.yassineabou.playground.feature.imagine.model.ImageGenerationRequest
 
 
 interface ChutesAiApi {
+    suspend fun generateImage(apiKey: String, endpoint: String, request: ImageGenerationRequest): ByteArray
     fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String>
 }
 
@@ -32,10 +34,23 @@ class KtorChutesApi(
     private val json: Json
 ) : ChutesAiApi {
 
+    override suspend fun generateImage(
+        apiKey: String,
+        endpoint: String,
+        request: ImageGenerationRequest
+    ): ByteArray  {
+
+        return client.preparePost(endpoint) {
+            header(HttpHeaders.Authorization, "Bearer $apiKey")
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
+
 
     override fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
         try {
-            client.preparePost(CHUTES_API_URL) {
+            client.preparePost(CHAT_BASE_URL) {
                 header(HttpHeaders.Authorization, "Bearer $apiKey")
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Text.EventStream)

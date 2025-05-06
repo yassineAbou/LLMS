@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -59,6 +56,7 @@ import androidx.navigation.NavController
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
+import org.yassineabou.playground.app.core.data.GenerationState
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.CustomIconButton
 import org.yassineabou.playground.app.core.sharedViews.GoToFirst
@@ -86,7 +84,7 @@ fun ImagineScreen(
     var ideaText by remember { mutableStateOf("") }
     var selectModelClicked by remember { mutableStateOf(false) }
     val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsStateWithLifecycle()
-    val estimatedTimerState by imageGenViewModel.estimatedTimerState.collectAsStateWithLifecycle()
+    val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val loadedInspiration by imageGenViewModel.loadedInspiration.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
@@ -149,7 +147,7 @@ fun ImagineScreen(
                 .fillMaxWidth(),
         )
         CreateImageButton(
-            enabled = ideaText.isNotEmpty() and estimatedTimerState.isTimerCompleted,
+            enabled = ideaText.isNotEmpty() && imageGenerationState !is GenerationState.Loading,
             modifier = Modifier
                 .weight(0.1f)
                 .width(400.dp)
@@ -163,7 +161,7 @@ fun ImagineScreen(
                     paneDestination = SupportingPaneScreen.ImageCreationTimer,
                     screenRoute = Screen.ImageCreationTimerScreen.route
                 )
-                imageGenViewModel.startEstimatedTimer()
+                imageGenViewModel.generateImage(ideaText)
             }
         )
         if (selectModelClicked) {
@@ -247,80 +245,6 @@ private fun TypeIdeaForm(
         )
     }
 }
-
-
-@Composable
-private fun IdeaSelectionHeader(
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            modifier = Modifier.padding(top = 10.dp, start = 16.dp),
-            text = "Type your idea",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-        )
-    }
-}
-
-@Composable
-private fun SelectImageModels(
-    modelName: String,
-    modifier: Modifier = Modifier,
-    changeSelectModelClicked: (Boolean) -> Unit,
-) {
-    Box(modifier = modifier) {
-        Column {
-            Text(
-                text = "Choose your model",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            ImageModel(
-                modelName = modelName,
-                modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .border(
-                        width = (5.dp),
-                        color = MaterialTheme.colorSchemeCustom.alwaysBlue,
-                        shape = RoundedCornerShape(10)
-                    )
-                    .clickable { changeSelectModelClicked(true) }
-            )
-            Spacer(modifier = Modifier.weight(1f))
-        }
-    }
-}
-
-@Composable
-private fun ImageModel(
-    modelName: String,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-    ) {
-        Text(
-            text = modelName,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
-        )
-        Icon(
-            imageVector = Icons.Filled.KeyboardArrowDown,
-            contentDescription = "",
-            modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 16.dp)
-                .size(35.dp)
-        )
-    }
-}
-
 
 @Composable
 private fun Inspirations(

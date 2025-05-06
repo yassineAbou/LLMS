@@ -9,9 +9,9 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import org.yassineabou.playground.feature.chat.data.dataSource.remote.ChutesAiApi
-import org.yassineabou.playground.feature.chat.data.dataSource.remote.KtorChutesApi
-import org.yassineabou.playground.feature.chat.data.repository.ChutesAiRepository
+import org.yassineabou.playground.app.core.data.ChutesAiApi
+import org.yassineabou.playground.app.core.data.KtorChutesApi
+import org.yassineabou.playground.app.core.data.ChutesAiRepository
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 
@@ -25,6 +25,7 @@ val provideDataModule = module {
             ignoreUnknownKeys = true
             isLenient = true
             encodeDefaults = false
+            explicitNulls = false
         }
     }
 
@@ -65,7 +66,7 @@ val provideDataModule = module {
 //                                  ViewModule Module
 // ========================================================================================
 val provideViewModelModule = module {
-    viewModel { ImageGenViewModel() }
+    viewModel { ImageGenViewModel(get()) }
     viewModel {
       ChatViewModel(
         chutesAiRepository = get()

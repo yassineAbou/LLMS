@@ -22,3 +22,4 @@ data class UrlExample @OptIn(ExperimentalUuidApi::class) constructor(
     val prompt: String = ""
 )
 
+

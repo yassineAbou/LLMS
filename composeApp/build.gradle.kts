@@ -15,7 +15,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "composeApp"
+        outputModuleName.set(project.provider { "composeApp" })
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -102,13 +102,16 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.sketch.compose)
-            implementation(libs.sketch.http)
+            implementation(libs.sketch.http.ktor3)
+
+            implementation(project.dependencies.platform(libs.encoding.bom))
+            implementation(libs.encoding.base64)
 
             implementation(libs.dragselect)
 
             implementation(libs.navigation.compose)
 
-            //implementation(libs.kermit)
+            implementation(libs.kermit)
 
             implementation(libs.multiplatform.markdown.renderer.m3)
 

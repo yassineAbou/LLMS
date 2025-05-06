@@ -2,20 +2,20 @@ package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.yassineabou.playground.feature.imagine.model.EstimatedTimerState
+import org.yassineabou.playground.app.core.data.ChutesAiEndPoint.API_KEY
+import org.yassineabou.playground.app.core.data.ChutesAiRepository
+import org.yassineabou.playground.app.core.data.GenerationState
 import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 import kotlin.math.min
-import kotlin.time.Duration.Companion.seconds
 
-class ImageGenViewModel : ViewModel() {
+class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : ViewModel() {
 
     // Existing state
     private val _listGeneratedPhotos: MutableStateFlow<MutableList<UrlExample>> = MutableStateFlow(mutableListOf())
@@ -27,6 +27,9 @@ class ImageGenViewModel : ViewModel() {
     private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.newImageModel.first())
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
 
+    private val _imageGenerationState = MutableStateFlow<GenerationState>(GenerationState.Success)
+    val imageGenerationState: StateFlow<GenerationState> = _imageGenerationState
+
 
     // Pagination for inspiration
     private val fullInspirationList = ImageGenModelList.inspiration
@@ -37,25 +40,10 @@ class ImageGenViewModel : ViewModel() {
     val loadedInspiration: StateFlow<List<UrlExample>> = _loadedInspiration
 
 
-    // Timer state
-    private val _estimatedTimerState = MutableStateFlow(
-        EstimatedTimerState(
-            remainingSeconds = 10,
-            progress = 0f,
-            isTimerCompleted = true
-        )
-    )
-    val estimatedTimerState: StateFlow<EstimatedTimerState> = _estimatedTimerState
-
     // Add a state for the current image index
     private val _currentImageIndex = MutableStateFlow(0)
     val currentImageIndex: StateFlow<Int> = _currentImageIndex
 
-    private val _isImageGenerated = MutableStateFlow(false)
-    val isImageGenerated: StateFlow<Boolean> = _isImageGenerated
-
-    // Coroutine job for the timer
-    private var timerJob: Job? = null
 
     init {
         loadNextInspirationPage()
@@ -75,46 +63,35 @@ class ImageGenViewModel : ViewModel() {
         currentPage++
     }
 
-    // Function to start the timer
-    fun startEstimatedTimer() {
-        setIsImageGenerated(false)
-        timerJob = viewModelScope.launch {
-            for (i in 10 downTo 0) {
-                _estimatedTimerState.value = EstimatedTimerState(
-                    remainingSeconds = i,
-                    progress = 1f - (i /10), // Invert the progress calculation
-                    isTimerCompleted = false
-                )
-                delay(1.seconds)
-            }
-
-            val randomUrl = ImageGenModelList.inspiration.random().url
-
-            addImage(
-                UrlExample(
-                    url = randomUrl,
-                    prompt = "We're going to work on generating images next. this is just a prototype with fake data"
-                )
+    fun generateImage(prompt: String) {
+        viewModelScope.launch {
+            _imageGenerationState.value = GenerationState.Loading(id = _currentImageIndex.value)
+            val result = chutesAiRepository.generateImage(
+                apiKey = API_KEY,
+                model = selectedImageModel.value,
+                prompt = prompt,
             )
-            setIsImageGenerated(true)
-            _estimatedTimerState.value = _estimatedTimerState.value.copy(isTimerCompleted = true) // Mark timer as completed
+
+            when {
+                result.isSuccess -> {
+                    val image = result.getOrNull()
+                    _listGeneratedPhotos.update { list ->
+                        if (image != null) {
+                            list.add(0, image)
+                        }
+                        list
+                    }
+                    _imageGenerationState.value = GenerationState.Success
+                }
+                result.isFailure -> {
+                    _imageGenerationState.value = GenerationState.Failure(
+                        result.exceptionOrNull()?.message ?: "Image generation failed"
+                    )
+                }
+            }
         }
     }
 
-    // Function to stop the timer
-    fun stopEstimatedTimer() {
-        timerJob?.cancel() // Cancel the timer coroutine
-        resetEstimatedTimer() // Reset the timer state
-    }
-
-    // Reset timer state
-    fun resetEstimatedTimer() {
-        _estimatedTimerState.value = EstimatedTimerState(
-            remainingSeconds = 10,
-            progress = 0f,
-            isTimerCompleted = true
-        )
-    }
 
     // Existing functions
     fun deletePhoto(index: Int) {
@@ -156,10 +133,6 @@ class ImageGenViewModel : ViewModel() {
 
     fun updateCurrentImageIndex(index: Int) {
         _currentImageIndex.value = index
-    }
-
-    fun setIsImageGenerated(value: Boolean) {
-        _isImageGenerated.value = value
     }
 
 }

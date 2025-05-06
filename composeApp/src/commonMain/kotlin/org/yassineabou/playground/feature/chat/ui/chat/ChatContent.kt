@@ -45,7 +45,7 @@ import org.yassineabou.playground.app.core.sharedViews.SelectedModel
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.Animations
 import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
-import org.yassineabou.playground.feature.chat.data.model.TextGenerationState
+import org.yassineabou.playground.app.core.data.GenerationState
 import org.yassineabou.playground.feature.chat.data.model.TextModel
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 import org.yassineabou.playground.feature.chat.ui.view.ChatAppBar
@@ -65,8 +65,8 @@ fun ChatContent(
     val focusManager = LocalFocusManager.current
     var selectModelClicked by remember { mutableStateOf(false) }
     val chatMessages = chatViewModel.currentChatMessages
-    val textGenerationState by  chatViewModel.textGenerationState.collectAsStateWithLifecycle()
-    val isLoading = textGenerationState is TextGenerationState.Loading
+    val textGenerationState by  chatViewModel.generationState.collectAsStateWithLifecycle()
+    val isLoading = textGenerationState is GenerationState.Loading
 
     Box(modifier = modifier.fillMaxSize()) {
         if (showAppBar) {
@@ -101,7 +101,7 @@ fun ChatContent(
         ChatMessagesList(
             chatMessages = chatMessages,
             selectedTextModel = selectedTextModel,
-            textGenerationState = textGenerationState,
+            generationState = textGenerationState,
             regenerateResponse = { index -> chatViewModel.regenerateResponse(index) }
         )
 
@@ -168,7 +168,7 @@ private fun ScrollToBottomButton(
 
 @Composable
 private fun ChatMessagesList(
-    textGenerationState: TextGenerationState,
+    generationState: GenerationState,
     chatMessages: List<ChatMessageModel>,
     selectedTextModel: TextModel,
     regenerateResponse: (Int) -> Unit
@@ -196,10 +196,10 @@ private fun ChatMessagesList(
                 .padding(top = 70.dp, bottom = 80.dp)
         ) {
             itemsIndexed(chatMessages) { index, chatMessage ->
-                val isLoading = when (textGenerationState) {
-                    is TextGenerationState.Loading -> {
+                val isLoading = when (generationState) {
+                    is GenerationState.Loading -> {
                         // Only show loading for the specific AI message index
-                        !chatMessage.isUser && textGenerationState.id == index
+                        !chatMessage.isUser && generationState.id == index
                     }
                     else -> false
                 }
