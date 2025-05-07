@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -51,7 +52,7 @@ fun ChatBubble(
 ) {
     val backgroundColor = when {
         chatMessage.isUser -> MaterialTheme.colorScheme.surface
-        isLoading -> MaterialTheme.colorSchemeCustom.alwaysBlack
+        isLoading -> Color.Black
         else -> MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f)
     }
     Box(
@@ -183,7 +184,7 @@ private fun AiMessage(
         Markdown(
             content = message.trimIndent(),
             colors = markdownColor(
-                text = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                text = Color.White,
             ),
             typography = markdownTypography(
                 // Header hierarchy
@@ -228,7 +229,7 @@ private fun AiMessage(
                     Icon(
                         imageVector = Icons.Default.ContentCopy,
                         contentDescription = "Copy",
-                        tint = MaterialTheme.colorSchemeCustom.alwaysWhite
+                        tint = Color.White
                     )
                 }
                 IconButton(
@@ -237,7 +238,7 @@ private fun AiMessage(
                     Icon(
                         imageVector = Icons.Default.Autorenew,
                         contentDescription = "Regenerate",
-                        tint = MaterialTheme.colorSchemeCustom.alwaysWhite
+                        tint = Color.White
                     )
                 }
             }

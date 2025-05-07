@@ -29,7 +29,7 @@ import org.yassineabou.playground.feature.imagine.ui.util.NavigateToImagineOnScr
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
 @Composable
-fun ImageCreationTimerScreen(
+fun ImageGenerationLoadingScreen(
     navController: NavController,
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
@@ -53,7 +53,7 @@ fun ImageCreationTimerScreen(
 
     NavigateToImagineOnScreenExpansion(
         navController = navController,
-        targetRoute = Screen.ImageCreationTimerScreen.route,
+        targetRoute = Screen.ImageGenerationLoadingScreen.route,
         onNavigate = {
             navController.navigate(Screen.ImagineScreen.route)
         }
@@ -62,7 +62,7 @@ fun ImageCreationTimerScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorSchemeCustom.alwaysBlack)
+            .background(Color.Black)
     ) {
 
         LoadingContent(
@@ -80,7 +80,7 @@ fun ImageCreationTimerScreen(
             modifier = Modifier.align(Alignment.BottomCenter)
                 .padding(bottom = 48.dp),
             onClick = {
-
+                imageGenViewModel.cancelImageGeneration()
                 PaneOrScreenNavigator.navigateBack(
                     supportingPaneNavigator = supportingPaneNavigator,
                     navController = navController,

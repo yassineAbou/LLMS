@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
@@ -135,7 +136,7 @@ fun AiProviderInfo(textModel: TextModel) {
     Row(
         modifier = Modifier
             .border(
-                BorderStroke(1.dp, MaterialTheme.colorSchemeCustom.alwaysGray),
+                BorderStroke(1.dp, LightGray),
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(6.dp),

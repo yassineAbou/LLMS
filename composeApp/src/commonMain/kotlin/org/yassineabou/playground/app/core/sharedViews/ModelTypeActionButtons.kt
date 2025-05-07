@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 
@@ -33,7 +34,7 @@ fun ModelTypeActionButtons(onDismissRequest: () -> Unit, onDone: () -> Unit) {
             onClick = onDone
         ) {
             Text(
-                color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                color = Color.White,
                 text = "Done"
             )
         }

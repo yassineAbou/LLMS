@@ -6,10 +6,7 @@ import androidx.compose.ui.graphics.Color
 
 data class CustomColorScheme(
     val alwaysPink: Color,
-    val alwaysWhite: Color,
     val alwaysBlue: Color,
-    val alwaysBlack: Color,
-    val alwaysGray: Color,
     val alwaysOrange: Color,
     val askAnythingBgColor: Color
 )

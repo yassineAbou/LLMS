@@ -159,7 +159,7 @@ fun ImagineScreen(
                     navController = navController,
                     isLargeScreen = isLargeScreen,
                     paneDestination = SupportingPaneScreen.ImageCreationTimer,
-                    screenRoute = Screen.ImageCreationTimerScreen.route
+                    screenRoute = Screen.ImageGenerationLoadingScreen.route
                 )
                 imageGenViewModel.generateImage(ideaText)
             }
@@ -258,6 +258,7 @@ private fun Inspirations(
     var showImageDialog by remember { mutableStateOf(false) }
     var dialogUrlExample by remember { mutableStateOf(UrlExample()) }
 
+
     val shouldLoadMore by remember(scrollState, loadedInspiration) {
         derivedStateOf {
             val layoutInfo = scrollState.layoutInfo
@@ -274,12 +275,12 @@ private fun Inspirations(
         }
     }
 
-
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore) {
             loadNextPage()
         }
     }
+
 
     Box(modifier = modifier) {
         Column {
@@ -395,7 +396,7 @@ private fun CreateImageButton(
             Text(
                 text = "Create",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorSchemeCustom.alwaysWhite
+                color = Color.White
             )
         }
     }

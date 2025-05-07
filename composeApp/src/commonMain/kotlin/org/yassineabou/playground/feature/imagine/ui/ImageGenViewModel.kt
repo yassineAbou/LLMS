@@ -2,7 +2,8 @@ package org.yassineabou.playground.feature.imagine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -30,6 +31,7 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
     private val _imageGenerationState = MutableStateFlow<GenerationState>(GenerationState.Success)
     val imageGenerationState: StateFlow<GenerationState> = _imageGenerationState
 
+    private var imageGenerationJob: Job? = null
 
     // Pagination for inspiration
     private val fullInspirationList = ImageGenModelList.inspiration
@@ -64,7 +66,7 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
     }
 
     fun generateImage(prompt: String) {
-        viewModelScope.launch {
+        imageGenerationJob = viewModelScope.launch {
             _imageGenerationState.value = GenerationState.Loading(id = _currentImageIndex.value)
             val result = chutesAiRepository.generateImage(
                 apiKey = API_KEY,
@@ -75,14 +77,12 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
             when {
                 result.isSuccess -> {
                     val image = result.getOrNull()
-                    _listGeneratedPhotos.update { list ->
-                        if (image != null) {
-                            list.add(0, image)
-                        }
-                        list
+                    if (image != null) {
+                        addImage(image)
+                        _imageGenerationState.value = GenerationState.Success
                     }
-                    _imageGenerationState.value = GenerationState.Success
                 }
+
                 result.isFailure -> {
                     _imageGenerationState.value = GenerationState.Failure(
                         result.exceptionOrNull()?.message ?: "Image generation failed"
@@ -90,6 +90,15 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
                 }
             }
         }
+    }
+
+    fun cancelImageGeneration() {
+        imageGenerationJob?.takeIf { it.isActive }?.cancel()
+        resetImageGenerationState()
+    }
+
+    fun resetImageGenerationState() {
+        _imageGenerationState.value = GenerationState.Success
     }
 
 

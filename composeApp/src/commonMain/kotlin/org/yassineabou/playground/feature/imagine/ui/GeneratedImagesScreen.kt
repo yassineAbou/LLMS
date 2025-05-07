@@ -24,6 +24,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -126,7 +128,7 @@ fun GeneratedImagesScreen(
                 items { image ->
                     val isSelected = image in selectedPhotos
                     val selectedModifier =
-                        if (isSelected) Modifier.background(MaterialTheme.colorSchemeCustom.alwaysGray)
+                        if (isSelected) Modifier.background(LightGray)
                             .padding(4.dp) else Modifier
                     SelectableItem(
                         modifier = selectedModifier,
@@ -135,7 +137,7 @@ fun GeneratedImagesScreen(
                             SelectedIcon(
                                 options = IndicatorIconDefaults.selectedIconOptions(
                                     tint = MaterialTheme.colorSchemeCustom.alwaysBlue,
-                                    backgroundColor = MaterialTheme.colorSchemeCustom.alwaysWhite
+                                    backgroundColor = Color.White
                                 ),
                                 modifier = Modifier.align(Alignment.TopStart)
                             )

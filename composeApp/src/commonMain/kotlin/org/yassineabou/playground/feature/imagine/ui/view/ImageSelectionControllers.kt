@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 
@@ -73,13 +74,13 @@ fun CloseButton(
             Icon(
                 modifier = Modifier.size(30.dp),
                 imageVector = Icons.Filled.Close,
-                tint = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                tint = Color.White,
                 contentDescription = "Close"
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = if (selectedPhotoCount > 0) "$selectedPhotoCount" else "  ",
-                color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                color = Color.White,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(end = 8.dp)
             )

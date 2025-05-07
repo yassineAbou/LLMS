@@ -28,10 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.panpf.sketch.AsyncImage
-import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.sharedViews.PyramidTextFormat
 import org.yassineabou.playground.feature.imagine.model.UrlExample
 
@@ -80,10 +80,10 @@ fun CloseButton(
         Icon(
             modifier = Modifier
                 .clip(CircleShape)
-                .background(MaterialTheme.colorSchemeCustom.alwaysWhite)
+                .background(Color.White)
                 .padding(5.dp),
             imageVector = Icons.Default.Close,
-            tint = MaterialTheme.colorSchemeCustom.alwaysBlack,
+            tint = Color.Black,
             contentDescription = "Close",
         )
     }
@@ -103,7 +103,7 @@ fun DescriptionWithTryButton(
         Box(modifier = Modifier.height(100.dp)) {
             PyramidTextFormat(
                 text = description,
-                color = MaterialTheme.colorSchemeCustom.alwaysWhite,
+                color = Color.White,
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.verticalScroll(scrollState)
             )
@@ -114,8 +114,8 @@ fun DescriptionWithTryButton(
         Button(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorSchemeCustom.alwaysWhite,
-                contentColor = MaterialTheme.colorSchemeCustom.alwaysBlack
+                containerColor = Color.White,
+                contentColor = Color.Black
             ),
             onClick = {
                 onIdeaTextChange("")

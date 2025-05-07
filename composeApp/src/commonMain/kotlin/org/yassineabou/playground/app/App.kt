@@ -34,7 +34,7 @@ import org.yassineabou.playground.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.playground.feature.chat.ui.history.ChatHistoryScreen
 import org.yassineabou.playground.feature.imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
+import org.yassineabou.playground.feature.imagine.ui.ImageGenerationLoadingScreen
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.playground.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
@@ -85,7 +85,7 @@ fun LLMsApp() {
         val routeToCheck = listOf(
             Screen.GeneratedImagesScreen.route,
             Screen.FullScreenImage.route,
-            Screen.ImageCreationTimerScreen.route,
+            Screen.ImageGenerationLoadingScreen.route,
             Screen.ChatHistoryScreen.route,
         )
         isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
@@ -145,13 +145,13 @@ fun LLMsApp() {
                         SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
-                        route = Screen.ImageCreationTimerScreen.route,
+                        route = Screen.ImageGenerationLoadingScreen.route,
                         enterTransition = NavTransitions.slideLeftIn(),
                         exitTransition = NavTransitions.slideRightOut(),
                         popEnterTransition = NavTransitions.slideLeftIn(),
                         popExitTransition = NavTransitions.slideRightOut()
                     ) {
-                        ImageCreationTimerScreen(navController = navController, imageGenViewModel = imageGenViewModel, supportingPaneNavigator = supportingPaneNavigator)
+                        ImageGenerationLoadingScreen(navController = navController, imageGenViewModel = imageGenViewModel, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.FullScreenImage.route,

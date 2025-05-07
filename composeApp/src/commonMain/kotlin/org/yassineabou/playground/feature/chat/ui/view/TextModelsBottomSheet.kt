@@ -136,7 +136,7 @@ private fun TextModelItem(
     val backgroundColor =
         if (isSelected) MaterialTheme.colorSchemeCustom.alwaysBlue else Color.Transparent
     val textColor =
-        if (isSelected) MaterialTheme.colorSchemeCustom.alwaysWhite else MaterialTheme.colorScheme.onBackground
+        if (isSelected) Color.White else MaterialTheme.colorScheme.onBackground
     Column(
         modifier = Modifier
             .border(

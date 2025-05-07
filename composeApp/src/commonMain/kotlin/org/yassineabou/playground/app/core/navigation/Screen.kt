@@ -1,8 +1,6 @@
 package org.yassineabou.playground.app.core.navigation
 
 import androidx.compose.runtime.saveable.Saver
-import kotlinx.serialization.Serializable
-import org.yassineabou.playground.feature.imagine.ui.supportingPane.SupportingPaneScreen
 
 
 sealed class Screen(val route: String) {
@@ -17,7 +15,7 @@ sealed class Screen(val route: String) {
 
     data object FullScreenImage : Screen("FullScreenImage")
     
-    data object ImageCreationTimerScreen : Screen("ImageCreationTimerScreen")
+    data object ImageGenerationLoadingScreen : Screen("ImageGenerationLoadingScreen")
 
     companion object {
 
@@ -28,7 +26,7 @@ sealed class Screen(val route: String) {
                 ImagineScreen.route -> ImagineScreen
                 GeneratedImagesScreen.route -> GeneratedImagesScreen
                 FullScreenImage.route -> FullScreenImage
-                ImageCreationTimerScreen.route -> ImageCreationTimerScreen
+                ImageGenerationLoadingScreen.route -> ImageGenerationLoadingScreen
                 else -> throw IllegalArgumentException("Unknown route: $route")
             }
         }

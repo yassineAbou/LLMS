@@ -3,6 +3,8 @@ package org.yassineabou.playground.app.core.data
 import io.matthewnelson.encoding.base64.Base64
 import io.matthewnelson.encoding.core.Encoder.Companion.encodeToString
 import kotlinx.coroutines.flow.Flow
+import kotlinx.io.IOException
+import org.yassineabou.playground.app.core.util.ImageMimeTypeDetector.detectImageMimeType
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.playground.feature.chat.data.model.ChatMessage
 import org.yassineabou.playground.feature.imagine.model.ImageGenerationRequest
@@ -52,10 +54,12 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
                 padEncoded = true
             }
 
+            // Detect MIME type and validate image
+            val mimeType = detectImageMimeType(imageBytes)
+                ?: throw IOException("Invalid image data: Unrecognized format")
 
             val base64Image = imageBytes.encodeToString(base64Encoder)
-            val dataUrl = "data:image/jpeg;base64,$base64Image"
-
+            val dataUrl = "data:$mimeType;base64,$base64Image"
 
             Result.success(
                 UrlExample(
@@ -64,11 +68,11 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
                 )
             )
 
-
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 
     private fun createImageRequest(
         model: ImageModel,
@@ -96,6 +100,4 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
             infusenet_conditioning_scale = allParams["infusenet_conditioning_scale"] as? Float
         )
     }
-
-
 }

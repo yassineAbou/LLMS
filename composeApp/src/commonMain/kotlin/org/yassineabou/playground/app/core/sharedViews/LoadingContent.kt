@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import llms.composeapp.generated.resources.Res
@@ -48,6 +49,7 @@ fun LoadingContent(
             text = "This is a learning project with free models. Response may take a few seconds",
             fontSize = 15.sp,
             color = Color.Gray,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 24.dp, start = 12.dp, end = 12.dp)
         )
 

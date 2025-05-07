@@ -71,7 +71,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
+            //implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -102,7 +102,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.sketch.compose)
-            implementation(libs.sketch.http.ktor3)
+            implementation(libs.sketch.http)
 
             implementation(project.dependencies.platform(libs.encoding.bom))
             implementation(libs.encoding.base64)

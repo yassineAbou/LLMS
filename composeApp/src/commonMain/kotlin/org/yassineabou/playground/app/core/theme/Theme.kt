@@ -7,7 +7,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.graphics.Color
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -87,20 +86,14 @@ private val darkScheme = darkColorScheme(
 
 private val lightCustomColorScheme = CustomColorScheme(
     alwaysPink = pink100,
-    alwaysWhite = Color.White,
     alwaysBlue = blue100,
-    alwaysBlack = Color.Black,
-    alwaysGray = Color.LightGray,
     askAnythingBgColor = gray100,
     alwaysOrange = orange100
 )
 
 private val darkCustomColorScheme = CustomColorScheme(
     alwaysPink = pink100,
-    alwaysWhite = Color.White,
     alwaysBlue = blue100,
-    alwaysBlack = Color.Black,
-    alwaysGray = Color.LightGray,
     askAnythingBgColor = gray200,
     alwaysOrange = orange100
 )

@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import org.yassineabou.playground.feature.imagine.ui.FullScreenImage
 import org.yassineabou.playground.feature.imagine.ui.GeneratedImagesScreen
 import org.yassineabou.playground.feature.imagine.ui.ImageGenViewModel
-import org.yassineabou.playground.feature.imagine.ui.ImageCreationTimerScreen
+import org.yassineabou.playground.feature.imagine.ui.ImageGenerationLoadingScreen
 import org.yassineabou.playground.feature.imagine.ui.ImagineScreen
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
@@ -78,7 +78,7 @@ fun ThreePaneScaffoldScope.MainPane(
                 )
             }
             isLargeScreen && currentScreen is SupportingPaneScreen.ImageCreationTimer  -> {
-                ImageCreationTimerScreen(
+                ImageGenerationLoadingScreen(
                     navController = navController,
                     imageGenViewModel = imageGenViewModel,
                     supportingPaneNavigator = supportingPaneNavigator
@@ -94,7 +94,7 @@ fun ThreePaneScaffoldScope.MainPane(
             else -> {
                 when (currentScreen) {
                     SupportingPaneScreen.ImageCreationTimer -> {
-                        ImageCreationTimerScreen(
+                        ImageGenerationLoadingScreen(
                             navController = navController,
                             imageGenViewModel = imageGenViewModel,
                             supportingPaneNavigator = supportingPaneNavigator
@@ -146,7 +146,7 @@ fun SupportingPane(
                 )
             }
             is SupportingPaneScreen.ImageCreationTimer -> {
-                ImageCreationTimerScreen(
+                ImageGenerationLoadingScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
                     imageGenViewModel = imageGenViewModel,
                     navController = navController
