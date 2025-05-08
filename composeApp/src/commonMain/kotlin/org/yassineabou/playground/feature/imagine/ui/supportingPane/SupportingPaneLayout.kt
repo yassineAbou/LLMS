@@ -77,7 +77,7 @@ fun ThreePaneScaffoldScope.MainPane(
                     shouldShowSupportingPaneButton = shouldShowSupportingPaneButton
                 )
             }
-            isLargeScreen && currentScreen is SupportingPaneScreen.ImageCreationTimer  -> {
+            isLargeScreen && currentScreen is SupportingPaneScreen.ImageGenerationLoading  -> {
                 ImageGenerationLoadingScreen(
                     navController = navController,
                     imageGenViewModel = imageGenViewModel,
@@ -93,7 +93,7 @@ fun ThreePaneScaffoldScope.MainPane(
             }
             else -> {
                 when (currentScreen) {
-                    SupportingPaneScreen.ImageCreationTimer -> {
+                    SupportingPaneScreen.ImageGenerationLoading -> {
                         ImageGenerationLoadingScreen(
                             navController = navController,
                             imageGenViewModel = imageGenViewModel,
@@ -145,7 +145,7 @@ fun SupportingPane(
                     navController = navController
                 )
             }
-            is SupportingPaneScreen.ImageCreationTimer -> {
+            is SupportingPaneScreen.ImageGenerationLoading -> {
                 ImageGenerationLoadingScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
                     imageGenViewModel = imageGenViewModel,

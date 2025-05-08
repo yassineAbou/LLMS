@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.Web
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,23 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.github.panpf.sketch.AsyncImage
-import com.github.panpf.sketch.LocalPlatformContext
-import com.github.panpf.sketch.rememberAsyncImageState
-import com.github.panpf.sketch.request.ComposableImageOptions
-import com.github.panpf.sketch.request.ComposableImageRequest
-import com.github.panpf.sketch.request.ImageResult
-import com.github.panpf.sketch.transform.BlurTransformation
 import kotlinx.coroutines.launch
-import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_deepseek
-import llms.composeapp.generated.resources.ic_llama
 import org.yassineabou.playground.app.core.data.GenerationState
 import org.yassineabou.playground.app.core.navigation.Screen
 import org.yassineabou.playground.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.playground.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.playground.app.core.sharedViews.PyramidTextFormat
 import org.yassineabou.playground.app.core.sharedViews.SnackbarController
-import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.playground.app.core.util.PlatformConfig
 import org.yassineabou.playground.app.core.util.isDesktop
@@ -159,6 +148,7 @@ fun FullScreenImage(
             onDelete = {
                 imageGenViewModel.deletePhoto(pagerState.currentPage)
                 val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
+                imageGenViewModel.updateCurrentImageIndex(newPage)
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(newPage)
                 }
@@ -229,6 +219,10 @@ private fun ImagePager(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState.currentPage) {
+        updateCurrentImageIndex(pagerState.currentPage)
+    }
 
     Box(
         modifier = modifier

@@ -125,7 +125,7 @@ fun GeneratedImagesScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                items { image ->
+                itemsIndexed { index, image ->
                     val isSelected = image in selectedPhotos
                     val selectedModifier =
                         if (isSelected) Modifier.background(LightGray)
@@ -148,10 +148,9 @@ fun GeneratedImagesScreen(
                             image = image,
                             isInSelectionMode = inSelectionMode,
                             onClick = {
-                                val itemIndex = listGeneratedPhotos.indexOf(image)
-                                if (itemIndex != -1) {
+                                if (index != -1) {
                                     // Save the index in the ViewModel
-                                    imageGenViewModel.updateCurrentImageIndex(itemIndex)
+                                    imageGenViewModel.updateCurrentImageIndex(index)
                                     PaneOrScreenNavigator.navigateTo(
                                         supportingPaneNavigator = supportingPaneNavigator,
                                         navController = navController,

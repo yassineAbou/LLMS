@@ -158,7 +158,7 @@ fun ImagineScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
                     navController = navController,
                     isLargeScreen = isLargeScreen,
-                    paneDestination = SupportingPaneScreen.ImageCreationTimer,
+                    paneDestination = SupportingPaneScreen.ImageGenerationLoading,
                     screenRoute = Screen.ImageGenerationLoadingScreen.route
                 )
                 imageGenViewModel.generateImage(ideaText)
