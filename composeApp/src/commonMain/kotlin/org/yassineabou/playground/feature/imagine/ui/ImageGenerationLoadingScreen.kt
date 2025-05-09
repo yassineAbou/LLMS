@@ -10,7 +10,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,9 +37,10 @@ fun ImageGenerationLoadingScreen(
     val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
-    // Trigger navigation when timer completes
-    LaunchedEffect(key1 = imageGenerationState) {
-        if (imageGenerationState !is GenerationState.Loading) {
+
+    when (imageGenerationState) {
+        is GenerationState.Success,
+        is GenerationState.Failure -> {
             PaneOrScreenNavigator.navigateTo(
                 supportingPaneNavigator = supportingPaneNavigator,
                 navController = navController,
@@ -49,12 +49,25 @@ fun ImageGenerationLoadingScreen(
                 screenRoute = Screen.FullScreenImage.route
             )
         }
+
+        is GenerationState.Cancelled -> {
+            PaneOrScreenNavigator.navigateTo(
+                supportingPaneNavigator = supportingPaneNavigator,
+                navController = navController,
+                isLargeScreen = isLargeScreen,
+                paneDestination = SupportingPaneScreen.GeneratedImages,
+                screenRoute = Screen.GeneratedImagesScreen.route
+            )
+        }
+
+        else -> Unit
     }
 
     NavigateToImagineOnScreenExpansion(
         navController = navController,
         targetRoute = Screen.ImageGenerationLoadingScreen.route,
         onNavigate = {
+            supportingPaneNavigator.navigate(SupportingPaneScreen.ImageGenerationLoading)
             navController.navigate(Screen.ImagineScreen.route)
         }
     )
@@ -81,11 +94,6 @@ fun ImageGenerationLoadingScreen(
                 .padding(bottom = 48.dp),
             onClick = {
                 imageGenViewModel.cancelImageGeneration()
-                PaneOrScreenNavigator.navigateBack(
-                    supportingPaneNavigator = supportingPaneNavigator,
-                    navController = navController,
-                    isLargeScreen = isLargeScreen
-                )
             }
         ) {
             Text(

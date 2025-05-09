@@ -3,7 +3,6 @@ package org.yassineabou.playground.feature.imagine.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -94,7 +93,7 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
 
     fun cancelImageGeneration() {
         imageGenerationJob?.takeIf { it.isActive }?.cancel()
-        resetImageGenerationState()
+        _imageGenerationState.value = GenerationState.Cancelled
     }
 
     fun resetImageGenerationState() {

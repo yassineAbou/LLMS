@@ -90,7 +90,10 @@ fun FullScreenImage(
     NavigateToImagineOnScreenExpansion(
         navController = navController,
         targetRoute = Screen.FullScreenImage.route,
-        onNavigate = { navController.navigate(Screen.ImagineScreen.route) }
+        onNavigate = {
+            supportingPaneNavigator.navigate(SupportingPaneScreen.FullScreenImage)
+            navController.navigate(Screen.ImagineScreen.route)
+        }
     )
 
     Column(

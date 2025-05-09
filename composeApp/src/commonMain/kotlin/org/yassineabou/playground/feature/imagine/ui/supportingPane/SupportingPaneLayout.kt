@@ -107,10 +107,11 @@ fun ThreePaneScaffoldScope.MainPane(
                             supportingPaneNavigator = supportingPaneNavigator
                         )
                     }
-                    else -> Unit
+                    else -> {}
                 }
             }
         }
+
     }
 }
 

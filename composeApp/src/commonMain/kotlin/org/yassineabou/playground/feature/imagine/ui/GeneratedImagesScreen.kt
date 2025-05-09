@@ -72,7 +72,10 @@ fun GeneratedImagesScreen(
     NavigateToImagineOnScreenExpansion(
         navController = navController,
         targetRoute = Screen.GeneratedImagesScreen.route,
-        onNavigate = { navController.navigate(Screen.ImagineScreen.route) }
+        onNavigate = {
+            supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
+            navController.navigate(Screen.ImagineScreen.route)
+        }
     )
 
     Column(
@@ -86,7 +89,10 @@ fun GeneratedImagesScreen(
             GeneratedImagesTopBar(
                 isLargeScreen = isLargeScreen,
                 modifier = Modifier.padding(vertical = 4.dp),
-                onBackPress = { navController.navigate(Screen.ImagineScreen.route) }
+                onBackPress = {
+                    navController.navigate(Screen.ImagineScreen.route)
+                   supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
+                }
             )
         }
         AnimatedVisibility(

@@ -19,16 +19,4 @@ object PaneOrScreenNavigator {
             navController.navigate(screenRoute)
         }
     }
-
-    fun navigateBack(
-        supportingPaneNavigator: SupportingPaneNavigator,
-        navController: NavController,
-        isLargeScreen: Boolean
-    ) {
-        if (isLargeScreen) {
-            supportingPaneNavigator.popBackStack()
-        } else {
-            navController.popBackStack()
-        }
-    }
 }
