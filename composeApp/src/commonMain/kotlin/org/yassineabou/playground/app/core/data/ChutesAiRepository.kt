@@ -1,7 +1,6 @@
 package org.yassineabou.playground.app.core.data
 
-import io.matthewnelson.encoding.base64.Base64
-import io.matthewnelson.encoding.core.Encoder.Companion.encodeToString
+import io.ktor.util.encodeBase64
 import kotlinx.coroutines.flow.Flow
 import kotlinx.io.IOException
 import org.yassineabou.playground.app.core.util.ImageMimeTypeDetector.detectImageMimeType
@@ -48,17 +47,11 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
             val request = createImageRequest(model, prompt, additionalParams)
             val imageBytes = chutesAiApi.generateImage(apiKey, endpoint, request)
 
-            val base64Encoder = Base64 {
-                encodeToUrlSafe = false
-                lineBreakInterval = 0 // Disable line breaks
-                padEncoded = true
-            }
-
             // Detect MIME type and validate image
             val mimeType = detectImageMimeType(imageBytes)
                 ?: throw IOException("Invalid image data: Unrecognized format")
 
-            val base64Image = imageBytes.encodeToString(base64Encoder)
+            val base64Image = imageBytes.encodeBase64()
             val dataUrl = "data:$mimeType;base64,$base64Image"
 
             Result.success(

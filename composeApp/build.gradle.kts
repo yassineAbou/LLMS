@@ -71,7 +71,6 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            //implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -89,6 +88,11 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.utils)
+
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.core)
@@ -97,23 +101,17 @@ kotlin {
             implementation(libs.adaptive.layout)
             implementation(libs.adaptive.navigation)
 
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-
             implementation(libs.sketch.compose)
             implementation(libs.sketch.http)
 
-            implementation(project.dependencies.platform(libs.encoding.bom))
-            implementation(libs.encoding.base64)
 
             implementation(libs.dragselect)
 
             implementation(libs.navigation.compose)
 
-            implementation(libs.kermit)
-
             implementation(libs.multiplatform.markdown.renderer.m3)
+
+            //implementation(libs.kermit)
 
         }
         desktopMain.dependencies {
@@ -175,6 +173,7 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "org.yassineabou.playground.MainKt"
+
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

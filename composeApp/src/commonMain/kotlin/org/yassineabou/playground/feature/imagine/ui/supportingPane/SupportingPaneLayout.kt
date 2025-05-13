@@ -7,13 +7,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.SupportingPaneScaffold
 import androidx.compose.material3.adaptive.layout.SupportingPaneScaffoldRole
-import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldScope
 import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,8 +39,8 @@ fun SupportingPaneLayout(
         mainPane = {
             MainPane(
                 navController = navController,
-                imageGenViewModel = imageGenViewModel,
                 supportingPaneNavigator = supportingPaneNavigator,
+                imageGenViewModel = imageGenViewModel,
                 shouldShowSupportingPaneButton = navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden,
             )
         },
@@ -55,9 +54,8 @@ fun SupportingPaneLayout(
     )
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun ThreePaneScaffoldScope.MainPane(
+fun MainPane(
     navController: NavController,
     supportingPaneNavigator: SupportingPaneNavigator,
     imageGenViewModel: ImageGenViewModel,
@@ -67,7 +65,7 @@ fun ThreePaneScaffoldScope.MainPane(
     val isLargeScreen = rememberIsLargeScreen()
     val currentScreen = supportingPaneNavigator.currentScreen
 
-    AnimatedPane(modifier = modifier.safeContentPadding()) {
+    Box(modifier = modifier.safeContentPadding()) {
         when {
             isLargeScreen || currentScreen is SupportingPaneScreen.GeneratedImages -> {
                 ImagineScreen(

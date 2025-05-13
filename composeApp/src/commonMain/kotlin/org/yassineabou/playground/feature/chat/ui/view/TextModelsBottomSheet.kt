@@ -7,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -37,8 +39,8 @@ import org.yassineabou.playground.app.core.sharedViews.ModelDetails
 import org.yassineabou.playground.app.core.sharedViews.ModelHeader
 import org.yassineabou.playground.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
+import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
-import org.yassineabou.playground.feature.chat.data.model.textGenModelList
 import org.yassineabou.playground.feature.chat.ui.ChatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,23 +75,81 @@ fun TextModelsBottomSheet(
                     )
                 },
                 body = {
-                    TextModelType(
-                        textModelsList = textGenModelList,
-                        tempSelectedTextModel = tempSelectedTextModel,
-                        onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                        onInfoClick = { textModel ->
-                            isInfoIconClicked = true
-                            infoTextModel = textModel
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(bottom = 12.dp)
+                    ) {
+                        item {
+                            TextModelType(
+                                type = "Qwen",
+                                textModelsList = TextGenModelList.qwen,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
                         }
-                    )
+                        item {
+                            TextModelType(
+                                type = "DeepSeek",
+                                textModelsList = TextGenModelList.deepSeek,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Mistral",
+                                textModelsList = TextGenModelList.mistral,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Llama",
+                                textModelsList = TextGenModelList.llama,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Others",
+                                textModelsList = TextGenModelList.others,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                    }
                 }
             )
         }
         AnimatedVisibility(isInfoIconClicked) {
             ModelDetails(
-                title = tempSelectedTextModel.title,
-                description = tempSelectedTextModel.description,
-                image = tempSelectedTextModel.image,
+                title = infoTextModel.title,
+                description = infoTextModel.description,
+                image = infoTextModel.image,
                 modifier = Modifier.fillMaxWidth()
                     .fillMaxHeight(0.5f)
                     .padding(horizontal = 16.dp),
@@ -102,27 +162,56 @@ fun TextModelsBottomSheet(
 @Composable
 private fun TextModelType(
     textModelsList: List<TextModel>,
+    type: String,
     tempSelectedTextModel: TextModel,
     onTextModelSelected: (TextModel) -> Unit,
     onInfoClick: (TextModel) -> Unit
 ) {
-     LazyVerticalGrid(
-         columns = GridCells.Adaptive(minSize = 150.dp),
-         verticalArrangement = Arrangement.spacedBy(12.dp),
-         horizontalArrangement = Arrangement.spacedBy(12.dp),
-         modifier =  Modifier
-             .fillMaxSize()
-             .padding(vertical = 8.dp, horizontal = 16.dp)
-     ) {
-         items(textModelsList) { item ->
-             TextModelItem(
-                 tempSelectedTextModel = item,
-                 isSelected = item == tempSelectedTextModel,
-                 onSelected = { onTextModelSelected(item) },
-                 onInfoClick = { onInfoClick(item) }
-             )
-         }
-     }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth() // Avoid infinite height
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+    ) {
+        Text(
+            text = type,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp, end = 8.dp)
+        )
+        TextModelGrid(
+            textModels = textModelsList,
+            selectedModel = tempSelectedTextModel,
+            onModelSelected = onTextModelSelected,
+            onInfoClicked = onInfoClick
+        )
+    }
+}
+
+@Composable
+fun TextModelGrid(
+    textModels: List<TextModel>,
+    selectedModel: TextModel,
+    onModelSelected: (TextModel) -> Unit,
+    onInfoClicked: (TextModel) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 150.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 300.dp)
+            .padding(vertical = 8.dp, horizontal = 16.dp)
+    ) {
+        items(textModels) { item ->
+            TextModelItem(
+                tempSelectedTextModel = item,
+                isSelected = item == selectedModel,
+                onSelected = { onModelSelected(item) },
+                onInfoClick = { onInfoClicked(item) }
+            )
+        }
+    }
 }
 
 
@@ -154,6 +243,7 @@ private fun TextModelItem(
             backgroundColor = backgroundColor,
             onInfoClick =  { onInfoClick(true) }
         )
+
         Text(
             text = tempSelectedTextModel.title,
             color = textColor,

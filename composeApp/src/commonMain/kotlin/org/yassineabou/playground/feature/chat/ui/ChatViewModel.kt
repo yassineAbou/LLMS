@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.data.ChutesAiEndPoint.API_KEY
+import org.yassineabou.playground.app.core.data.ChutesAiRepository
+import org.yassineabou.playground.app.core.data.GenerationState
 import org.yassineabou.playground.feature.chat.data.model.ChatHistory
 import org.yassineabou.playground.feature.chat.data.model.ChatMessageModel
+import org.yassineabou.playground.feature.chat.data.model.TextGenModelList
 import org.yassineabou.playground.feature.chat.data.model.TextModel
-import org.yassineabou.playground.feature.chat.data.model.textGenModelList
-import org.yassineabou.playground.app.core.data.GenerationState
-import org.yassineabou.playground.app.core.data.ChutesAiRepository
 import kotlin.coroutines.cancellation.CancellationException
 
 class ChatViewModel(
@@ -26,8 +26,8 @@ class ChatViewModel(
 
     // region Text Model Selection State
     // ========================================================================================
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(textGenModelList.first())
-    private val _selectedTextModel = MutableStateFlow<TextModel>(textGenModelList.first())
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.qwen.first())
+    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.qwen.first())
 
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel

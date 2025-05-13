@@ -158,7 +158,7 @@ fun FullScreenImage(
             }
         )
 
-        if (showInfoBottomSheet) {
+        if (showInfoBottomSheet  and listGeneratedPhotos.isNotEmpty()) {
             InfoBottomSheet(
                 description = pagerState.currentPage.let { listGeneratedPhotos[it].prompt },
                 onDismissRequest = { showInfoBottomSheet = false }
@@ -375,7 +375,7 @@ private fun FullScreenBottomBar(
         IconWithLabel(
             icon = Icons.Filled.Download,
             text = "Download",
-            onClick = { snackbarController.showMessage("Image saved to your gallery") }
+            onClick = { snackbarController.showMessage("Development for this feature is actively in progress") }
         )
         if (isInFullScreen) {
             IconWithLabel(
@@ -387,7 +387,7 @@ private fun FullScreenBottomBar(
         IconWithLabel(
             icon = Icons.Filled.Share,
             text = "Share",
-            onClick = { snackbarController.showMessage("Your image has been shared") }
+            onClick = { snackbarController.showMessage("Development for this feature is actively in progress") }
         )
         IconWithLabel(
             icon = Icons.Filled.Delete,
@@ -431,6 +431,7 @@ private fun InfoBottomSheet(
         BottomSheetContent(
             body = {
                 PyramidTextFormat(
+                    modifier = Modifier.padding(end = 16.dp),
                     text = description
                 )
             }

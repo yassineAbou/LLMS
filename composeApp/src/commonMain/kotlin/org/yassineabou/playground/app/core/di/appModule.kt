@@ -39,7 +39,7 @@ val provideDataModule = module {
                 )
             }
             install(HttpTimeout) {
-                requestTimeoutMillis = 60000
+                requestTimeoutMillis = 600_000
             }
         }
 

@@ -88,9 +88,9 @@ fun ImageModelsBottomSheet(
         }
         AnimatedVisibility(isInfoIconClicked) {
             ModelDetails(
-                title = tempSelectedImageModel.title,
-                description = tempSelectedImageModel.description,
-                image = tempSelectedImageModel.image,
+                title = infoImageModel.title,
+                description = infoImageModel.description,
+                image = infoImageModel.image,
                 modifier = Modifier.fillMaxWidth()
                     .fillMaxHeight(0.4f)
                     .padding(horizontal = 16.dp),

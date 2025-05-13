@@ -2,28 +2,16 @@ package org.yassineabou.playground.feature.imagine.model
 
 import androidx.compose.runtime.Immutable
 import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_bytedance
 import llms.composeapp.generated.resources.ic_chroma
 import llms.composeapp.generated.resources.ic_hi_dream
-import llms.composeapp.generated.resources.ic_snapchat
 
 @Immutable
 object ImageGenModelList {
 
     val newImageModel = listOf(
         ImageModel(
-            title = "Hidream",
-            description = "No description provided",
-            image = Res.drawable.ic_hi_dream,
-            chutesName = "hidream",
-            defaultParams = mapOf(
-                "guidance_scale" to 5f,
-                "num_inference_steps" to 50
-            )
-        ),
-        ImageModel(
             title = "Chroma",
-            description = "No description provided",
+            description = "Open-Source, Uncensored, and Built for the Community Chroma is a 8.9B parameter model based on FLUX.1-schnell",
             image = Res.drawable.ic_chroma,
             chutesName = "chroma",
             defaultParams = mapOf(
@@ -32,26 +20,15 @@ object ImageGenModelList {
             )
         ),
         ImageModel(
-            title = "StableFlow",
-            description = "Training free image editing with FLUX.1 [dev]",
-            image = Res.drawable.ic_snapchat,
-            chutesName = "stable-flow",
+            title = "Hidream",
+            description = "HiDream-I1 is a new open-source image generative foundation model with 17B parameters that achieves state-of-the-art image generation quality within seconds.",
+            image = Res.drawable.ic_hi_dream,
+            chutesName = "hidream",
             defaultParams = mapOf(
-                "cfg" to 4.5f,
-                "steps" to 30
+                "guidance_scale" to 5f,
+                "num_inference_steps" to 50
             )
-        ),
-        ImageModel(
-            title = "Infiniteyou",
-            description = "No description provided",
-            image = Res.drawable.ic_bytedance,
-            chutesName = "infiniteyou",
-            defaultParams = mapOf(
-                "steps" to 30,
-                "infusenet_guidance_start" to 0f,
-                "infusenet_guidance_end" to 1f
-            )
-        ),
+        )
     )
 
     val inspiration = listOf(

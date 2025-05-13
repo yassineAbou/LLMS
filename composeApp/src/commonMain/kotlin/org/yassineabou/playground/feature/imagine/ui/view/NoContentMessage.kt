@@ -43,6 +43,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.github.panpf.sketch.Bitmap
+import com.github.panpf.sketch.Image
 import kotlinx.coroutines.delay
 import org.yassineabou.playground.app.core.theme.colorSchemeCustom
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
@@ -213,3 +215,4 @@ private fun BouncingButton(
         )
     }
 }
+
