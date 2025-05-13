@@ -47,10 +47,11 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
 
 ## 🎨 Demo
 
-https://github.com/user-attachments/assets/cd1b0aa6-f41d-473d-a95a-0dd0d0753c40
+https://github.com/user-attachments/assets/af1903df-139f-4178-8fcb-c3d7c7b46219
+
+https://github.com/user-attachments/assets/f5200415-6c61-49d0-b8d2-a9ab0ebae900
 
 
-https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
 
 ## 🤖 Chutes AI Integration
 
@@ -78,7 +79,19 @@ https://github.com/user-attachments/assets/ce9c5052-f51b-41aa-bbbd-2fff38bb5035
        ),  
        ```
        
-     - **Image models**: `ImageGenModelList.kt`  
+     - **Image models**: `ImageGenModelList.kt`
+       ```kotlin  
+       ImageModel(
+            title = "Chroma",
+            description = "Open-Source, Uncensored...",
+            image = Res.drawable.ic_chroma,
+            chutesName = "chroma",
+            defaultParams = mapOf(
+                "cfg" to 4.5f,
+                "steps" to 30
+            )
+        ),  
+       ```
 
 ## 📈 Progress
 
@@ -90,10 +103,10 @@ Our development process is divided into four key steps:
 #### 2. Connect with Chutes AI REST API (Text Models) 📝 
 - Status: 🎯 Done 
 #### 3. Connect with Chutes AI REST API (Image Models) 🖼️  
-- Status: 🔄 in progress
+- Status: 🎯 Done 
 
 #### 4. Save Chat History & Generated Images Locally 💾  
-- Status: ➡️ Next 
+- Status: 🔄 in progress
 
 
 ## 🏗️ Architecture
@@ -122,7 +135,8 @@ Our development process is divided into four key steps:
 ## Package Structure
 ```  
 app/  
-├── core/  
+├── core/
+│   ├── data  
 │   ├── di  
 │   ├── navigation  
 │   ├── sharedViews  
@@ -131,17 +145,15 @@ app/
 └── feature/  
     ├── chat/  
     │   ├── data  
-    │   │   ├── local  
-    │   │   └── remote  
-    │   ├── model  
-    │   ├── repository  
+    │   │   └── model  
     │   └── ui  
     │       ├── chat  
     │       ├── history  
     │       ├── listDetailPane  
     │       └── view  
     ├── imagine/  
-    │   ├── model  
+    │   ├── data  
+    │   │   └── model  
     │   └── ui  
     │       ├── supportingPane  
     │       ├── util  
