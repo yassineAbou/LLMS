@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -86,13 +87,15 @@ fun ImageModelsBottomSheet(
                 }
             )
         }
-        AnimatedVisibility(isInfoIconClicked) {
+        AnimatedVisibility(
+            isInfoIconClicked,
+        ) {
             ModelDetails(
                 title = infoImageModel.title,
                 description = infoImageModel.description,
                 image = infoImageModel.image,
-                modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.4f)
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onDismissRequest = { isInfoIconClicked = false }
             )

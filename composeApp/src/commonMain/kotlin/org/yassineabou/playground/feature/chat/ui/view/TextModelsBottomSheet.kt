@@ -150,8 +150,8 @@ fun TextModelsBottomSheet(
                 title = infoTextModel.title,
                 description = infoTextModel.description,
                 image = infoTextModel.image,
-                modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.5f)
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onDismissRequest = { isInfoIconClicked = false }
             )

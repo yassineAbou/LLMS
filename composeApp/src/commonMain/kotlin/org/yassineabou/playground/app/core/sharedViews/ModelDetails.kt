@@ -2,9 +2,7 @@ package org.yassineabou.playground.app.core.sharedViews
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,7 +10,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -29,18 +26,17 @@ fun ModelDetails(
     modifier: Modifier = Modifier,
     onDismissRequest: (Boolean) -> Unit,
 ) {
-    Box(
+    Column(
         modifier = modifier
     ) {
         ModelContent(
             image = image,
             title = title,
-            description = description
+            description = description,
         )
         GotItButton(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp)
+                .padding(bottom = 32.dp, top = 8.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             onDismissRequest = onDismissRequest
@@ -54,10 +50,11 @@ private fun ModelContent(
     image: DrawableResource,
     title: String,
     description: String,
+    modifier: Modifier = Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
         Image(
             painter = painterResource(image),
