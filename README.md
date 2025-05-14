@@ -27,7 +27,9 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
 
 - **WebAssembly**
   
-  Check the about section
+  Check the about section  
+
+  <span style="color: red;">⚠️</span> **<span style="color: orange;">IMPORTANT NOTE</span>**: *This link represents the second phase enabling chat with the text model. A temporary bug was introduced with Compose 1.8 update (reported and awaiting fix). The WebAssembly version will be refreshed immediately when resolved!*
 
 - **Desktop(macOS/Windows/Linux)**:
   
