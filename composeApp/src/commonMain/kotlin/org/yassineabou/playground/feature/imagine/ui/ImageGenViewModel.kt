@@ -12,7 +12,9 @@ import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.data.ChutesAiEndPoint.API_KEY
 import org.yassineabou.playground.app.core.data.ChutesAiRepository
 import org.yassineabou.playground.app.core.data.GenerationState
+import org.yassineabou.playground.app.core.util.FileKit
 import org.yassineabou.playground.app.core.util.ImageMetadataUtil
+import org.yassineabou.playground.app.core.util.saveImage
 import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.model.UrlExample
@@ -122,7 +124,7 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
 
             // Handle file operations
             runCatching {
-                // TODO: add saving image function
+                FileKit.saveImage(bytes = imageData, filename = filename)
             }.onSuccess {
                 _snackbarMessage.send("Image saved as $filename")
             }.onFailure { error ->
