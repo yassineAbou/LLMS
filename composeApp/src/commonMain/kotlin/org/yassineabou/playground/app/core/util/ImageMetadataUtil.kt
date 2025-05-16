@@ -1,7 +1,47 @@
 package org.yassineabou.playground.app.core.util
 
+import io.ktor.util.decodeBase64Bytes
+import kotlinx.datetime.Clock
 
-object ImageMimeTypeDetector {
+
+object ImageMetadataUtil {
+
+    fun extractImageData(dataUrl: String): Pair<String, ByteArray> {
+        require(dataUrl.startsWith("data:")) { "Invalid data URL format" }
+
+        val parts = dataUrl.split(",", limit = 2)
+        require(parts.size == 2) { "Malformed data URL" }
+
+        val header = parts[0]
+        val base64Data = parts[1]
+
+        val mimeType = header.substringAfter("data:").substringBefore(";")
+        val bytes = base64Data.decodeBase64Bytes() // ✨ Use Ktor's Base64 decoder
+
+        return Pair(mimeType, bytes)
+    }
+
+    // Generate filename from prompt and MIME type
+    fun generateFileName(prompt: String, mimeType: String): String {
+        val baseName = sanitizePrompt(prompt)
+        val extension = mimeType.split("/").lastOrNull()?.takeIf { it.isNotBlank() } ?: "dat"
+        return "$baseName.$extension"
+    }
+
+    // Sanitize prompt for filename safety
+    private fun sanitizePrompt(prompt: String): String {
+        return prompt.split(" ")
+            .take(3)
+            .map { word ->
+                word.replace(Regex("[^A-Za-z0-9]"), "").lowercase()
+            }
+            .filter { it.isNotBlank() }
+            .joinToString("_")
+            .ifEmpty {
+                "image_${Clock.System.now().toEpochMilliseconds()}"
+            }
+    }
+
 
     fun detectImageMimeType(bytes: ByteArray): String? {
         if (bytes.isEmpty()) return null

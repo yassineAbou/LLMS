@@ -3,7 +3,7 @@ package org.yassineabou.playground.app.core.data
 import io.ktor.util.encodeBase64
 import kotlinx.coroutines.flow.Flow
 import kotlinx.io.IOException
-import org.yassineabou.playground.app.core.util.ImageMimeTypeDetector.detectImageMimeType
+import org.yassineabou.playground.app.core.util.ImageMetadataUtil.detectImageMimeType
 import org.yassineabou.playground.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.playground.feature.chat.data.model.ChatMessage
 import org.yassineabou.playground.feature.imagine.model.ImageGenerationRequest

@@ -3,13 +3,16 @@ package org.yassineabou.playground.feature.imagine.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.yassineabou.playground.app.core.data.ChutesAiEndPoint.API_KEY
 import org.yassineabou.playground.app.core.data.ChutesAiRepository
 import org.yassineabou.playground.app.core.data.GenerationState
+import org.yassineabou.playground.app.core.util.ImageMetadataUtil
 import org.yassineabou.playground.feature.imagine.model.ImageGenModelList
 import org.yassineabou.playground.feature.imagine.model.ImageModel
 import org.yassineabou.playground.feature.imagine.model.UrlExample
@@ -40,10 +43,12 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
     private val _loadedInspiration = MutableStateFlow<List<UrlExample>>(emptyList())
     val loadedInspiration: StateFlow<List<UrlExample>> = _loadedInspiration
 
-
     // Add a state for the current image index
     private val _currentImageIndex = MutableStateFlow(0)
     val currentImageIndex: StateFlow<Int> = _currentImageIndex
+
+    private val _snackbarMessage = Channel<String>()
+    val snackbarMessage = _snackbarMessage.receiveAsFlow()
 
 
     init {
@@ -100,6 +105,31 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
         _imageGenerationState.value = GenerationState.Success
     }
 
+    fun downloadImage() {
+        viewModelScope.launch {
+            val currentIndex = _currentImageIndex.value
+            val image = _listGeneratedPhotos.value.getOrNull(currentIndex) ?: return@launch
+
+            // Declare filename in outer scope
+            val (imageData, filename) = runCatching {
+                // Extract and decode image data
+                val (mimeType, imageData) = ImageMetadataUtil.extractImageData(image.url)
+                val filename = ImageMetadataUtil.generateFileName(image.prompt, mimeType)
+                Pair(imageData, filename)
+            }.onFailure { error ->
+                _snackbarMessage.send("Invalid image data: ${error.message}")
+            }.getOrNull() ?: return@launch
+
+            // Handle file operations
+            runCatching {
+                // TODO: add saving image function
+            }.onSuccess {
+                _snackbarMessage.send("Image saved as $filename")
+            }.onFailure { error ->
+                _snackbarMessage.send("Download failed: ${error.message}")
+            }
+        }
+    }
 
     // Existing functions
     fun deletePhoto(index: Int) {

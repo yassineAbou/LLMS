@@ -19,7 +19,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -74,6 +73,7 @@ fun FullScreenImage(
     val currentImageIndex by imageGenViewModel.currentImageIndex.collectAsStateWithLifecycle()
     val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
+    val snackbarController = SnackbarController.current
     val pagerState = rememberPagerState(
         pageCount = { listGeneratedPhotos.size },
         initialPage = currentImageIndex
@@ -84,6 +84,12 @@ fun FullScreenImage(
     LaunchedEffect(currentImageIndex) {
         if (currentImageIndex != pagerState.currentPage) {
             pagerState.animateScrollToPage(currentImageIndex)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        imageGenViewModel.snackbarMessage.collect { message ->
+            snackbarController.showMessage(message)
         }
     }
 
@@ -148,6 +154,7 @@ fun FullScreenImage(
 
         FullScreenBottomBar(
             onInfoClicked = { showInfoBottomSheet = true },
+            onDownload =  { imageGenViewModel.downloadImage() },
             onDelete = {
                 imageGenViewModel.deletePhoto(pagerState.currentPage)
                 val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
@@ -361,11 +368,10 @@ private fun NavigationArrows(
 
 @Composable
 private fun FullScreenBottomBar(
-    isInFullScreen: Boolean = true,
+    onDownload: () -> Unit,
     onInfoClicked: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val snackbarController = SnackbarController.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -375,19 +381,12 @@ private fun FullScreenBottomBar(
         IconWithLabel(
             icon = Icons.Filled.Download,
             text = "Download",
-            onClick = { snackbarController.showMessage("Development for this feature is actively in progress") }
+            onClick = onDownload
         )
-        if (isInFullScreen) {
-            IconWithLabel(
-                icon = Icons.Filled.Info,
-                text = "Info",
-                onClick = onInfoClicked
-            )
-        }
         IconWithLabel(
-            icon = Icons.Filled.Share,
-            text = "Share",
-            onClick = { snackbarController.showMessage("Development for this feature is actively in progress") }
+            icon = Icons.Filled.Info,
+            text = "Info",
+            onClick = onInfoClicked
         )
         IconWithLabel(
             icon = Icons.Filled.Delete,
