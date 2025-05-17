@@ -4,6 +4,7 @@ actual object FileKit
 
 actual suspend fun FileKit.saveImage(
     bytes: ByteArray,
-    filename: String
-) {
+    fileName: String
+): String {
+    return "hello"
 }

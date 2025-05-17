@@ -110,26 +110,22 @@ class ImageGenViewModel(private val chutesAiRepository: ChutesAiRepository) : Vi
     fun downloadImage() {
         viewModelScope.launch {
             val currentIndex = _currentImageIndex.value
-            val image = _listGeneratedPhotos.value.getOrNull(currentIndex) ?: return@launch
+            val image = _listGeneratedPhotos.value.getOrNull(currentIndex) ?: run {
+                _snackbarMessage.send("No image selected")
+                return@launch
+            }
 
-            // Declare filename in outer scope
             val (imageData, filename) = runCatching {
-                // Extract and decode image data
-                val (mimeType, imageData) = ImageMetadataUtil.extractImageData(image.url)
-                val filename = ImageMetadataUtil.generateFileName(image.prompt, mimeType)
-                Pair(imageData, filename)
+                val (mimeType, data) = ImageMetadataUtil.extractImageData(image.url)
+                val name = ImageMetadataUtil.generateFileName(image.prompt, mimeType)
+                data to name
             }.onFailure { error ->
                 _snackbarMessage.send("Invalid image data: ${error.message}")
+                return@launch
             }.getOrNull() ?: return@launch
 
-            // Handle file operations
-            runCatching {
-                FileKit.saveImage(bytes = imageData, filename = filename)
-            }.onSuccess {
-                _snackbarMessage.send("Image saved as $filename")
-            }.onFailure { error ->
-                _snackbarMessage.send("Download failed: ${error.message}")
-            }
+            val result = FileKit.saveImage(bytes = imageData, fileName = filename)
+            _snackbarMessage.send(result) // Directly send the String message
         }
     }
 

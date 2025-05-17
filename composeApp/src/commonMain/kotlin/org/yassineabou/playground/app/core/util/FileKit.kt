@@ -4,5 +4,5 @@ expect object FileKit
 
 expect suspend fun FileKit.saveImage(
     bytes: ByteArray,
-    filename: String
-)
+    fileName: String
+): String

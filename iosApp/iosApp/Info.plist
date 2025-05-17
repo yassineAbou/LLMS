@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- Required for saving images to the photo library -->
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>This app needs permission to save photos to your library</string>
+
+        <!-- Required for accessing/selecting images from the photo library -->
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>This app needs access to your photo library to let you pick images.</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
