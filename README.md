@@ -51,9 +51,7 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
 
 https://github.com/user-attachments/assets/af1903df-139f-4178-8fcb-c3d7c7b46219
 
-https://github.com/user-attachments/assets/f5200415-6c61-49d0-b8d2-a9ab0ebae900
-
-
+https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
 
 ## 🤖 Chutes AI Integration
 
