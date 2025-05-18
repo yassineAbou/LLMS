@@ -36,7 +36,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -63,6 +65,8 @@ import org.yassineabou.playground.feature.imagine.ui.util.NavigateToImagineOnScr
 import org.yassineabou.playground.feature.imagine.ui.util.rememberIsLargeScreen
 
 
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FullScreenImage(
     navController: NavController,
@@ -80,6 +84,18 @@ fun FullScreenImage(
     )
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
+
+    BackHandler {
+        imageGenViewModel.resetImageGenerationState()
+        PaneOrScreenNavigator.navigateTo(
+            supportingPaneNavigator = supportingPaneNavigator,
+            navController = navController,
+            isLargeScreen = isLargeScreen,
+            paneDestination = SupportingPaneScreen.GeneratedImages,
+            screenRoute = Screen.GeneratedImagesScreen.route
+        )
+    }
+
 
     LaunchedEffect(currentImageIndex) {
         if (currentImageIndex != pagerState.currentPage) {

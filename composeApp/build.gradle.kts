@@ -111,6 +111,9 @@ kotlin {
 
             implementation(libs.multiplatform.markdown.renderer.m3)
 
+            implementation(libs.ui.backhandler)
+
+
             //implementation(libs.kermit)
 
         }

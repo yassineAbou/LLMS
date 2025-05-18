@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 
 
 package org.yassineabou.playground.feature.imagine.ui
@@ -23,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.layout.ContentScale
@@ -48,7 +50,7 @@ import org.yassineabou.playground.feature.imagine.ui.util.NavigateToImagineOnScr
 import org.yassineabou.playground.feature.imagine.ui.view.ImageSelectionControls
 import org.yassineabou.playground.feature.imagine.ui.view.NoContentMessage
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,
@@ -68,6 +70,11 @@ fun GeneratedImagesScreen(
         else -> 2
     }
     val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
+
+    BackHandler {
+        navController.navigate(Screen.ImagineScreen.route)
+        supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
+    }
 
     NavigateToImagineOnScreenExpansion(
         navController = navController,
