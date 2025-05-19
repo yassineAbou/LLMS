@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.sqlDelight)
 }
 
 kotlin {
@@ -59,6 +60,10 @@ kotlin {
 
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
+            implementation(libs.sqldelight.web.driver)
+            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.1.0"))
+            implementation(npm("sql.js", libs.versions.sqlJs.get()))
+            implementation(devNpm("copy-webpack-plugin", libs.versions.webPackPlugin.get()))
         }
 
         androidMain.dependencies {
@@ -67,6 +72,7 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.ktor.client.android)
+            implementation(libs.sqldelight.android.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -77,6 +83,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+            implementation(libs.ui.backhandler)
 
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
@@ -104,6 +111,9 @@ kotlin {
             implementation(libs.sketch.compose)
             implementation(libs.sketch.http)
 
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
+
 
             implementation(libs.dragselect)
 
@@ -111,18 +121,17 @@ kotlin {
 
             implementation(libs.multiplatform.markdown.renderer.m3)
 
-            implementation(libs.ui.backhandler)
-
-
-            //implementation(libs.kermit)
+            implementation(libs.kermit)
 
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.java)
+            implementation(libs.sqldelight.sqlite.driver)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.native.driver)
         }
     }
 }
