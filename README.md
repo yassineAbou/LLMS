@@ -1,5 +1,5 @@
 <div align="center">  
- <img src="https://i.imgur.com/aBVZRPL.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
+ <img src="https://imgur.com/mVICjDJ.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
  <h1 style="display: inline-block; margin: 0; vertical-align: middle; text-align: center; width: 100%;">LLMS</h1>  
 </div>
 
@@ -131,6 +131,7 @@ Our development process is divided into four key steps:
 - [Ktor Client](https://ktor.io/docs/full-stack-development-with-kotlin-multiplatform.html) (HTTP client)
 - [Markdown renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) (Markdown renderer)
 - [Drag Select](https://github.com/jordond/drag-select-compose) (adding Google Photos style drag-to-select multi-selection to a LazyGrid)
+- [SQLDelight](https://sqldelight.github.io/sqldelight/2.1.0/) (SQLDelight generates typesafe Kotlin APIs from your SQL statements.)
 
 ## Package Structure
 ```  
