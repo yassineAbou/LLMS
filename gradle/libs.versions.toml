@@ -7,7 +7,7 @@ androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.16.0"
-androidx-lifecycle = "2.8.4"
+androidx-lifecycle = "2.9.0"
 
 # Android
 agp = "8.6.1"
@@ -19,13 +19,13 @@ android-targetSdk = "35"
 kotlin = "2.1.21"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.6.2"
-kotlinx-collections-immutable = "0.3.8"
+kotlinx-collections-immutable = "0.4.0"
 
 # Compose
-compose-plugin = "1.8.0"
-adaptive = "1.1.0"
-navigationCompose = "2.9.0-beta01"
-foundationLayoutAndroid = "1.8.1"
+compose-plugin = "1.8.1"
+adaptive = "1.1.1"
+navigationCompose = "2.9.0-beta02"
+foundationLayoutAndroid = "1.8.2"
 
 # Testing
 junit = "4.13.2"
@@ -33,9 +33,9 @@ androidx-test-junit = "1.2.1"
 androidx-espresso-core = "3.6.1"
 
 # UI Components
-dragselect = "3.0.0"
+dragselect = "3.0.1"
 multiplatformMarkdownRendererM3 = "0.34.0"
-sketch = "4.0.6"
+sketch = "4.1.0"
 
 # SQLdelight
 sqlDelight = "2.1.0"

@@ -136,6 +136,14 @@ kotlin {
     }
 }
 
+sqldelight {
+    databases {
+        create("LlmsDatabase") {
+            packageName.set("org.yassineabou.playground")
+        }
+    }
+}
+
 android {
     namespace = "org.yassineabou.playground"
     compileSdk = 35

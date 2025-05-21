@@ -2,6 +2,7 @@ package org.yassineabou.playground.feature.chat.data.model
 
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_agentica
+import llms.composeapp.generated.resources.ic_byte_dance
 import llms.composeapp.generated.resources.ic_deepseek
 import llms.composeapp.generated.resources.ic_dolphin
 import llms.composeapp.generated.resources.ic_glm
@@ -10,6 +11,7 @@ import llms.composeapp.generated.resources.ic_microsoft
 import llms.composeapp.generated.resources.ic_mistral
 import llms.composeapp.generated.resources.ic_nvidia
 import llms.composeapp.generated.resources.ic_qwen
+import llms.composeapp.generated.resources.ic_sales_force
 import llms.composeapp.generated.resources.ic_shisa
 
 object TextGenModelList {
@@ -153,7 +155,7 @@ object TextGenModelList {
             chutesName = "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
             description = "Llama-3.1-Nemotron-Ultra-253B is a 253 billion parameter reasoning-focused language model optimized for efficiency that excels at math, coding, and general instruction-following tasks while running on a single 8xH100...",
             image = Res.drawable.ic_nvidia
-        ),
+        )
     )
 
     // Others models
@@ -181,6 +183,18 @@ object TextGenModelList {
             chutesName = "agentica-org/DeepCoder-14B-Preview",
             description = "DeepCoder-14B-Preview is a 14 billion parameter open-source code reasoning LLM fine-tuned with reinforcement learning that achieves competitive performance with OpenAI's o3-mini and can be used for advanced code...",
             image = Res.drawable.ic_agentica
-        )
+        ),
+        TextModel(
+            title = "Seed Coder 8B Reasoning Bf16",
+            chutesName = "ByteDance-Seed/Seed-Coder-8B-Reasoning-bf16",
+            description = "Seed-Coder-8B-Reasoning is an 8 billion parameter code-focused language model optimized for programming tasks and reasoning capabilities, particularly useful for competitive programming and complex coding challenges.",
+            image = Res.drawable.ic_byte_dance
+        ),
+        TextModel(
+            title = "Xgen Small 9B Instruct R",
+            chutesName = "Salesforce/xgen-small-9B-instruct-r",
+            description = "xGen-small is a research-focused LLM available in 4B and 9B parameter sizes that excels at long-context tasks (up to 128k tokens) and shows strong performance on math, science, and coding benchmarks compared to similar-sized models...",
+            image = Res.drawable.ic_sales_force
+        ),
     )
 }
