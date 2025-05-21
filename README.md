@@ -29,8 +29,6 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
   
   Check the about section  
 
-  <span style="color: red;">⚠️</span> **<span style="color: orange;">IMPORTANT NOTE</span>**: *This link represents the second phase enabling chat with the text model. A temporary bug was introduced with Compose 1.8 update (reported and awaiting fix). The WebAssembly version will be refreshed immediately when resolved!*
-
 - **Desktop(macOS/Windows/Linux)**:
   
   1- Build the release by running this command:  
@@ -41,10 +39,9 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
      ```bash
      composeApp/build/compose/binaries/
      ```
-### ⌛ Pending Releases
 - **iOS**:
   
-  *Coming soon after Apple Developer account creation*
+  *Run iOS emulator via Xcode or Android Studio*
 
 
 ## 🎨 Demo
