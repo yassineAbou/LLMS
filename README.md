@@ -73,7 +73,7 @@ https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
            chutesName = "deepseek-ai/DeepSeek-V3-0324",  
            description = "DeepSeek-V3-0324 is...",  
            image = Res.drawable.ic_deepseek  
-       ),  
+       )  
        ```
        
      - **Image models**: `ImageGenModelList.kt`
@@ -87,7 +87,7 @@ https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
                 "cfg" to 4.5f,
                 "steps" to 30
             )
-        ),  
+        )  
        ```
 
 ## 📈 Progress
