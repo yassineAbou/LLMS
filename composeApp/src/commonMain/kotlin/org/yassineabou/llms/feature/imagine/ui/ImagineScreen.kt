@@ -229,18 +229,16 @@ private fun TypeIdeaForm(
                     }
                 }
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = if (ideaText.isNotEmpty()) ImeAction.Done else ImeAction.Default
-            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done), // Static action
             keyboardActions = KeyboardActions(
                 onDone = { focusManager.clearFocus() }
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.Transparent, // Hide the default border
-                unfocusedBorderColor = Color.Transparent, // Hide the default border
-                cursorColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set cursor color to blue
-                focusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue, // Optional: Set label color to blue when focused
-                unfocusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f) // Optional: Set label color to semi-transparent blue when unfocused
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = MaterialTheme.colorSchemeCustom.alwaysBlue,
+                focusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue,
+                unfocusedLabelColor = MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f)
             )
         )
     }
