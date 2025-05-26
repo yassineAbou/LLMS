@@ -1,5 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
@@ -126,7 +125,7 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.java)
+            implementation(libs.ktor.client.cio)
             implementation(libs.sqldelight.sqlite.driver)
         }
         iosMain.dependencies {
@@ -139,13 +138,13 @@ kotlin {
 sqldelight {
     databases {
         create("LlmsDatabase") {
-            packageName.set("org.yassineabou.playground")
+            packageName.set("org.yassineabou.llms")
         }
     }
 }
 
 android {
-    namespace = "org.yassineabou.playground"
+    namespace = "org.yassineabou.llms"
     compileSdk = 35
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -153,7 +152,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "org.yassineabou.playground"
+        applicationId = "org.yassineabou.llms"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -192,7 +191,7 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "org.yassineabou.playground.MainKt"
+        mainClass = "org.yassineabou.llms.MainKt"
 
 
         nativeDistributions {

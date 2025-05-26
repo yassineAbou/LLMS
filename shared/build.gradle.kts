@@ -45,7 +45,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.yassineabou.playground.shared"
+    namespace = "org.yassineabou.llms.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
