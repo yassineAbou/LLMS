@@ -12,6 +12,9 @@ import org.yassineabou.llms.app.core.di.LlmsDatabaseWrapper
 
 interface LlmsDatabaseInterface {
 
+    // Chats + Messages
+    suspend fun insertChatWithMessages(chat: Chats, messages: List<Chat_messages>)
+
     // Chats
     fun getAllChats(): Flow<List<Chats>>
     suspend fun insertChat(chat: Chats)
@@ -20,7 +23,6 @@ interface LlmsDatabaseInterface {
 
     // Messages
     fun getMessagesByChatId(chatId: String): Flow<List<Chat_messages>>
-    suspend fun insertMessage(message: Chat_messages)
 
     // Images
     fun getAllImages(): Flow<List<Generated_images>>
@@ -39,6 +41,34 @@ class LlmsDatabaseRepository(
         queries.selectAllChats()
             .asFlow()
             .mapToList(Dispatchers.Default)
+
+
+    override suspend fun insertChatWithMessages(
+        chat: Chats,
+        messages: List<Chat_messages>
+    ) = withContext(Dispatchers.Default) {
+        queries.transaction {
+            // 1. Insert chat first
+            queries.insertChat(
+                id = chat.id,
+                title = chat.title,
+                description = chat.description,
+                text_model_name = chat.text_model_name,
+                is_bookmarked = chat.is_bookmarked,
+                created_at = chat.created_at
+            )
+
+            // 2. Insert messages in the same transaction
+            messages.forEach { message ->
+                queries.insertMessage(
+                    chat_id = chat.id,  // Ensure same chat ID
+                    message = message.message,
+                    is_user = message.is_user,
+                    timestamp = message.timestamp
+                )
+            }
+        }
+    }
 
     override suspend fun insertChat(chat: Chats) = withContext(Dispatchers.Default) {
         queries.insertChat(
@@ -66,16 +96,6 @@ class LlmsDatabaseRepository(
         queries.selectMessagesByChatId(chatId)
             .asFlow()
             .mapToList(Dispatchers.Default)
-
-    override suspend fun insertMessage(message: Chat_messages) = withContext(Dispatchers.Default) {
-        queries.insertMessage(
-            chat_id = message.chat_id,
-            message = message.message,
-            is_user = message.is_user,
-            timestamp = message.timestamp
-        )
-        Unit
-    }
 
     override fun getAllImages(): Flow<List<Generated_images>> =
         queries.selectAllImages()

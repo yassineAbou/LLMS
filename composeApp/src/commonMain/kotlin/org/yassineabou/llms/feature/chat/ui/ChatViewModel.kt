@@ -1,21 +1,25 @@
+@file:OptIn(ExperimentalUuidApi::class)
+
 package org.yassineabou.llms.feature.chat.ui
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import org.yassineabou.llms.Chat_messages
+import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
 import org.yassineabou.llms.app.core.data.remote.ChutesAiEndPoint.API_KEY
 import org.yassineabou.llms.app.core.data.remote.ChutesAiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
-import org.yassineabou.llms.feature.chat.data.model.ChatHistory
-import org.yassineabou.llms.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class ChatViewModel(
     private val chutesAiRepository: ChutesAiRepository,
@@ -28,8 +32,8 @@ class ChatViewModel(
 
     // region Text Model Selection State
     // ========================================================================================
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.qwen.first())
-    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.qwen.first())
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.defaultModel)
+    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.defaultModel)
 
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel
@@ -37,21 +41,27 @@ class ChatViewModel(
 
     // region Chat Message State
     // ========================================================================================
-    private val _currentChatMessages = mutableStateListOf<ChatMessageModel>()
-    val currentChatMessages: SnapshotStateList<ChatMessageModel> = _currentChatMessages
+    private val _currentChatMessages = mutableStateListOf<Chat_messages>()
+    val currentChatMessages: SnapshotStateList<Chat_messages> = _currentChatMessages
     // endregion
 
     // region Chat History State
     // ========================================================================================
-    private val _chatHistoryList = mutableStateListOf<ChatHistory>()
-    private val _savedChatHistoryList = mutableStateListOf<ChatHistory>()
-    private val _currentChatId = MutableStateFlow<String?>(null)
-    private val _selectedChatHistory = MutableStateFlow<ChatHistory?>(null)
+    private val _selectedChats = MutableStateFlow<Chats?>(null)
 
-    val chatHistoryList: SnapshotStateList<ChatHistory> = _chatHistoryList
-    val savedChatHistoryList: SnapshotStateList<ChatHistory> = _savedChatHistoryList
-    val currentChatId: StateFlow<String?> get() = _currentChatId
-    val selectedChatHistory: MutableStateFlow<ChatHistory?> get() = _selectedChatHistory
+    private val _allChats = MutableStateFlow<List<Chats>>(emptyList())
+
+    val allChats: StateFlow<List<Chats>> = _allChats
+
+    val savedChats: StateFlow<List<Chats>> = _allChats.map { chats ->
+        chats.filter { it.is_bookmarked == 1L }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val recentChats: StateFlow<List<Chats>> = _allChats.map { chats ->
+        chats.filter { it.is_bookmarked == 0L }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val selectedChats: MutableStateFlow<Chats?> get() = _selectedChats
     // endregion
 
     // region Response Generation State
@@ -59,6 +69,15 @@ class ChatViewModel(
     private val _generationState = MutableStateFlow<GenerationState>(GenerationState.Success)
     val generationState: MutableStateFlow<GenerationState> = _generationState
     // endregion
+
+    init {
+        // Start collecting chats from repository
+        viewModelScope.launch {
+            llmsDatabaseRepository.getAllChats().collect { chats ->
+                _allChats.update { chats }
+            }
+        }
+    }
 
     // ========================================================================================
     //                                  Model Management
@@ -98,7 +117,15 @@ class ChatViewModel(
     // ========================================================================================
     fun sendMessage(message: String, isUser: Boolean = true) {
         if (_generationState.value is GenerationState.Loading) stopGeneration()
-        _currentChatMessages.add(ChatMessageModel(message = message, isUser = isUser))
+        _currentChatMessages.add(
+            Chat_messages(
+                id = 0L,
+                chat_id = "",
+                message = message,
+                is_user = if (isUser) 1 else 0,
+                timestamp = Clock.System.now().toString()
+            )
+        )
         if (isUser) initiateResponseGeneration()
     }
 
@@ -107,10 +134,13 @@ class ChatViewModel(
         val aiMessageIndex = loadingState.id
 
         _generationState.value = GenerationState.Failure()
-        _currentChatMessages[aiMessageIndex] = ChatMessageModel(
-            message = (generationState.value as GenerationState.Failure).message,
-            isUser = false,
-        )
+        _currentChatMessages[aiMessageIndex] = Chat_messages(
+                id = 0L,
+                chat_id = "",
+                message = (generationState.value as GenerationState.Failure).message,
+                is_user = 0,
+                timestamp = Clock.System.now().toString()
+            )
         _generationState.value = GenerationState.Success
     }
 
@@ -120,8 +150,7 @@ class ChatViewModel(
         _currentChatMessages[index] = currentMessage.copy(message = "")
         performResponseGeneration(
             messageIndex = index,
-            prompt = userMessage,
-            initialMessage = ""
+            prompt = userMessage
         )
     }
     // endregion
@@ -129,25 +158,31 @@ class ChatViewModel(
     // region Response Generation Implementation
     // ========================================================================================
     private fun initiateResponseGeneration() {
-        val userMessage = _currentChatMessages.lastOrNull { it.isUser }?.message ?: ""
-        _currentChatMessages.add(ChatMessageModel(message = "", isUser = false))
+        val userMessage = _currentChatMessages.lastOrNull { it.is_user == 1L}?.message ?: ""
+        _currentChatMessages.add(
+            Chat_messages(
+                id = 0L,
+                chat_id = "",
+                message = "",
+                is_user = 0,
+                timestamp = Clock.System.now().toString()
+            )
+        )
         performResponseGeneration(
             messageIndex = _currentChatMessages.lastIndex,
-            prompt = userMessage,
-            initialMessage = ""
+            prompt = userMessage
         )
     }
 
     private fun performResponseGeneration(
         messageIndex: Int,
         prompt: String,
-        initialMessage: String
     ) {
         viewModelScope.launch {
             val chutesName = _selectedTextModel.value.chutesName
             val currentMessage = _currentChatMessages[messageIndex]
 
-            _currentChatMessages[messageIndex] = currentMessage.copy(message = initialMessage)
+            _currentChatMessages[messageIndex] = currentMessage.copy(message = "")
             _generationState.value = GenerationState.Loading(messageIndex)
 
             try {
@@ -175,12 +210,16 @@ class ChatViewModel(
         if (e !is CancellationException) {
             val errorMessage = e.message ?: "Generation failed"
             _generationState.value = GenerationState.Failure(errorMessage)
-            _currentChatMessages[messageIndex] = ChatMessageModel(
-                message = "⚠️ $errorMessage",
-                isUser = false,
-            )
+            _currentChatMessages[messageIndex] = Chat_messages(
+                    id = 0L,
+                    chat_id = "",
+                    message = "⚠️ $errorMessage",
+                    is_user = 0,
+                    timestamp = Clock.System.now().toString()
+                )
         }
     }
+
     // endregion
 
     // ========================================================================================
@@ -198,94 +237,90 @@ class ChatViewModel(
             resetCurrentChat()
             return
         }
-
         val description = generateChatDescription()
-        when {
-            forceNew || _currentChatId.value == null -> createNewChatHistory(description)
-            else -> findExistingChat()?.let { updateExistingChat(it, description) }
-        }
+        createChatHistory(description)
         resetCurrentChat()
     }
 
     fun resetCurrentChat() {
         _currentChatMessages.clear()
-        _currentChatId.value = null
-        _selectedChatHistory.value = null
+        _selectedChats.value = null
     }
 
-    fun deleteChatHistory(chatHistory: ChatHistory) {
-        _chatHistoryList.remove(chatHistory)
-        _selectedChatHistory.value = _chatHistoryList.firstOrNull() ?: run {
+    fun deleteChats(chats: Chats) {
+        viewModelScope.launch {
+            llmsDatabaseRepository.deleteChatById(chats.id)
             resetCurrentChat()
-            null
+        }
+
+    }
+
+    fun clearChats() {
+        viewModelScope.launch {
+            llmsDatabaseRepository.clearAllChats()
+            resetCurrentChat()
         }
     }
 
-    fun clearChatHistory() {
-        _chatHistoryList.clear()
-        _savedChatHistoryList.clear()
-        _selectedChatHistory.value = null
-        resetCurrentChat()
+    fun toggleBookmark(chat: Chats) {
+        viewModelScope.launch {
+            val updatedChat = chat.copy(
+                is_bookmarked = if (chat.is_bookmarked == 1L) 0L else 1L
+            )
+            llmsDatabaseRepository.insertChat(updatedChat)
+        }
     }
 
-    fun toggleBookmark(chatHistory: ChatHistory) {
-        chatHistory.isBookmarked = !chatHistory.isBookmarked
-        if (chatHistory.isBookmarked) moveToSaved(chatHistory) else moveToRecent(chatHistory)
-    }
-
-    fun selectChatHistory(chatHistory: ChatHistory) {
-        _selectedChatHistory.value = chatHistory
-        loadChatMessages(chatHistory)
-        _selectedTextModel.value = chatHistory.textModel
-        _tempSelectedTextModel.value = chatHistory.textModel
+    fun selectChats(chats: Chats) {
+        viewModelScope.launch {
+            _selectedChats.value = chats
+            loadChats(chats)
+            val matchedModel = TextGenModelList.allModels.find { it.chutesName == chats.text_model_name }
+            _selectedTextModel.value = matchedModel ?: TextGenModelList.defaultModel
+            _tempSelectedTextModel.value = matchedModel ?: TextGenModelList.defaultModel
+        }
     }
     // endregion
 
     // region History Implementation
     // ========================================================================================
-    private fun findExistingChat() = _currentChatId.value?.let { id ->
-        _chatHistoryList.find { it.id == id }
-    }
 
     private fun generateChatDescription(): String {
         val fullDescription = _currentChatMessages.joinToString("\n") { it.message }
         return if (fullDescription.length > 150) "${fullDescription.take(150)}..." else fullDescription
     }
 
-    private fun createNewChatHistory(description: String) {
-        val newChat = ChatHistory(
-            title = "Chat ${_chatHistoryList.size + 1}",
-            description = description,
-            textModel = _selectedTextModel.value,
-            chatMessages = _currentChatMessages.toList()
-        )
-        _chatHistoryList.add(0, newChat)
-        _currentChatId.value = newChat.id
+    private fun createChatHistory(description: String) {
+        viewModelScope.launch {
+
+            val isNewChat = _selectedChats.value == null
+            val chatId = if (isNewChat) Uuid.random().toString() else _selectedChats.value!!.id
+
+            val chats = Chats(
+                id = chatId,
+                title = if (isNewChat) "Chat ${_allChats.value.size + 1}" else _selectedChats.value!!.title,
+                description = description,
+                text_model_name = _selectedTextModel.value.chutesName,
+                is_bookmarked = 0L,
+                created_at = Clock.System.now().toString()
+            )
+
+            llmsDatabaseRepository.insertChatWithMessages(
+                chat = chats,
+                messages = _currentChatMessages.map {
+                    it.copy(chat_id = chatId)
+                }
+            )
+        }
     }
 
-    private fun updateExistingChat(existingChat: ChatHistory, description: String) {
-        val updatedChat = existingChat.copy(
-            description = description,
-            chatMessages = _currentChatMessages.toList()
-        )
-        _chatHistoryList.remove(selectedChatHistory.value)
-        _chatHistoryList.add(0, updatedChat)
-    }
+    private fun loadChats(chats: Chats) {
+        viewModelScope.launch {
+            _currentChatMessages.clear()
+            val chatMessages = llmsDatabaseRepository.getMessagesByChatId(chats.id).firstOrNull() ?: emptyList()
+            _currentChatMessages.addAll(chatMessages)
 
-    private fun moveToSaved(chatHistory: ChatHistory) {
-        _chatHistoryList.remove(chatHistory)
-        _savedChatHistoryList.add(0, chatHistory)
-    }
-
-    private fun moveToRecent(chatHistory: ChatHistory) {
-        _savedChatHistoryList.remove(chatHistory)
-        _chatHistoryList.add(0, chatHistory)
-    }
-
-    private fun loadChatMessages(chatHistory: ChatHistory) {
-        _currentChatMessages.clear()
-        _currentChatMessages.addAll(chatHistory.chatMessages)
-        _currentChatId.value = chatHistory.id
+        }
     }
     // endregion
 }

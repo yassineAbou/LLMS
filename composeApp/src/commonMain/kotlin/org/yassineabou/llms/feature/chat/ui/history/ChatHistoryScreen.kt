@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
@@ -51,7 +52,7 @@ private fun ChatHistoryContent(
     chatViewModel: ChatViewModel
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
-    val chatHistoryList = chatViewModel.chatHistoryList
+    val allChats by chatViewModel.allChats.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
@@ -61,7 +62,7 @@ private fun ChatHistoryContent(
             modifier = Modifier.fillMaxWidth().statusBarsPadding(),
             onBackPress = { navController.popBackStack() },
             onClearHistory = {
-                if (chatHistoryList.isNotEmpty()) {
+                if (allChats.isNotEmpty()) {
                     showClearHistoryDialog = true
                 }
             }
@@ -80,7 +81,7 @@ private fun ChatHistoryContent(
                 ClearHistoryDialogContent(
                     onDismiss = { showClearHistoryDialog = false },
                     onConfirm = {
-                        chatViewModel.clearChatHistory()
+                        chatViewModel.clearChats()
                         showClearHistoryDialog = false
                     }
                 )

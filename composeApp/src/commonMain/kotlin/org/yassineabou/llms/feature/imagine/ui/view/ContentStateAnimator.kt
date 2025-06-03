@@ -1,20 +1,15 @@
 package org.yassineabou.llms.feature.imagine.ui.view
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import org.yassineabou.llms.feature.chat.data.model.ChatHistory
+import org.yassineabou.llms.Chats
 
 @Composable
 fun ContentStateAnimator(
-    contentList: List<ChatHistory>,
-    contentComposable: @Composable (List<ChatHistory>) -> Unit,
+    contentList: List<Chats>,
+    contentComposable: @Composable (List<Chats>) -> Unit,
     navigateToChatScreen: () -> Unit
 ) {
 

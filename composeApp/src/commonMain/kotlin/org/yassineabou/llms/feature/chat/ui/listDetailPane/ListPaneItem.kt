@@ -2,37 +2,23 @@ package org.yassineabou.llms.feature.chat.ui.listDetailPane
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.feature.chat.data.model.ChatHistory
 
 @Composable
 fun ListPaneItem(
-    chat: ChatHistory,
+    chats: Chats,
     selected: Boolean,
     onClick: () -> Unit,
     onPinClick: () -> Unit,
@@ -56,14 +42,14 @@ fun ListPaneItem(
             modifier = Modifier.fillMaxWidth()
         ) {
             ChatDescription(
-                chat = chat,
+                chats = chats,
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .weight(1f)
             )
             MoreOptionsMenu(
                 expanded = expanded,
-                isBookmarked = chat.isBookmarked,
+                isBookmarked = chats.is_bookmarked == 1L,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .width(56.dp),
@@ -77,11 +63,11 @@ fun ListPaneItem(
 
 @Composable
 private fun ChatDescription(
-    chat: ChatHistory,
+    chats: Chats,
     modifier: Modifier
 ) {
     Text(
-        text = chat.description,
+        text = chats.description ?: "",
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
         maxLines = 1,
         modifier = modifier

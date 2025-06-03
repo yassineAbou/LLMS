@@ -16,6 +16,15 @@ import llms.composeapp.generated.resources.ic_shisa
 
 object TextGenModelList {
 
+    val allModels: List<TextModel> by lazy {
+        qwen + deepSeek + mistral + llama + others
+    }
+
+    // Default fallback model
+    val defaultModel: TextModel by lazy {
+        qwen.first() // Or any default you prefer
+    }
+
     // Qwen models
     val qwen = listOf(
         TextModel(

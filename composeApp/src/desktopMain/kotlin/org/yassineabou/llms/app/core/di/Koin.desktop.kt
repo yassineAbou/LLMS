@@ -8,6 +8,7 @@ actual val platformModule = module {
     single {
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
             .also { LlmsDatabase.Schema.create(it) }
+
         LlmsDatabaseWrapper(driver, LlmsDatabase(driver))
 
     }

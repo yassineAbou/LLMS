@@ -36,22 +36,22 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.app.core.sharedViews.LoadingContent
 import org.yassineabou.llms.app.core.sharedViews.SnackbarController
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.app.core.util.Animations
-import org.yassineabou.llms.feature.chat.data.model.ChatMessageModel
 
 
 @Composable
 fun ChatBubble(
-    chatMessage: ChatMessageModel,
+    chatMessage: Chat_messages,
     aiIcon: DrawableResource,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
     val backgroundColor = when {
-        chatMessage.isUser -> MaterialTheme.colorScheme.surface
+        chatMessage.is_user == 1L -> MaterialTheme.colorScheme.surface
         isLoading -> Color.Black
         else -> MaterialTheme.colorSchemeCustom.alwaysBlue.copy(alpha = 0.5f)
     }
@@ -67,7 +67,7 @@ fun ChatBubble(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            ChatBubbleIcon(isUser = chatMessage.isUser, aiIcon = aiIcon)
+            ChatBubbleIcon(isUser = chatMessage.is_user == 1L, aiIcon = aiIcon)
 
             when {
                 isLoading -> {
@@ -140,11 +140,11 @@ private fun AiProviderIcon(aiIcon: DrawableResource) {
 
 @Composable
 private fun ChatBubbleMessage(
-    chatMessage: ChatMessageModel,
+    chatMessage: Chat_messages,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
-    if (chatMessage.isUser) {
+    if (chatMessage.is_user == 1L) {
         UserMessage(message = chatMessage.message)
     } else {
         AiMessage(

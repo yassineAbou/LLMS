@@ -4,45 +4,35 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.feature.chat.data.model.ChatHistory
+import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 
 
 @Composable
 fun ChatHistoryListView(
-    chatHistoryList: List<ChatHistory>,
-    removeChatHistory: (ChatHistory) -> Unit,
-    toggleBookmark: (ChatHistory) -> Unit,
-    onClick: (ChatHistory) -> Unit
+    chats: List<Chats>,
+    deleteChats: (Chats) -> Unit,
+    toggleBookmark: (Chats) -> Unit,
+    onClick: (Chats) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -50,11 +40,11 @@ fun ChatHistoryListView(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(
-            chatHistoryList,
+            chats,
         ) { conversationItem ->
             ChatHistoryCard(
-                chatHistory = conversationItem,
-                removeChatHistory = { removeChatHistory(it) },
+                chats = conversationItem,
+                deleteChats = { deleteChats(it) },
                 toggleBookmark = { toggleBookmark(it) },
                 onClick = { onClick(it) }
             )
@@ -64,27 +54,33 @@ fun ChatHistoryListView(
 
 @Composable
 fun ChatHistoryCard(
-    chatHistory: ChatHistory,
-    removeChatHistory: (ChatHistory) -> Unit,
-    toggleBookmark: (ChatHistory) -> Unit,
-    onClick: (ChatHistory) -> Unit
+    chats: Chats,
+    deleteChats: (Chats) -> Unit,
+    toggleBookmark: (Chats) -> Unit,
+    onClick: (Chats) -> Unit
 ) {
+    val textModel by remember(chats.text_model_name) {
+        derivedStateOf {
+            TextGenModelList.allModels.find { it.chutesName == chats.text_model_name }
+                ?: TextGenModelList.defaultModel
+        }
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(chatHistory) },
+            .clickable { onClick(chats) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             ChatHistoryDetails(
-                title = chatHistory.title,
-                description = chatHistory.description
+                title = chats.title,
+                description = chats.description ?: ""
             )
             ChatHistoryAction(
-                textModel = chatHistory.textModel,
-                isBookmarked = chatHistory.isBookmarked,
-                deleteConversationFromHistory = { removeChatHistory(chatHistory) },
-                toggleBookmark = { toggleBookmark(chatHistory) },
+                textModel = textModel,
+                isBookmarked = chats.is_bookmarked == 1L,
+                deleteConversationFromHistory = { deleteChats(chats) },
+                toggleBookmark = { toggleBookmark(chats) },
             )
         }
     }

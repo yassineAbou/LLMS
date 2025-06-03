@@ -42,10 +42,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.app.core.sharedViews.SelectedModel
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.app.core.util.Animations
-import org.yassineabou.llms.feature.chat.data.model.ChatMessageModel
 import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
@@ -170,7 +170,7 @@ private fun ScrollToBottomButton(
 @Composable
 private fun ChatMessagesList(
     generationState: GenerationState,
-    chatMessages: List<ChatMessageModel>,
+    chatMessages: List<Chat_messages>,
     selectedTextModel: TextModel,
     regenerateResponse: (Int) -> Unit
 ) {
@@ -200,7 +200,7 @@ private fun ChatMessagesList(
                 val isLoading = when (generationState) {
                     is GenerationState.Loading -> {
                         // Only show loading for the specific AI message index
-                        !chatMessage.isUser && generationState.id == index
+                        chatMessage.is_user != 1L && generationState.id == index
                     }
                     else -> false
                 }

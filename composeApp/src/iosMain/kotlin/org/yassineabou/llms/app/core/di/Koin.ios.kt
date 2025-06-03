@@ -7,7 +7,11 @@ import org.yassineabou.llms.LlmsDatabase
 
 actual val platformModule = module {
     single {
-        val driver = NativeSqliteDriver(LlmsDatabase.Schema, "LlmsDatabase.db")
+        val driver = NativeSqliteDriver(
+            schema = LlmsDatabase.Schema,
+            name = "LlmsDatabase.db",
+        )
+
         LlmsDatabaseWrapper(driver, LlmsDatabase(driver))
     }
 }

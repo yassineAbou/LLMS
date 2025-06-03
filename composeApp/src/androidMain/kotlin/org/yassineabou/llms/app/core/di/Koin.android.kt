@@ -9,8 +9,13 @@ import org.yassineabou.llms.MyApp
 actual val platformModule = module {
     single {
         val driver =
-            AndroidSqliteDriver(LlmsDatabase.Schema, MyApp.getContext(), "LlmsDatabase.db")
-
+            AndroidSqliteDriver(
+                schema = LlmsDatabase.Schema,
+                context = MyApp.getContext(),
+                name = "LlmsDatabase.db",
+            ).apply {
+                enableForeignKeys()
+            }
         LlmsDatabaseWrapper(driver, LlmsDatabase(driver))
     }
 }

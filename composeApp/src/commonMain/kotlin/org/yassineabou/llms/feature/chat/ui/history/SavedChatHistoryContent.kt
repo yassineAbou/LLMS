@@ -2,6 +2,8 @@ package org.yassineabou.llms.feature.chat.ui.history
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.feature.imagine.ui.view.ContentStateAnimator
@@ -13,21 +15,20 @@ fun SavedChatHistoryContent(
     chatViewModel: ChatViewModel,
     navController: NavController
 ) {
-    val savedChatHistoryList = chatViewModel.savedChatHistoryList
+    val savedChats by chatViewModel.savedChats.collectAsStateWithLifecycle()
 
     Surface {
         ContentStateAnimator(
-            contentList = savedChatHistoryList,
+            contentList = savedChats,
             contentComposable = { list ->
                 ChatHistoryListView(
-                    chatHistoryList = list,
-                    removeChatHistory = {
-                        chatViewModel.deleteChatHistory(it)
-                        chatViewModel.toggleBookmark(it)
+                    chats = list,
+                    deleteChats = {
+                        chatViewModel.deleteChats(it)
                     },
                     toggleBookmark = { chatViewModel.toggleBookmark(it) },
                     onClick = { chatHistory ->
-                        chatViewModel.selectChatHistory(chatHistory)
+                        chatViewModel.selectChats(chatHistory)
                         navController.navigate(Screen.ChatScreen.route)
                     }
                 )

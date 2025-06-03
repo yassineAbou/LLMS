@@ -21,9 +21,9 @@ import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 fun ListPaneSections(
     chatViewModel: ChatViewModel
 ) {
-    val savedChatHistoryList = chatViewModel.savedChatHistoryList
-    val chatHistoryList = chatViewModel.chatHistoryList
-    val selectedChatHistory by chatViewModel.selectedChatHistory.collectAsStateWithLifecycle()
+    val savedChats by chatViewModel.savedChats.collectAsStateWithLifecycle()
+    val recentChats by chatViewModel.recentChats.collectAsStateWithLifecycle()
+    val selectedChats by chatViewModel.selectedChats.collectAsStateWithLifecycle()
 
     LazyColumn(
             modifier = Modifier
@@ -32,43 +32,43 @@ fun ListPaneSections(
         ) {
             item {
                 AnimatedVisibility(
-                    visible = savedChatHistoryList.isNotEmpty(),
+                    visible = savedChats.isNotEmpty(),
                     enter = Animations.fadeInExpand(), // Use the descriptive enter animation
                     exit = Animations.fadeOutShrink()
                 ) {
                     SectionHeader(title = "Saved")
                 }
             }
-            items(savedChatHistoryList) { chat ->
+            items(savedChats) { chat ->
                 ListPaneItem(
-                    chat = chat,
-                    selected = chat == selectedChatHistory,
+                    chats = chat,
+                    selected = chat == selectedChats,
                     onClick = {
-                        chatViewModel.selectChatHistory(chat)
+                        chatViewModel.selectChats(chat)
                     },
                     onPinClick = { chatViewModel.toggleBookmark(chat) },
-                    onDeleteClick = {chatViewModel.deleteChatHistory(chat) }
+                    onDeleteClick = {chatViewModel.deleteChats(chat) }
                 )
 
             }
             item {
                 AnimatedVisibility(
-                    visible = chatHistoryList.isNotEmpty(),
+                    visible = recentChats.isNotEmpty(),
                     enter = Animations.fadeInExpand(), // Use the descriptive enter animation
                     exit = Animations.fadeOutShrink()
                 ) {
                     SectionHeader(title = "Recent")
                 }
             }
-            items(chatHistoryList) { chat ->
+            items(recentChats) { chat ->
                 ListPaneItem(
-                    chat = chat,
-                    selected = chat == selectedChatHistory,
+                    chats = chat,
+                    selected = chat == selectedChats,
                     onClick = {
-                        chatViewModel.selectChatHistory(chat)
+                        chatViewModel.selectChats(chat)
                     },
                     onPinClick = { chatViewModel.toggleBookmark(chat) },
-                    onDeleteClick = { chatViewModel.deleteChatHistory(chat) }
+                    onDeleteClick = { chatViewModel.deleteChats(chat) }
                 )
             }
         }

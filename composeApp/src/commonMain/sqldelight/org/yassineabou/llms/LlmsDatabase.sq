@@ -43,7 +43,7 @@ CREATE TABLE chat_messages (
     message TEXT NOT NULL,
     is_user INTEGER NOT NULL, -- 0 = false (assistant), 1 = true (user)
     timestamp TEXT DEFAULT CURRENT_TIMESTAMP, -- ISO8601 format
-    FOREIGN KEY(chat_id) REFERENCES chats(id) -- Foreign key constraint
+    FOREIGN KEY(chat_id) REFERENCES chats(id) ON DELETE CASCADE -- Enforces relationship with cascading delete
 );
 
 -- GENERATED_IMAGES TABLE
@@ -74,7 +74,7 @@ FROM chats ORDER BY created_at DESC;
 -- Insert a new chat
 -- Expects values: id, title, description, text_model_name, is_bookmarked, created_at
 insertChat:
-INSERT INTO chats(id, title, description, text_model_name, is_bookmarked, created_at)
+INSERT OR REPLACE INTO chats(id, title, description, text_model_name, is_bookmarked, created_at)
 VALUES (?, ?, ?, ?, ?, ?);
 
 -- Delete a specific chat by ID
@@ -97,7 +97,7 @@ FROM chat_messages WHERE chat_id = ? ORDER BY timestamp ASC;
 -- Insert a new message into a chat
 -- Expects values: chat_id, message, is_user, timestamp
 insertMessage:
-INSERT INTO chat_messages(chat_id, message, is_user, timestamp)
+INSERT OR REPLACE INTO chat_messages(chat_id, message, is_user, timestamp)
 VALUES (?, ?, ?, ?);
 
 -- === QUERIES FOR GENERATED IMAGES ===
@@ -120,3 +120,4 @@ DELETE FROM generated_images WHERE id = ?;
 -- Delete all generated images
 clearAllImages:
 DELETE FROM generated_images;
+
