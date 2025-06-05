@@ -58,7 +58,7 @@ fun GeneratedImagesScreen(
     supportingPaneNavigator: SupportingPaneNavigator,
     dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id }),
 ) {
-    val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsState()
+    val listGeneratedPhotos by imageGenViewModel.listGeneratedImages.collectAsState()
     val selectedPhotos = dragSelectState.selected
     val inSelectionMode = dragSelectState.inSelectionMode
     val selectedPhotoCount = dragSelectState.selected.size
@@ -111,7 +111,7 @@ fun GeneratedImagesScreen(
                 onDownloadClick = { /* Handle download */ },
                 onShareClick = { /* Handle share */ },
                 onDeleteClick = {
-                    imageGenViewModel.deleteSelectedPhotos(selectedPhotos)
+                    imageGenViewModel.deleteSelectedImages(selectedPhotos)
                     dragSelectState.disableSelectionMode()
                 },
                 onSelectAllClick = { dragSelectState.updateSelected(listGeneratedPhotos) }

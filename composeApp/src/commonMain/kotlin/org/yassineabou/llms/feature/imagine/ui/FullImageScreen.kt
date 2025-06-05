@@ -73,7 +73,7 @@ fun FullScreenImage(
     imageGenViewModel: ImageGenViewModel,
     supportingPaneNavigator: SupportingPaneNavigator
 ) {
-    val listGeneratedPhotos by imageGenViewModel.listGeneratedPhotos.collectAsStateWithLifecycle()
+    val listGeneratedPhotos by imageGenViewModel.listGeneratedImages.collectAsStateWithLifecycle()
     val currentImageIndex by imageGenViewModel.currentImageIndex.collectAsStateWithLifecycle()
     val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
@@ -172,7 +172,8 @@ fun FullScreenImage(
             onInfoClicked = { showInfoBottomSheet = true },
             onDownload =  { imageGenViewModel.downloadImage() },
             onDelete = {
-                imageGenViewModel.deletePhoto(pagerState.currentPage)
+                val currentId = listGeneratedPhotos[pagerState.currentPage].id
+                imageGenViewModel.deleteImage(currentId)
                 val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
                 imageGenViewModel.updateCurrentImageIndex(newPage)
                 coroutineScope.launch {

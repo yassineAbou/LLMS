@@ -10,7 +10,9 @@ actual val platformModule = module {
         val driver = NativeSqliteDriver(
             schema = LlmsDatabase.Schema,
             name = "LlmsDatabase.db",
-        )
+        ).apply {
+            enableForeignKeys()
+        }
 
         LlmsDatabaseWrapper(driver, LlmsDatabase(driver))
     }

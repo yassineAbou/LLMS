@@ -6,6 +6,7 @@ import kotlinx.io.IOException
 import org.yassineabou.llms.app.core.util.ImageMetadataUtil
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatMessage
+import org.yassineabou.llms.feature.imagine.model.GeneratedImageResult
 import org.yassineabou.llms.feature.imagine.model.ImageGenerationRequest
 import org.yassineabou.llms.feature.imagine.model.ImageModel
 import org.yassineabou.llms.feature.imagine.model.UrlExample
@@ -41,7 +42,7 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
         model: ImageModel,
         prompt: String,
         additionalParams: Map<String, Any> = emptyMap()
-    ): Result<UrlExample> {
+    ): Result<GeneratedImageResult> {
         return try {
             val endpoint = ChutesAiEndPoint.getImageEndpoint(model.chutesName)
             val request = createImageRequest(model, prompt, additionalParams)
@@ -55,9 +56,9 @@ class ChutesAiRepository(private val chutesAiApi: ChutesAiApi) {
             val dataUrl = "data:$mimeType;base64,$base64Image"
 
             Result.success(
-                UrlExample(
-                    url = dataUrl, // Use the generated URL
-                    prompt = prompt
+                GeneratedImageResult(
+                    urlExample = UrlExample(url = dataUrl, prompt = prompt),
+                    imageBytes = imageBytes
                 )
             )
 

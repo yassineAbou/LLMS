@@ -29,6 +29,8 @@ interface LlmsDatabaseInterface {
     suspend fun insertImage(image: Generated_images)
     suspend fun deleteImageById(id: String)
     suspend fun clearAllImages()
+
+    suspend fun deleteImagesByIds(ids: List<String>)
 }
 
 class LlmsDatabaseRepository(
@@ -121,5 +123,13 @@ class LlmsDatabaseRepository(
     override suspend fun clearAllImages() = withContext(Dispatchers.Default) {
         queries.clearAllImages()
         Unit
+    }
+
+    override suspend fun deleteImagesByIds(ids: List<String>) = withContext(Dispatchers.Default) {
+        queries.transaction {
+            ids.forEach { id ->
+                queries.deleteImageById(id)
+            }
+        }
     }
 }
