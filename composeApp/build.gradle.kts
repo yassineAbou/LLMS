@@ -122,6 +122,8 @@ kotlin {
 
             implementation(libs.kermit)
 
+            implementation("me.sujanpoudel.multiplatform.utils:multiplatform-paths:0.2.2")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -208,6 +210,7 @@ compose.desktop {
             linux {
                 iconFile.set(project.file("src/commonMain/composeResources/drawable/linux.png"))
             }
+            modules("java.sql")
         }
 
 
