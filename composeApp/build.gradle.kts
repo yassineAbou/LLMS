@@ -122,13 +122,14 @@ kotlin {
 
             implementation(libs.kermit)
 
-            implementation("me.sujanpoudel.multiplatform.utils:multiplatform-paths:0.2.2")
 
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.cio)
             implementation(libs.sqldelight.sqlite.driver)
+            implementation(libs.multiplatform.paths)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
