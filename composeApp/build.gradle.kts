@@ -142,6 +142,7 @@ sqldelight {
     databases {
         create("LlmsDatabase") {
             packageName.set("org.yassineabou.llms")
+            generateAsync = true
         }
     }
 }

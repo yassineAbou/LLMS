@@ -5,14 +5,16 @@ import org.koin.dsl.module
 import org.w3c.dom.Worker
 import org.yassineabou.llms.LlmsDatabase
 
-// Top-level function to get the worker URL as a String
-private fun getWorkerUrl(): String =
-    js("new URL('@cashapp/sqldelight-sqljs-worker/sqljs.worker.js', import.meta.url).href")
+
+private val workerScriptUrl: String =
+    js("""new URL("@cashapp/sqldelight-sqljs-worker/sqljs.worker.js", import.meta.url)""")
+
 
 actual val platformModule = module {
     single {
-        val workerUrl = getWorkerUrl()
-        val driver = WebWorkerDriver(Worker(workerUrl))
+        val driver = WebWorkerDriver(Worker(workerScriptUrl)).apply {
+            enableForeignKeys()
+        }
         LlmsDatabaseWrapper(driver, LlmsDatabase(driver))
     }
 }
