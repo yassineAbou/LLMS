@@ -28,6 +28,7 @@ kotlin {
                         add(projectDirPath)
                     }
                 }
+                sourceMaps = true
             }
         }
         binaries.executable()

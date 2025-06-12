@@ -7,7 +7,7 @@ import org.yassineabou.llms.app.App
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    ComposeViewport(document.body!!) {
-        App()
-    }
+     ComposeViewport(document.body!!) {
+         App()
+     }
 }

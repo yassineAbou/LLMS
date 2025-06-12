@@ -62,17 +62,17 @@ object TextGenModelList {
             chutesName = "ArliAI/QwQ-32B-ArliAI-RpR-v1",
             description = "QwQ-32B-ArliAI-RpR-v1 is a 32 billion parameter language model fine-tuned for roleplay and creative writing that combines reasoning capabilities with creative storytelling to maintain coherence in long conversations.",
             image = Res.drawable.ic_qwen
-        ),
-        TextModel(
-            title = "Qwen2.5 VL 32B Instruct",
-            chutesName = "Qwen/Qwen2.5-VL-32B-Instruct",
-            description = "Qwen2.5-VL-32B-Instruct Latest Updates: In addition to the original formula, we have further enhanced Qwen2.5-VL-32B's mathematical and problem-solving abilities through reinforcement learning...",
-            image = Res.drawable.ic_qwen
-        ),
+        )
     )
 
     // DeepSeek models
     val deepSeek = listOf(
+        TextModel(
+            title = "DeepSeek R1 0528",
+            chutesName = "deepseek-ai/DeepSeek-R1-0528",
+            description = "DeepSeek-R1-0528 is an open-source large language model specializing in complex reasoning, mathematics, and programming tasks, with significant improvements over its predecessor in areas like AIME test performance (87.5%...",
+            image = Res.drawable.ic_deepseek
+        ),
         TextModel(
             title = "DeepSeek V3 0324",
             chutesName = "deepseek-ai/DeepSeek-V3-0324",
@@ -98,12 +98,6 @@ object TextGenModelList {
             image = Res.drawable.ic_deepseek
         ),
         TextModel(
-            title = "DeepSeek Prover V2 671B",
-            chutesName = "deepseek-ai/DeepSeek-Prover-V2-671B",
-            description = "DeepSeek-Prover-V2 is an open-source large language model available in 7B and 671B parameter versions that specializes in formal mathematical theorem proving in Lean 4, capable of breaking down complex mathematical...",
-            image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
             title = "DeepSeek R1 Zero",
             chutesName = "deepseek-ai/DeepSeek-R1-Zero",
             description = "DeepSeek-R1 is a 671B parameter (37B activated) reasoning-focused language model trained via reinforcement learning that excels at mathematical, coding, and general reasoning tasks, with performance comparable to OpenAI's models...",
@@ -119,12 +113,6 @@ object TextGenModelList {
 
     // Mistral models
     val mistral = listOf(
-        TextModel(
-            title = "Dolphin3.0 R1 Mistral 24B",
-            chutesName = "cognitivecomputations/Dolphin3.0-R1-Mistral-24B",
-            description = "Dolphin 3.0 R1 Mistral 24B is a 24 billion parameter open-source language model optimized for general-purpose tasks like coding, math, and reasoning that gives users full control over the system prompt and alignment.",
-            image = Res.drawable.ic_dolphin
-        ),
         TextModel(
             title = "Mistral Small 3.1 24B Instruct 2503",
             chutesName = "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
@@ -170,6 +158,12 @@ object TextGenModelList {
     // Others models
     val others = listOf(
         TextModel(
+            title = "TEMPLAR I",
+            chutesName = "tplr/TEMPLAR-I",
+            description = "The model information appears incomplete - the model card is empty except for showing it uses the MIT license, so I cannot provide an accurate summary of its capabilities, parameter count, or use cases.",
+            image = Res.drawable.ic_microsoft
+        ),
+        TextModel(
             title = "MAI DS R1 FP8",
             chutesName = "microsoft/MAI-DS-R1-FP8",
             description = "MAI-DS-R1 is a 671B parameter post-trained version of DeepSeek-R1 that maintains strong reasoning capabilities while being more responsive on previously blocked topics, making it particularly useful for general language tasks...",
@@ -179,12 +173,6 @@ object TextGenModelList {
             title = "GLM 4 32B 0414",
             chutesName = "THUDM/GLM-4-32B-0414",
             description = "GLM-4-32B-0414 is a 32 billion parameter open-source language model that performs well at tasks like code generation, artistic creation, function calling and complex reasoning, achieving performance comparable to GPT-...",
-            image = Res.drawable.ic_glm
-        ),
-        TextModel(
-            title = "GLM Z1 32B 0414",
-            chutesName = "THUDM/GLM-Z1-32B-0414",
-            description = "GLM-4-Z1-32B-0414 is a 32 billion parameter open-source language model specialized in mathematical reasoning, code generation, and complex problem-solving through its \"deep thinking\" capabilities that allow it to break down...",
             image = Res.drawable.ic_glm
         ),
         TextModel(
