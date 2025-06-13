@@ -17,6 +17,8 @@ sealed class Screen(val route: String) {
     
     data object ImageGenerationLoadingScreen : Screen("ImageGenerationLoadingScreen")
 
+    data object YouScreen : Screen("YouScreen")
+
     companion object {
 
         fun fromRoute(route: String): Screen {
@@ -27,6 +29,7 @@ sealed class Screen(val route: String) {
                 GeneratedImagesScreen.route -> GeneratedImagesScreen
                 FullScreenImage.route -> FullScreenImage
                 ImageGenerationLoadingScreen.route -> ImageGenerationLoadingScreen
+                YouScreen.route -> YouScreen
                 else -> throw IllegalArgumentException("Unknown route: $route")
             }
         }
