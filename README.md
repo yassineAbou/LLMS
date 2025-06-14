@@ -1,3 +1,4 @@
+
 <div align="center">  
  <img src="https://imgur.com/mVICjDJ.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
  <h1 style="display: inline-block; margin: 0; vertical-align: middle; text-align: center; width: 100%;">LLMS</h1>  
@@ -17,7 +18,7 @@
 <img src="https://img.shields.io/badge/macOS-808080?logo=apple" alt="macOS">
 </p>
 
-Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images.
+Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images. and keep everything safe and in sync across your devices.
 
 ## Releases
 ### ✅ Available Releases
@@ -41,7 +42,7 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
      ```
 - **iOS**:
   
-  *Run iOS emulator via Xcode or Android Studio*
+  *Run iOS emulator via Xcode, Intellij Idea or Android Studio*
 
 
 ## 🎨 Demo
@@ -49,6 +50,8 @@ Discover the power of AI with our Kotlin Multiplatform app. Choose from the late
 https://github.com/user-attachments/assets/af1903df-139f-4178-8fcb-c3d7c7b46219
 
 https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
+
+https://github.com/user-attachments/assets/fa7a58ff-8f53-4cc2-9cca-a91943bcc61e
 
 ## 🤖 Chutes AI Integration
 
@@ -92,18 +95,22 @@ https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
 
 ## 📈 Progress
 
-Our development process is divided into four key steps:
+Our development process is divided into five key steps:
 
 #### 1. Prototype with Fake Data 🚧
 - Status: 🎯 Done
 
 #### 2. Connect with Chutes AI REST API (Text Models) 📝 
-- Status: 🎯 Done 
+- Status: 🎯 Done
+  
 #### 3. Connect with Chutes AI REST API (Image Models) 🖼️  
 - Status: 🎯 Done 
 
 #### 4. Save Chat History & Generated Images Locally 💾  
-- Status: 🔄 in progress
+- Status: 🎯 Done  
+
+#### 5. Sync Data Across Devices with Authentication 🔐  
+- Status: 🔄 in progress  
 
 
 ## 🏗️ Architecture
@@ -113,6 +120,8 @@ Our development process is divided into four key steps:
 
 - **Layers**: All data handling, business logic, and presentation layers are implemented
   using [kotlin multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)
+
+- **backend**: The backend is developed using [Ktor framework](https://ktor.io/).  
 
 <p align="center">
   <img src="https://miro.medium.com/v2/resize:fit:2552/1*0MUE4D4nlEITAUyOTZ1zcg.png" alt="Kotlin Multiplatform" width="250">
@@ -134,7 +143,9 @@ Our development process is divided into four key steps:
 ```  
 app/  
 ├── core/
-│   ├── data  
+│   ├── data
+│   │   ├── local
+│   │   └── remote
 │   ├── di  
 │   ├── navigation  
 │   ├── sharedViews  
@@ -155,7 +166,10 @@ app/
     │   └── ui  
     │       ├── supportingPane  
     │       ├── util  
-    │       └── view  
+    │       └── view
+    └──You/  
+    
+    
     
 ``` 
 
