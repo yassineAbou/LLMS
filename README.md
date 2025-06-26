@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-<img src="https://img.shields.io/badge/Chutes%20AI-000000?logo=ai&logoColor=white&color=000000" alt="Chutes AI">
+<img src="https://img.shields.io/badge/%20AI-000000?logo=ai&logoColor=white&color=000000" alt="AI">
 <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=kotlin&logoColor=white" alt="Kotlin">
 <img src="https://img.shields.io/badge/Kotlin%20Multiplatform-7F52FF?style=flat&logo=kotlin&logoColor=white" alt="Kotlin Multiplatform">
 <img src="https://img.shields.io/badge/Compose%20Multiplatform-4285F4?logo=jetpack-compose&logoColor=white" alt="Compose Multiplatform">
@@ -53,15 +53,15 @@ https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
 
 https://github.com/user-attachments/assets/fa7a58ff-8f53-4cc2-9cca-a91943bcc61e
 
-## 🤖 Chutes AI Integration
+## 🤖 OpenRouter and ImageRouter AI Integration
 
-**Chutes AI** is a serverless AI compute platform that lets you deploy, run, and scale any AI model in seconds. This project uses **FREE** models provided by Chutes AI.  
+**OpenRouter** is the unified interface for LLMS, and **ImageRouter** is Unified Interface for Image AI.  This project uses **FREE** models provided by both of them.  
 
 ### 🔧 Setup  
 1. **Get an API Key**:  
-   - Sign up at [chutes.ai](https://chutes.ai/) and paste your API key in `ChutesAiEndPoint.kt`:  
+   - Sign up at [openrouter.ai](https://openrouter.ai/) and [imagerouter.io](https://imagerouter.io/) and paste your API keies in `AiEndPoint.kt`:  
      ```kotlin  
-     object ChutesAiEndPoint {  
+     object AiEndPoint {  
          val API_KEY = "YOUR_API_KEY_HERE"  
      }  
      ```  
@@ -100,10 +100,10 @@ Our development process is divided into five key steps:
 #### 1. Prototype with Fake Data 🚧
 - Status: 🎯 Done
 
-#### 2. Connect with Chutes AI REST API (Text Models) 📝 
+#### 2. Connect with AI REST API (Text Models) 📝 
 - Status: 🎯 Done
   
-#### 3. Connect with Chutes AI REST API (Image Models) 🖼️  
+#### 3. Connect with AI REST API (Image Models) 🖼️  
 - Status: 🎯 Done 
 
 #### 4. Save Chat History & Generated Images Locally 💾  
