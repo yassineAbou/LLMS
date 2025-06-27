@@ -11,6 +11,6 @@ data class ImageModel @OptIn(ExperimentalUuidApi::class) constructor(
     val title: String,
     val description: String,
     val image: DrawableResource,
-    val chutesName: String,
+    val modelName: String,
     val defaultParams: Map<String, Any> = emptyMap()
 )

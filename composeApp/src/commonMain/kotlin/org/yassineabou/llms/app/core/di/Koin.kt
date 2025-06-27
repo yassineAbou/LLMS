@@ -10,11 +10,10 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.ChutesAiApi
-import org.yassineabou.llms.app.core.data.remote.ChutesAiRepository
-import org.yassineabou.llms.app.core.data.remote.KtorChutesApi
+import org.yassineabou.llms.app.core.data.remote.AiApi
+import org.yassineabou.llms.app.core.data.remote.AiRepository
+import org.yassineabou.llms.app.core.data.remote.KtorApi
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
 
@@ -53,12 +52,12 @@ val commonModule = module {
     }
 
     // 3. API Implementation
-    single<ChutesAiApi> {
-        KtorChutesApi(client = get(), json = get())
+    single<AiApi> {
+        KtorApi(client = get(), json = get())
     }
 
 
-    single<ChutesAiRepository> { ChutesAiRepository(chutesAiApi = get())
+    single<AiRepository> { AiRepository(aiApi = get())
     }
 
 // ========================================================================================
@@ -72,8 +71,8 @@ val commonModule = module {
 //                                  ViewModule
 // ========================================================================================
 
-    viewModel { ImageGenViewModel(chutesAiRepository = get(), llmsDatabaseRepository = get ()) }
-    viewModel { ChatViewModel(chutesAiRepository = get(), llmsDatabaseRepository = get()) }
+    viewModel { ImageGenViewModel(aiRepository = get(), llmsDatabaseRepository = get ()) }
+    viewModel { ChatViewModel(aiRepository = get(), llmsDatabaseRepository = get()) }
 }
 
 

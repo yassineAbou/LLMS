@@ -4,7 +4,7 @@ package org.yassineabou.llms.feature.imagine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.util.encodeBase64
+import io.ktor.util.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,8 @@ import kotlinx.datetime.Clock
 import kotlinx.io.IOException
 import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.ChutesAiEndPoint.API_KEY
-import org.yassineabou.llms.app.core.data.remote.ChutesAiRepository
+import org.yassineabou.llms.app.core.data.remote.AiEndPoint.IMAGE_ROUTER_API_KEY
+import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.app.core.util.FileKit
 import org.yassineabou.llms.app.core.util.ImageMetadataUtil
@@ -30,7 +30,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class ImageGenViewModel(
-    private val chutesAiRepository: ChutesAiRepository,
+    private val aiRepository: AiRepository,
     private val llmsDatabaseRepository: LlmsDatabaseRepository
 ) : ViewModel() {
 
@@ -108,8 +108,8 @@ class ImageGenViewModel(
     fun generateImage(prompt: String) {
         imageGenerationJob = viewModelScope.launch {
             _imageGenerationState.value = GenerationState.Loading(id = _currentImageIndex.value)
-            val result = chutesAiRepository.generateImage(
-                apiKey = API_KEY,
+            val result = aiRepository.generateImage(
+                apiKey = IMAGE_ROUTER_API_KEY,
                 model = selectedImageModel.value,
                 prompt = prompt,
             )
@@ -181,6 +181,8 @@ class ImageGenViewModel(
                 image_model_name = imageModel.title,
                 generated_at = Clock.System.now().toString()
             )
+
+
 
             viewModelScope.launch {
                 llmsDatabaseRepository.insertImage(newImage)

@@ -12,8 +12,8 @@ import kotlinx.datetime.Clock
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.ChutesAiEndPoint.API_KEY
-import org.yassineabou.llms.app.core.data.remote.ChutesAiRepository
+import org.yassineabou.llms.app.core.data.remote.AiEndPoint.API_KEY
+import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
@@ -22,7 +22,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class ChatViewModel(
-    private val chutesAiRepository: ChutesAiRepository,
+    private val aiRepository: AiRepository,
     private val llmsDatabaseRepository: LlmsDatabaseRepository
 ) : ViewModel() {
 
@@ -186,7 +186,7 @@ class ChatViewModel(
             _generationState.value = GenerationState.Loading(messageIndex)
 
             try {
-                chutesAiRepository.streamChat(
+                aiRepository.streamChat(
                     apiKey = API_KEY,
                     prompt = prompt,
                     model = chutesName

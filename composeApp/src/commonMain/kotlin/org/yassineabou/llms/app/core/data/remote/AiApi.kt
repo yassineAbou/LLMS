@@ -1,46 +1,44 @@
 package org.yassineabou.llms.app.core.data.remote
 
-import io.ktor.client.HttpClient
-import io.ktor.client.request.accept
-import io.ktor.client.request.header
-import io.ktor.client.request.preparePost
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsChannel
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.contentType
-import io.ktor.http.isSuccess
-import io.ktor.utils.io.readUTF8Line
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import org.yassineabou.llms.app.core.data.remote.ChutesAiEndPoint.CHAT_BASE_URL
-import org.yassineabou.llms.app.core.data.remote.ChutesAiEndPoint.STREAM_PREFIX
+import org.yassineabou.llms.app.core.data.remote.AiEndPoint.CHAT_BASE_URL
+import org.yassineabou.llms.app.core.data.remote.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
-import org.yassineabou.llms.feature.imagine.model.ImageGenerationRequest
+import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationRequest
+import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationResponse
 
 
-interface ChutesAiApi {
-    suspend fun generateImage(apiKey: String, endpoint: String, request: ImageGenerationRequest): ByteArray
+interface AiApi {
+    suspend fun generateImage(
+        apiKey: String,
+        endpoint: String,
+        request: ImageRouterGenerationRequest
+    ): ImageRouterGenerationResponse
     fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String>
 }
 
-class KtorChutesApi(
+class KtorApi(
     private val client: HttpClient,
     private val json: Json
-) : ChutesAiApi {
+) : AiApi {
 
     override suspend fun generateImage(
         apiKey: String,
         endpoint: String,
-        request: ImageGenerationRequest
-    ): ByteArray  {
-
-        return client.preparePost(endpoint) {
+        request: ImageRouterGenerationRequest
+    ): ImageRouterGenerationResponse {
+        return client.post(endpoint) {
             header(HttpHeaders.Authorization, "Bearer $apiKey")
             contentType(ContentType.Application.Json)
             setBody(request)
