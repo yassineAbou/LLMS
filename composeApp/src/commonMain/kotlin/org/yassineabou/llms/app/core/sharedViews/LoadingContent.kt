@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_chutes
+import llms.composeapp.generated.resources.linux
 import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 
@@ -30,7 +30,7 @@ fun LoadingContent(
         modifier = modifier
     ) {
         Image(
-            painter = painterResource(Res.drawable.ic_chutes),
+            painter = painterResource(Res.drawable.linux),
             contentDescription = null,
             modifier = Modifier
                 .padding(bottom = 32.dp)

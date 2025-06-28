@@ -12,7 +12,7 @@ import kotlinx.datetime.Clock
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.AiEndPoint.API_KEY
+import org.yassineabou.llms.app.core.data.remote.AiEndPoint.CHUTES_API_KEY
 import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
@@ -187,7 +187,7 @@ class ChatViewModel(
 
             try {
                 aiRepository.streamChat(
-                    apiKey = API_KEY,
+                    apiKey = CHUTES_API_KEY,
                     prompt = prompt,
                     model = chutesName
                 ).collect { chunk ->

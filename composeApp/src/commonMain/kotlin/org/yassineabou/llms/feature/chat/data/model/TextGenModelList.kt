@@ -1,18 +1,6 @@
 package org.yassineabou.llms.feature.chat.data.model
 
-import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_agentica
-import llms.composeapp.generated.resources.ic_byte_dance
-import llms.composeapp.generated.resources.ic_deepseek
-import llms.composeapp.generated.resources.ic_dolphin
-import llms.composeapp.generated.resources.ic_glm
-import llms.composeapp.generated.resources.ic_llama
-import llms.composeapp.generated.resources.ic_microsoft
-import llms.composeapp.generated.resources.ic_mistral
-import llms.composeapp.generated.resources.ic_nvidia
-import llms.composeapp.generated.resources.ic_qwen
-import llms.composeapp.generated.resources.ic_sales_force
-import llms.composeapp.generated.resources.ic_shisa
+import llms.composeapp.generated.resources.*
 
 object TextGenModelList {
 
@@ -96,18 +84,6 @@ object TextGenModelList {
             chutesName = "deepseek-ai/DeepSeek-V3",
             description = "DeepSeek-V3 is a 671B parameter MoE model (37B activated per token) that achieves state-of-the-art open-source performance across language, math and code tasks while maintaining reasonable compute requirements through...",
             image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
-            title = "DeepSeek R1 Zero",
-            chutesName = "deepseek-ai/DeepSeek-R1-Zero",
-            description = "DeepSeek-R1 is a 671B parameter (37B activated) reasoning-focused language model trained via reinforcement learning that excels at mathematical, coding, and general reasoning tasks, with performance comparable to OpenAI's models...",
-            image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
-            title = "DeepSeek V3 Base",
-            chutesName = "deepseek-ai/DeepSeek-V3-Base",
-            description = "DeepSeek-V3 is a 671B parameter MoE language model (37B active parameters per token) that excels at coding, math, and reasoning tasks while maintaining strong performance across general knowledge and multilingual...",
-            image = Res.drawable.ic_deepseek
         )
     )
 
@@ -146,23 +122,11 @@ object TextGenModelList {
             chutesName = "shisa-ai/shisa-v2-llama3.3-70b",
             description = "Shisa V2 is a family of bilingual Japanese/English language models ranging from 7B to 70B parameters, optimized for high-quality Japanese language capabilities while maintaining strong English performance, making them...",
             image = Res.drawable.ic_shisa
-        ),
-        TextModel(
-            title = "Llama 3_1 Nemotron Ultra 253B V1",
-            chutesName = "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
-            description = "Llama-3.1-Nemotron-Ultra-253B is a 253 billion parameter reasoning-focused language model optimized for efficiency that excels at math, coding, and general instruction-following tasks while running on a single 8xH100...",
-            image = Res.drawable.ic_nvidia
         )
     )
 
     // Others models
     val others = listOf(
-        TextModel(
-            title = "TEMPLAR I",
-            chutesName = "tplr/TEMPLAR-I",
-            description = "The model information appears incomplete - the model card is empty except for showing it uses the MIT license, so I cannot provide an accurate summary of its capabilities, parameter count, or use cases.",
-            image = Res.drawable.ic_microsoft
-        ),
         TextModel(
             title = "MAI DS R1 FP8",
             chutesName = "microsoft/MAI-DS-R1-FP8",
@@ -182,16 +146,10 @@ object TextGenModelList {
             image = Res.drawable.ic_agentica
         ),
         TextModel(
-            title = "Seed Coder 8B Reasoning Bf16",
-            chutesName = "ByteDance-Seed/Seed-Coder-8B-Reasoning-bf16",
-            description = "Seed-Coder-8B-Reasoning is an 8 billion parameter code-focused language model optimized for programming tasks and reasoning capabilities, particularly useful for competitive programming and complex coding challenges.",
-            image = Res.drawable.ic_byte_dance
-        ),
-        TextModel(
             title = "Xgen Small 9B Instruct R",
             chutesName = "Salesforce/xgen-small-9B-instruct-r",
             description = "xGen-small is a research-focused LLM available in 4B and 9B parameter sizes that excels at long-context tasks (up to 128k tokens) and shows strong performance on math, science, and coding benchmarks compared to similar-sized models...",
             image = Res.drawable.ic_sales_force
-        ),
+        )
     )
 }

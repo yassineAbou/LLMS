@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import org.yassineabou.llms.app.core.data.remote.AiEndPoint.CHAT_BASE_URL
+import org.yassineabou.llms.app.core.data.remote.AiEndPoint.CHUTES_BASE_URL
 import org.yassineabou.llms.app.core.data.remote.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
@@ -48,7 +48,7 @@ class KtorApi(
 
     override fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
         try {
-            client.preparePost(CHAT_BASE_URL) {
+            client.preparePost(CHUTES_BASE_URL) {
                 header(HttpHeaders.Authorization, "Bearer $apiKey")
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Text.EventStream)
