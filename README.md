@@ -53,46 +53,6 @@ https://github.com/user-attachments/assets/7d95e471-4ca1-4ac2-a9cb-502a139f087d
 
 https://github.com/user-attachments/assets/fa7a58ff-8f53-4cc2-9cca-a91943bcc61e
 
-## 🤖 OpenRouter and ImageRouter AI Integration
-
-**OpenRouter** is the unified interface for LLMS, and **ImageRouter** is Unified Interface for Image AI.  This project uses **FREE** models provided by both of them.  
-
-### 🔧 Setup  
-1. **Get an API Key**:  
-   - Sign up at [openrouter.ai](https://openrouter.ai/) and [imagerouter.io](https://imagerouter.io/) and paste your API keies in `AiEndPoint.kt`:  
-     ```kotlin  
-     object AiEndPoint {  
-         val API_KEY = "YOUR_API_KEY_HERE"  
-     }  
-     ```  
-
-2. **Customize Models**:  
-   - Add new or custom models by editing:
-     
-     - **Text models**: `TextGenModelList.kt`  
-       ```kotlin  
-       TextModel(  
-           title = "DeepSeek V3 0324",  
-           chutesName = "deepseek-ai/DeepSeek-V3-0324",  
-           description = "DeepSeek-V3-0324 is...",  
-           image = Res.drawable.ic_deepseek  
-       )  
-       ```
-       
-     - **Image models**: `ImageGenModelList.kt`
-       ```kotlin  
-       ImageModel(
-            title = "Chroma",
-            description = "Open-Source, Uncensored...",
-            image = Res.drawable.ic_chroma,
-            chutesName = "chroma",
-            defaultParams = mapOf(
-                "cfg" to 4.5f,
-                "steps" to 30
-            )
-        )  
-       ```
-
 ## 📈 Progress
 
 Our development process is divided into five key steps:
