@@ -26,19 +26,27 @@ import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 fun YouScreen() {
     var isLoggedIn by remember { mutableStateOf(false) }
     var showLogoutPrompt by remember { mutableStateOf(false) }
+    var showAuthentification by remember { mutableStateOf(false) }
 
     YouContent(
         isLoggedIn = isLoggedIn,
         onLogin = {
-            isLoggedIn = true
-            showLogoutPrompt = false
+            showAuthentification = true
+            //isLoggedIn = true
+            //showLogoutPrompt = false
         },
         onLogout = {
-            isLoggedIn = false
-            showLogoutPrompt = true
+            //isLoggedIn = false
+            //showLogoutPrompt = true
         },
         showLogoutPrompt = showLogoutPrompt
     )
+
+    if (showAuthentification) {
+        AuthentificationBottomSheet(
+            onDismiss = { showAuthentification = false },
+        )
+    }
 }
 
 // Main screen composable

@@ -17,62 +17,38 @@ object ImageGenModelList {
             title = "FLUX-1-schnell",
             description = "is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
             image = Res.drawable.ic_flux,
-            modelName = "black-forest-labs/FLUX-1-schnell:free",
-            defaultParams = mapOf(
-                "cfg" to 4.5f,
-                "steps" to 30
-            )
+            modelName = "black-forest-labs/FLUX-1-schnell:free"
         ),
         ImageModel(
             title = "sdxl-turbo",
             description = "SDXL-Turbo is a fast generative text-to-image model that can synthesize photorealistic images from a text prompt in a single network evaluation.",
             image = Res.drawable.ic_sdxl_turbo,
-            modelName = "stabilityai/sdxl-turbo:free",
-            defaultParams = mapOf(
-                "guidance_scale" to 5f,
-                "num_inference_steps" to 50
-            )
+            modelName = "stabilityai/sdxl-turbo:free"
         )
         ,
         ImageModel(
             title = "gemini-2.0-flash-exp",
             description = " Gemini 2.0 Flash combines multimodal input, enhanced reasoning, and natural language understanding to create images.",
             image = Res.drawable.ic_gemini,
-            modelName = "google/gemini-2.0-flash-exp:free",
-            defaultParams = mapOf(
-                "guidance_scale" to 5f,
-                "num_inference_steps" to 50
-            )
+            modelName = "google/gemini-2.0-flash-exp:free"
         ),
         ImageModel(
             title = "HiDream-I1-Full",
             description = " HiDream-I1 is a new open-source image generative foundation model with 17B parameters that achieves state-of-the-art image generation quality within seconds.",
             image = Res.drawable.ic_hi_dream,
-            modelName = "HiDream-ai/HiDream-I1-Full:free",
-            defaultParams = mapOf(
-                "guidance_scale" to 5f,
-                "num_inference_steps" to 50
-            )
+            modelName = "HiDream-ai/HiDream-I1-Full:free"
         ),
         ImageModel(
             title = "Chroma",
             description = "is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
             image = Res.drawable.ic_chroma,
-            modelName = "lodestones/Chroma:free",
-            defaultParams = mapOf(
-                "cfg" to 4.5f,
-                "steps" to 30
-            )
+            modelName = "lodestones/Chroma:free"
         ),
         ImageModel(
             title = "InfiniteYou",
             description = "InfiniteYou generates identity-preserved images with exceptional identity similarity, text-image alignment, quality, and aesthetics.",
             image = Res.drawable.ic_infinite_you,
-            modelName = "ByteDance/InfiniteYou:free",
-            defaultParams = mapOf(
-                "cfg" to 4.5f,
-                "steps" to 30
-            )
+            modelName = "ByteDance/InfiniteYou:free"
         ),
 
     )
