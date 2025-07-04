@@ -1,17 +1,14 @@
 package org.yassineabou.llms.feature.you
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,21 +17,17 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -44,22 +37,51 @@ import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_apple
 import llms.composeapp.generated.resources.ic_google
 import llms.composeapp.generated.resources.ic_pass_key
-import org.jetbrains.compose.resources.painterResource
 
+// Login Screen
 @Composable
 fun LoginAuthentification() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
 
+    val loginProviders = listOf(
+        AuthProvider(
+            name = "Google",
+            iconRes = Res.drawable.ic_google,
+            backgroundColor = Color.White,
+            textColor = Color.Black,
+            onClick = { /* Handle Google login */ }
+        ),
+        AuthProvider(
+            name = "Apple",
+            iconRes = Res.drawable.ic_apple,
+            backgroundColor = Color.Black,
+            textColor = Color.LightGray,
+            onClick = { /* Handle Apple login */ }
+        ),
+        AuthProvider(
+            name = "Passkey",
+            iconRes = Res.drawable.ic_pass_key,
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            textColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            onClick = { /* Handle passkey login */ }
+        )
+    )
+
     Column(
         modifier = Modifier
-            .padding(24.dp)
+            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Title with bottom padding
-        LoginTitle(Modifier.padding(bottom = 32.dp))
+        Text(
+            text = "Log in",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
 
         // Email field with bottom padding
         EmailInputField(
@@ -92,27 +114,22 @@ fun LoginAuthentification() {
 
         // Registration link with bottom padding
         RegistrationLink(
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // Add divider with "or" text
+        DividerWithText(
+            text = "or",
+            modifier = Modifier.padding(vertical = 8.dp)
         )
 
         // Third-party login options
-        ThirdPartyLoginOptions(
-            onPasskeyClick = { /* Handle passkey login */ },
-            onGoogleClick = { /* Handle Google login */ },
-            onAppleClick = { /* Handle Apple login */ }
+        ThirdPartyAuthOptions(
+            title = "Log in using:",
+            providers = loginProviders
         )
     }
 }
-
-@Composable
-private fun LoginTitle(modifier: Modifier = Modifier) {
-    Text(
-        text = "Log in",
-        style = MaterialTheme.typography.headlineLarge,
-        modifier = modifier
-    )
-}
-
 @Composable
 private fun EmailInputField(
     email: String,
@@ -190,7 +207,8 @@ private fun LoginButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 30.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -207,7 +225,6 @@ private fun LoginButton(
     }
 }
 
-
 @Composable
 private fun RegistrationLink(modifier: Modifier = Modifier) {
     Row(
@@ -220,98 +237,17 @@ private fun RegistrationLink(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
-        Text(
-            text = " Register now ",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.primary,
-                textDecoration = TextDecoration.Underline
-            ),
-            modifier = Modifier.clickable { /* Handle registration */ }
-        )
-    }
-}
-
-@Composable
-private fun ThirdPartyLoginOptions(
-    onPasskeyClick: () -> Unit,
-    onGoogleClick: () -> Unit,
-    onAppleClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Log in using:",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        // Use FlowRow for responsive wrapping
-        FlowRow(
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth(),
-            maxItemsInEachRow = 3
+        Button(
+            onClick = { /* Handle registration */ },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+            modifier = Modifier.padding(start = 8.dp)
         ) {
-            ProviderButton(
-                text = "Passkey",
-                icon = painterResource(Res.drawable.ic_pass_key),
-                backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-                textColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                onClick = onPasskeyClick,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-            )
-            ProviderButton(
-                text = "Google",
-                icon = painterResource(Res.drawable.ic_google),
-                backgroundColor = Color.White,
-                textColor = Color.Black,
-                onClick = onGoogleClick,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-            )
-            ProviderButton(
-                text = "Apple",
-                icon = painterResource(Res.drawable.ic_apple),
-                backgroundColor = Color.Black,
-                textColor = Color.LightGray,
-                onClick = onAppleClick,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-            )
-        }
-    }
-}
-
-@Composable
-private fun ProviderButton(
-    text: String,
-    icon: Painter,
-    backgroundColor: Color,
-    textColor: Color,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    FilledTonalButton(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = backgroundColor),
-        modifier = modifier
-            .height(40.dp)
-            .sizeIn(minWidth = 120.dp) // Set minimum width for better touch targets
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Image(
-                painter = icon,
-                contentDescription = null,
-                modifier = Modifier.size(18.dp)
-            )
             Text(
-                text = text,
-                style = MaterialTheme.typography.labelMedium,
-                color = textColor
+                text = "Register now",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                )
             )
         }
     }

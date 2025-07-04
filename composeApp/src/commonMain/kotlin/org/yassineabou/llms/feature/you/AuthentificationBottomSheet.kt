@@ -18,5 +18,7 @@ fun AuthentificationBottomSheet(
         sheetState = sheetState
     ) {
         LoginAuthentification()
+        //RegistrationAuthentification()
+        //ForgotPasswordAuthentification()
     }
 }
