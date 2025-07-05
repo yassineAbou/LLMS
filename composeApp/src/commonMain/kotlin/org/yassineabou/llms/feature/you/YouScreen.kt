@@ -30,15 +30,8 @@ fun YouScreen() {
 
     YouContent(
         isLoggedIn = isLoggedIn,
-        onLogin = {
-            showAuthentification = true
-            //isLoggedIn = true
-            //showLogoutPrompt = false
-        },
-        onLogout = {
-            //isLoggedIn = false
-            //showLogoutPrompt = true
-        },
+        onLogin = { showAuthentification = true },
+        onLogout = { showLogoutPrompt = true },
         showLogoutPrompt = showLogoutPrompt
     )
 
@@ -61,106 +54,321 @@ fun YouContent(
     val isLargeScreen = rememberIsLargeScreen()
     val horizontalPadding = if (isLargeScreen) 48.dp else 16.dp
 
-    Scaffold(
-        topBar = { AuthTopBar(isLoggedIn) }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = horizontalPadding, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Profile or login content
-            if (isLoggedIn) ProfileContent(onLogout) else LoginPromptContent(onLogin)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = horizontalPadding, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Profile or login content
+        if (isLoggedIn) {
+            ProfileContent(onLogout = onLogout)
+        } else {
+            LoginPromptContent(onLogin = onLogin)
+        }
 
-            Spacer(Modifier.weight(1f))
+        // Animation section
+        AuthenticationStatusSection(isLoggedIn)
 
-            // Animation section
-            AuthStatusAnimationSection(isLoggedIn)
-
-            Spacer(Modifier.weight(1f))
-
-            // Logout confirmation
-            if (showLogoutPrompt) LogoutConfirmation()
+        // Logout confirmation
+        if (showLogoutPrompt) {
+            LogoutConfirmation()
         }
     }
 }
 
-// Top bar with dynamic title
+// Profile content
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun AuthTopBar(isLoggedIn: Boolean) {
-    TopAppBar(
-        title = {
-            Text(
-                text = if (isLoggedIn) "Profile" else "Login",
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+fun ProfileContent(onLogout: () -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        ProfileHeader(modifier = Modifier.padding(top = 24.dp))
+
+        ResponsiveButtonContainer(
+            modifier = Modifier.padding(top = 24.dp)
+        ) {
+            AuthButton(
+                onClick = onLogout,
+                text = "Log out",
+                icon = Icons.AutoMirrored.Filled.ExitToApp,
+                maxWidth = 400.dp,
+                widthFraction = if (rememberIsLargeScreen()) 0.6f else 0.5f,
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-    )
+
+        AccountCard(
+            onLogout = onLogout,
+            modifier = Modifier.padding(top = 32.dp)
+        )
+    }
 }
 
-// Section showing authentication status animation
+// User profile header
 @Composable
-private fun AuthStatusAnimationSection(isLoggedIn: Boolean) {
+private fun ProfileHeader(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        UserInitials(
+            name = "Pet Companion",
+            modifier = Modifier.size(72.dp)
+        )
+
+        Column(modifier = Modifier.padding(start = 16.dp)) {
+            Text("Pet Companion", style = MaterialTheme.typography.titleLarge)
+            Text(
+                "@pet_friend",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 16.sp
+            )
+        }
+    }
+}
+
+// Google account integration card
+@Composable
+private fun AccountCard(
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    AdaptiveLayout(modifier = modifier) {
+        Card(
+            modifier = Modifier
+                .widthIn(max = 600.dp)
+                .fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(4.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AccountAvatar(
+                    label = "G",
+                    modifier = Modifier.size(40.dp)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 16.dp)
+                ) {
+                    Text("Google Account", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "petfriend@gmail.com",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                RemoveAccountButton(onLogout)
+            }
+        }
+    }
+}
+
+// Authentication status display with animation
+@Composable
+fun AuthenticationStatusSection(isLoggedIn: Boolean) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (isLoggedIn) {
             VerifiedUserAnimation(modifier = Modifier.size(200.dp))
-            Spacer(Modifier.height(24.dp))
-            Text(
-                "Account Verified",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                "Your data is securely synced across all devices",
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
-            )
+            AuthenticationSuccessContent()
         } else {
             CloudSyncAnimation(modifier = Modifier.size(240.dp))
-            Spacer(Modifier.height(24.dp))
-            Text(
-                "Sync Your Journey",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                "Login to access your data from any device",
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
-            )
+            AuthenticationPromptContent()
         }
+    }
+}
+
+// Success state content
+@Composable
+private fun AuthenticationSuccessContent() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(top = 24.dp)
+    ) {
+        Text(
+            "Account Verified",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            "Your data is securely synced across all devices",
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+    }
+}
+
+// Sync prompt content
+@Composable
+private fun AuthenticationPromptContent() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(top = 16.dp)
+    ) {
+        Text(
+            "Sync Your Journey",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            "Login to access your data from any device",
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+    }
+}
+
+// Adaptive layout container
+@Composable
+fun AdaptiveLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val isLargeScreen = rememberIsLargeScreen()
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = if (isLargeScreen) 96.dp else 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
+}
+
+// User authentication button
+@Composable
+fun AuthButton(
+    onClick: () -> Unit,
+    text: String,
+    maxWidth: Dp = 400.dp,
+    widthFraction: Float = if (rememberIsLargeScreen()) 0.5f else 0.7f,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    icon: ImageVector? = null,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .widthIn(max = maxWidth)
+            .fillMaxWidth(widthFraction)
+            .height(50.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = contentColor
+        ),
+        shape = RoundedCornerShape(12.dp),
+        elevation = ButtonDefaults.buttonElevation(0.dp)
+    ) {
+        icon?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = text,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(Modifier.width(8.dp))
+        }
+        Text(text, fontSize = 16.sp)
+    }
+}
+
+// Circular user initials display
+@Composable
+private fun UserInitials(
+    name: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primaryContainer),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            name.take(1),
+            fontSize = 32.sp,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+// Account avatar component
+@Composable
+private fun AccountAvatar(
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            label,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        )
+    }
+}
+
+// Remove account button
+@Composable
+private fun RemoveAccountButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        ),
+        shape = RoundedCornerShape(12.dp),
+        elevation = ButtonDefaults.buttonElevation(0.dp)
+    ) {
+        Text("Remove")
     }
 }
 
 // Logout confirmation message
 @Composable
 private fun LogoutConfirmation() {
-    Spacer(Modifier.height(24.dp))
     Text(
         "You have been logged out",
         style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(top = 24.dp)
     )
 }
 
 // Responsive button container
 @Composable
 fun ResponsiveButtonContainer(
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = if (isLargeScreen) 96.dp else 0.dp),
         contentAlignment = Alignment.Center
@@ -175,26 +383,27 @@ fun LoginPromptContent(onLogin: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 32.dp),
+            .padding(vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(48.dp))
         Text(
             "Access Your Data Everywhere",
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(top = 48.dp)
         )
-        Spacer(Modifier.height(16.dp))
         Text(
             "Login to sync your data across all your devices",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 16.dp)
         )
-        Spacer(Modifier.height(32.dp))
 
-        ResponsiveButtonContainer {
+        ResponsiveButtonContainer(
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
             AuthButton(
                 onClick = onLogin,
                 text = "Sign In",
@@ -206,163 +415,5 @@ fun LoginPromptContent(onLogin: () -> Unit) {
         }
     }
 }
-
-// Profile content
-@Composable
-fun ProfileContent(onLogout: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        ProfileHeader()
-        Spacer(Modifier.height(24.dp))
-
-        ResponsiveButtonContainer {
-            AuthButton(
-                onClick = onLogout,
-                text = "Log out",
-                icon = Icons.AutoMirrored.Filled.ExitToApp,
-                maxWidth = 400.dp,
-                widthFraction = if (rememberIsLargeScreen()) 0.6f else 1f,
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Spacer(Modifier.height(32.dp))
-        GoogleAccountCard(onLogout)
-    }
-}
-
-// Profile header section
-@Composable
-private fun ProfileHeader() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(72.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "P",
-                fontSize = 32.sp,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(Modifier.width(16.dp))
-
-        Column {
-            Text("Pet Companion", style = MaterialTheme.typography.titleLarge)
-            Text(
-                "@pet_friend",
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 16.sp
-            )
-        }
-    }
-}
-
-// Google account card
-@Composable
-private fun GoogleAccountCard(onLogout: () -> Unit) {
-    ResponsiveButtonContainer {
-        Card(
-            modifier = Modifier
-                .widthIn(max = 600.dp)
-                .fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        "G",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                }
-
-                Spacer(Modifier.width(16.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Google Account", style = MaterialTheme.typography.titleMedium)
-                    Text(
-                        "petfriend@gmail.com",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Button(
-                    onClick = onLogout,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                    ),
-                    shape = RoundedCornerShape(12.dp),
-                    elevation = ButtonDefaults.buttonElevation(0.dp)
-                ) {
-                    Text("Remove")
-                }
-            }
-        }
-    }
-}
-
-// Reusable authentication button
-@Composable
-fun AuthButton(
-    onClick: () -> Unit,
-    text: String,
-    maxWidth: Dp,
-    widthFraction: Float,
-    containerColor: Color,
-    contentColor: Color,
-    icon: ImageVector? = null
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .widthIn(max = maxWidth)
-            .fillMaxWidth(widthFraction)
-            .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        ),
-        shape = RoundedCornerShape(12.dp),
-        elevation = ButtonDefaults.buttonElevation(0.dp)
-    ) {
-        if (icon != null) {
-            Icon(
-                imageVector = icon,
-                contentDescription = text,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-        }
-        Text(text, fontSize = 16.sp)
-    }
-}
-
-
-
-
 
 

@@ -76,10 +76,9 @@ fun LoginAuthentification() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Title with bottom padding
-        Text(
-            text = "Log in",
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = 32.dp)
+        AuthTopBar(
+            title = "Log in",
+            onDismissed = {}
         )
 
 

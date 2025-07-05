@@ -58,10 +58,10 @@ fun RegistrationAuthentification() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Title
-        Text(
-            text = "Register",
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
+        AuthTopBar(
+            title = "Register",
+            onBackPressed = {},
+            onDismissed = {}
         )
 
         // Username field

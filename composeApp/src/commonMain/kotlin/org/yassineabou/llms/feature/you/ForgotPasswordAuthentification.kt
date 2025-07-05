@@ -23,12 +23,10 @@ fun ForgotPasswordAuthentification() {
             .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally, // Center all children horizontally
     ) {
-        // Title - centered
-        Text(
-            text = "Lost password",
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = 16.dp),
-            textAlign = TextAlign.Center // Center text within its width
+        AuthTopBar(
+            title = "Lost password",
+            onBackPressed = {},
+            onDismissed = {  }
         )
 
         // Description - left aligned
