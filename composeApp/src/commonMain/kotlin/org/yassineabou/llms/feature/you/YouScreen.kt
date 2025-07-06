@@ -1,5 +1,6 @@
 package org.yassineabou.llms.feature.you
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -18,26 +19,33 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
+import org.yassineabou.llms.feature.you.view.AuthScreenTransition
+import org.yassineabou.llms.feature.you.view.CloudSyncAnimation
+import org.yassineabou.llms.feature.you.view.VerifiedUserAnimation
 
 
 // State container that manages authentication state
 @Composable
-fun YouScreen() {
-    var isLoggedIn by remember { mutableStateOf(false) }
-    var showLogoutPrompt by remember { mutableStateOf(false) }
-    var showAuthentification by remember { mutableStateOf(false) }
+fun YouScreen(youViewModel: YouViewModel) {
+    val isLoggedIn by youViewModel.isLoggedIn.collectAsStateWithLifecycle()
+    val showAuthSheet by youViewModel.showAuthSheet.collectAsStateWithLifecycle()
+    val currentAuthScreen by youViewModel.authScreen.collectAsStateWithLifecycle()
 
     YouContent(
         isLoggedIn = isLoggedIn,
-        onLogin = { showAuthentification = true },
-        onLogout = { showLogoutPrompt = true },
-        showLogoutPrompt = showLogoutPrompt
+        onLogin = {
+            youViewModel.onShowAuthSheet(true)
+            youViewModel.resetAuthScreen()
+        },
+        onLogout = { youViewModel.onLogout() }
     )
 
-    if (showAuthentification) {
-        AuthentificationBottomSheet(
-            onDismiss = { showAuthentification = false },
+    if (showAuthSheet) {
+        AuthBottomSheet(
+            currentAuthScreen = currentAuthScreen,
+            youViewModel = youViewModel,
         )
     }
 }
@@ -48,8 +56,7 @@ fun YouScreen() {
 fun YouContent(
     isLoggedIn: Boolean,
     onLogin: () -> Unit,
-    onLogout: () -> Unit,
-    showLogoutPrompt: Boolean
+    onLogout: () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
     val horizontalPadding = if (isLargeScreen) 48.dp else 16.dp
@@ -61,27 +68,33 @@ fun YouContent(
             .padding(horizontal = horizontalPadding, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Profile or login content
-        if (isLoggedIn) {
+        // Heroic container transform animation for login state
+        AnimatedVisibility(
+            visible = isLoggedIn,
+            enter = AuthScreenTransition.heroContentEnter,
+            exit = AuthScreenTransition.heroContentExit
+        ) {
             ProfileContent(onLogout = onLogout)
-        } else {
+        }
+
+        AnimatedVisibility(
+            visible = !isLoggedIn,
+            enter = AuthScreenTransition.heroContentEnter,
+            exit = AuthScreenTransition.heroContentExit
+        ) {
             LoginPromptContent(onLogin = onLogin)
         }
 
-        // Animation section
-        AuthenticationStatusSection(isLoggedIn)
-
-        // Logout confirmation
-        if (showLogoutPrompt) {
-            LogoutConfirmation()
-        }
     }
 }
 
 // Profile content
 @Composable
 fun ProfileContent(onLogout: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         ProfileHeader(modifier = Modifier.padding(top = 24.dp))
 
         ResponsiveButtonContainer(
@@ -102,6 +115,11 @@ fun ProfileContent(onLogout: () -> Unit) {
             onLogout = onLogout,
             modifier = Modifier.padding(top = 32.dp)
         )
+
+        VerifiedUserAnimation(modifier = Modifier.size(200.dp))
+        AuthenticationSuccessContent()
+
+
     }
 }
 
@@ -170,25 +188,6 @@ private fun AccountCard(
 
                 RemoveAccountButton(onLogout)
             }
-        }
-    }
-}
-
-// Authentication status display with animation
-@Composable
-fun AuthenticationStatusSection(isLoggedIn: Boolean) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (isLoggedIn) {
-            VerifiedUserAnimation(modifier = Modifier.size(200.dp))
-            AuthenticationSuccessContent()
-        } else {
-            CloudSyncAnimation(modifier = Modifier.size(240.dp))
-            AuthenticationPromptContent()
         }
     }
 }
@@ -349,17 +348,6 @@ private fun RemoveAccountButton(onClick: () -> Unit) {
     }
 }
 
-// Logout confirmation message
-@Composable
-private fun LogoutConfirmation() {
-    Text(
-        "You have been logged out",
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(top = 24.dp)
-    )
-}
-
 // Responsive button container
 @Composable
 fun ResponsiveButtonContainer(
@@ -413,6 +401,9 @@ fun LoginPromptContent(onLogin: () -> Unit) {
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
         }
+
+        CloudSyncAnimation(modifier = Modifier.size(240.dp))
+        AuthenticationPromptContent()
     }
 }
 

@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you
+package org.yassineabou.llms.feature.you.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme

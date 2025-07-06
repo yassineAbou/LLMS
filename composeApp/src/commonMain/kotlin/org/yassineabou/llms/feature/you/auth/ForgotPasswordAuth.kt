@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you
+package org.yassineabou.llms.feature.you.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,9 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.yassineabou.llms.feature.you.view.AuthTopBar
 
 @Composable
-fun ForgotPasswordAuthentification() {
+fun ForgotPasswordAuth(
+    onReset: () -> Unit,
+    onDismiss: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
 
     Column(
@@ -25,8 +29,8 @@ fun ForgotPasswordAuthentification() {
     ) {
         AuthTopBar(
             title = "Lost password",
-            onBackPressed = {},
-            onDismissed = {  }
+            onBackPressed = onReset,
+            onDismissed = onDismiss
         )
 
         // Description - left aligned
@@ -50,7 +54,7 @@ fun ForgotPasswordAuthentification() {
 
         // Reset button - centered
         Button(
-            onClick = { /* Handle password reset */ },
+            onClick = onReset,
             modifier = Modifier
                 .widthIn(min = 200.dp) // Minimum width for better appearance
                 .height(50.dp)

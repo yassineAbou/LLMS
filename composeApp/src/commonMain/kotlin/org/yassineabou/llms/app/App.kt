@@ -39,6 +39,7 @@ import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
 import org.yassineabou.llms.feature.you.YouScreen
+import org.yassineabou.llms.feature.you.YouViewModel
 
 @Composable
 fun App() {
@@ -59,6 +60,7 @@ fun LLMsApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val chatViewModel = koinViewModel<ChatViewModel>()
     val imageGenViewModel = koinViewModel<ImageGenViewModel>()
+    val youViewModel = koinViewModel<YouViewModel>()
     val supportingPaneNavigator = rememberSupportingPaneNavigator()
 
     // Track the current destination
@@ -173,7 +175,7 @@ fun LLMsApp() {
                         GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(Screen.YouScreen.route) {
-                        YouScreen()
+                        YouScreen(youViewModel = youViewModel)
                     }
                 }
             }

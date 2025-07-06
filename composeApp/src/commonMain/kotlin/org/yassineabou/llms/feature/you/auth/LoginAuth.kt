@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you
+package org.yassineabou.llms.feature.you.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +22,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -37,10 +35,19 @@ import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_apple
 import llms.composeapp.generated.resources.ic_google
 import llms.composeapp.generated.resources.ic_pass_key
+import org.yassineabou.llms.feature.you.view.AuthProvider
+import org.yassineabou.llms.feature.you.view.AuthTopBar
+import org.yassineabou.llms.feature.you.view.DividerWithText
+import org.yassineabou.llms.feature.you.view.ThirdPartyAuthOptions
 
 // Login Screen
 @Composable
-fun LoginAuthentification() {
+fun LoginAuth(
+    onLogin: () -> Unit,
+    onForgotPassword: () -> Unit,
+    onRegister: () -> Unit,
+    onDismiss: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
@@ -78,7 +85,7 @@ fun LoginAuthentification() {
         // Title with bottom padding
         AuthTopBar(
             title = "Log in",
-            onDismissed = {}
+            onDismissed = onDismiss
         )
 
 
@@ -102,18 +109,20 @@ fun LoginAuthentification() {
         ForgotPasswordLink(
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            onForgotPassword = onForgotPassword
         )
 
         // Login button with bottom padding
         LoginButton(
-            onClick = { /* Handle login */ },
+            onClick = onLogin,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         // Registration link with bottom padding
         RegistrationLink(
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
+            onRegister = onRegister
         )
 
         // Add divider with "or" text
@@ -187,7 +196,10 @@ private fun PasswordInputField(
 }
 
 @Composable
-private fun ForgotPasswordLink(modifier: Modifier = Modifier) {
+private fun ForgotPasswordLink(
+    modifier: Modifier = Modifier,
+    onForgotPassword: () -> Unit
+) {
     Text(
         text = " Forgot your password? ",
         style = MaterialTheme.typography.bodyMedium.copy(
@@ -195,7 +207,7 @@ private fun ForgotPasswordLink(modifier: Modifier = Modifier) {
             textDecoration = TextDecoration.Underline
         ),
         modifier = modifier
-            .clickable { /* Handle forgot password */ }
+            .clickable { onForgotPassword() }
     )
 }
 
@@ -225,7 +237,10 @@ private fun LoginButton(
 }
 
 @Composable
-private fun RegistrationLink(modifier: Modifier = Modifier) {
+private fun RegistrationLink(
+    modifier: Modifier = Modifier,
+    onRegister: () -> Unit
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -237,7 +252,7 @@ private fun RegistrationLink(modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.onBackground
         )
         Button(
-            onClick = { /* Handle registration */ },
+            onClick = onRegister,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             modifier = Modifier.padding(start = 8.dp)
         ) {

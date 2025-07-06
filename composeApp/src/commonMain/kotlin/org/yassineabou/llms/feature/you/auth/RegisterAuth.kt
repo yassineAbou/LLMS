@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you
+package org.yassineabou.llms.feature.you.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -18,10 +18,18 @@ import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_apple
 import llms.composeapp.generated.resources.ic_google
 import llms.composeapp.generated.resources.ic_pass_key
+import org.yassineabou.llms.feature.you.view.AuthProvider
+import org.yassineabou.llms.feature.you.view.AuthTopBar
+import org.yassineabou.llms.feature.you.view.DividerWithText
+import org.yassineabou.llms.feature.you.view.ThirdPartyAuthOptions
 
 // Registration Screen with extracted field components
 @Composable
-fun RegistrationAuthentification() {
+fun RegistrationAuth(
+    onRegister: () -> Unit,
+    onDismiss: () -> Unit,
+    onBackPressed: () -> Unit
+) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -60,8 +68,8 @@ fun RegistrationAuthentification() {
         // Title
         AuthTopBar(
             title = "Register",
-            onBackPressed = {},
-            onDismissed = {}
+            onBackPressed = onBackPressed,
+            onDismissed = onDismiss
         )
 
         // Username field
@@ -89,7 +97,7 @@ fun RegistrationAuthentification() {
 
         // Register button
         Button(
-            onClick = { /* Handle registration */ },
+            onClick = onRegister,
             modifier = Modifier
                 .widthIn(min = 200.dp)
                 .height(50.dp)
