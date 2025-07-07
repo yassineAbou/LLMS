@@ -13,9 +13,8 @@
 <img src="https://img.shields.io/badge/WebAssembly-654FF0?logo=webassembly&logoColor=white" alt="WebAssembly">
 <img src="https://img.shields.io/badge/Android-3DDC84?logo=android" alt="Android">
 <img src="https://img.shields.io/badge/iOS-000000?logo=apple" alt="iOS">
-<img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" alt="Linux">
-<img src="https://img.shields.io/badge/Windows-0078D6?logo=windows" alt="Windows">
-<img src="https://img.shields.io/badge/macOS-808080?logo=apple" alt="macOS">
+<img src="https://img.shields.io/badge/Desktop-FCC624?logo=desktop&logoColor=black" alt="Desktop">
+
 </p>
 
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images. and keep everything safe and in sync across your devices.
