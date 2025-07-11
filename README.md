@@ -19,6 +19,9 @@
 
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images. and keep everything safe and in sync across your devices.
 
+## ⚠️ Important Update 
+The text model REST API provider for text models has changed its pricing policy. I'm currently in the process of switching to a new provider. Text generation features will be temporarily not working as expected during this transition.
+
 ## Releases
 ### ✅ Available Releases
 - **Android app**
