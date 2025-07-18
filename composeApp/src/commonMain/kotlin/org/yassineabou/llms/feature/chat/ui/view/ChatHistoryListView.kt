@@ -61,7 +61,7 @@ fun ChatHistoryCard(
 ) {
     val textModel by remember(chats.text_model_name) {
         derivedStateOf {
-            TextGenModelList.allModels.find { it.chutesName == chats.text_model_name }
+            TextGenModelList.allModels.find { it.modelName == chats.text_model_name }
                 ?: TextGenModelList.defaultModel
         }
     }

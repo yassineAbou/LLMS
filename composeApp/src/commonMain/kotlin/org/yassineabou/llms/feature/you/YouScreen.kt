@@ -8,7 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,34 +21,30 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import llms.composeapp.generated.resources.Res
+import llms.composeapp.generated.resources.ic_apple
+import llms.composeapp.generated.resources.ic_google
+import llms.composeapp.generated.resources.ic_pass_key
+import org.jetbrains.compose.resources.painterResource
+import org.yassineabou.llms.app.core.util.PlatformConfig
+import org.yassineabou.llms.app.core.util.isAndroid
+import org.yassineabou.llms.app.core.util.isIos
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
-import org.yassineabou.llms.feature.you.view.AuthScreenTransition
-import org.yassineabou.llms.feature.you.view.CloudSyncAnimation
-import org.yassineabou.llms.feature.you.view.VerifiedUserAnimation
+import org.yassineabou.llms.feature.you.view.*
 
 
 // State container that manages authentication state
 @Composable
 fun YouScreen(youViewModel: YouViewModel) {
     val isLoggedIn by youViewModel.isLoggedIn.collectAsStateWithLifecycle()
-    val showAuthSheet by youViewModel.showAuthSheet.collectAsStateWithLifecycle()
-    val currentAuthScreen by youViewModel.authScreen.collectAsStateWithLifecycle()
 
     YouContent(
         isLoggedIn = isLoggedIn,
         onLogin = {
-            youViewModel.onShowAuthSheet(true)
-            youViewModel.resetAuthScreen()
+            youViewModel.onLogin()
         },
         onLogout = { youViewModel.onLogout() }
     )
-
-    if (showAuthSheet) {
-        AuthBottomSheet(
-            currentAuthScreen = currentAuthScreen,
-            youViewModel = youViewModel,
-        )
-    }
 }
 
 // Main screen composable
@@ -90,12 +87,16 @@ fun YouContent(
 
 // Profile content
 @Composable
-fun ProfileContent(onLogout: () -> Unit) {
+fun ProfileContent(
+    onLogout: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
-        ProfileHeader(modifier = Modifier.padding(top = 24.dp))
+        ProfileHeader(
+            name = "User",
+            modifier = Modifier.padding(top = 24.dp)
+        )
 
         ResponsiveButtonContainer(
             modifier = Modifier.padding(top = 24.dp)
@@ -112,11 +113,14 @@ fun ProfileContent(onLogout: () -> Unit) {
         }
 
         AccountCard(
+            label = "U",
+            email = "User@gmail.com",
             onLogout = onLogout,
             modifier = Modifier.padding(top = 32.dp)
         )
 
         VerifiedUserAnimation(modifier = Modifier.size(200.dp))
+
         AuthenticationSuccessContent()
 
 
@@ -125,20 +129,23 @@ fun ProfileContent(onLogout: () -> Unit) {
 
 // User profile header
 @Composable
-private fun ProfileHeader(modifier: Modifier = Modifier) {
+private fun ProfileHeader(
+    name: String,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         UserInitials(
-            name = "Pet Companion",
+            name = name,
             modifier = Modifier.size(72.dp)
         )
 
         Column(modifier = Modifier.padding(start = 16.dp)) {
-            Text("Pet Companion", style = MaterialTheme.typography.titleLarge)
+            Text(name, style = MaterialTheme.typography.titleLarge)
             Text(
-                "@pet_friend",
+                text = "@${name}",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 16.sp
             )
@@ -149,8 +156,10 @@ private fun ProfileHeader(modifier: Modifier = Modifier) {
 // Google account integration card
 @Composable
 private fun AccountCard(
+    label: String,
+    email: String,
+    modifier: Modifier = Modifier,
     onLogout: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     AdaptiveLayout(modifier = modifier) {
         Card(
@@ -170,7 +179,7 @@ private fun AccountCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AccountAvatar(
-                    label = "G",
+                    label = label,
                     modifier = Modifier.size(40.dp)
                 )
 
@@ -179,9 +188,9 @@ private fun AccountCard(
                         .weight(1f)
                         .padding(start = 16.dp)
                 ) {
-                    Text("Google Account", style = MaterialTheme.typography.titleMedium)
+                    Text("Account", style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "petfriend@gmail.com",
+                        text = email,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -207,28 +216,6 @@ private fun AuthenticationSuccessContent() {
         )
         Text(
             "Your data is securely synced across all devices",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 8.dp)
-        )
-    }
-}
-
-// Sync prompt content
-@Composable
-private fun AuthenticationPromptContent() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(top = 16.dp)
-    ) {
-        Text(
-            "Sync Your Journey",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            "Login to access your data from any device",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 8.dp)
@@ -368,42 +355,97 @@ fun ResponsiveButtonContainer(
 // Login prompt content
 @Composable
 fun LoginPromptContent(onLogin: () -> Unit) {
+    val loginProviders = buildList {
+        add(
+            AuthProvider(
+                name = "Google",
+                iconRes = Res.drawable.ic_google,
+                backgroundColor = Color.White,
+                textColor = Color.Black,
+                onClick = onLogin
+            )
+        )
+
+        if (PlatformConfig.isIos()) {
+            add(
+                AuthProvider(
+                    name = "Apple",
+                    iconRes = Res.drawable.ic_apple,
+                    backgroundColor = Color.Black,
+                    iconPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
+                    textColor = Color.White,
+                    onClick = onLogin
+                )
+            )
+        }
+        if (PlatformConfig.isIos() || PlatformConfig.isAndroid()) {
+
+            add(
+                AuthProvider(
+                    name = "Passkey",
+                    iconRes = Res.drawable.ic_pass_key,
+                    backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    textColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    onClick = onLogin
+                )
+            )
+
+
+       }
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Main title with emphasized typography
         Text(
-            "Access Your Data Everywhere",
-            style = MaterialTheme.typography.headlineMedium,
+            text = "Access Your Data\nEverywhere",
+            style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(top = 48.dp)
         )
+
+        // Subtitle with clean spacing
         Text(
-            "Login to sync your data across all your devices",
+            text = "Login to sync your data across all your devices",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp, bottom = 40.dp)
         )
 
-        ResponsiveButtonContainer(
-            modifier = Modifier.padding(top = 16.dp)
+        // Authentication providers section
+        Text(
+            text = "Sign in with",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // Auth providers in a clean column
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
         ) {
-            AuthButton(
-                onClick = onLogin,
-                text = "Sign In",
-                maxWidth = 400.dp,
-                widthFraction = if (rememberIsLargeScreen()) 0.5f else 0.7f,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
+            loginProviders.forEach { provider ->
+                AuthProviderButton(
+                    provider = provider,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
         }
 
         CloudSyncAnimation(modifier = Modifier.size(240.dp))
-        AuthenticationPromptContent()
+
+        Text(
+            "Sync Your Journey",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 }
 

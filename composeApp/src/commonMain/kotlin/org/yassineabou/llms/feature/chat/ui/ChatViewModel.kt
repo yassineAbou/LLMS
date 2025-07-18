@@ -12,7 +12,6 @@ import kotlinx.datetime.Clock
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.AiEndPoint.CHUTES_API_KEY
 import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
@@ -179,7 +178,6 @@ class ChatViewModel(
         prompt: String,
     ) {
         viewModelScope.launch {
-            val chutesName = _selectedTextModel.value.chutesName
             val currentMessage = _currentChatMessages[messageIndex]
 
             _currentChatMessages[messageIndex] = currentMessage.copy(message = "")
@@ -187,9 +185,8 @@ class ChatViewModel(
 
             try {
                 aiRepository.streamChat(
-                    apiKey = CHUTES_API_KEY,
                     prompt = prompt,
-                    model = chutesName
+                    textModel = _selectedTextModel.value,
                 ).collect { chunk ->
                     if (generationState.value is GenerationState.Loading) {
                         _currentChatMessages[messageIndex] = _currentChatMessages[messageIndex].copy(
@@ -275,7 +272,7 @@ class ChatViewModel(
         viewModelScope.launch {
             _selectedChats.value = chats
             loadChats(chats)
-            val matchedModel = TextGenModelList.allModels.find { it.chutesName == chats.text_model_name }
+            val matchedModel = TextGenModelList.allModels.find { it.modelName == chats.text_model_name }
             _selectedTextModel.value = matchedModel ?: TextGenModelList.defaultModel
             _tempSelectedTextModel.value = matchedModel ?: TextGenModelList.defaultModel
         }
@@ -300,7 +297,7 @@ class ChatViewModel(
                 id = chatId,
                 title = if (isNewChat) "Chat ${_allChats.value.size + 1}" else _selectedChats.value!!.title,
                 description = description,
-                text_model_name = _selectedTextModel.value.chutesName,
+                text_model_name = _selectedTextModel.value.modelName,
                 is_bookmarked = 0L,
                 created_at = Clock.System.now().toString()
             )

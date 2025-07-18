@@ -1,5 +1,6 @@
 package org.yassineabou.llms.app.core.data.remote
 
+import co.touchlab.kermit.Logger
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -11,7 +12,6 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import org.yassineabou.llms.app.core.data.remote.AiEndPoint.CHUTES_BASE_URL
 import org.yassineabou.llms.app.core.data.remote.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
@@ -25,7 +25,7 @@ interface AiApi {
         endpoint: String,
         request: ImageRouterGenerationRequest
     ): ImageRouterGenerationResponse
-    fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String>
+    fun streamChatCompletions(baseUrl: String, apiKey: String, request: ChatCompletionRequest): Flow<String>
 }
 
 class KtorApi(
@@ -45,10 +45,9 @@ class KtorApi(
         }.body()
     }
 
-
-    override fun streamChatCompletions(apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
+    override fun streamChatCompletions(baseUrl: String, apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
         try {
-            client.preparePost(CHUTES_BASE_URL) {
+            client.preparePost(baseUrl) {
                 header(HttpHeaders.Authorization, "Bearer $apiKey")
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Text.EventStream)
@@ -56,12 +55,13 @@ class KtorApi(
             }.execute { response ->
                 if (!response.status.isSuccess()) {
                     val errorBody = response.bodyAsText()
-                    //Logger.e {("API request failed: ${response.status} - $errorBody") }
+                    Logger.e {("API request failed: ${response.status} - $errorBody") }
                     throw Exception("API request failed: ${response.status} - $errorBody")
                 }
 
                 val channel = response.bodyAsChannel()
                 val eventBuffer = StringBuilder()
+                val rawJsonBuffer = StringBuilder() // Buffer for non-SSE JSON
 
                 while (!channel.isClosedForRead) {
                     val line = channel.readUTF8Line() ?: break
@@ -78,23 +78,36 @@ class KtorApi(
                         }
                         line.startsWith(":") -> Unit // Ignore comments
                         else -> {
-                            try {
-                                // Handle cases where server sends raw JSON without SSE formatting [[7]]
-                                processChunk(line)
-                            } catch (e: Exception) {
-                                //Logger.e  { "Failed to parse unexpected line format: $line" }
+                            // This is not a standard SSE line.
+                            // Assume it's part of a raw JSON object at the end.
+                            if (line.isNotBlank()) {
+                                rawJsonBuffer.append(line.trim())
                             }
                         }
                     }
                 }
+
+                // After the loop, process any remaining data in the buffers.
+                if (eventBuffer.isNotEmpty()) {
+                    processChunk(eventBuffer.toString())
+                }
+                if (rawJsonBuffer.isNotEmpty()) {
+                    processChunk(rawJsonBuffer.toString())
+                }
             }
         } catch (e: Exception) {
-           //Logger.e { "Global exception during streaming" }
+            //Logger.e { "Global exception during streaming" }
             throw e // Re-throw after logging [[3]]
         }
     }
 
     private suspend fun FlowCollector<String>.processChunk(dataJson: String) {
+        // Handle the [DONE] signal which some APIs send.
+        if (dataJson.equals("[DONE]", ignoreCase = true)) {
+            Logger.e { "Stream completed with [DONE] signal." }
+            return
+        }
+
         try {
             val chunk = json.decodeFromString<ChatCompletionChunk>(dataJson)
             chunk.choices.forEach { choice ->
@@ -110,10 +123,13 @@ class KtorApi(
                 }
                 if (choice.finishReason != null) {
                     //Logger.e { "Stream completed with reason: ${choice.finishReason}" }
-                    return
+                    // Note: The original code had a 'return' here. I've removed it
+                    // to allow processing of a final message that might contain both content and a finish_reason.
                 }
             }
         } catch (e: SerializationException) {
+            // With the stream parsing fix, this log should no longer show partial JSON.
+            // It will now show the full JSON if parsing still fails for other reasons.
             //Logger.e { "Serialization error parsing chunk: $dataJson" }
         } catch (e: Exception) {
             //Logger.e { "Unexpected error processing chunk" }

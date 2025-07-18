@@ -7,8 +7,10 @@ import org.yassineabou.llms.feature.imagine.model.IdGenerator
 data class TextModel(
     val id: Int = IdGenerator().generatedId(),
     val title: String,
-    val chutesName: String,
+    val provider: String,
+    val modelName: String,
     val image: DrawableResource,
     val description: String,
 )
+
 
