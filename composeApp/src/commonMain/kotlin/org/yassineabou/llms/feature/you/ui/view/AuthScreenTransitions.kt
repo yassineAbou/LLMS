@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you.view
+package org.yassineabou.llms.feature.you.ui.view
 
 // TransitionSpecs.kt
 import androidx.compose.animation.*

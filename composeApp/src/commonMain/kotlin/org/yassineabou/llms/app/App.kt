@@ -38,8 +38,8 @@ import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
-import org.yassineabou.llms.feature.you.YouScreen
-import org.yassineabou.llms.feature.you.YouViewModel
+import org.yassineabou.llms.feature.you.ui.YouScreen
+import org.yassineabou.llms.feature.you.ui.YouViewModel
 
 @Composable
 fun App() {

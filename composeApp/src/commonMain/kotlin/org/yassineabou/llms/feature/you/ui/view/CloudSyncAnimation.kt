@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you.view
+package org.yassineabou.llms.feature.you.ui.view
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FastOutSlowInEasing

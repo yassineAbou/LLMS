@@ -16,3 +16,7 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+**/assetlinks.json
+**/security-config.xml
+
+composeApp/src/androidMain/assetlinks.json

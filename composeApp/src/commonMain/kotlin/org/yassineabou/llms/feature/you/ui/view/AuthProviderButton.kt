@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you.view
+package org.yassineabou.llms.feature.you.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
@@ -47,7 +48,8 @@ fun AuthProviderButton(
             Image(
                 painter = painterResource(provider.iconRes),
                 contentDescription = null,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(20.dp),
+                colorFilter = if (provider.name == "Passkey") ColorFilter.tint(MaterialTheme.colorScheme.onBackground) else null
             )
             Text(
                 text = provider.name,

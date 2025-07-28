@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you
+package org.yassineabou.llms.feature.you.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,27 +22,34 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.panpf.sketch.PlatformContext
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_apple
 import llms.composeapp.generated.resources.ic_google
-import llms.composeapp.generated.resources.ic_pass_key
-import org.jetbrains.compose.resources.painterResource
+import llms.composeapp.generated.resources.ic_passkey
 import org.yassineabou.llms.app.core.util.PlatformConfig
 import org.yassineabou.llms.app.core.util.isAndroid
 import org.yassineabou.llms.app.core.util.isIos
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
-import org.yassineabou.llms.feature.you.view.*
+import org.yassineabou.llms.feature.you.model.AuthInfo
+import org.yassineabou.llms.feature.you.model.AuthMethod
+import org.yassineabou.llms.feature.you.model.AuthState
+import org.yassineabou.llms.feature.you.ui.view.*
 
 
 // State container that manages authentication state
 @Composable
 fun YouScreen(youViewModel: YouViewModel) {
     val isLoggedIn by youViewModel.isLoggedIn.collectAsStateWithLifecycle()
+    val authInfo by youViewModel.authInfo.collectAsStateWithLifecycle()
+    val authState by youViewModel.authState.collectAsStateWithLifecycle()
 
     YouContent(
         isLoggedIn = isLoggedIn,
-        onLogin = {
-            youViewModel.onLogin()
+        authInfo = authInfo,
+        authState = authState,
+        onLogin = { provider ->
+            youViewModel.onLogin(provider)
         },
         onLogout = { youViewModel.onLogout() }
     )
@@ -52,7 +60,9 @@ fun YouScreen(youViewModel: YouViewModel) {
 @Composable
 fun YouContent(
     isLoggedIn: Boolean,
-    onLogin: () -> Unit,
+    authInfo: AuthInfo?,
+    authState: AuthState,
+    onLogin: (String) -> Unit,
     onLogout: () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
@@ -71,7 +81,10 @@ fun YouContent(
             enter = AuthScreenTransition.heroContentEnter,
             exit = AuthScreenTransition.heroContentExit
         ) {
-            ProfileContent(onLogout = onLogout)
+            ProfileContent(
+                authInfo = authInfo,
+                onLogout = onLogout
+            )
         }
 
         AnimatedVisibility(
@@ -79,22 +92,34 @@ fun YouContent(
             enter = AuthScreenTransition.heroContentEnter,
             exit = AuthScreenTransition.heroContentExit
         ) {
-            LoginPromptContent(onLogin = onLogin)
+            LoginPromptContent(onLogin = { provider -> onLogin(provider) })
         }
-
     }
 }
 
 // Profile content
 @Composable
 fun ProfileContent(
-    onLogout: () -> Unit) {
+    authInfo: AuthInfo?,
+    onLogout: () -> Unit
+) {
+    // Use authInfo for dynamic data; fallback to defaults
+    val displayName = authInfo?.username ?: "User"
+
+    // CHANGED: Display accurate information instead of a fake email
+    val displayDetail = if (authInfo?.authMethod == AuthMethod.PASSKEY) {
+        "Signed in with passkey" // This is clear and honest
+    } else {
+        authInfo?.username ?: "user@example.com" // Use real username/email for other methods
+    }
+    val displayLabel = displayName.take(1).uppercase() // For avatar
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
         ProfileHeader(
-            name = "User",
+            name = displayName,
             modifier = Modifier.padding(top = 24.dp)
         )
 
@@ -113,8 +138,8 @@ fun ProfileContent(
         }
 
         AccountCard(
-            label = "U",
-            email = "User@gmail.com",
+            label = displayLabel,
+            email = displayDetail,
             onLogout = onLogout,
             modifier = Modifier.padding(top = 32.dp)
         )
@@ -122,8 +147,6 @@ fun ProfileContent(
         VerifiedUserAnimation(modifier = Modifier.size(200.dp))
 
         AuthenticationSuccessContent()
-
-
     }
 }
 
@@ -354,44 +377,28 @@ fun ResponsiveButtonContainer(
 
 // Login prompt content
 @Composable
-fun LoginPromptContent(onLogin: () -> Unit) {
+fun LoginPromptContent(onLogin: (String) -> Unit) {
     val loginProviders = buildList {
+        if (PlatformConfig.isAndroid() && PlatformConfig.supportsPasskeys()) {
+            add(
+                AuthProvider(
+                    name = "Passkey",
+                    iconRes = Res.drawable.ic_passkey,
+                    backgroundColor = MaterialTheme.colorScheme.background,
+                    textColor = MaterialTheme.colorScheme.onBackground,
+                    onClick = { onLogin("Passkey") }
+                )
+            )
+        }
         add(
             AuthProvider(
                 name = "Google",
                 iconRes = Res.drawable.ic_google,
                 backgroundColor = Color.White,
                 textColor = Color.Black,
-                onClick = onLogin
+                onClick = { onLogin("Google") }
             )
         )
-
-        if (PlatformConfig.isIos()) {
-            add(
-                AuthProvider(
-                    name = "Apple",
-                    iconRes = Res.drawable.ic_apple,
-                    backgroundColor = Color.Black,
-                    iconPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
-                    textColor = Color.White,
-                    onClick = onLogin
-                )
-            )
-        }
-        if (PlatformConfig.isIos() || PlatformConfig.isAndroid()) {
-
-            add(
-                AuthProvider(
-                    name = "Passkey",
-                    iconRes = Res.drawable.ic_pass_key,
-                    backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    textColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    onClick = onLogin
-                )
-            )
-
-
-       }
     }
     Column(
         modifier = Modifier

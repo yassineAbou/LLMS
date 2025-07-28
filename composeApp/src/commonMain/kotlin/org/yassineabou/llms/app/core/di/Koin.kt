@@ -16,7 +16,7 @@ import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.KtorApi
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
-import org.yassineabou.llms.feature.you.YouViewModel
+import org.yassineabou.llms.feature.you.ui.YouViewModel
 
 
 fun appModules() = listOf(commonModule, platformModule)
