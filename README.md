@@ -50,7 +50,11 @@ https://github.com/user-attachments/assets/af1903df-139f-4178-8fcb-c3d7c7b46219
 
 https://github.com/user-attachments/assets/46d00b90-6df8-484c-bfd6-f38c65ad85d9
 
-https://github.com/user-attachments/assets/144247db-4e89-4cd4-94d6-77fc20119146
+
+
+https://github.com/user-attachments/assets/62ad62f5-a80a-4ac0-b8a7-f0707a45a249
+
+
 
 ## 📈 Progress
 
@@ -97,6 +101,7 @@ Our development process is divided into five key steps:
 - [Markdown renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) (Markdown renderer)
 - [Drag Select](https://github.com/jordond/drag-select-compose) (adding Google Photos style drag-to-select multi-selection to a LazyGrid)
 - [SQLDelight](https://sqldelight.github.io/sqldelight/2.1.0/) (SQLDelight generates typesafe Kotlin APIs from your SQL statements.)
+- [KotlinMultiplatformAuth](https://github.com/sunildhiman90/KotlinMultiplatformAuth) (Authentification Library Targeting Android, iOS, Desktop and Web Kotlin/Js and Kotlin/Wasm both)
 
 ## Package Structure
 ```  
@@ -130,7 +135,55 @@ app/
     
     
     
-``` 
+```
+## 🔵🔴🟡🟢 Google Authentication Setup
+This project supports Google Authentication for data syncing across devices (part of Step 5 in Progress). Keys and sensitive files (e.g., `google-services.json`, `GoogleService-Info.plist`) are hidden and not committed to GitHub for security. To enable real Google auth after cloning the repo, follow these platform-specific steps. We've included fake data in the code (e.g., in `commonMain/YouViewModel.kt`) for testing without setup—uncomment the real auth code when ready.
+
+If you are confused in the process, watch this video: [https://youtu.be/-5Ws4HSaYJc?si=uHhDbmnhC7GBZEL3](https://youtu.be/-5Ws4HSaYJc?si=uHhDbmnhC7GBZEL3).
+
+### General Steps
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Create a new Firebase project (or select an existing one).
+3. Enable **Authentication** → **Sign-in method** → **Google**.
+4. For multiplatform support, also go to [Google Cloud Console → APIs & Services → Credentials](https://console.cloud.google.com/apis/credentials) to create OAuth 2.0 Client IDs as needed.
+
+### Compose App
+1. In Firebase, click “Add app” → **Android**.
+2. Register your package name (e.g., `com.yassineabou.llms`), add SHA-1 fingerprints (debug/release).
+3. Download `google-services.json`.
+4. Replace the placeholder in `composeApp/google-services.json` with your file.
+5. In Google Cloud Console, create an “Android” OAuth Client ID with the same package name and SHA-1.
+6. In `androidMain/MainActivity.kt`, uncomment the init code for `KMAuthInitializer`.
+7. In `commonMain/YouViewModel.kt` and `commonMain/App.kt`, uncomment the Google auth-related code.
+8. Sync Gradle and rebuild.
+
+### iOSMain Module
+1. In Firebase, click “Add app” → **iOS**.
+2. Register your bundle ID, App Store ID (optional), and nickname.
+3. Download `GoogleService-Info.plist`.
+4. Replace the placeholder in `iosApp/GoogleService-Info.plist` with your file.
+5. Drag it into Xcode (check “Copy items if needed”).
+6. Add the Google Sign-In SDK via Xcode: `File` → `Add Packages…` → URL: `https://github.com/google/GoogleSignIn-iOS` → Add **GoogleSignIn** to your target.
+7. In `iosApp/Info.plist`, uncomment and paste:
+   - `<key>GIDClientID</key><string>PASTE CLIENT_ID FROM GoogleService-Info.plist HERE</string>`
+   - For `<key>CFBundleURLTypes</key>`, add the `<dict>` with `<key>CFBundleURLSchemes</key><array><string>PASTE REVERSED_CLIENT_ID FROM GoogleService-Info.plist HERE</string></array>`.
+
+### Desktop/WebAssembly (desktopMain Module and commonMain)
+1. In Google Cloud Console, create a “Web application” OAuth Client ID.
+2. Add authorized redirect URIs (e.g., `http://localhost:8080/callback`).
+3. Copy the generated `CLIENT_ID` and `CLIENT_SECRET`.
+4. Paste them into `commonMain/GoogleOAuthConfig.kt` (replace the empty constants).
+5. In `desktopMain/main.kt`, uncomment the init code for `KMAuthInitializer.initClientSecret`.
+6. In `commonMain/App.kt` and `commonMain/YouViewModel.kt`, uncomment the Google auth-related code.
+
+## 🔑 Sign in with Passkey for Android Setup
+For passkey-based auth (alternative to Google), use Android's Credential Manager. See the official docs for info: [https://developer.android.com/identity/sign-in/credential-manager](https://developer.android.com/identity/sign-in/credential-manager).
+
+To set up:
+1. Run `./gradlew signingReport`
+2. Copy the SHA-256 fingerprint.
+3. Replace `"SHA_HEX_VALUE"` in `androidMain/assetlinks.json` with it.
+
 
 ## 🤝 Contribution
 
