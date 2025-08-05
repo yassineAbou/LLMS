@@ -105,7 +105,7 @@ Our development process is divided into five key steps:
 
 ## Package Structure
 ```  
-app/  
+app/
 ├── core/
 │   ├── data
 │   │   ├── local
@@ -115,24 +115,27 @@ app/
 │   ├── sharedViews  
 │   ├── theme  
 │   └── util  
-└── feature/  
-    ├── chat/  
-    │   ├── data  
-    │   │   └── model  
-    │   └── ui  
-    │       ├── chat  
-    │       ├── history  
-    │       ├── listDetailPane  
-    │       └── view  
-    ├── imagine/  
-    │   ├── data  
-    │   │   └── model  
-    │   └── ui  
-    │       ├── supportingPane  
-    │       ├── util  
+└── feature/
+    ├── chat/
+    │   ├── data
+    │   │   └── model
+    │   └── ui
+    │       ├── chat
+    │       ├── history
+    │       ├── listDetailPane
     │       └── view
-    └──You/  
-    
+    ├── imagine/
+    │   ├── data
+    │   │   └── model
+    │   └── ui
+    │       ├── supportingPane
+    │       ├── util
+    │       └── view
+    └── you/
+        ├── model
+        └──  ui
+            ├── util
+            └── view
     
     
 ```
