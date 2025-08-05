@@ -41,11 +41,11 @@ actual object PasskeyAuth {
                 // Extract authentication data from the response
                 val authData = when (val credential = credentialResponse.credential) {
                     is PublicKeyCredential -> {
-                        Logger.d { "Passkey authentication successful" }
+                        //œÂLogger.d { "Passkey authentication successful" }
                         credential.authenticationResponseJson
                     }
                     is PasswordCredential -> {
-                        Logger.d { "Password authentication successful" }
+                        //Logger.d { "Password authentication successful" }
                         // Create a JSON response for password auth
                         JSONObject().apply {
                             put("type", "password")
@@ -54,7 +54,7 @@ actual object PasskeyAuth {
                         }.toString()
                     }
                     else -> {
-                        Logger.w { "Unknown credential type" }
+                        //Logger.w { "Unknown credential type" }
                         "{}"
                     }
                 }

@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi
 import androidx.credentials.*
 import androidx.credentials.exceptions.*
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
-import co.touchlab.kermit.Logger
 import kotlinx.coroutines.coroutineScope
 import org.yassineabou.llms.MyApp
 
@@ -47,7 +46,7 @@ class PasskeyFunctions() {
                 handleSignIn(result)
                 onSuccess(result)
             } catch (e: GetCredentialException) {
-                Logger.e(TAG, throwable = e) { "Sign-in failed" }
+                //Logger.e(TAG, throwable = e) { "Sign-in failed" }
                 onFailure(e)
             }
         }
@@ -71,7 +70,7 @@ class PasskeyFunctions() {
                     request = createPublicKeyCredentialRequest
                 )
                 // Handle result (e.g., send to server)
-                Logger.d(TAG) { "Passkey created successfully" }
+                //Logger.d(TAG) { "Passkey created successfully" }
                 onSuccess()
             } catch (e: CreateCredentialException) {
                 handleFailure(e)
@@ -87,13 +86,13 @@ class PasskeyFunctions() {
             is PublicKeyCredential -> {
                 val responseJson = credential.authenticationResponseJson
                 // TODO: Send responseJson to your server for validation and authentication
-                Logger.d(TAG) { "Passkey sign-in successful: $responseJson" }
+                //Logger.d(TAG) { "Passkey sign-in successful: $responseJson" }
             }
             is PasswordCredential -> {
                 val username = credential.id
                 val password = credential.password
                 // TODO: Send to server for validation
-                Logger.d(TAG) { "Password sign-in: $username" }
+                //Logger.d(TAG) { "Password sign-in: $username" }
             }
             is CustomCredential -> {
                 if (credential.type == ExampleCustomCredential.TYPE) {
@@ -101,14 +100,14 @@ class PasskeyFunctions() {
                         val exampleCustomCredential = ExampleCustomCredential.createFrom(credential.data)
                         // TODO: Complete authentication flow
                     } catch (e: ExampleCustomCredential.ExampleCustomCredentialParsingException) {
-                        Logger.e(TAG, throwable = e) { "Failed to parse custom credential" }
+                        //Logger.e(TAG, throwable = e) { "Failed to parse custom credential" }
                     }
                 } else {
-                    Logger.e(TAG) { "Unexpected custom credential type" }
+                    //Logger.e(TAG) { "Unexpected custom credential type" }
                 }
             }
             else -> {
-                Logger.e(TAG) { "Unexpected credential type" }
+               // Logger.e(TAG) { "Unexpected credential type" }
             }
         }
     }
@@ -117,26 +116,26 @@ class PasskeyFunctions() {
         when (e) {
             is CreatePublicKeyCredentialDomException -> {
                 // Handle WebAuthn DOM errors
-                Logger.e(TAG, throwable = e) { "DOM error during passkey creation" }
+                //Logger.e(TAG, throwable = e) { "DOM error during passkey creation" }
             }
             is CreateCredentialCancellationException -> {
-                Logger.d(TAG) { "User canceled passkey creation" }
+                //Logger.d(TAG) { "User canceled passkey creation" }
             }
             is CreateCredentialInterruptedException -> {
-                Logger.w(TAG, throwable = e) { "Interrupted; retry possible" }
+                //Logger.w(TAG, throwable = e) { "Interrupted; retry possible" }
             }
             is CreateCredentialProviderConfigurationException -> {
-                Logger.e(TAG, throwable = e) { "Missing provider config (check dependencies)" }
+                //Logger.e(TAG, throwable = e) { "Missing provider config (check dependencies)" }
             }
             is CreateCredentialCustomException -> {
-                Logger.e(TAG, throwable = e) { "Custom SDK error" }
+                //Logger.e(TAG, throwable = e) { "Custom SDK error" }
             }
-            else -> Logger.w(TAG, throwable = e) { "Unexpected exception: ${e::class.java.name}" }
+            else -> ""
         }
     }
 
     fun handleFailure(e: GetCredentialException) {
-        Logger.e(TAG, throwable = e) { "GetCredential failed" }
+        //Logger.e(TAG, throwable = e) { "GetCredential failed" }
     }
 
     // Other methods (e.g., registerPassword, autofillImplementation) omitted for now; add if needed

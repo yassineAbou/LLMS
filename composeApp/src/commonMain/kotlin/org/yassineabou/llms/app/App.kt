@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
+import com.sunildhiman90.kmauth.core.KMAuthInitializer
 import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinViewModel
 import org.yassineabou.llms.app.core.di.appModules
@@ -28,6 +29,7 @@ import org.yassineabou.llms.app.core.navigation.Screen.ChatHistoryScreen.ScreenS
 import org.yassineabou.llms.app.core.navigation.listNavigationBarItems
 import org.yassineabou.llms.app.core.sharedViews.SnackbarControllerProvider
 import org.yassineabou.llms.app.core.theme.AppTheme
+import org.yassineabou.llms.app.core.util.GoogleOAuthConfig
 import org.yassineabou.llms.app.core.util.NavTransitions
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.chat.ChatScreen
@@ -54,6 +56,9 @@ fun App() {
 
 @Composable
 fun LLMsApp() {
+
+    // Uncomment this if you want to try Google Authentication:
+    //KMAuthInitializer.init(webClientId = GoogleOAuthConfig.CLIENT_ID)
     val navController = rememberNavController()
     var isNavigationBarVisible by rememberSaveable { mutableStateOf(true) }
     var isFullScreenImage by rememberSaveable { mutableStateOf(false) }

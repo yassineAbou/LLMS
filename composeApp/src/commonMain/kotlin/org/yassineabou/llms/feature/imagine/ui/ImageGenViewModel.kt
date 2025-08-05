@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalUuidApi::class)
+@file:OptIn(ExperimentalUuidApi::class, ExperimentalTime::class)
 
 package org.yassineabou.llms.feature.imagine.ui
 
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.io.IOException
 import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
@@ -26,6 +25,8 @@ import org.yassineabou.llms.feature.imagine.model.ImageGenModelList
 import org.yassineabou.llms.feature.imagine.model.ImageModel
 import org.yassineabou.llms.feature.imagine.model.UrlExample
 import kotlin.math.min
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -191,11 +192,11 @@ class ImageGenViewModel(
     }
 
     fun deleteSelectedImages(selectedImages: List<UrlExample>) {
-       viewModelScope.launch {
-           val idsToDelete = selectedImages.map { it.id }
-           if (idsToDelete.isEmpty()) return@launch
-           llmsDatabaseRepository.deleteImagesByIds(ids = idsToDelete)
-       }
+        viewModelScope.launch {
+            val idsToDelete = selectedImages.map { it.id }
+            if (idsToDelete.isEmpty()) return@launch
+            llmsDatabaseRepository.deleteImagesByIds(ids = idsToDelete)
+        }
     }
 
     fun selectTempImageModel(imageModel: ImageModel) {
@@ -214,4 +215,3 @@ class ImageGenViewModel(
         _currentImageIndex.value = index
     }
 }
-

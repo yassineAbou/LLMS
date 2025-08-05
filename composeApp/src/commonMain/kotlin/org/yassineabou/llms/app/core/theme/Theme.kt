@@ -98,6 +98,7 @@ private val darkCustomColorScheme = CustomColorScheme(
     alwaysOrange = orange100
 )
 
+
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

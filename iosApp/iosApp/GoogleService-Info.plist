@@ -1,0 +1,29 @@
+<!--
+================================================================================
+  GOOGLE SIGN-IN FOR iOS – STEP-BY-STEP SET-UP
+================================================================================
+1. 🔥 Firebase
+   • Open [Firebase Console](https://console.firebase.google.com/)
+   • Select (or create) your project.
+   • “Add app” → **iOS** → register bundle ID, App Store ID (optional), nickname.
+   • Download **GoogleService-Info.plist**.
+   • Replace `iosApp/GoogleService-Info.plist` with the downloaded file.
+   • **Authentication** → **Sign-in method** → enable **Google**.
+
+2. ⚙️ Xcode project
+   • Drag the new `GoogleService-Info.plist` into Xcode (check “Copy items if needed”).
+   • Add the **Google Sign-In SDK / Swift Package**:
+     `Xcode menu` → `File` → `Add Packages…`
+     URL: `https://github.com/google/GoogleSignIn-iOS`
+     Choose the latest version and add **GoogleSignIn** to your target.
+
+3. 🔗 URL Scheme
+   • In `Info.plist` (or **Info** tab → **URL Types**) add:
+     • **GIDClientID** = `CLIENT_ID` value from `GoogleService-Info.plist`
+     • **REVERSED_CLIENT_ID** (looks like `com.googleusercontent.apps.xxx`)
+       as an entry under **CFBundleURLSchemes**.
+
+4. 🏗️ Re-build the iOS target.
+   Google Sign-In should now work on iOS simulators & devices.
+================================================================================
+-->

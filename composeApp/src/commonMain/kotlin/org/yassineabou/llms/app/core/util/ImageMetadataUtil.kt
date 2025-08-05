@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.yassineabou.llms.app.core.util
 
 import io.ktor.util.decodeBase64Bytes
-import kotlinx.datetime.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.uuid.ExperimentalUuidApi
 
 
 object ImageMetadataUtil {
@@ -29,6 +32,7 @@ object ImageMetadataUtil {
     }
 
     // Sanitize prompt for filename safety
+
     private fun sanitizePrompt(prompt: String): String {
         return prompt.split(" ")
             .take(3)
@@ -38,7 +42,7 @@ object ImageMetadataUtil {
             .filter { it.isNotBlank() }
             .joinToString("_")
             .ifEmpty {
-                "image_${Clock.System.now().toEpochMilliseconds()}"
+                "image_${kotlin.time.Clock.System.now().toEpochMilliseconds()}"
             }
     }
 

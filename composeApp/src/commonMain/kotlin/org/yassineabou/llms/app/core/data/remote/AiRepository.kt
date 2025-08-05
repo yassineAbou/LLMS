@@ -20,7 +20,7 @@ class AiRepository(private val aiApi: AiApi) {
         textModel: TextModel, // Pass the TextModel
     ): Flow<String> {
         val (baseUrl, apiKey) = when (textModel.provider) {
-            "together" -> AiEndPoint.TOGETHER_BASE_URL to AiEndPoint.TOGETHER_API_KEY
+            "llm7" -> AiEndPoint.LLM7_BASE_URL to AiEndPoint.LLM7_API_KEY
             "gemini" -> AiEndPoint.GEMINI_BASE_URL to AiEndPoint.GEMINI_API_KEY
             else -> throw IllegalArgumentException("Unknown provider: ${textModel.provider}")
         }

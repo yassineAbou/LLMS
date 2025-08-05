@@ -13,6 +13,7 @@ plugins {
 }
 
 kotlin {
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         outputModuleName.set(project.provider { "composeApp" })
@@ -74,8 +75,10 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.sqldelight.android.driver)
 
-            implementation("androidx.credentials:credentials:1.5.0")
-            implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+
+            implementation(libs.android.credentials)
+            implementation(libs.android.credentials.play.services.auth)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -126,6 +129,8 @@ kotlin {
 
             implementation(libs.kermit)
 
+            implementation(libs.kmauth.google)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -152,7 +157,7 @@ sqldelight {
 
 android {
     namespace = "org.yassineabou.llms"
-    compileSdk = 35
+    compileSdk = 36
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -166,21 +171,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        val certFingerprint = System.getenv("SHA256_CERT_FINGERPRINT")
-            ?: "DEBUG_FINGERPRINT"
-
-        // Add this new task
-        applicationVariants.all {
-            val variant = this
-            val generateAssetLinks = task("generate${variant.name.capitalize()}AssetLinks") {
-                doLast {
-                    val template = file("src/androidMain/assets/.well-known/assetlinks.json.template")
-                    val output = file("src/androidMain/assets/.well-known/assetlinks.json")
-                    output.writeText(template.readText().replace("{{SHA256_CERT_FINGERPRINT}}", certFingerprint))
-                }
-            }
-            variant.mergeAssetsProvider.get().dependsOn(generateAssetLinks)
-        }
     }
     packaging {
         resources {

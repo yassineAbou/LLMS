@@ -15,6 +15,7 @@ import kotlinx.serialization.json.Json
 import org.yassineabou.llms.app.core.data.remote.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
+import org.yassineabou.llms.feature.chat.data.model.ChatCompletionResponse
 import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationRequest
 import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationResponse
 
@@ -55,13 +56,13 @@ class KtorApi(
             }.execute { response ->
                 if (!response.status.isSuccess()) {
                     val errorBody = response.bodyAsText()
-                    Logger.e {("API request failed: ${response.status} - $errorBody") }
+                    //Logger.e { "API request failed: ${response.status} - $errorBody" }
                     throw Exception("API request failed: ${response.status} - $errorBody")
                 }
 
                 val channel = response.bodyAsChannel()
                 val eventBuffer = StringBuilder()
-                val rawJsonBuffer = StringBuilder() // Buffer for non-SSE JSON
+                val rawJsonBuffer = StringBuilder()
 
                 while (!channel.isClosedForRead) {
                     val line = channel.readUTF8Line() ?: break
@@ -78,8 +79,6 @@ class KtorApi(
                         }
                         line.startsWith(":") -> Unit // Ignore comments
                         else -> {
-                            // This is not a standard SSE line.
-                            // Assume it's part of a raw JSON object at the end.
                             if (line.isNotBlank()) {
                                 rawJsonBuffer.append(line.trim())
                             }
@@ -87,7 +86,6 @@ class KtorApi(
                     }
                 }
 
-                // After the loop, process any remaining data in the buffers.
                 if (eventBuffer.isNotEmpty()) {
                     processChunk(eventBuffer.toString())
                 }
@@ -96,25 +94,25 @@ class KtorApi(
                 }
             }
         } catch (e: Exception) {
-            //Logger.e { "Global exception during streaming" }
-            throw e // Re-throw after logging [[3]]
+            //Logger.e { "Global exception during streaming: ${e.message}" }
+            throw e
         }
     }
 
     private suspend fun FlowCollector<String>.processChunk(dataJson: String) {
-        // Handle the [DONE] signal which some APIs send.
         if (dataJson.equals("[DONE]", ignoreCase = true)) {
-            Logger.e { "Stream completed with [DONE] signal." }
+            //Logger.e { "Stream completed with [DONE] signal." }
             return
         }
 
         try {
+            // First try to parse as a streaming chunk
             val chunk = json.decodeFromString<ChatCompletionChunk>(dataJson)
             chunk.choices.forEach { choice ->
                 choice.delta.content?.let { rawContent ->
                     val cleanedContent = rawContent
-                        .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "") // Remove reasoning blocks
-                        .replace(Regex("(<sep>.*|◁.*?▷)"), "") // Remove other tags
+                        .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "")
+                        .replace(Regex("(<sep>.*|◁.*?▷)"), "")
                         .trim()
 
                     if (cleanedContent.isNotBlank()) {
@@ -123,16 +121,29 @@ class KtorApi(
                 }
                 if (choice.finishReason != null) {
                     //Logger.e { "Stream completed with reason: ${choice.finishReason}" }
-                    // Note: The original code had a 'return' here. I've removed it
-                    // to allow processing of a final message that might contain both content and a finish_reason.
                 }
             }
         } catch (e: SerializationException) {
-            // With the stream parsing fix, this log should no longer show partial JSON.
-            // It will now show the full JSON if parsing still fails for other reasons.
-            //Logger.e { "Serialization error parsing chunk: $dataJson" }
+            // If streaming parse fails, try parsing as a complete response
+            try {
+                val completeResponse = json.decodeFromString<ChatCompletionResponse>(dataJson)
+                completeResponse.choices.forEach { choice ->
+                    choice.message.content.let { rawContent ->
+                        val cleanedContent = rawContent
+                            .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "")
+                            .replace(Regex("(<sep>.*|◁.*?▷)"), "")
+                            .trim()
+
+                        if (cleanedContent.isNotBlank()) {
+                            emit(cleanedContent)
+                        }
+                    }
+                }
+            } catch (e2: Exception) {
+                //Logger.e { "Failed to parse response: $dataJson" }
+            }
         } catch (e: Exception) {
-            //Logger.e { "Unexpected error processing chunk" }
+           // Logger.e { "Unexpected error processing chunk: ${e.message}" }
         }
     }
 }

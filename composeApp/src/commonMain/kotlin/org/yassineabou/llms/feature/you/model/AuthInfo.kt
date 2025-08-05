@@ -1,7 +1,8 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.yassineabou.llms.feature.you.model
 
-import kotlinx.datetime.Clock
-
+import kotlin.time.ExperimentalTime
 
 data class AuthInfo(
     val userId: String,
@@ -11,7 +12,8 @@ data class AuthInfo(
     val publicKey: String? = null,
     val authenticatorData: String? = null,
     val clientDataJSON: String? = null,
-    val timestamp: Long = Clock.System.now().toEpochMilliseconds()
+    val imageUrl: String? = null,
+    val timestamp: Long = kotlin.time.Clock.System.now().toEpochMilliseconds()
 )
 
 enum class AuthMethod {

@@ -82,8 +82,8 @@ fun TextModelsBottomSheet(
                     ) {
                         item {
                             TextModelType(
-                                type = "Google Ai Studio",
-                                textModelsList = TextGenModelList.geminiModels,
+                                type = "Others",
+                                textModelsList = TextGenModelList.otherModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->
@@ -94,8 +94,32 @@ fun TextModelsBottomSheet(
                         }
                         item {
                             TextModelType(
-                                type = "together.ai",
-                                textModelsList = TextGenModelList.togetherFreeModels,
+                                type = "Openai",
+                                textModelsList = TextGenModelList.openaiModels,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Llama",
+                                textModelsList = TextGenModelList.llamaModels,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Mistral",
+                                textModelsList = TextGenModelList.mistralModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->

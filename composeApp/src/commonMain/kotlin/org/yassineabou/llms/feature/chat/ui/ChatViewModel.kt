@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalUuidApi::class)
+@file:OptIn(ExperimentalUuidApi::class, ExperimentalTime::class)
 
 package org.yassineabou.llms.feature.chat.ui
 
@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
@@ -17,8 +16,11 @@ import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+
 
 class ChatViewModel(
     private val aiRepository: AiRepository,
@@ -134,12 +136,12 @@ class ChatViewModel(
 
         _generationState.value = GenerationState.Failure()
         _currentChatMessages[aiMessageIndex] = Chat_messages(
-                id = 0L,
-                chat_id = "",
-                message = (generationState.value as GenerationState.Failure).message,
-                is_user = 0,
-                timestamp = Clock.System.now().toString()
-            )
+            id = 0L,
+            chat_id = "",
+            message = (generationState.value as GenerationState.Failure).message,
+            is_user = 0,
+            timestamp = Clock.System.now().toString()
+        )
         _generationState.value = GenerationState.Success
     }
 
@@ -208,12 +210,12 @@ class ChatViewModel(
             val errorMessage = e.message ?: "Generation failed"
             _generationState.value = GenerationState.Failure(errorMessage)
             _currentChatMessages[messageIndex] = Chat_messages(
-                    id = 0L,
-                    chat_id = "",
-                    message = "⚠️ $errorMessage",
-                    is_user = 0,
-                    timestamp = Clock.System.now().toString()
-                )
+                id = 0L,
+                chat_id = "",
+                message = "⚠️ $errorMessage",
+                is_user = 0,
+                timestamp = Clock.System.now().toString()
+            )
         }
     }
 

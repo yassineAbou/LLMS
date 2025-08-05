@@ -54,5 +54,31 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-</dict>
-</plist>
+
+
+        <!--
+    ================================================================================
+      iOS GOOGLE SIGN-IN CONFIGURATION
+      1. Open the GoogleService-Info.plist you downloaded from Firebase.
+      2. Copy the value for key "CLIENT_ID".
+      3. Paste it inside the <string> tag below for <key>GIDClientID</key>.
+      4. Copy the value for key "REVERSED_CLIENT_ID" (looks like: com.googleusercontent.apps.xxx).
+      5. Paste it inside the <string> tag below for <key>CFBundleURLSchemes</key>.
+    ================================================================================
+    -->
+
+
+    <!--
+  <key>GIDClientID</key><string>PASTE CLIENT_ID FROM GoogleService-Info.plist HERE</string>
+    <key>CFBundleURLTypes</key><array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>PASTE REVERSED_CLIENT_ID FROM GoogleService-Info.plist HERE</string>
+        </array>
+    </dict>
+</array>
+    -->
+
+  </dict>
+  </plist>

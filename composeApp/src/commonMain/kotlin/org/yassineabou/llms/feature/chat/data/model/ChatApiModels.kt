@@ -63,3 +63,22 @@ data class UsageInfo(
     @SerialName("prompt_tokens_details")
     val promptTokensDetails: Nothing? = null
 )
+
+@Serializable
+data class ChatCompletionResponse(
+    val id: String,
+    @SerialName("object")
+    val objectType: String,
+    val created: Long,
+    val model: String,
+    val choices: List<CompletionChoice>,
+    val usage: UsageInfo? = null
+)
+
+@Serializable
+data class CompletionChoice(
+    val index: Int? = null,
+    val message: ChatMessage,
+    @SerialName("finish_reason")
+    val finishReason: String? = null
+)

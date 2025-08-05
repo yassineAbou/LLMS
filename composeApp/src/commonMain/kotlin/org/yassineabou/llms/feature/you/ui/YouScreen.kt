@@ -9,27 +9,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.github.panpf.sketch.PlatformContext
+import com.github.panpf.sketch.AsyncImage
 import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_apple
 import llms.composeapp.generated.resources.ic_google
 import llms.composeapp.generated.resources.ic_passkey
+import org.yassineabou.llms.app.core.sharedViews.SnackbarController
 import org.yassineabou.llms.app.core.util.PlatformConfig
 import org.yassineabou.llms.app.core.util.isAndroid
-import org.yassineabou.llms.app.core.util.isIos
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 import org.yassineabou.llms.feature.you.model.AuthInfo
 import org.yassineabou.llms.feature.you.model.AuthMethod
@@ -43,13 +43,33 @@ fun YouScreen(youViewModel: YouViewModel) {
     val isLoggedIn by youViewModel.isLoggedIn.collectAsStateWithLifecycle()
     val authInfo by youViewModel.authInfo.collectAsStateWithLifecycle()
     val authState by youViewModel.authState.collectAsStateWithLifecycle()
+    val snackbarController = SnackbarController.current
+
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.Error -> {
+                snackbarController.showMessage(
+                    message = (authState as AuthState.Error).message,
+                    duration = SnackbarDuration.Long
+                )
+            }
+            AuthState.Success -> {
+                snackbarController.showMessage(
+                    message = "Successfully logged in!",
+                    duration = SnackbarDuration.Short
+                )
+            }
+            else -> {}
+        }
+    }
+
+
 
     YouContent(
         isLoggedIn = isLoggedIn,
         authInfo = authInfo,
-        authState = authState,
-        onLogin = { provider ->
-            youViewModel.onLogin(provider)
+        onLogin = { authMethod ->
+            youViewModel.onLogin(authMethod)
         },
         onLogout = { youViewModel.onLogout() }
     )
@@ -61,8 +81,7 @@ fun YouScreen(youViewModel: YouViewModel) {
 fun YouContent(
     isLoggedIn: Boolean,
     authInfo: AuthInfo?,
-    authState: AuthState,
-    onLogin: (String) -> Unit,
+    onLogin: (AuthMethod) -> Unit,
     onLogout: () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
@@ -120,6 +139,7 @@ fun ProfileContent(
     ) {
         ProfileHeader(
             name = displayName,
+            imageUrl = authInfo?.imageUrl,
             modifier = Modifier.padding(top = 24.dp)
         )
 
@@ -140,6 +160,7 @@ fun ProfileContent(
         AccountCard(
             label = displayLabel,
             email = displayDetail,
+            imageUrl = authInfo?.imageUrl,
             onLogout = onLogout,
             modifier = Modifier.padding(top = 32.dp)
         )
@@ -154,6 +175,7 @@ fun ProfileContent(
 @Composable
 private fun ProfileHeader(
     name: String,
+    imageUrl: String?,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -162,6 +184,7 @@ private fun ProfileHeader(
     ) {
         UserInitials(
             name = name,
+            imageUrl = imageUrl,
             modifier = Modifier.size(72.dp)
         )
 
@@ -181,6 +204,7 @@ private fun ProfileHeader(
 private fun AccountCard(
     label: String,
     email: String,
+    imageUrl: String?,
     modifier: Modifier = Modifier,
     onLogout: () -> Unit,
 ) {
@@ -203,6 +227,7 @@ private fun AccountCard(
             ) {
                 AccountAvatar(
                     label = label,
+                    imageUrl = imageUrl,
                     modifier = Modifier.size(40.dp)
                 )
 
@@ -304,6 +329,7 @@ fun AuthButton(
 @Composable
 private fun UserInitials(
     name: String,
+    imageUrl: String?,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -312,12 +338,21 @@ private fun UserInitials(
             .background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            name.take(1),
-            fontSize = 32.sp,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontWeight = FontWeight.Bold
-        )
+        if (!imageUrl.isNullOrEmpty()) {
+            AsyncImage(
+                uri = imageUrl,
+                contentDescription = "Profile picture",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Text(
+                name.take(1),
+                fontSize = 32.sp,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -325,6 +360,7 @@ private fun UserInitials(
 @Composable
 private fun AccountAvatar(
     label: String,
+    imageUrl: String?,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -333,12 +369,21 @@ private fun AccountAvatar(
             .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            label,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+        if (!imageUrl.isNullOrEmpty()) {
+            AsyncImage(
+                uri = imageUrl,
+                contentDescription = "Profile picture",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Text(
+                text = label,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+        }
     }
 }
 
@@ -377,7 +422,7 @@ fun ResponsiveButtonContainer(
 
 // Login prompt content
 @Composable
-fun LoginPromptContent(onLogin: (String) -> Unit) {
+fun LoginPromptContent(onLogin: (AuthMethod) -> Unit) {
     val loginProviders = buildList {
         if (PlatformConfig.isAndroid() && PlatformConfig.supportsPasskeys()) {
             add(
@@ -386,7 +431,7 @@ fun LoginPromptContent(onLogin: (String) -> Unit) {
                     iconRes = Res.drawable.ic_passkey,
                     backgroundColor = MaterialTheme.colorScheme.background,
                     textColor = MaterialTheme.colorScheme.onBackground,
-                    onClick = { onLogin("Passkey") }
+                    onClick = { onLogin(AuthMethod.PASSKEY) }
                 )
             )
         }
@@ -396,7 +441,7 @@ fun LoginPromptContent(onLogin: (String) -> Unit) {
                 iconRes = Res.drawable.ic_google,
                 backgroundColor = Color.White,
                 textColor = Color.Black,
-                onClick = { onLogin("Google") }
+                onClick = { onLogin(AuthMethod.GOOGLE) }
             )
         )
     }
