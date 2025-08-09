@@ -11,15 +11,9 @@ fun main() = application {
 
     FileKit.init(appId = "LLMs")
 
-
-    // Uncomment this if you want to try Google Authentication:
-    /*
     KMAuthInitializer.initClientSecret(
         clientSecret = GoogleOAuthConfig.CLIENT_SECRET
     )
-     */
-
-
     Window(
         onCloseRequest = ::exitApplication,
         title = "LLMs",

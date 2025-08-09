@@ -8,6 +8,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +22,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.sunildhiman90.kmauth.core.KMAuthInitializer
-import org.koin.compose.KoinApplication
-import org.koin.compose.viewmodel.koinViewModel
-import org.yassineabou.llms.app.core.di.appModules
+import org.kodein.di.DI
+import org.yassineabou.llms.app.core.di.LocalDI
+import org.yassineabou.llms.app.core.di.appModule
+import org.yassineabou.llms.app.core.di.kodeinViewModel
 import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.app.core.navigation.Screen.ChatHistoryScreen.ScreenSaver
 import org.yassineabou.llms.app.core.navigation.listNavigationBarItems
@@ -45,9 +47,12 @@ import org.yassineabou.llms.feature.you.ui.YouViewModel
 
 @Composable
 fun App() {
-    KoinApplication(application = {
-        modules(appModules())
-    }) {
+    val di = remember {
+        DI {
+            import(appModule())
+        }
+    }
+    CompositionLocalProvider(LocalDI provides di) {
         AppTheme {
             LLMsApp()
         }
@@ -58,14 +63,14 @@ fun App() {
 fun LLMsApp() {
 
     // Uncomment this if you want to try Google Authentication:
-    //KMAuthInitializer.init(webClientId = GoogleOAuthConfig.CLIENT_ID)
+    KMAuthInitializer.init(webClientId = GoogleOAuthConfig.CLIENT_ID)
     val navController = rememberNavController()
     var isNavigationBarVisible by rememberSaveable { mutableStateOf(true) }
     var isFullScreenImage by rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val chatViewModel = koinViewModel<ChatViewModel>()
-    val imageGenViewModel = koinViewModel<ImageGenViewModel>()
-    val youViewModel = koinViewModel<YouViewModel>()
+    val chatViewModel = kodeinViewModel<ChatViewModel>()
+    val imageGenViewModel = kodeinViewModel<ImageGenViewModel>()
+    val youViewModel = kodeinViewModel<YouViewModel>()
     val supportingPaneNavigator = rememberSupportingPaneNavigator()
 
     // Track the current destination

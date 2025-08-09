@@ -94,7 +94,7 @@ Our development process is divided into five key steps:
 
 - [Material 3 Adaptive](https://www.jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html#across-platforms) (creates adaptive UIs that will adapt themselves automatically)
 - [Compose Navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) (Navigates between composables with built-in infrastructure and features)
-- [Koin](https://insert-koin.io/docs/reference/koin-compose/compose/) (Dependency injection)
+- [Kodein](https://github.com/kosi-libs/Kodein) (Painless Kotlin Dependency Injection)
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) (asynchronous or non-blocking)
 - [Sketch](https://github.com/panpf/sketch) (Image loading)
 - [Ktor Client](https://ktor.io/docs/full-stack-development-with-kotlin-multiplatform.html) (HTTP client)

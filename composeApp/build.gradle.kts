@@ -71,7 +71,6 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
-            implementation(libs.koin.android)
             implementation(libs.ktor.client.android)
             implementation(libs.sqldelight.android.driver)
 
@@ -96,10 +95,7 @@ kotlin {
             implementation(compose.material3AdaptiveNavigationSuite)
             implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
 
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
+
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -130,6 +126,8 @@ kotlin {
             implementation(libs.kermit)
 
             implementation(libs.kmauth.google)
+
+            implementation(libs.kodein.di)
 
         }
         desktopMain.dependencies {

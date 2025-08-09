@@ -13,12 +13,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Uncomment this if you want to try Google Auth:
-        /*
+
         KMAuthInitializer.initContext(
             kmAuthPlatformContext = KMAuthPlatformContext(this)
         )
-         */
 
         setContent {
             App()

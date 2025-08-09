@@ -1,6 +1,5 @@
 package org.yassineabou.llms.app.core.data.local
 
-import app.cash.sqldelight.async.coroutines.awaitAsList
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +8,7 @@ import kotlinx.coroutines.withContext
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.Generated_images
-import org.yassineabou.llms.app.core.di.LlmsDatabaseWrapper
+import org.yassineabou.llms.LlmsDatabase
 
 interface LlmsDatabaseInterface {
 
@@ -35,10 +34,10 @@ interface LlmsDatabaseInterface {
 }
 
 class LlmsDatabaseRepository(
-    private val llmsDatabaseWrapper: LlmsDatabaseWrapper
+    private val llmsDatabase: LlmsDatabase
 ) : LlmsDatabaseInterface {
 
-    private val queries get() = llmsDatabaseWrapper.instance.llmsDatabaseQueries
+    private val queries get() = llmsDatabase.llmsDatabaseQueries
 
     override fun getAllChats(): Flow<List<Chats>> =
         queries.selectAllChats()

@@ -51,12 +51,12 @@ androidxCredentials = "1.5.0"
 # Networking
 ktor = "3.2.1"
 
-# DI
-koin-bom = "4.1.0"
-
-
 # Utilities
 kermit = "2.0.6"
+
+# Dependency Injection
+kodeinDi = "7.26.1"
+
 
 
 # ------------------------------------------------------------------------------------------------------
@@ -101,14 +101,6 @@ sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", versi
 sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqldelight-web-driver = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
 
-
-# Koin
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
-koin-core = { module = "io.insert-koin:koin-core" }
-koin-compose = { module = "io.insert-koin:koin-compose" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
-koin-android = { module = "io.insert-koin:koin-android" }
-
 # Kotlin
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -134,6 +126,10 @@ android-credentials-play-services-auth = { module = "androidx.credentials:creden
 
 # Utilities
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
+# Dependency Injection
+kodein-di = { module = "org.kodein.di:kodein-di", version.ref = "kodeinDi" }
+
 
 
 # ------------------------------------------------------------------------------------------------------

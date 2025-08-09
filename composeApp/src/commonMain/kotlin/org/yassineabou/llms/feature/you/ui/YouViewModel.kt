@@ -25,8 +25,8 @@ class YouViewModel : ViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
 
-    // Uncomment this if you want to try Google Authentication:
-    //private val googleAuthManager = KMAuthGoogle.googleAuthManager
+
+    private val googleAuthManager = KMAuthGoogle.googleAuthManager
 
     fun onLogin(authMethod: AuthMethod) {
         if (authMethod == AuthMethod.PASSKEY) {
@@ -56,6 +56,7 @@ class YouViewModel : ViewModel() {
         viewModelScope.launch {
             // --- FAKE DATA FOR GOOGLE LOGIN ---
             // Replace this block with real Google Auth when needed
+            /*
              delay(1000) // Simulate network delay
             _authInfo.value = AuthInfo(
                 userId = "fake-google-id-123",
@@ -66,10 +67,11 @@ class YouViewModel : ViewModel() {
             _isLoggedIn.value = true
             _authState.value = AuthState.Success
 
+             */
+
 
             // --- REAL GOOGLE AUTH CODE ---
             // Uncomment this block to use real Google Authentication
-            /*
             _authState.value = AuthState.Loading
             val result = googleAuthManager.signIn()
                 if (result.isSuccess) {
@@ -88,7 +90,7 @@ class YouViewModel : ViewModel() {
                     )
                     //Logger.e(result.exceptionOrNull()) { result.exceptionOrNull()?.message.toString() }
                 }
-             */
+
 
         }
 
@@ -104,7 +106,7 @@ class YouViewModel : ViewModel() {
 
             // --- REAL GOOGLE AUTH SIGN OUT ---
             // Uncomment this to sign out from Google as well
-            // googleAuthManager.signOut()
+            googleAuthManager.signOut()
         }
     }
 }

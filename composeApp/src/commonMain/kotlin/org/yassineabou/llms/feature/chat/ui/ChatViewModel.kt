@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
+import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
 import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
@@ -24,7 +25,7 @@ import kotlin.uuid.Uuid
 
 class ChatViewModel(
     private val aiRepository: AiRepository,
-    private val llmsDatabaseRepository: LlmsDatabaseRepository
+    private val llmsDatabaseRepository: LlmsDatabaseInterface
 ) : ViewModel() {
 
     // ========================================================================================
