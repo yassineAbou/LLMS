@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
     alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.kotlinx.rpc)
 }
 
 kotlin {
@@ -71,7 +72,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
-            implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.cio)
             implementation(libs.sqldelight.android.driver)
 
 
@@ -90,21 +91,25 @@ kotlin {
             implementation(projects.shared)
             implementation(libs.ui.backhandler)
 
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.material3AdaptiveNavigationSuite)
-            implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
-
-
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.rpc.krpc.client)
+            implementation(libs.kotlinx.rpc.krpc.serialization.json)
+            implementation(libs.kotlinx.rpc.krpc.ktor.client)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.utils)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.websockets)
 
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.kotlinx.coroutines.core)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.material3AdaptiveNavigationSuite)
+            implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
+
 
             implementation(libs.adaptive)
             implementation(libs.adaptive.layout)
@@ -138,7 +143,7 @@ kotlin {
 
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+            implementation(libs.ktor.client.cio)
             implementation(libs.sqldelight.native.driver)
         }
     }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
 import org.yassineabou.llms.Generated_images
+import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
 import org.yassineabou.llms.app.core.data.remote.AiEndPoint.IMAGE_ROUTER_API_KEY
 import org.yassineabou.llms.app.core.data.remote.AiRepository
@@ -32,7 +33,7 @@ import kotlin.uuid.Uuid
 
 class ImageGenViewModel(
     private val aiRepository: AiRepository,
-    private val llmsDatabaseRepository: LlmsDatabaseRepository
+    private val llmsDatabaseRepository: LlmsDatabaseInterface
 ) : ViewModel() {
 
     // Existing state

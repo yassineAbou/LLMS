@@ -1,196 +1,81 @@
 package org.yassineabou.llms.app
 
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.window.core.layout.WindowWidthSizeClass
-import com.sunildhiman90.kmauth.core.KMAuthInitializer
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.runtime.*
+import co.touchlab.kermit.Logger
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.kodein.di.DI
+import org.yassineabou.llms.UserService
 import org.yassineabou.llms.app.core.di.LocalDI
 import org.yassineabou.llms.app.core.di.appModule
-import org.yassineabou.llms.app.core.di.kodeinViewModel
-import org.yassineabou.llms.app.core.navigation.Screen
-import org.yassineabou.llms.app.core.navigation.Screen.ChatHistoryScreen.ScreenSaver
-import org.yassineabou.llms.app.core.navigation.listNavigationBarItems
-import org.yassineabou.llms.app.core.sharedViews.SnackbarControllerProvider
+import org.yassineabou.llms.app.core.sharedViews.SnackbarController
 import org.yassineabou.llms.app.core.theme.AppTheme
-import org.yassineabou.llms.app.core.util.GoogleOAuthConfig
-import org.yassineabou.llms.app.core.util.NavTransitions
-import org.yassineabou.llms.feature.chat.ui.ChatViewModel
-import org.yassineabou.llms.feature.chat.ui.chat.ChatScreen
-import org.yassineabou.llms.feature.chat.ui.history.ChatHistoryScreen
-import org.yassineabou.llms.feature.imagine.ui.FullScreenImage
-import org.yassineabou.llms.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
-import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
-import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneLayout
-import org.yassineabou.llms.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
-import org.yassineabou.llms.feature.you.ui.YouScreen
-import org.yassineabou.llms.feature.you.ui.YouViewModel
+import org.yassineabou.llms.app.core.util.setupRPC
+
 
 @Composable
 fun App() {
+    var service: UserService? by remember { mutableStateOf(null) }
+    var connected by remember { mutableStateOf(false) }
     val di = remember {
         DI {
             import(appModule())
         }
     }
-    CompositionLocalProvider(LocalDI provides di) {
-        AppTheme {
-            LLMsApp()
-        }
-    }
-}
 
-@Composable
-fun LLMsApp() {
-
-    // Uncomment this if you want to try Google Authentication:
-    KMAuthInitializer.init(webClientId = GoogleOAuthConfig.CLIENT_ID)
-    val navController = rememberNavController()
-    var isNavigationBarVisible by rememberSaveable { mutableStateOf(true) }
-    var isFullScreenImage by rememberSaveable { mutableStateOf(false) }
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val chatViewModel = kodeinViewModel<ChatViewModel>()
-    val imageGenViewModel = kodeinViewModel<ImageGenViewModel>()
-    val youViewModel = kodeinViewModel<YouViewModel>()
-    val supportingPaneNavigator = rememberSupportingPaneNavigator()
-
-    // Track the current destination
-    var currentDestination by rememberSaveable(stateSaver = ScreenSaver) {
-        mutableStateOf(Screen.ChatScreen)
-    }
-
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    var isLargeScreen by  remember { mutableStateOf(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) }
-
-    // Customize the layout type based on window size class and isBottomBarVisible
-    val layoutType = when (windowSizeClass.windowWidthSizeClass) {
-        WindowWidthSizeClass.COMPACT -> {
-            if (isNavigationBarVisible) NavigationSuiteType.NavigationBar else NavigationSuiteType.None
-        }
-        WindowWidthSizeClass.MEDIUM -> {
-            if (isNavigationBarVisible) NavigationSuiteType.NavigationBar else NavigationSuiteType.None
-        }
-        WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationRail
-        else -> NavigationSuiteType.NavigationBar
-    }
-
-    LaunchedEffect(navBackStackEntry?.destination?.route) {
-        isLargeScreen =! isLargeScreen
-        val routeToCheck = listOf(
-            Screen.GeneratedImagesScreen.route,
-            Screen.FullScreenImage.route,
-            Screen.ImageGenerationLoadingScreen.route,
-            Screen.ChatHistoryScreen.route,
-        )
-        isFullScreenImage = navBackStackEntry?.destination?.route?.let { currentRoute ->
-            routeToCheck.any { currentRoute.startsWith(it) }
-        } ?: false
-        isNavigationBarVisible = !isFullScreenImage
-    }
-
-    SnackbarControllerProvider { host ->
-        NavigationSuiteScaffold(
-            layoutType = layoutType,
-            navigationSuiteItems = {
-                listNavigationBarItems.forEach { item ->
-                    item(
-                        icon = {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.name
-                            )
-                        },
-                        label = { Text(text = item.name) },
-                        selected = currentDestination.route == item.route,
-                        onClick = {
-                            currentDestination = Screen.fromRoute(item.route)
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
+    // Connect & Ping the RPC server
+    LaunchedEffect(Unit) {
+        launch {
+            while (true) {
+                // Attempt to (re)connect to the RPC server.
+                while (!connected) {
+                    try {
+                        service = setupRPC()
+                        connected = true
+                        SnackbarController.showMessage(
+                            message = "Connected to server",
+                            duration = SnackbarDuration.Short
+                        )
+                    } catch (e: Exception) {
+                        connected = false
+                        SnackbarController.showMessage(
+                            message = "Connection failed: ${e.message}",
+                            duration = SnackbarDuration.Long
+                        )
+                        Logger.i("Rpc") { "${e.message}" }
+                    }
+                    delay(2000) // Wait 2 seconds before trying to reconnect.
                 }
-            },
-        ) {
-            Scaffold(
-                snackbarHost = { SnackbarHost(hostState = host) }
-            ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.ChatScreen.route,
-                ) {
-                    composable(Screen.ChatScreen.route) {
-                        ChatScreen(navController = navController, chatViewModel = chatViewModel)
-                    }
-                    composable(
-                        route = Screen.ChatHistoryScreen.route,
-                        enterTransition = NavTransitions.slideUpIn(),
-                        exitTransition = NavTransitions.slideDownOut(),
-                        popEnterTransition = NavTransitions.slideDownIn(),
-                        popExitTransition = NavTransitions.slideUpOut()
-                    ) {
-                        ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
-                    }
-                    composable(Screen.ImagineScreen.route) {
-                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
-                    }
-                    composable(
-                        route = Screen.ImageGenerationLoadingScreen.route,
-                        enterTransition = NavTransitions.slideLeftIn(),
-                        exitTransition = NavTransitions.slideRightOut(),
-                        popEnterTransition = NavTransitions.slideLeftIn(),
-                        popExitTransition = NavTransitions.slideRightOut()
-                    ) {
-                        ImageGenerationLoadingScreen(navController = navController, imageGenViewModel = imageGenViewModel, supportingPaneNavigator = supportingPaneNavigator)
-                    }
-                    composable(
-                        route = Screen.FullScreenImage.route,
-                        enterTransition = NavTransitions.slideLeftIn(),
-                        exitTransition = NavTransitions.slideRightOut(),
-                        popEnterTransition = NavTransitions.slideRightIn(),
-                        popExitTransition = NavTransitions.slideLeftOut()
-                    ) {
-                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
-                    }
-                    composable(
-                        route = Screen.GeneratedImagesScreen.route,
-                        enterTransition = NavTransitions.slideLeftIn(),
-                        exitTransition = NavTransitions.slideRightOut(),
-                        popEnterTransition = NavTransitions.slideRightIn(),
-                        popExitTransition = NavTransitions.slideLeftOut()
-                    ) {
-                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
-                    }
-                    composable(Screen.YouScreen.route) {
-                        YouScreen(youViewModel = youViewModel)
+
+                // Ping the RPC server every second.
+                service?.let {
+                    try {
+                        while (true) {
+                            println(service?.ping())
+                            delay(1000)
+
+                        }
+                    } catch (e: Exception) {
+                        connected = false
+                        SnackbarController.showMessage(
+                            message = "Connection lost, trying to reconnect...",
+                            duration = SnackbarDuration.Long
+                        )
+                        Logger.i("Rpc") { "${e.message}" }
                     }
                 }
             }
         }
     }
+
+    CompositionLocalProvider(LocalDI provides di) {
+        AppTheme {
+            MainScreen()
+        }
+    }
 }
+
+
 
 
