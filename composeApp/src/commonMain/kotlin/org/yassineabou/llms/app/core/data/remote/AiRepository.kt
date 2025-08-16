@@ -19,39 +19,23 @@ class AiRepository(private val aiApi: AiApi) {
         prompt: String, // Keep simple prompt input for ease of use
         textModel: TextModel, // Pass the TextModel
     ): Flow<String> {
-        val (baseUrl, apiKey) = when (textModel.provider) {
-            "llm7" -> AiEndPoint.LLM7_BASE_URL to AiEndPoint.LLM7_API_KEY
-            "gemini" -> AiEndPoint.GEMINI_BASE_URL to AiEndPoint.GEMINI_API_KEY
-            else -> throw IllegalArgumentException("Unknown provider: ${textModel.provider}")
-        }
+        // All models use LLM7 endpoint
+        val baseUrl = AiEndPoint.LLM7_BASE_URL
+        val apiKey = AiEndPoint.LLM7_API_KEY
 
-        // Create messages
-        var messages = listOf(ChatMessage(role = "user", content = prompt))
-
-        var temperature = 0.5
-        var maxTokens: Int? = 1000
-
-        if (textModel.provider == "gemini") {
-            val systemPrompt = """
-            """.trimIndent()
-            messages = listOf(ChatMessage(role = "system", content = systemPrompt)) + messages
-            temperature = 0.9
-            maxTokens = null // As per doc: Max new Token = 0 (interpreted as no limit)
-        }
+        // Create messages - simple user message for all models
+        val messages = listOf(ChatMessage(role = "user", content = prompt))
 
         val request = ChatCompletionRequest(
             model = textModel.modelName,
             messages = messages,
             stream = true, // Ensure streaming is enabled
-            maxTokens = maxTokens,
-            temperature = temperature
+            maxTokens = 1000,
+            temperature = 0.5
         )
 
         // Return the Flow directly from the API call
-        // Error handling can be done here or downstream when collecting the flow
         return aiApi.streamChatCompletions(baseUrl, apiKey, request)
-
-        // No polling needed anymore!
     }
 
     suspend fun generateImage(

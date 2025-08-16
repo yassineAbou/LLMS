@@ -143,7 +143,7 @@ class KtorApi(
                 //Logger.e { "Failed to parse response: $dataJson" }
             }
         } catch (e: Exception) {
-           // Logger.e { "Unexpected error processing chunk: ${e.message}" }
+            // Logger.e { "Unexpected error processing chunk: ${e.message}" }
         }
     }
 }
