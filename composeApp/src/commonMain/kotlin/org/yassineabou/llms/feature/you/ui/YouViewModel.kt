@@ -2,17 +2,12 @@ package org.yassineabou.llms.feature.you.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import com.sunildhiman90.kmauth.google.KMAuthGoogle
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.feature.you.model.AuthInfo
-import org.yassineabou.llms.feature.you.model.AuthMethod
 import org.yassineabou.llms.feature.you.model.AuthState
-import org.yassineabou.llms.feature.you.ui.util.AuthUtils
-import org.yassineabou.llms.feature.you.ui.util.PasskeyAuth
 
 class YouViewModel : ViewModel() {
 
@@ -28,28 +23,8 @@ class YouViewModel : ViewModel() {
 
     private val googleAuthManager = KMAuthGoogle.googleAuthManager
 
-    fun onLogin(authMethod: AuthMethod) {
-        if (authMethod == AuthMethod.PASSKEY) {
-            handlePasskeyLogin()
-        } else {
-            handleGoogleLogin()
-        }
-    }
-
-    private fun handlePasskeyLogin() {
-        viewModelScope.launch {
-            _authState.value = AuthState.Loading
-            PasskeyAuth.signInWithPasskey(
-                onSuccess = { authData ->
-                    _authInfo.value = AuthUtils.parsePasskeyAuthData(authData)
-                    _isLoggedIn.value = true
-                    _authState.value = AuthState.Success
-                },
-                onFailure = { error ->
-                    _authState.value = AuthState.Error(error.message ?: "Authentication failed")
-                }
-            )
-        }
+    fun onLogin() {
+        handleGoogleLogin()
     }
 
     private fun handleGoogleLogin() {
@@ -80,7 +55,6 @@ class YouViewModel : ViewModel() {
                         userId  = user?.id ?: "",
                         username = user?.name ?: user?.email ?: "Google User",
                         imageUrl = user?.profilePicUrl,
-                        authMethod = AuthMethod.GOOGLE
                     )
                     _isLoggedIn.value = true
                     _authState.value = AuthState.Success

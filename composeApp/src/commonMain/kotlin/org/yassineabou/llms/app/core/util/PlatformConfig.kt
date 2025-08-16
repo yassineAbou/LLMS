@@ -9,7 +9,6 @@ enum class Platform {
 
 expect object PlatformConfig {
     val platform: Platform
-    fun supportsPasskeys(): Boolean
 }
 
 fun PlatformConfig.isAndroid() = platform == Platform.Android

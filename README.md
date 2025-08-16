@@ -179,14 +179,6 @@ If you are confused in the process, watch this video: [https://youtu.be/-5Ws4HSa
 5. In `desktopMain/main.kt`, uncomment the init code for `KMAuthInitializer.initClientSecret`.
 6. In `commonMain/App.kt` and `commonMain/YouViewModel.kt`, uncomment the Google auth-related code.
 
-## 🔑 Sign in with Passkey for Android Setup
-For passkey-based auth (alternative to Google), use Android's Credential Manager. See the official docs for info: [https://developer.android.com/identity/sign-in/credential-manager](https://developer.android.com/identity/sign-in/credential-manager).
-
-To set up:
-1. Run `./gradlew signingReport`
-2. Copy the SHA-256 fingerprint.
-3. Replace `"SHA_HEX_VALUE"` in `androidMain/assetlinks.json` with it.
-
 
 ## 🤝 Contribution
 

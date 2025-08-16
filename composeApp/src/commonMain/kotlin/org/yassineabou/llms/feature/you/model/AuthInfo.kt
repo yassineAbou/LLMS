@@ -7,7 +7,6 @@ import kotlin.time.ExperimentalTime
 data class AuthInfo(
     val userId: String,
     val username: String,
-    val authMethod: AuthMethod,
     val credentialId: String? = null,
     val publicKey: String? = null,
     val authenticatorData: String? = null,
@@ -15,8 +14,3 @@ data class AuthInfo(
     val imageUrl: String? = null,
     val timestamp: Long = kotlin.time.Clock.System.now().toEpochMilliseconds()
 )
-
-enum class AuthMethod {
-    PASSKEY,
-    GOOGLE,
-}

@@ -2,12 +2,30 @@ package org.yassineabou.llms.feature.you.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,15 +44,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.panpf.sketch.AsyncImage
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_google
-import llms.composeapp.generated.resources.ic_passkey
 import org.yassineabou.llms.app.core.sharedViews.SnackbarController
-import org.yassineabou.llms.app.core.util.PlatformConfig
-import org.yassineabou.llms.app.core.util.isAndroid
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 import org.yassineabou.llms.feature.you.model.AuthInfo
-import org.yassineabou.llms.feature.you.model.AuthMethod
 import org.yassineabou.llms.feature.you.model.AuthState
-import org.yassineabou.llms.feature.you.ui.view.*
+import org.yassineabou.llms.feature.you.ui.view.AuthProvider
+import org.yassineabou.llms.feature.you.ui.view.AuthProviderButton
+import org.yassineabou.llms.feature.you.ui.view.AuthScreenTransition
+import org.yassineabou.llms.feature.you.ui.view.CloudSyncAnimation
+import org.yassineabou.llms.feature.you.ui.view.VerifiedUserAnimation
 
 
 // State container that manages authentication state
@@ -68,9 +86,7 @@ fun YouScreen(youViewModel: YouViewModel) {
     YouContent(
         isLoggedIn = isLoggedIn,
         authInfo = authInfo,
-        onLogin = { authMethod ->
-            youViewModel.onLogin(authMethod)
-        },
+        onLogin = { youViewModel.onLogin()},
         onLogout = { youViewModel.onLogout() }
     )
 }
@@ -81,7 +97,7 @@ fun YouScreen(youViewModel: YouViewModel) {
 fun YouContent(
     isLoggedIn: Boolean,
     authInfo: AuthInfo?,
-    onLogin: (AuthMethod) -> Unit,
+    onLogin: () -> Unit,
     onLogout: () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
@@ -111,7 +127,7 @@ fun YouContent(
             enter = AuthScreenTransition.heroContentEnter,
             exit = AuthScreenTransition.heroContentExit
         ) {
-            LoginPromptContent(onLogin = { provider -> onLogin(provider) })
+            LoginPromptContent(onLogin = onLogin)
         }
     }
 }
@@ -126,11 +142,7 @@ fun ProfileContent(
     val displayName = authInfo?.username ?: "User"
 
     // CHANGED: Display accurate information instead of a fake email
-    val displayDetail = if (authInfo?.authMethod == AuthMethod.PASSKEY) {
-        "Signed in with passkey" // This is clear and honest
-    } else {
-        authInfo?.username ?: "user@example.com" // Use real username/email for other methods
-    }
+    val displayDetail = authInfo?.username ?: "user@example.com"
     val displayLabel = displayName.take(1).uppercase() // For avatar
 
     Column(
@@ -422,29 +434,7 @@ fun ResponsiveButtonContainer(
 
 // Login prompt content
 @Composable
-fun LoginPromptContent(onLogin: (AuthMethod) -> Unit) {
-    val loginProviders = buildList {
-        if (PlatformConfig.isAndroid() && PlatformConfig.supportsPasskeys()) {
-            add(
-                AuthProvider(
-                    name = "Passkey",
-                    iconRes = Res.drawable.ic_passkey,
-                    backgroundColor = MaterialTheme.colorScheme.background,
-                    textColor = MaterialTheme.colorScheme.onBackground,
-                    onClick = { onLogin(AuthMethod.PASSKEY) }
-                )
-            )
-        }
-        add(
-            AuthProvider(
-                name = "Google",
-                iconRes = Res.drawable.ic_google,
-                backgroundColor = Color.White,
-                textColor = Color.Black,
-                onClick = { onLogin(AuthMethod.GOOGLE) }
-            )
-        )
-    }
+fun LoginPromptContent(onLogin: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -478,17 +468,16 @@ fun LoginPromptContent(onLogin: (AuthMethod) -> Unit) {
         )
 
         // Auth providers in a clean column
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            loginProviders.forEach { provider ->
-                AuthProviderButton(
-                    provider = provider,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
+        AuthProviderButton(
+            provider = AuthProvider(
+                name = "Google",
+                iconRes = Res.drawable.ic_google,
+                backgroundColor = Color.White,
+                textColor = Color.Black,
+                onClick = { onLogin() }  // Directly trigger login
+            ),
+            modifier = Modifier.padding(8.dp)
+        )
 
         CloudSyncAnimation(modifier = Modifier.size(240.dp))
 
