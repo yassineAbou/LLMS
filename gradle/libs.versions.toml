@@ -6,8 +6,9 @@
 androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
-androidx-core-ktx = "1.16.0"
-androidx-lifecycle = "2.9.1"
+androidx-core-ktx = "1.17.0"
+androidx-lifecycle = "2.9.2"
+
 
 # Android
 agp = "8.12.0"
@@ -21,14 +22,21 @@ kotlin = "2.2.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
 kotlinx-collections-immutable = "0.4.0"
-serialization = "1.8.1"
+serialization = "1.9.0"
 
 # Compose
-compose-plugin = "1.9.0-beta01"
-adaptive = "1.2.0-alpha04"
+compose-plugin = "1.9.0-beta03"
+adaptive = "1.2.0-alpha05"
 multiplatformPaths = "0.2.2"
-navigationCompose = "2.9.0-beta04"
-foundationLayoutAndroid = "1.8.3"
+navigationCompose = "2.9.0-beta05"
+foundationLayoutAndroid = "1.9.0"
+
+# SQLdelight
+sqlDelight = "2.1.0"
+sqlJs = "1.8.0"
+webPackPlugin = "9.1.0"
+postgresql = "42.7.7"
+hikaricp = "7.0.1"
 
 # Testing
 junit = "4.13.2"
@@ -36,14 +44,9 @@ androidx-test-junit = "1.3.0"
 androidx-espresso-core = "3.7.0"
 
 # UI Components
-dragselect = "3.0.2"
+dragselect = "3.1.0"
 multiplatformMarkdownRendererM3 = "0.35.0"
 sketch = "4.3.1"
-
-# SQLdelight
-sqlDelight = "2.1.0"
-sqlJs = "1.8.0"
-webPackPlugin = "9.1.0"
 
 # Authentificcation
 kmauth-google = "0.2.1"
@@ -61,6 +64,9 @@ kodeinDi = "7.26.1"
 
 # Rpc
 kotlinx-rpc = "0.9.1"
+
+# Jwt
+auth0-jwt = "4.5.0"
 
 
 
@@ -85,6 +91,17 @@ ktor-server-websockets-jvm = { module = "io.ktor:ktor-server-websockets-jvm", ve
 ktor-server-host-common-jvm = { module = "io.ktor:ktor-server-host-common-jvm", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+
+# SQLdelight
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
+sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
+sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+sqldelight-web-driver = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
+sqldelight-jdbc-driver = { module = "app.cash.sqldelight:jdbc-driver", version.ref = "sqlDelight" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -111,13 +128,6 @@ kotlinx-rpc-krpc-ktor-client = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krp
 kotlinx-rpc-krpc-ktor-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-ktor-server", version.ref = "kotlinx-rpc" }
 kotlinx-rpc-krpc-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-serialization-json", version.ref = "kotlinx-rpc" }
 
-# SQLdelight
-sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
-sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
-sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
-sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
-sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
-sqldelight-web-driver = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
 
 # Kotlin
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -138,6 +148,11 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+
+# Jwt
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+auth0-jwt = { module = "com.auth0:java-jwt", version.ref = "auth0-jwt" }
 
 # Authentification
 kmauth-google = { module = "io.github.sunildhiman90:kmauth-google", version.ref = "kmauth-google" }

@@ -17,11 +17,11 @@ object TextGenModelList {
     // Other/General models
     val otherModels = listOf(
         TextModel(
-            title = "Claude", // ADDED
+            title = "Claude 3.5 Haiku", // UPDATED
             provider = "llm7",
-            modelName = "claude",
-            description = "Anthropic's model known for its conversational and creative text generation capabilities.",
-            image = Res.drawable.ic_claude // Using a generic icon
+            modelName = "claude-3-5-haiku-20241022",
+            description = "Anthropic's fast and compact model, ideal for responsive user-facing applications.",
+            image = Res.drawable.ic_claude
         ),
         TextModel(
             title = "Gemini", // ADDED
