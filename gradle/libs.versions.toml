@@ -11,14 +11,14 @@ androidx-lifecycle = "2.9.2"
 
 
 # Android
-agp = "8.12.0"
+agp = "8.12.2"
 android-compileSdk = "36"
 android-minSdk = "28"
 #noinspection EditedTargetSdkVersion
 android-targetSdk = "36"
 
 # Kotlin
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
 kotlinx-collections-immutable = "0.4.0"
@@ -35,8 +35,7 @@ foundationLayoutAndroid = "1.9.0"
 sqlDelight = "2.1.0"
 sqlJs = "1.8.0"
 webPackPlugin = "9.1.0"
-postgresql = "42.7.7"
-hikaricp = "7.0.1"
+
 
 # Testing
 junit = "4.13.2"
@@ -48,6 +47,12 @@ dragselect = "3.1.0"
 multiplatformMarkdownRendererM3 = "0.35.0"
 sketch = "4.3.1"
 
+# Exposed
+exposed = "1.0.0-beta-5"
+r2dbcPostgres = "0.8.13.RELEASE"
+r2dbcPool = "1.0.2.RELEASE"
+
+
 # Authentificcation
 kmauth-google = "0.2.1"
 androidxCredentials = "1.5.0"
@@ -56,7 +61,7 @@ androidxCredentials = "1.5.0"
 ktor = "3.2.3"
 
 # Utilities
-kermit = "2.0.6"
+kermit = "2.0.8"
 logback = "1.5.18"
 
 # Dependency Injection
@@ -65,8 +70,6 @@ kodeinDi = "7.26.1"
 # Rpc
 kotlinx-rpc = "0.9.1"
 
-# Jwt
-auth0-jwt = "4.5.0"
 
 
 
@@ -75,11 +78,9 @@ auth0-jwt = "4.5.0"
 # ------------------------------------------------------------------------------------------------------
 
 # Ktor
-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
@@ -93,15 +94,13 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
 
 # SQLdelight
+r2dbc-pool = { module = "io.r2dbc:r2dbc-pool", version.ref = "r2dbcPool" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqldelight-web-driver = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
-sqldelight-jdbc-driver = { module = "app.cash.sqldelight:jdbc-driver", version.ref = "sqlDelight" }
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
-hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -136,6 +135,13 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 
+# Exposed Core Components
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+exposed-r2dbc = { module = "org.jetbrains.exposed:exposed-r2dbc", version.ref = "exposed" }
+r2dbc-postgresql = { module = "io.r2dbc:r2dbc-postgresql", version.ref = "r2dbcPostgres" }
+
 # UI Components
 dragselect = { module = "com.dragselectcompose:dragselect", version.ref = "dragselect" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatformMarkdownRendererM3" }
@@ -148,11 +154,6 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-
-# Jwt
-ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
-ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
-auth0-jwt = { module = "com.auth0:java-jwt", version.ref = "auth0-jwt" }
 
 # Authentification
 kmauth-google = { module = "io.github.sunildhiman90:kmauth-google", version.ref = "kmauth-google" }

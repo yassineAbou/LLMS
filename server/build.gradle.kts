@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlinx.rpc)
-    alias(libs.plugins.sqlDelight)
     application
 }
 
@@ -35,27 +34,12 @@ dependencies {
     testImplementation(libs.kotlinx.rpc.krpc.client)
     testImplementation(libs.kotlinx.rpc.krpc.ktor.client)
 
-    // SQLDelight
-    implementation(libs.sqldelight.jdbc.driver)
-    implementation(libs.sqldelight.coroutines.extensions)
-    implementation(libs.postgresql)
-    implementation(libs.hikaricp)
+    // Exposed ORM
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.kotlin.datetime)
+    implementation(libs.exposed.r2dbc)
+    implementation(libs.r2dbc.postgresql)
+    implementation(libs.r2dbc.pool)
 
-    //JWT
-    implementation(libs.ktor.server.auth)
-    implementation(libs.ktor.server.auth.jwt)
-    implementation(libs.auth0.jwt)
-
-}
-
-
-sqldelight {
-    databases {
-        create("ServerDatabase") {
-            packageName.set("org.yassineabou.llms")
-            dialect("app.cash.sqldelight:postgresql-dialect:${libs.versions.sqlDelight.get()}")
-            srcDirs("src/main/sqldelight")
-            deriveSchemaFromMigrations.set(true)
-        }
-    }
 }
