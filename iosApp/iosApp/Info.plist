@@ -68,17 +68,16 @@
     -->
 
 
-    <!--
-  <key>GIDClientID</key><string>PASTE CLIENT_ID FROM GoogleService-Info.plist HERE</string>
+
+  <key>GIDClientID</key><string>899837635305-kngv2dk02b4umpp56qgmmeei69hkndps.apps.googleusercontent.com</string>
     <key>CFBundleURLTypes</key><array>
     <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-            <string>PASTE REVERSED_CLIENT_ID FROM GoogleService-Info.plist HERE</string>
+            <string>CFBundleURLSchemes = com.googleusercontent.apps.899837635305-kngv2dk02b4umpp56qgmmeei69hkndps</string>
         </array>
     </dict>
 </array>
-    -->
 
   </dict>
   </plist>

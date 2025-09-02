@@ -27,10 +27,10 @@ object ImageGenModelList {
         )
         ,
         ImageModel(
-            title = "gemini-2.0-flash-exp",
+            title = "gemini-2.5-flash",
             description = " Gemini 2.0 Flash combines multimodal input, enhanced reasoning, and natural language understanding to create images.",
             image = Res.drawable.ic_gemini,
-            modelName = "google/gemini-2.0-flash-exp:free"
+            modelName = "google/gemini-2.5-flash:free"
         ),
         ImageModel(
             title = "HiDream-I1-Full",

@@ -93,7 +93,7 @@ object TextGenModelList {
         TextModel(
             title = "GPT-4o Mini",
             provider = "llm7",
-            modelName = "gpt-4o-mini-2024-07-18",
+            modelName = "gpt-o4-mini-2025-04-16",
             description = "Optimized GPT-4o Mini model for common tasks with good performance and efficiency.",
             image = Res.drawable.ic_openai
         ),
