@@ -12,7 +12,7 @@ import kotlin.time.Instant
 object UsersTable : Table("users") {
     val id = text("id") // Google Sub ID
     val username = text("username")
-    val email = text("email")
+    val email = text("email").uniqueIndex()  // Unique index for email lookups
     val profilePicUrl = text("profile_pic_url").nullable()
     val createdAt = timestamp("created_at").default(Clock.System.now())
 
@@ -20,7 +20,7 @@ object UsersTable : Table("users") {
 }
 
 // Data class for User entity
-data class User(
+data class UserEntity(
     val id: String,
     val username: String,
     val email: String,

@@ -8,7 +8,7 @@ import kotlinx.rpc.krpc.ktor.client.rpc
 import kotlinx.rpc.krpc.ktor.client.rpcConfig
 import kotlinx.rpc.krpc.serialization.json.json
 import kotlinx.rpc.withService
-import org.yassineabou.llms.UserService
+import org.yassineabou.llms.api.UserService
 
 // commonMain/kotlin/RpcConfig.kt
 

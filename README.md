@@ -102,6 +102,8 @@ Our development process is divided into five key steps:
 - [Drag Select](https://github.com/jordond/drag-select-compose) (adding Google Photos style drag-to-select multi-selection to a LazyGrid)
 - [SQLDelight](https://sqldelight.github.io/sqldelight/2.1.0/) (SQLDelight generates typesafe Kotlin APIs from your SQL statements.)
 - [KotlinMultiplatformAuth](https://github.com/sunildhiman90/KotlinMultiplatformAuth) (Authentification Library Targeting Android, iOS, Desktop and Web Kotlin/Js and Kotlin/Wasm both)
+- [kotlinx-rpc](https://github.com/Kotlin/kotlinx-rpc) (is a Kotlin library for adding asynchronous Remote Procedure Call (RPC) services to your applications)
+- [Exposed](https://github.com/JetBrains/Exposed) (Kotlin SQL Framework)
 
 ## Package Structure
 ```  

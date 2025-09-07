@@ -11,6 +11,7 @@ import io.ktor.server.routing.routing
 import kotlinx.rpc.krpc.ktor.server.Krpc
 import kotlinx.rpc.krpc.ktor.server.rpc
 import kotlinx.rpc.krpc.serialization.json.json
+import org.yassineabou.llms.api.UserService
 
 
 fun main() {

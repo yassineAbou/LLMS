@@ -14,7 +14,7 @@ object ChatsTable : Table("chats") {
     val userId = text("user_id").references(
         UsersTable.id,
         onDelete = ReferenceOption.CASCADE
-    )
+    ).index() // Index for filtering by user
     val title = text("title")
     val description = text("description").nullable()
     val textModelName = text("text_model_name")
@@ -22,10 +22,21 @@ object ChatsTable : Table("chats") {
     val createdAt = timestamp("created_at").default(Clock.System.now())
 
     override val primaryKey = PrimaryKey(id)
+
+    init {
+        // Composite index for the common query: WHERE userId = ? ORDER BY createdAt DESC
+        index("idx_chats_user_created", false, userId, createdAt)
+
+        // Composite index for security checks: WHERE id = ? AND userId = ?
+        index("idx_chats_id_user", false, id, userId)
+
+        // Partial index for bookmarked chats (if you query them separately)
+        index("idx_chats_bookmarked", false, userId, createdAt) { isBookmarked eq true }
+    }
 }
 
 // Data class for Chat entity
-data class Chat(
+data class ChatEntity(
     val id: String,
     val userId: String,
     val title: String,

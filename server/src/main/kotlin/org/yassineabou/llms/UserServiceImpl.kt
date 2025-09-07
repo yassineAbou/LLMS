@@ -4,6 +4,7 @@ package org.yassineabou.llms
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.yassineabou.llms.api.UserService
 import kotlin.random.Random
 
 class UserServiceImpl() : UserService {

@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.yassineabou.llms.database.DatabaseFactory.dbQuery
-import org.yassineabou.llms.database.tables.User
+import org.yassineabou.llms.database.tables.UserEntity
 import org.yassineabou.llms.database.tables.UsersTable
 import kotlin.time.ExperimentalTime
 
@@ -58,7 +58,7 @@ class UserRepository {
 
     // Helper function to map a ResultRow to a User data class
     @OptIn(ExperimentalTime::class)
-    private fun toUser(row: ResultRow): User = User(
+    private fun toUser(row: ResultRow): UserEntity = UserEntity(
         id = row[UsersTable.id],
         username = row[UsersTable.username],
         email = row[UsersTable.email],

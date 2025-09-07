@@ -12,13 +12,13 @@ import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.yassineabou.llms.database.DatabaseFactory.dbQuery
-import org.yassineabou.llms.database.tables.GeneratedImage
+import org.yassineabou.llms.database.tables.GeneratedImageEntity
 import org.yassineabou.llms.database.tables.GeneratedImagesTable
 import kotlin.time.ExperimentalTime
 
 class ImageRepository {
 
-    suspend fun createImage(userId: String, image: GeneratedImage) = dbQuery {
+    suspend fun createImage(userId: String, image: GeneratedImageEntity) = dbQuery {
         // Verify the image's userId matches the authenticated user
         if (image.userId != userId) {
             throw SecurityException("User ID mismatch")
@@ -51,7 +51,7 @@ class ImageRepository {
     }
 
 
-    private fun toGeneratedImage(row: ResultRow): GeneratedImage = GeneratedImage(
+    private fun toGeneratedImage(row: ResultRow): GeneratedImageEntity = GeneratedImageEntity(
         id = row[GeneratedImagesTable.id],
         userId = row[GeneratedImagesTable.userId],
         prompt = row[GeneratedImagesTable.prompt],

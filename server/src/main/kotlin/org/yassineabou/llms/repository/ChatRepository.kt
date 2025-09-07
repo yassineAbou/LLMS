@@ -10,27 +10,27 @@ import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.upsert
 import org.yassineabou.llms.database.DatabaseFactory.dbQuery
-import org.yassineabou.llms.database.tables.Chat
+import org.yassineabou.llms.database.tables.ChatEntity
 import org.yassineabou.llms.database.tables.ChatsTable
 import kotlin.time.ExperimentalTime
 
 class ChatRepository {
 
-    suspend fun createChat(userId: String, chat: Chat) = dbQuery {
+    suspend fun createChat(userId: String, chatEntity: ChatEntity) = dbQuery {
         // Verify the chat's userId matches the authenticated user
-        if (chat.userId != userId) {
+        if (chatEntity.userId != userId) {
             throw SecurityException("User ID mismatch")
         }
 
         ChatsTable.upsert {
-            it[id] = chat.id
-            it[ChatsTable.userId] = chat.userId
-            it[title] = chat.title
-            it[description] = chat.description
-            it[textModelName] = chat.textModelName
-            it[isBookmarked] = chat.isBookmarked
-            it[createdAt] = chat.createdAt
-        }.let { chat }
+            it[id] = chatEntity.id
+            it[ChatsTable.userId] = chatEntity.userId
+            it[title] = chatEntity.title
+            it[description] = chatEntity.description
+            it[textModelName] = chatEntity.textModelName
+            it[isBookmarked] = chatEntity.isBookmarked
+            it[createdAt] = chatEntity.createdAt
+        }.let { chatEntity }
     }
 
     suspend fun getChatsForUser(userId: String) = dbQuery {
@@ -38,7 +38,7 @@ class ChatRepository {
             .where { ChatsTable.userId eq userId }
             .orderBy(ChatsTable.createdAt, SortOrder.DESC)
             .map { row ->
-                Chat(
+                ChatEntity(
                     id = row[ChatsTable.id],
                     userId = row[ChatsTable.userId],
                     title = row[ChatsTable.title],
