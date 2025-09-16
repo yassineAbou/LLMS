@@ -2,11 +2,7 @@ package org.yassineabou.llms.feature.imagine.model
 
 import androidx.compose.runtime.Immutable
 import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_chroma
 import llms.composeapp.generated.resources.ic_flux
-import llms.composeapp.generated.resources.ic_gemini
-import llms.composeapp.generated.resources.ic_hi_dream
-import llms.composeapp.generated.resources.ic_infinite_you
 import llms.composeapp.generated.resources.ic_sdxl_turbo
 
 @Immutable
@@ -14,43 +10,17 @@ object ImageGenModelList {
 
     val newImageModel = listOf(
         ImageModel(
-            title = "FLUX-1-schnell",
-            description = "is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
-            image = Res.drawable.ic_flux,
-            modelName = "black-forest-labs/FLUX-1-schnell:free"
+            title = "Flux",
+            description = "A powerful and fast model for high-quality, general-purpose image generation.",
+            image = Res.drawable.ic_flux, // Assuming you have a drawable
+            modelName = "flux"
         ),
         ImageModel(
-            title = "sdxl-turbo",
-            description = "SDXL-Turbo is a fast generative text-to-image model that can synthesize photorealistic images from a text prompt in a single network evaluation.",
-            image = Res.drawable.ic_sdxl_turbo,
-            modelName = "stabilityai/sdxl-turbo:free"
-        )
-        ,
-        ImageModel(
-            title = "gemini-2.5-flash",
-            description = " Gemini 2.0 Flash combines multimodal input, enhanced reasoning, and natural language understanding to create images.",
-            image = Res.drawable.ic_gemini,
-            modelName = "google/gemini-2.5-flash:free"
+            title = "Turbo",
+            description = "An extremely fast model, great for rapid previews and real-time generation.",
+            image = Res.drawable.ic_sdxl_turbo, // Assuming you have a drawable
+            modelName = "turbo"
         ),
-        ImageModel(
-            title = "HiDream-I1-Full",
-            description = " HiDream-I1 is a new open-source image generative foundation model with 17B parameters that achieves state-of-the-art image generation quality within seconds.",
-            image = Res.drawable.ic_hi_dream,
-            modelName = "HiDream-ai/HiDream-I1-Full:free"
-        ),
-        ImageModel(
-            title = "Chroma",
-            description = "is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
-            image = Res.drawable.ic_chroma,
-            modelName = "lodestones/Chroma:free"
-        ),
-        ImageModel(
-            title = "InfiniteYou",
-            description = "InfiniteYou generates identity-preserved images with exceptional identity similarity, text-image alignment, quality, and aesthetics.",
-            image = Res.drawable.ic_infinite_you,
-            modelName = "ByteDance/InfiniteYou:free"
-        ),
-
     )
 
     val inspiration = listOf(

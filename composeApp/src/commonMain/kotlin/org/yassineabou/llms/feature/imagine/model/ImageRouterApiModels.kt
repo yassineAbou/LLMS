@@ -3,21 +3,17 @@ package org.yassineabou.llms.feature.imagine.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ImageRouterGenerationRequest(
+data class PollinationsImageRequest(
     val prompt: String,
     val model: String,
-    val quality: String? = "auto",
-    val response_format: String? = "url"
-)
-
-@Serializable
-data class ImageRouterGenerationResponse(
-    val created: Long,
-    val data: List<ImageData>
-)
-
-@Serializable
-data class ImageData(
-    val url: String? = null,
-    val b64_json: String? = null
+    val width: Int = 1024,
+    val height: Int = 1024,
+    val seed: Long? = null,
+    val nologo: Boolean = false,
+    val private: Boolean = false,
+    val enhance: Boolean = false,
+    val safe: Boolean = false,
+    val referrer: String? = null
+    // You can add the 'image' parameter here if you plan to support image-to-image
+    // val image: String? = null
 )

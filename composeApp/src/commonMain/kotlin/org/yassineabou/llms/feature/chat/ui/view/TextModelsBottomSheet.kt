@@ -82,8 +82,8 @@ fun TextModelsBottomSheet(
                     ) {
                         item {
                             TextModelType(
-                                type = "Others",
-                                textModelsList = TextGenModelList.otherModels,
+                                type = "DeepSeek",
+                                textModelsList = TextGenModelList.deepseekModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->
@@ -106,8 +106,8 @@ fun TextModelsBottomSheet(
                         }
                         item {
                             TextModelType(
-                                type = "Llama",
-                                textModelsList = TextGenModelList.llamaModels,
+                                type = "Others",
+                                textModelsList = TextGenModelList.otherModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->
@@ -120,6 +120,18 @@ fun TextModelsBottomSheet(
                             TextModelType(
                                 type = "Mistral",
                                 textModelsList = TextGenModelList.mistralModels,
+                                tempSelectedTextModel = tempSelectedTextModel,
+                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
+                                onInfoClick = { textModel ->
+                                    isInfoIconClicked = true
+                                    infoTextModel = textModel
+                                }
+                            )
+                        }
+                        item {
+                            TextModelType(
+                                type = "Llama",
+                                textModelsList = TextGenModelList.llamaModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->

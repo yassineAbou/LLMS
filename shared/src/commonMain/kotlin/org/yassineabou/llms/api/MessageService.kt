@@ -12,6 +12,8 @@ data class ChatMessageDto(
     val isUser: Boolean,
     val timestamp: String // Converted from Instant for serialization
 )
+
+/*
 @Rpc
 interface MessageService {
 
@@ -36,3 +38,5 @@ interface MessageService {
      */
     suspend fun clearChatMessages(userId: String, chatId: String): Int
 }
+
+ */

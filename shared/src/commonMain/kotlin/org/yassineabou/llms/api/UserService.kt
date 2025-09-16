@@ -14,6 +14,7 @@ data class UserDto(
     val createdAt: String // Using String for serialization compatibility
 )
 
+/*
 @Rpc
 interface UserService {
     suspend fun findByIdOrCreateUser(
@@ -25,3 +26,5 @@ interface UserService {
 
     suspend fun deleteUser(userId: String): Int
 }
+
+ */

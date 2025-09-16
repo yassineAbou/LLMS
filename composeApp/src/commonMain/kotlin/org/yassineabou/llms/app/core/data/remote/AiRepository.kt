@@ -1,6 +1,7 @@
 package org.yassineabou.llms.app.core.data.remote
 
-import io.ktor.util.*
+import co.touchlab.kermit.Logger
+import io.ktor.util.encodeBase64
 import kotlinx.coroutines.flow.Flow
 import kotlinx.io.IOException
 import org.yassineabou.llms.app.core.util.ImageMetadataUtil
@@ -9,7 +10,7 @@ import org.yassineabou.llms.feature.chat.data.model.ChatMessage
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import org.yassineabou.llms.feature.imagine.model.GeneratedImageResult
 import org.yassineabou.llms.feature.imagine.model.ImageModel
-import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationRequest
+import org.yassineabou.llms.feature.imagine.model.PollinationsImageRequest
 import org.yassineabou.llms.feature.imagine.model.UrlExample
 
 class AiRepository(private val aiApi: AiApi) {
@@ -39,28 +40,13 @@ class AiRepository(private val aiApi: AiApi) {
     }
 
     suspend fun generateImage(
-        apiKey: String,
-        model: ImageModel,
-        prompt: String,
-        additionalParams: Map<String, Any> = emptyMap()
+        request: PollinationsImageRequest // The function now accepts the new data class
     ): Result<GeneratedImageResult> {
         return try {
-            val endpoint = AiEndPoint.IMAGE_ROUTER_URL
-            val request = ImageRouterGenerationRequest(
-                prompt = prompt,
-                model = model.modelName,
-                quality = additionalParams["quality"] as? String,
-                response_format = "b64_json" // Always get base64 for consistency
-            )
+            // The API call is now much cleaner
+            val imageBytes = aiApi.generateImage(request)
 
-            val response = aiApi.generateImage(apiKey, endpoint, request)
-            val imageData = response.data.firstOrNull()
-                ?: throw IOException("No image data in response")
-
-            val imageBytes = imageData.b64_json?.decodeBase64Bytes()
-                ?: throw IOException("Missing base64 image data")
-
-            // Detect MIME type and validate image
+            // The rest of the logic remains the same
             val mimeType = ImageMetadataUtil.detectImageMimeType(imageBytes)
                 ?: throw IOException("Invalid image data: Unrecognized format")
 
@@ -69,7 +55,8 @@ class AiRepository(private val aiApi: AiApi) {
 
             Result.success(
                 GeneratedImageResult(
-                    urlExample = UrlExample(url = dataUrl, prompt = prompt),
+                    // Use the prompt from the original request object
+                    urlExample = UrlExample(url = dataUrl, prompt = request.prompt),
                     imageBytes = imageBytes
                 )
             )

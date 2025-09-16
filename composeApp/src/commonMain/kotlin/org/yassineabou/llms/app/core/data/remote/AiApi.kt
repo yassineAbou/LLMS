@@ -1,12 +1,24 @@
 package org.yassineabou.llms.app.core.data.remote
 
-import co.touchlab.kermit.Logger
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.utils.io.*
+import co.touchlab.kermit.Logger.Companion.a
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.timeout
+import io.ktor.client.request.accept
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.preparePost
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsChannel
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
+import io.ktor.http.encodeURLParameter
+import io.ktor.http.encodeURLPathPart
+import io.ktor.http.isSuccess
+import io.ktor.utils.io.readUTF8Line
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
@@ -16,16 +28,13 @@ import org.yassineabou.llms.app.core.data.remote.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionResponse
-import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationRequest
-import org.yassineabou.llms.feature.imagine.model.ImageRouterGenerationResponse
+import org.yassineabou.llms.feature.imagine.model.PollinationsImageRequest
 
 
 interface AiApi {
-    suspend fun generateImage(
-        apiKey: String,
-        endpoint: String,
-        request: ImageRouterGenerationRequest
-    ): ImageRouterGenerationResponse
+    suspend fun generateImage(request: PollinationsImageRequest): ByteArray
+
+
     fun streamChatCompletions(baseUrl: String, apiKey: String, request: ChatCompletionRequest): Flow<String>
 }
 
@@ -34,15 +43,26 @@ class KtorApi(
     private val json: Json
 ) : AiApi {
 
-    override suspend fun generateImage(
-        apiKey: String,
-        endpoint: String,
-        request: ImageRouterGenerationRequest
-    ): ImageRouterGenerationResponse {
-        return client.post(endpoint) {
-            header(HttpHeaders.Authorization, "Bearer $apiKey")
-            contentType(ContentType.Application.Json)
-            setBody(request)
+    override suspend fun generateImage(request: PollinationsImageRequest): ByteArray {
+        // Use the correct encoding for URL path segments
+        val encodedPrompt = request.prompt.encodeURLPathPart()
+        val url = AiEndPoint.POLLINATIONS_BASE_URL + encodedPrompt
+
+        return client.get(url) {
+            // Build parameters in a type-safe way from the request object
+            parameter("model", request.model)
+            parameter("width", request.width)
+            parameter("height", request.height)
+            request.seed?.let { parameter("seed", it) }
+            if (request.nologo) parameter("nologo", "true")
+            if (request.private) parameter("private", "true")
+            if (request.enhance) parameter("enhance", "true")
+            if (request.safe) parameter("safe", "true")
+            request.referrer?.let { parameter("referrer", it) }
+
+            timeout {
+                requestTimeoutMillis = 300_000 // 5 minutes
+            }
         }.body()
     }
 
@@ -101,49 +121,68 @@ class KtorApi(
 
     private suspend fun FlowCollector<String>.processChunk(dataJson: String) {
         if (dataJson.equals("[DONE]", ignoreCase = true)) {
-            //Logger.e { "Stream completed with [DONE] signal." }
             return
         }
 
         try {
-            // First try to parse as a streaming chunk
+            // --- PRIMARY LOGIC: Try to parse as a standard streaming chunk ---
             val chunk = json.decodeFromString<ChatCompletionChunk>(dataJson)
             chunk.choices.forEach { choice ->
-                choice.delta.content?.let { rawContent ->
-                    val cleanedContent = rawContent
-                        .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "")
-                        .replace(Regex("(<sep>.*|◁.*?▷)"), "")
-                        .trim()
-
+                choice.delta.content?.let { content ->
+                    // Your cleaning logic is fine, let's keep it
+                    val cleanedContent = cleanContent(content)
                     if (cleanedContent.isNotBlank()) {
                         emit(cleanedContent)
                     }
                 }
-                if (choice.finishReason != null) {
-                    //Logger.e { "Stream completed with reason: ${choice.finishReason}" }
-                }
             }
         } catch (e: SerializationException) {
-            // If streaming parse fails, try parsing as a complete response
+            // --- FALLBACK LOGIC: If it's not a chunk, try parsing as a complete response ---
             try {
                 val completeResponse = json.decodeFromString<ChatCompletionResponse>(dataJson)
                 completeResponse.choices.forEach { choice ->
-                    choice.message.content.let { rawContent ->
-                        val cleanedContent = rawContent
-                            .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "")
-                            .replace(Regex("(<sep>.*|◁.*?▷)"), "")
-                            .trim()
+                    // This is the raw content from the full response
+                    val rawContent = choice.message.content
 
+                    // --- NEW: Add a check here ---
+                    // Try to parse the rawContent itself as another ChatCompletionResponse
+                    // This handles cases where the model wraps its response in a JSON string.
+                    try {
+                        val nestedResponse = json.decodeFromString<ChatCompletionResponse>(rawContent)
+                        val nestedContent = nestedResponse.choices.firstOrNull()?.message?.content ?: ""
+                        val cleanedContent = cleanContent(nestedContent)
+                        if (cleanedContent.isNotBlank()) {
+                            emit(cleanedContent)
+                        }
+                    } catch (nestedException: Exception) {
+                        // If it's not nested JSON, treat it as plain text. THIS IS THE NORMAL PATH.
+                        val cleanedContent = cleanContent(rawContent)
                         if (cleanedContent.isNotBlank()) {
                             emit(cleanedContent)
                         }
                     }
                 }
             } catch (e2: Exception) {
-                //Logger.e { "Failed to parse response: $dataJson" }
+                // If both parsing attempts fail, it might be malformed.
+                // As a last resort, emit the raw string if it doesn't look like JSON.
+                if (!dataJson.trim().startsWith("{")) {
+                    val cleanedContent = cleanContent(dataJson)
+                    if (cleanedContent.isNotBlank()) {
+                        emit(cleanedContent)
+                    }
+                }
+                // Logger.e { "Failed to parse response chunk as stream or complete object: $dataJson" }
             }
         } catch (e: Exception) {
             // Logger.e { "Unexpected error processing chunk: ${e.message}" }
         }
+    }
+
+    // Helper function to avoid repetition
+    private fun cleanContent(rawContent: String): String {
+        return rawContent
+            .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "")
+            .replace(Regex("(<sep>.*|◁.*?▷)"), "")
+            .trim()
     }
 }

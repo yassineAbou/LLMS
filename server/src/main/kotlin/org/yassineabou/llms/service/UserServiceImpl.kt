@@ -3,12 +3,10 @@
 
 package org.yassineabou.llms.service
 
-import org.yassineabou.llms.api.UserDto
-import org.yassineabou.llms.api.UserService
-import org.yassineabou.llms.repository.UserRepository
 import kotlin.time.ExperimentalTime
 
 // server/src/main/kotlin/UserServiceImpl.kt
+/*
 class UserServiceImpl(private val userRepository: UserRepository) : UserService {
     override suspend fun findByIdOrCreateUser(
         id: String,
@@ -30,3 +28,5 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.deleteUser(userId)
     }
 }
+
+ */

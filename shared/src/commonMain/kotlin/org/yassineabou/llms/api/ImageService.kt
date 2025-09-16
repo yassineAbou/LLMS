@@ -37,7 +37,7 @@ data class GeneratedImageDto(
         return result
     }
 }
-
+/*
 /**
  * The RPC interface for all image generation and management operations.
  */
@@ -74,3 +74,5 @@ interface ImageService {
      */
     suspend fun clearAllImagesForUser(userId: String): Int
 }
+
+ */

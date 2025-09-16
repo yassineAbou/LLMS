@@ -2,16 +2,9 @@
 
 package org.yassineabou.llms.service
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import org.yassineabou.llms.api.ChatDto
-import org.yassineabou.llms.api.ChatMessageDto
-import org.yassineabou.llms.api.MessageService
-import org.yassineabou.llms.database.tables.ChatMessageEntity
-import org.yassineabou.llms.repository.MessageRepository
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+/*
 class MessageServiceImpl(private val messageRepository: MessageRepository) : MessageService {
 
     override suspend fun addMessageToChat(
@@ -68,3 +61,5 @@ class MessageServiceImpl(private val messageRepository: MessageRepository) : Mes
         return messageRepository.clearChatMessages(userId, chatId)
     }
 }
+
+ */

@@ -2,15 +2,9 @@
 
 package org.yassineabou.llms.service
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import org.yassineabou.llms.api.ChatDto
-import org.yassineabou.llms.api.ChatService
-import org.yassineabou.llms.database.tables.ChatEntity
-import org.yassineabou.llms.repository.ChatRepository
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+/*
 class ChatServiceImpl(private val chatRepository: ChatRepository) : ChatService {
 
     override suspend fun createChat(
@@ -71,3 +65,5 @@ class ChatServiceImpl(private val chatRepository: ChatRepository) : ChatService 
         return chatRepository.deleteChat(userId, chatId)
     }
 }
+
+ */

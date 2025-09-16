@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------------------------------
 
 # AndroidX
-androidx-activityCompose = "1.10.1"
+androidx-activityCompose = "1.11.0"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
@@ -25,11 +25,11 @@ kotlinx-collections-immutable = "0.4.0"
 serialization = "1.9.0"
 
 # Compose
-compose-plugin = "1.9.0-rc01"
-adaptive = "1.2.0-alpha05"
+compose-plugin = "1.9.0-rc02"
+adaptive = "1.2.0-alpha06"
 multiplatformPaths = "0.2.2"
-navigationCompose = "2.9.0-rc01"
-foundationLayoutAndroid = "1.9.0"
+navigationCompose = "2.9.0-rc02"
+foundationLayoutAndroid = "1.9.1"
 
 # SQLdelight
 sqlDelight = "2.1.0"
@@ -44,21 +44,21 @@ androidx-espresso-core = "3.7.0"
 
 # UI Components
 dragselect = "3.1.0"
-multiplatformMarkdownRendererM3 = "0.36.0-b02"
+multiplatformMarkdownRendererM3 = "0.37.0"
 sketch = "4.3.1"
 
 # Exposed
-exposed = "1.0.0-beta-5"
+exposed = "1.0.0-rc-1"
 r2dbcPostgres = "0.8.13.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 
 
 # Authentificcation
-kmauth-google = "0.2.1"
+kmauth-google = "0.3.0"
 androidxCredentials = "1.5.0"
 
 # Networking
-ktor = "3.2.3"
+ktor = "3.3.0"
 
 # Utilities
 kermit = "2.0.8"

@@ -4,19 +4,19 @@ package org.yassineabou.llms.feature.imagine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.util.*
+import co.touchlab.kermit.Logger
+import io.ktor.util.encodeBase64
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
 import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.AiEndPoint.IMAGE_ROUTER_API_KEY
 import org.yassineabou.llms.app.core.data.remote.AiRepository
 import org.yassineabou.llms.app.core.data.remote.GenerationState
 import org.yassineabou.llms.app.core.util.FileKit
@@ -24,6 +24,7 @@ import org.yassineabou.llms.app.core.util.ImageMetadataUtil
 import org.yassineabou.llms.app.core.util.saveImage
 import org.yassineabou.llms.feature.imagine.model.ImageGenModelList
 import org.yassineabou.llms.feature.imagine.model.ImageModel
+import org.yassineabou.llms.feature.imagine.model.PollinationsImageRequest
 import org.yassineabou.llms.feature.imagine.model.UrlExample
 import kotlin.math.min
 import kotlin.time.Clock
@@ -69,27 +70,40 @@ class ImageGenViewModel(
 
     init {
         loadNextInspirationPage()
+
+        // Make sure this collection is actually working
         viewModelScope.launch {
-            llmsDatabaseRepository.getAllImages().collect { images -> // images is List<Generated_images>
-                // Convert all database images to UrlExample objects
-                val convertedImages = images.map { dbImage ->
-                    // Detect MIME type and validate image
-                    val mimeType = ImageMetadataUtil.detectImageMimeType(dbImage.image_data)
-                        ?: throw IOException("Invalid image data: Unrecognized format")
-                    // Convert byte array to base64 string
-                    val base64Image = dbImage.image_data.encodeBase64()
-                    val dataUrl = "data:$mimeType;base64,$base64Image"
+            llmsDatabaseRepository.getAllImages()
+                .distinctUntilChanged() // Only emit when data actually changes
+                .collect { images ->
+                    Logger.d { "Database images updated: ${images.size} images" }
 
-                    UrlExample(
-                        id = dbImage.id,
-                        url = dataUrl,
-                        prompt = dbImage.prompt
-                    )
+                    // Convert all database images to UrlExample objects
+                    val convertedImages = images.mapNotNull { dbImage ->
+                        try {
+                            // Detect MIME type and validate image
+                            val mimeType = ImageMetadataUtil.detectImageMimeType(dbImage.image_data)
+                                ?: throw IOException("Invalid image data: Unrecognized format")
+                            // Convert byte array to base64 string
+                            val base64Image = dbImage.image_data.encodeBase64()
+                            val dataUrl = "data:$mimeType;base64,$base64Image"
+
+                            UrlExample(
+                                id = dbImage.id,
+                                url = dataUrl,
+                                prompt = dbImage.prompt
+                            )
+                        } catch (e: Exception) {
+                            //Logger.e(e) { "Failed to convert database image: ${dbImage.id}" }
+                            null // Skip invalid images
+                        }
+                    }
+
+                    // Update the state flow with the converted list
+                    _listGeneratedImages.value = convertedImages.toMutableList()
+
+                    //Logger.d { "UI list updated with ${convertedImages.size} images" }
                 }
-
-                // Update the state flow with the converted list
-                _listGeneratedImages.value = convertedImages.toMutableList()
-            }
         }
     }
 
@@ -110,11 +124,17 @@ class ImageGenViewModel(
     fun generateImage(prompt: String) {
         imageGenerationJob = viewModelScope.launch {
             _imageGenerationState.value = GenerationState.Loading(id = _currentImageIndex.value)
-            val result = aiRepository.generateImage(
-                apiKey = IMAGE_ROUTER_API_KEY,
-                model = selectedImageModel.value,
+
+            val request = PollinationsImageRequest(
                 prompt = prompt,
+                model = selectedImageModel.value.modelName, // e.g., "flux"
+                width = 1024,  // You can get these from UI state if needed
+                height = 1024,
+                seed = 42L, // Example seed
+                nologo = true  // Example parameter
             )
+
+            val result = aiRepository.generateImage(request)
 
             when {
                 result.isSuccess -> {

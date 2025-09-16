@@ -15,6 +15,7 @@ data class ChatDto(
     val createdAt: String
 )
 
+/*
 /**
  * The RPC interface for managing chat sessions (creating, listing, deleting).
  */
@@ -45,3 +46,5 @@ interface ChatService {
      */
     suspend fun deleteChat(userId: String, chatId: String): Int
 }
+
+ */
