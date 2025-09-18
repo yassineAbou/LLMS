@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.datetime.timestamp
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
-
+/*
 object ChatMessagesTable : Table("chat_messages") {
     val id = integer("id").autoIncrement()
     val chatId = text("chat_id").references(
@@ -38,3 +38,5 @@ data class ChatMessageEntity(
     val isUser: Boolean,
     val timestamp: Instant
 )
+
+ */

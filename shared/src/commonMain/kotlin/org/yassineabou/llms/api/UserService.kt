@@ -1,10 +1,8 @@
 package org.yassineabou.llms.api
 
-import kotlinx.rpc.annotations.Rpc
-import kotlinx.serialization.Serializable
-
 // shared/src/commonMain/kotlin/UserService.kt
 // DTO (Data Transfer Object)
+/*
 @Serializable
 data class UserDto(
     val id: String,

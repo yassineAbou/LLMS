@@ -1,17 +1,16 @@
 package org.yassineabou.llms.app.core.util
 
-import io.ktor.client.HttpClient
-import kotlinx.rpc.krpc.ktor.client.installKrpc
-
 // commonMain/kotlin/RpcConfig.kt
 
 const val DEV_SERVER_HOST: String = ""
-
+/*
 val client by lazy {
     HttpClient {
         installKrpc()
     }
 }
+
+ */
 
 /*
 fun setupRPC(): UserService = client.rpc {

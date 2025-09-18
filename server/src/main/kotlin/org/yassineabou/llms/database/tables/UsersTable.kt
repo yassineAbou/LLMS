@@ -8,7 +8,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-
+/*
 object UsersTable : Table("users") {
     val id = text("id") // Google Sub ID
     val username = text("username")
@@ -27,3 +27,5 @@ data class UserEntity(
     val profilePicUrl: String?,
     val createdAt: Instant
 )
+
+ */

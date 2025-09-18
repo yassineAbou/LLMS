@@ -1,15 +1,7 @@
 package org.yassineabou.llms.database
 
 
-import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
-import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.yassineabou.llms.database.tables.ChatMessagesTable
-import org.yassineabou.llms.database.tables.ChatsTable
-import org.yassineabou.llms.database.tables.GeneratedImagesTable
-import org.yassineabou.llms.database.tables.UsersTable
-
+/*
 object DatabaseFactory {
     private val database: R2dbcDatabase by lazy {
         val r2dbcUrl = buildR2dbcUrl()
@@ -47,3 +39,6 @@ object DatabaseFactory {
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         suspendTransaction(Dispatchers.IO, db = database) { block() }
 }
+
+ */
+

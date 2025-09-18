@@ -1,9 +1,8 @@
 package org.yassineabou.llms.api
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.rpc.annotations.Rpc
-import kotlinx.serialization.Serializable
 
+import kotlinx.serialization.Serializable
+/*
 @Serializable
 data class ChatDto(
     val id: String,
@@ -14,6 +13,8 @@ data class ChatDto(
     val isBookmarked: Boolean,
     val createdAt: String
 )
+
+ */
 
 /*
 /**

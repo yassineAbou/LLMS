@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
-    alias(libs.plugins.kotlinx.rpc)
+    //alias(libs.plugins.kotlinx.rpc)
     application
 }
 
@@ -22,6 +22,7 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
 
     //Rpc
+    /*
     implementation(libs.logback)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.ktor.server.cors.jvm)
@@ -33,6 +34,8 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlinx.rpc.krpc.client)
     testImplementation(libs.kotlinx.rpc.krpc.ktor.client)
+
+     */
 
     // Exposed ORM
     implementation(libs.exposed.core)

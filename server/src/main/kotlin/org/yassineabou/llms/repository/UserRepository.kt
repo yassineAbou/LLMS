@@ -2,19 +2,9 @@
 
 package org.yassineabou.llms.repository
 
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.singleOrNull
-import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.v1.r2dbc.deleteWhere
-import org.jetbrains.exposed.v1.r2dbc.insert
-import org.jetbrains.exposed.v1.r2dbc.select
-import org.yassineabou.llms.database.DatabaseFactory.dbQuery
-import org.yassineabou.llms.database.tables.UserEntity
-import org.yassineabou.llms.database.tables.UsersTable
 import kotlin.time.ExperimentalTime
 
+/*
 class UserRepository {
 
     suspend fun findByIdOrCreateUser(
@@ -66,3 +56,5 @@ class UserRepository {
         createdAt = row[UsersTable.createdAt]
     )
 }
+
+ */

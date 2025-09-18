@@ -1,9 +1,6 @@
 package org.yassineabou.llms.api
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.rpc.annotations.Rpc
-import kotlinx.serialization.Serializable
-
+/*
 @Serializable
 data class ChatMessageDto(
     val id: Int,
@@ -12,6 +9,8 @@ data class ChatMessageDto(
     val isUser: Boolean,
     val timestamp: String // Converted from Instant for serialization
 )
+
+ */
 
 /*
 @Rpc
