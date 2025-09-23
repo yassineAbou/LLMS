@@ -87,6 +87,13 @@
 # Keep all @Serializable annotated classes intact (fallback safety)
 -keep @kotlinx.serialization.Serializable class * {*;}
 
+# Fix ProGuard "Can't find common super class" for Netty loggers
+-keep class io.netty.util.internal.logging.** { *; }
+-dontwarn org.apache.logging.log4j.**
+
+
+-ignorewarnings
+
 
 
 
