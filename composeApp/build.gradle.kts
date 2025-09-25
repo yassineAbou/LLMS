@@ -113,7 +113,6 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.material3AdaptiveNavigationSuite)
-            implementation("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0")
 
 
             implementation(libs.adaptive)

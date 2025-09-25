@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.window.core.layout.WindowSizeClass
 import com.dragselectcompose.core.DragSelectState
 import com.dragselectcompose.core.rememberDragSelectState
 import com.dragselectcompose.grid.LazyDragSelectVerticalGrid
@@ -51,7 +50,7 @@ import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExp
 import org.yassineabou.llms.feature.imagine.ui.view.ImageSelectionControls
 import org.yassineabou.llms.feature.imagine.ui.view.NoContentMessage
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,
@@ -63,14 +62,15 @@ fun GeneratedImagesScreen(
     val selectedPhotos = dragSelectState.selected
     val inSelectionMode = dragSelectState.inSelectionMode
     val selectedPhotoCount = dragSelectState.selected.size
-    val windowSizeClass = calculateWindowSizeClass()
-    val columnCount = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 2
-        WindowWidthSizeClass.Medium -> 3
-        WindowWidthSizeClass.Expanded -> 2
-        else -> 2
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val columnCount = when {
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> 2 // ≥840 dp
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> 3  // ≥600 dp
+        else -> 2 // <600 dp (COMPACT)
     }
-    val isLargeScreen = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
+
+
+    val isLargeScreen = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
 
     BackHandler {
         navController.navigate(Screen.ImagineScreen.route)

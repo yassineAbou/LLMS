@@ -31,9 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -53,6 +51,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.window.core.layout.WindowSizeClass
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
@@ -347,18 +346,17 @@ private fun Inspirations(
 }
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 @Composable
 private fun InspirationItem(
     url: String,
     onItemClick: () -> Unit
 ) {
-    val windowSizeClass = calculateWindowSizeClass()
-    val imageWidth = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 125.dp
-        WindowWidthSizeClass.Medium -> 175.dp
-        WindowWidthSizeClass.Expanded -> 225.dp
-        else -> 125.dp
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val imageWidth = when {
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> 225.dp
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> 175.dp
+        else -> 125.dp // COMPACT (< 600 dp)
     }
     AsyncImage(
         uri = url,
