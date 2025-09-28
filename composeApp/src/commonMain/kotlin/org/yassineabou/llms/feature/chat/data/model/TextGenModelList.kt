@@ -8,14 +8,28 @@ object TextGenModelList {
         otherModels + openaiModels + mistralModels + deepseekModels + llamaModels
     }
 
-    // Default fallback model
+    // Default fallback model — choose one that exists in the JSON
     val defaultModel: TextModel by lazy {
-        // Using gpt-4o-nano as default
-        openaiModels.first()
+        openaiModels.firstOrNull { it.modelName == "gpt-5-nano-2025-08-07" }
+            ?: allModels.first() // fallback to first if not found
     }
 
     // DeepSeek Models
     val deepseekModels = listOf(
+        TextModel(
+            title = "DeepSeek V3.1",
+            provider = "llm7",
+            modelName = "deepseek-v3.1",
+            description = "Latest DeepSeek V3.1 model for general-purpose tasks.",
+            image = Res.drawable.ic_deepseek
+        ),
+        TextModel(
+            title = "DeepSeek Reasoning",
+            provider = "llm7",
+            modelName = "deepseek-reasoning",
+            description = "DeepSeek model specialized for advanced reasoning tasks.",
+            image = Res.drawable.ic_deepseek
+        ),
         TextModel(
             title = "DeepSeek R1 0528",
             provider = "llm7",
@@ -46,20 +60,27 @@ object TextGenModelList {
         )
     )
 
-    // OpenAI Models
+    // OpenAI Models (now includes GPT-5 variants)
     val openaiModels = listOf(
         TextModel(
-            title = "GPT-4.1 Nano",
+            title = "GPT-5 Nano",
             provider = "llm7",
-            modelName = "gpt-4.1-nano-2025-04-14",
-            description = "Compact GPT-4.1 Nano model for efficient inference with good reasoning capabilities.",
+            modelName = "gpt-5-nano-2025-08-07",
+            description = "Ultra-lightweight GPT-5 Nano model for fast inference.",
             image = Res.drawable.ic_openai
         ),
         TextModel(
-            title = "GPT-4o Mini",
+            title = "GPT-5 Mini",
             provider = "llm7",
-            modelName = "gpt-4o-mini-2024-07-18",
-            description = "Compact GPT-4o model optimized for efficient inference with strong capabilities.",
+            modelName = "gpt-5-mini",
+            description = "Compact and efficient GPT-5 variant with multimodal support.",
+            image = Res.drawable.ic_openai
+        ),
+        TextModel(
+            title = "GPT-5 Chat",
+            provider = "llm7",
+            modelName = "gpt-5-chat",
+            description = "GPT-5 optimized for conversational and chat-based interactions.",
             image = Res.drawable.ic_openai
         ),
         TextModel(
@@ -106,13 +127,6 @@ object TextGenModelList {
             image = Res.drawable.ic_llama
         ),
         TextModel(
-            title = "Midnight Rose 70B v2.0.3",
-            provider = "llm7",
-            modelName = "midnight-rose-70b-v2.0.3",
-            description = "Specialized 70B model for creative writing and roleplay scenarios.",
-            image = Res.drawable.ic_llama
-        ),
-        TextModel(
             title = "L3 70B Euryale v2.1",
             provider = "llm7",
             modelName = "l3-70b-euryale-v2.1",
@@ -135,6 +149,13 @@ object TextGenModelList {
             provider = "llm7",
             modelName = "gemini-2.5-flash-lite",
             description = "Google's lightweight and fast multimodal model for responsive applications.",
+            image = Res.drawable.ic_gemini
+        ),
+        TextModel(
+            title = "Gemini Search",
+            provider = "llm7",
+            modelName = "gemini-search",
+            description = "Google's multimodal model optimized for search and information retrieval.",
             image = Res.drawable.ic_gemini
         ),
         TextModel(
@@ -171,13 +192,6 @@ object TextGenModelList {
             modelName = "bidara",
             description = "Bidara model optimized for general language understanding and generation tasks.",
             image = Res.drawable.ic_llm7
-        ),
-        TextModel(
-            title = "Mirexa",
-            provider = "llm7",
-            modelName = "mirexa",
-            description = "Mirexa model designed for creative writing and narrative generation tasks.",
-            image = Res.drawable.ic_mirexa
-        ),
+        )
     )
 }
