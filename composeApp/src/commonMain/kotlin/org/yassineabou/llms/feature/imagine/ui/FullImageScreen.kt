@@ -49,7 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
-import org.yassineabou.llms.app.core.data.remote.GenerationState
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
@@ -59,7 +59,7 @@ import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.llms.app.core.util.PlatformConfig
 import org.yassineabou.llms.app.core.util.isDesktop
 import org.yassineabou.llms.app.core.util.isWasm
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
 import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExpansion
@@ -71,12 +71,12 @@ import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 @Composable
 fun FullScreenImage(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator
 ) {
-    val listGeneratedPhotos by imageGenViewModel.listGeneratedImages.collectAsStateWithLifecycle()
-    val currentImageIndex by imageGenViewModel.currentImageIndex.collectAsStateWithLifecycle()
-    val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
+    val listGeneratedPhotos by imagineViewModel.listGeneratedImages.collectAsStateWithLifecycle()
+    val currentImageIndex by imagineViewModel.currentImageIndex.collectAsStateWithLifecycle()
+    val imageGenerationState by imagineViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     val snackbarController = SnackbarController.current
     val pagerState = rememberPagerState(
@@ -87,7 +87,7 @@ fun FullScreenImage(
     val isLargeScreen = rememberIsLargeScreen()
 
     BackHandler {
-        imageGenViewModel.resetImageGenerationState()
+        imagineViewModel.resetImageGenerationState()
         PaneOrScreenNavigator.navigateTo(
             supportingPaneNavigator = supportingPaneNavigator,
             navController = navController,
@@ -105,7 +105,7 @@ fun FullScreenImage(
     }
 
     LaunchedEffect(Unit) {
-        imageGenViewModel.snackbarMessage.collect { message ->
+        imagineViewModel.snackbarMessage.collect { message ->
             snackbarController.showMessage(message)
         }
     }
@@ -130,7 +130,7 @@ fun FullScreenImage(
                 .padding(4.dp)
                 .align(Alignment.Start),
             onBackPress = {
-                imageGenViewModel.resetImageGenerationState()
+                imagineViewModel.resetImageGenerationState()
                 PaneOrScreenNavigator.navigateTo(
                     supportingPaneNavigator = supportingPaneNavigator,
                     navController = navController,
@@ -162,7 +162,7 @@ fun FullScreenImage(
                     listGenerated = listGeneratedPhotos,
                     imageGenerationState = imageGenerationState,
                     updateCurrentImageIndex = { index ->
-                        imageGenViewModel.updateCurrentImageIndex(index)
+                        imagineViewModel.updateCurrentImageIndex(index)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -173,12 +173,12 @@ fun FullScreenImage(
 
         FullScreenBottomBar(
             onInfoClicked = { showInfoBottomSheet = true },
-            onDownload =  { imageGenViewModel.downloadImage() },
+            onDownload =  { imagineViewModel.downloadImage() },
             onDelete = {
                 val currentId = listGeneratedPhotos[pagerState.currentPage].id
-                imageGenViewModel.deleteImage(currentId)
+                imagineViewModel.deleteImage(currentId)
                 val newPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else 0
-                imageGenViewModel.updateCurrentImageIndex(newPage)
+                imagineViewModel.updateCurrentImageIndex(newPage)
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(newPage)
                 }

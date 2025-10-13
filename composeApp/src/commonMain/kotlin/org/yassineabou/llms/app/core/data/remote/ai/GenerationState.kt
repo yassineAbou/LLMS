@@ -1,4 +1,4 @@
-package org.yassineabou.llms.app.core.data.remote
+package org.yassineabou.llms.app.core.data.remote.ai
 
 sealed class GenerationState {
     data class Loading(val id:  Int) : GenerationState()

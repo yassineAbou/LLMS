@@ -12,8 +12,8 @@ import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.AiRepository
-import org.yassineabou.llms.app.core.data.remote.GenerationState
+import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import kotlin.coroutines.cancellation.CancellationException

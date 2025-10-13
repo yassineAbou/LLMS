@@ -10,7 +10,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-/*
+
 object GeneratedImagesTable : Table("generated_images") {
     val id = text("id")
     val userId = text("user_id").references(
@@ -63,5 +63,3 @@ data class GeneratedImageEntity(
         return result
     }
 }
-
- */

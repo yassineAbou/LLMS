@@ -55,7 +55,7 @@ import androidx.window.core.layout.WindowSizeClass
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
-import org.yassineabou.llms.app.core.data.remote.GenerationState
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.app.core.sharedViews.CustomIconButton
 import org.yassineabou.llms.app.core.sharedViews.GoToFirst
@@ -63,7 +63,7 @@ import org.yassineabou.llms.app.core.sharedViews.SelectedModel
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.llms.app.core.util.draggableScrollModifier
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
@@ -75,16 +75,16 @@ import org.yassineabou.llms.feature.imagine.ui.view.ImageModelsBottomSheet
 @Composable
 fun ImagineScreen(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
     shouldShowSupportingPaneButton: Boolean,
     modifier: Modifier = Modifier
 ) {
     var ideaText by remember { mutableStateOf("") }
     var selectModelClicked by remember { mutableStateOf(false) }
-    val selectedImageModel by imageGenViewModel.selectedImageModel.collectAsStateWithLifecycle()
-    val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
-    val loadedInspiration by imageGenViewModel.loadedInspiration.collectAsStateWithLifecycle()
+    val selectedImageModel by imagineViewModel.selectedImageModel.collectAsStateWithLifecycle()
+    val imageGenerationState by imagineViewModel.imageGenerationState.collectAsStateWithLifecycle()
+    val loadedInspiration by imagineViewModel.loadedInspiration.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
     Column(
@@ -140,7 +140,7 @@ fun ImagineScreen(
         Inspirations(
             loadedInspiration = loadedInspiration,
             onIdeaTextChange = { ideaText = it },
-            loadNextPage = { imageGenViewModel.loadNextInspirationPage() },
+            loadNextPage = { imagineViewModel.loadNextInspirationPage() },
             modifier = Modifier
                 .weight(0.38f)
                 .fillMaxWidth(),
@@ -160,12 +160,12 @@ fun ImagineScreen(
                     paneDestination = SupportingPaneScreen.ImageGenerationLoading,
                     screenRoute = Screen.ImageGenerationLoadingScreen.route
                 )
-                imageGenViewModel.generateImage(ideaText)
+                imagineViewModel.generateImage(ideaText)
             }
         )
         if (selectModelClicked) {
             ImageModelsBottomSheet(
-                imageGenViewModel = imageGenViewModel,
+                imagineViewModel = imagineViewModel,
                 onDismissRequest = { selectModelClicked = false },
                 onAuthenticated = { selectModelClicked = false }
             )

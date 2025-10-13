@@ -1,6 +1,5 @@
-package org.yassineabou.llms.app.core.data.remote
+package org.yassineabou.llms.app.core.data.remote.ai
 
-import co.touchlab.kermit.Logger
 import io.ktor.util.encodeBase64
 import kotlinx.coroutines.flow.Flow
 import kotlinx.io.IOException
@@ -8,10 +7,9 @@ import org.yassineabou.llms.app.core.util.ImageMetadataUtil
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatMessage
 import org.yassineabou.llms.feature.chat.data.model.TextModel
-import org.yassineabou.llms.feature.imagine.model.GeneratedImageResult
-import org.yassineabou.llms.feature.imagine.model.ImageModel
-import org.yassineabou.llms.feature.imagine.model.PollinationsImageRequest
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.GeneratedImageResult
+import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 
 class AiRepository(private val aiApi: AiApi) {
 

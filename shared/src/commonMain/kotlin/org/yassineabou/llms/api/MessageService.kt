@@ -1,6 +1,10 @@
 package org.yassineabou.llms.api
 
-/*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.rpc.annotations.Rpc
+import kotlinx.serialization.Serializable
+
+
 @Serializable
 data class ChatMessageDto(
     val id: Int,
@@ -10,9 +14,7 @@ data class ChatMessageDto(
     val timestamp: String // Converted from Instant for serialization
 )
 
- */
 
-/*
 @Rpc
 interface MessageService {
 
@@ -29,7 +31,7 @@ interface MessageService {
     /**
      * Retrieves a list of all chat sessions for a given user.
      */
-    suspend fun getChatsForUser(userId: String): Flow<ChatDto>
+    fun getChatsForUser(userId: String): Flow<ChatDto>
 
     /**
      * Deletes all messages within a specific chat.
@@ -38,4 +40,3 @@ interface MessageService {
     suspend fun clearChatMessages(userId: String, chatId: String): Int
 }
 
- */

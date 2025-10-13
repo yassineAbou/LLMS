@@ -46,7 +46,7 @@ import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.app.core.sharedViews.SelectedModel
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.app.core.util.Animations
-import org.yassineabou.llms.app.core.data.remote.GenerationState
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.view.ChatAppBar

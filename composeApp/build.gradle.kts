@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
     alias(libs.plugins.sqlDelight)
-    //alias(libs.plugins.kotlinx.rpc)
+    alias(libs.plugins.kotlinx.rpc)
 }
 
 kotlin {
@@ -75,10 +75,6 @@ kotlin {
             implementation(libs.ktor.client.cio)
             implementation(libs.sqldelight.android.driver)
 
-
-            implementation(libs.android.credentials)
-            implementation(libs.android.credentials.play.services.auth)
-
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -94,17 +90,15 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.core)
-            /*
+
             implementation(libs.kotlinx.rpc.krpc.client)
             implementation(libs.kotlinx.rpc.krpc.serialization.json)
             implementation(libs.kotlinx.rpc.krpc.ktor.client)
-             */
 
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.ktor.utils)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.websockets)
 

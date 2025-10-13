@@ -29,7 +29,7 @@ compose-plugin = "1.9.0"
 adaptive = "1.2.0-alpha06"
 multiplatformPaths = "0.2.2"
 navigationCompose = "2.9.0"
-foundationLayoutAndroid = "1.9.1"
+foundationLayoutAndroid = "1.9.2"
 
 # SQLdelight
 sqlDelight = "2.1.0"
@@ -54,21 +54,20 @@ r2dbcPool = "1.0.2.RELEASE"
 
 
 # Authentificcation
-kmauth-google = "0.3.0"
-androidxCredentials = "1.5.0"
+kmauth-google = "0.3.1"
 
 # Networking
 ktor = "3.3.0"
 
 # Utilities
 kermit = "2.0.8"
-logback = "1.5.18"
+logback = "1.5.19"
 
 # Dependency Injection
-kodeinDi = "7.26.1"
+kodeinDi = "7.28.0"
 
 # Rpc
-kotlinx-rpc = "0.9.1"
+kotlinx-rpc = "0.10.0"
 
 
 
@@ -86,7 +85,6 @@ ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "kto
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
-ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
 ktor-server-cors-jvm = { module = "io.ktor:ktor-server-cors-jvm", version.ref = "ktor" }
 ktor-server-websockets-jvm = { module = "io.ktor:ktor-server-websockets-jvm", version.ref = "ktor" }
 ktor-server-host-common-jvm = { module = "io.ktor:ktor-server-host-common-jvm", version.ref = "ktor" }
@@ -157,8 +155,6 @@ kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version
 
 # Authentification
 kmauth-google = { module = "io.github.sunildhiman90:kmauth-google", version.ref = "kmauth-google" }
-android-credentials = { module = "androidx.credentials:credentials", version.ref = "androidxCredentials" }
-android-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidxCredentials" }
 
 # Utilities
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }

@@ -1,11 +1,15 @@
 package org.yassineabou.llms.api
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.rpc.annotations.Rpc
+import kotlinx.serialization.Serializable
+
 /**
  * DTO for a generated image.
  * The binary imageData is handled as a ByteArray, which is a multiplatform type.
  * The generatedAt timestamp is converted to a String for serialization.
  */
-/*
+
 @Serializable
 data class GeneratedImageDto(
     val id: String,
@@ -35,8 +39,7 @@ data class GeneratedImageDto(
     }
 }
 
- */
-/*
+
 /**
  * The RPC interface for all image generation and management operations.
  */
@@ -59,7 +62,7 @@ interface ImageService {
     /**
      * Retrieves a list of all previously generated images for a user.
      */
-    suspend fun getImagesForUser(userId: String): Flow<GeneratedImageDto>
+   fun getImagesForUser(userId: String): Flow<GeneratedImageDto>
 
     /**
      * Deletes a specific image by its ID.
@@ -73,5 +76,3 @@ interface ImageService {
      */
     suspend fun clearAllImagesForUser(userId: String): Int
 }
-
- */

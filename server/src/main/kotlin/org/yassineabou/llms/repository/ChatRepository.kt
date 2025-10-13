@@ -2,9 +2,19 @@
 
 package org.yassineabou.llms.repository
 
+import kotlinx.coroutines.flow.map
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.upsert
+import org.yassineabou.llms.database.DatabaseFactory.dbQuery
+import org.yassineabou.llms.database.tables.ChatEntity
+import org.yassineabou.llms.database.tables.ChatsTable
 import kotlin.time.ExperimentalTime
 
-/*
+
 class ChatRepository {
 
     suspend fun createChat(userId: String, chatEntity: ChatEntity) = dbQuery {
@@ -48,5 +58,3 @@ class ChatRepository {
     }
 
 }
-
- */

@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import org.yassineabou.llms.app.core.data.remote.GenerationState
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.app.core.sharedViews.LoadingContent
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
@@ -33,15 +33,15 @@ import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 @Composable
 fun ImageGenerationLoadingScreen(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
     modifier: Modifier = Modifier
 ) {
-    val imageGenerationState by imageGenViewModel.imageGenerationState.collectAsStateWithLifecycle()
+    val imageGenerationState by imagineViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
 
     BackHandler {
-        imageGenViewModel.cancelImageGeneration()
+        imagineViewModel.cancelImageGeneration()
     }
 
 
@@ -101,7 +101,7 @@ fun ImageGenerationLoadingScreen(
             modifier = Modifier.align(Alignment.BottomCenter)
                 .padding(bottom = 48.dp),
             onClick = {
-                imageGenViewModel.cancelImageGeneration()
+                imagineViewModel.cancelImageGeneration()
             }
         ) {
             Text(

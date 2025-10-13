@@ -1,7 +1,7 @@
 package org.yassineabou.llms.feature.chat.data.model
 
 import org.jetbrains.compose.resources.DrawableResource
-import org.yassineabou.llms.feature.imagine.model.IdGenerator
+import org.yassineabou.llms.feature.imagine.data.model.IdGenerator
 
 
 data class TextModel(

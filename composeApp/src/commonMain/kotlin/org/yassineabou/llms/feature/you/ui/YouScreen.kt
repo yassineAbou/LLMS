@@ -46,8 +46,8 @@ import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_google
 import org.yassineabou.llms.app.core.sharedViews.SnackbarController
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
-import org.yassineabou.llms.feature.you.model.AuthInfo
-import org.yassineabou.llms.feature.you.model.AuthState
+import org.yassineabou.llms.feature.you.data.model.AuthInfo
+import org.yassineabou.llms.feature.you.data.model.AuthState
 import org.yassineabou.llms.feature.you.ui.view.AuthProvider
 import org.yassineabou.llms.feature.you.ui.view.AuthProviderButton
 import org.yassineabou.llms.feature.you.ui.view.AuthScreenTransition

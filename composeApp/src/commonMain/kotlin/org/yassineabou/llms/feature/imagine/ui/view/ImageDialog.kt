@@ -33,7 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.panpf.sketch.AsyncImage
 import org.yassineabou.llms.app.core.sharedViews.PyramidTextFormat
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 
 @Composable
 fun ImageDialogContent(

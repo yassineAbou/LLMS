@@ -35,25 +35,25 @@ import org.yassineabou.llms.app.core.sharedViews.ModelDetails
 import org.yassineabou.llms.app.core.sharedViews.ModelHeader
 import org.yassineabou.llms.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.feature.imagine.model.ImageGenModelList
-import org.yassineabou.llms.feature.imagine.model.ImageModel
-import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
+import org.yassineabou.llms.feature.imagine.data.model.ImageGenModelList
+import org.yassineabou.llms.feature.imagine.data.model.ImageModel
+import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageModelsBottomSheet(
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     onDismissRequest: () -> Unit,
     onAuthenticated: () -> Unit
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val tempSelectedImageModel by imageGenViewModel.tempSelectedImageModel.collectAsState()
+    val tempSelectedImageModel by imagineViewModel.tempSelectedImageModel.collectAsState()
     var isInfoIconClicked by remember { mutableStateOf(false) }
     var infoImageModel by remember { mutableStateOf(tempSelectedImageModel) }
 
 
     LaunchedEffect(Unit) {
-        imageGenViewModel.setTempSelectedToSelected()
+        imagineViewModel.setTempSelectedToSelected()
     }
 
 
@@ -68,7 +68,7 @@ fun ImageModelsBottomSheet(
                         onDismissRequest = onDismissRequest,
                         onDone = {
                             onAuthenticated()
-                            imageGenViewModel.confirmSelectedImageModel()
+                            imagineViewModel.confirmSelectedImageModel()
                         }
                     )
                 },
@@ -76,7 +76,7 @@ fun ImageModelsBottomSheet(
                     ImageModelType(
                         imageModelsList = ImageGenModelList.newImageModel,
                         tempSelectedImageModel = tempSelectedImageModel,
-                        onImageModelSelected = imageGenViewModel::selectTempImageModel,
+                        onImageModelSelected = imagineViewModel::selectTempImageModel,
                         onInfoClick = { imageModel ->
                             isInfoIconClicked = true
                             infoImageModel = imageModel

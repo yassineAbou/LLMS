@@ -33,7 +33,7 @@ import org.yassineabou.llms.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.llms.feature.chat.ui.history.ChatHistoryScreen
 import org.yassineabou.llms.feature.imagine.ui.FullScreenImage
 import org.yassineabou.llms.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
+import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
@@ -50,7 +50,7 @@ fun MainScreen() {
     var isFullScreenImage by rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val chatViewModel = kodeinViewModel<ChatViewModel>()
-    val imageGenViewModel = kodeinViewModel<ImageGenViewModel>()
+    val imagineViewModel = kodeinViewModel<ImagineViewModel>()
     val youViewModel = kodeinViewModel<YouViewModel>()
     val supportingPaneNavigator = rememberSupportingPaneNavigator()
 
@@ -136,7 +136,7 @@ fun MainScreen() {
                         ChatHistoryScreen(navController = navController, chatViewModel = chatViewModel)
                     }
                     composable(Screen.ImagineScreen.route) {
-                        SupportingPaneLayout(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
+                        SupportingPaneLayout(imagineViewModel = imagineViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.ImageGenerationLoadingScreen.route,
@@ -145,7 +145,7 @@ fun MainScreen() {
                         popEnterTransition = NavTransitions.slideLeftIn(),
                         popExitTransition = NavTransitions.slideRightOut()
                     ) {
-                        ImageGenerationLoadingScreen(navController = navController, imageGenViewModel = imageGenViewModel, supportingPaneNavigator = supportingPaneNavigator)
+                        ImageGenerationLoadingScreen(navController = navController, imagineViewModel = imagineViewModel, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.FullScreenImage.route,
@@ -154,7 +154,7 @@ fun MainScreen() {
                         popEnterTransition = NavTransitions.slideRightIn(),
                         popExitTransition = NavTransitions.slideLeftOut()
                     ) {
-                        FullScreenImage(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
+                        FullScreenImage(imagineViewModel = imagineViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(
                         route = Screen.GeneratedImagesScreen.route,
@@ -163,7 +163,7 @@ fun MainScreen() {
                         popEnterTransition = NavTransitions.slideRightIn(),
                         popExitTransition = NavTransitions.slideLeftOut()
                     ) {
-                        GeneratedImagesScreen(imageGenViewModel = imageGenViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
+                        GeneratedImagesScreen(imagineViewModel = imagineViewModel, navController = navController, supportingPaneNavigator = supportingPaneNavigator)
                     }
                     composable(Screen.YouScreen.route) {
                         YouScreen(youViewModel = youViewModel)

@@ -3,9 +3,22 @@
 
 package org.yassineabou.llms.repository
 
+import kotlinx.coroutines.flow.map
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
+import org.jetbrains.exposed.v1.r2dbc.select
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.upsert
+import org.yassineabou.llms.database.DatabaseFactory.dbQuery
+import org.yassineabou.llms.database.tables.ChatEntity
+import org.yassineabou.llms.database.tables.ChatMessageEntity
+import org.yassineabou.llms.database.tables.ChatMessagesTable
+import org.yassineabou.llms.database.tables.ChatsTable
 import kotlin.time.ExperimentalTime
 
-/*
+
 class MessageRepository {
 
     suspend fun addMessageToChat(userId: String, message: ChatMessageEntity) = dbQuery {
@@ -59,5 +72,3 @@ class MessageRepository {
     }
 
 }
-
- */

@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import org.yassineabou.llms.feature.imagine.ui.FullScreenImage
 import org.yassineabou.llms.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
+import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
 import org.yassineabou.llms.feature.imagine.ui.ImagineScreen
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
@@ -28,7 +28,7 @@ import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 @Composable
 fun SupportingPaneLayout(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator
 ) {
     val navigator = rememberSupportingPaneScaffoldNavigator()
@@ -40,7 +40,7 @@ fun SupportingPaneLayout(
             MainPane(
                 navController = navController,
                 supportingPaneNavigator = supportingPaneNavigator,
-                imageGenViewModel = imageGenViewModel,
+                imagineViewModel = imagineViewModel,
                 shouldShowSupportingPaneButton = navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden,
             )
         },
@@ -48,7 +48,7 @@ fun SupportingPaneLayout(
             SupportingPane(
                 navController = navController,
                 supportingPaneNavigator = supportingPaneNavigator,
-                imageGenViewModel = imageGenViewModel
+                imagineViewModel = imagineViewModel
             )
         }
     )
@@ -58,7 +58,7 @@ fun SupportingPaneLayout(
 fun MainPane(
     navController: NavController,
     supportingPaneNavigator: SupportingPaneNavigator,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     shouldShowSupportingPaneButton: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -70,7 +70,7 @@ fun MainPane(
             isLargeScreen || currentScreen is SupportingPaneScreen.GeneratedImages -> {
                 ImagineScreen(
                     navController = navController,
-                    imageGenViewModel = imageGenViewModel,
+                    imagineViewModel = imagineViewModel,
                     supportingPaneNavigator = supportingPaneNavigator,
                     shouldShowSupportingPaneButton = shouldShowSupportingPaneButton
                 )
@@ -78,14 +78,14 @@ fun MainPane(
             isLargeScreen && currentScreen is SupportingPaneScreen.ImageGenerationLoading  -> {
                 ImageGenerationLoadingScreen(
                     navController = navController,
-                    imageGenViewModel = imageGenViewModel,
+                    imagineViewModel = imagineViewModel,
                     supportingPaneNavigator = supportingPaneNavigator
                 )
             }
             isLargeScreen && currentScreen is SupportingPaneScreen.FullScreenImage  -> {
                 FullScreenImage(
                     navController = navController,
-                    imageGenViewModel = imageGenViewModel,
+                    imagineViewModel = imagineViewModel,
                     supportingPaneNavigator = supportingPaneNavigator
                 )
             }
@@ -94,14 +94,14 @@ fun MainPane(
                     SupportingPaneScreen.ImageGenerationLoading -> {
                         ImageGenerationLoadingScreen(
                             navController = navController,
-                            imageGenViewModel = imageGenViewModel,
+                            imagineViewModel = imagineViewModel,
                             supportingPaneNavigator = supportingPaneNavigator
                         )
                     }
                     SupportingPaneScreen.FullScreenImage -> {
                         FullScreenImage(
                             navController = navController,
-                            imageGenViewModel = imageGenViewModel,
+                            imagineViewModel = imagineViewModel,
                             supportingPaneNavigator = supportingPaneNavigator
                         )
                     }
@@ -117,7 +117,7 @@ fun MainPane(
 fun SupportingPane(
     navController: NavController,
     supportingPaneNavigator: SupportingPaneNavigator,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     modifier: Modifier = Modifier
 ) {
     val currentScreen = supportingPaneNavigator.currentScreen
@@ -140,21 +140,21 @@ fun SupportingPane(
             is SupportingPaneScreen.GeneratedImages -> {
                 GeneratedImagesScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
-                    imageGenViewModel = imageGenViewModel,
+                    imagineViewModel = imagineViewModel,
                     navController = navController
                 )
             }
             is SupportingPaneScreen.ImageGenerationLoading -> {
                 ImageGenerationLoadingScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
-                    imageGenViewModel = imageGenViewModel,
+                    imagineViewModel = imagineViewModel,
                     navController = navController
                 )
             }
             is SupportingPaneScreen.FullScreenImage -> {
                 FullScreenImage(
                     supportingPaneNavigator = supportingPaneNavigator,
-                    imageGenViewModel = imageGenViewModel,
+                    imagineViewModel = imagineViewModel,
                     navController = navController
                 )
             }

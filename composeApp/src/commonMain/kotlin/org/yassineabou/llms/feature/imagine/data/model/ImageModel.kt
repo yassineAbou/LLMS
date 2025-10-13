@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.imagine.model
+package org.yassineabou.llms.feature.imagine.data.model
 
 import androidx.compose.runtime.Immutable
 import org.jetbrains.compose.resources.DrawableResource

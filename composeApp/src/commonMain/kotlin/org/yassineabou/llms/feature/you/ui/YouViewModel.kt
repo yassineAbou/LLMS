@@ -6,8 +6,8 @@ import com.sunildhiman90.kmauth.google.KMAuthGoogle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.yassineabou.llms.feature.you.model.AuthInfo
-import org.yassineabou.llms.feature.you.model.AuthState
+import org.yassineabou.llms.feature.you.data.model.AuthInfo
+import org.yassineabou.llms.feature.you.data.model.AuthState
 
 class YouViewModel : ViewModel() {
 

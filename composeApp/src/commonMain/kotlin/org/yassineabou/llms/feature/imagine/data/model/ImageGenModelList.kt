@@ -1,8 +1,9 @@
-package org.yassineabou.llms.feature.imagine.model
+package org.yassineabou.llms.feature.imagine.data.model
 
 import androidx.compose.runtime.Immutable
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_flux
+import llms.composeapp.generated.resources.ic_openai
 import llms.composeapp.generated.resources.ic_sdxl_turbo
 
 @Immutable
@@ -21,6 +22,12 @@ object ImageGenModelList {
             image = Res.drawable.ic_sdxl_turbo, // Assuming you have a drawable
             modelName = "turbo"
         ),
+        ImageModel(
+            title = "GPT Image",
+            description = "A model for generating images from text descriptions with enhanced understanding.",
+            image = Res.drawable.ic_openai, // Assuming you have a drawable
+            modelName = "gptimage"
+        )
     )
 
     val inspiration = listOf(

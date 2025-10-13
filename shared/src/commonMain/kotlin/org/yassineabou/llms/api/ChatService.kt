@@ -1,8 +1,10 @@
 package org.yassineabou.llms.api
 
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.rpc.annotations.Rpc
 import kotlinx.serialization.Serializable
-/*
+
 @Serializable
 data class ChatDto(
     val id: String,
@@ -12,11 +14,9 @@ data class ChatDto(
     val textModelName: String,
     val isBookmarked: Boolean,
     val createdAt: String
+
 )
 
- */
-
-/*
 /**
  * The RPC interface for managing chat sessions (creating, listing, deleting).
  */
@@ -39,7 +39,7 @@ interface ChatService {
     /**
      * Retrieves a list of all chat sessions for a given user.
      */
-    suspend fun getChatsForUser(userId: String): Flow<ChatDto>
+    fun getChatsForUser(userId: String): Flow<ChatDto>
 
     /**
      * Deletes a chat session and all its associated messages (due to DB cascade).
@@ -47,5 +47,3 @@ interface ChatService {
      */
     suspend fun deleteChat(userId: String, chatId: String): Int
 }
-
- */

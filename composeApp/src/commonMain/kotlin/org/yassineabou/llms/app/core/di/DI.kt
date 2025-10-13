@@ -20,11 +20,11 @@ import org.yassineabou.llms.LlmsDatabase
 import org.yassineabou.llms.app.core.data.local.DatabaseFactory
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.remote.AiApi
-import org.yassineabou.llms.app.core.data.remote.AiRepository
-import org.yassineabou.llms.app.core.data.remote.KtorApi
+import org.yassineabou.llms.app.core.data.remote.ai.AiApi
+import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
+import org.yassineabou.llms.app.core.data.remote.ai.KtorApi
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
-import org.yassineabou.llms.feature.imagine.ui.ImageGenViewModel
+import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.you.ui.YouViewModel
 
 
@@ -106,7 +106,7 @@ val commonModule = DI.Module("commonModule") {
     // Koin has a special `viewModel` scope. In Kodein, ViewModels are typically
     // not singletons. They should be created for each screen. The `provider`
     // binding is perfect for this, as it creates a new instance every time.
-    bindProvider { ImageGenViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
+    bindProvider { ImagineViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
     bindProvider { ChatViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
     bindProvider { YouViewModel() }
 }

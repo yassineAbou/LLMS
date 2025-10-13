@@ -20,7 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.delay
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

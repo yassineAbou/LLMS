@@ -4,11 +4,12 @@ package org.yassineabou.llms.database.tables
 
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.datetime.timestamp
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
-/*
+
 object ChatsTable : Table("chats") {
     val id = text("id")
     val userId = text("user_id").references(
@@ -45,5 +46,3 @@ data class ChatEntity(
     val isBookmarked: Boolean,
     val createdAt: Instant
 )
-
- */

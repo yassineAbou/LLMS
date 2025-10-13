@@ -43,7 +43,7 @@ import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
 import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExpansion
@@ -54,11 +54,11 @@ import org.yassineabou.llms.feature.imagine.ui.view.NoContentMessage
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,
-    imageGenViewModel: ImageGenViewModel,
+    imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
     dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id }),
 ) {
-    val listGeneratedPhotos by imageGenViewModel.listGeneratedImages.collectAsState()
+    val listGeneratedPhotos by imagineViewModel.listGeneratedImages.collectAsState()
     val selectedPhotos = dragSelectState.selected
     val inSelectionMode = dragSelectState.inSelectionMode
     val selectedPhotoCount = dragSelectState.selected.size
@@ -113,7 +113,7 @@ fun GeneratedImagesScreen(
                 onDownloadClick = { /* Handle download */ },
                 onShareClick = { /* Handle share */ },
                 onDeleteClick = {
-                    imageGenViewModel.deleteSelectedImages(selectedPhotos)
+                    imagineViewModel.deleteSelectedImages(selectedPhotos)
                     dragSelectState.disableSelectionMode()
                 },
                 onSelectAllClick = { dragSelectState.updateSelected(listGeneratedPhotos) }
@@ -165,7 +165,7 @@ fun GeneratedImagesScreen(
                             onClick = {
                                 if (index != -1) {
                                     // Save the index in the ViewModel
-                                    imageGenViewModel.updateCurrentImageIndex(index)
+                                    imagineViewModel.updateCurrentImageIndex(index)
                                     PaneOrScreenNavigator.navigateTo(
                                         supportingPaneNavigator = supportingPaneNavigator,
                                         navController = navController,

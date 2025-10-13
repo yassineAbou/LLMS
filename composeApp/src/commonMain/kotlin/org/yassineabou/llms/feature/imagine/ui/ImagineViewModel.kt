@@ -2,6 +2,9 @@
 
 package org.yassineabou.llms.feature.imagine.ui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -17,22 +20,22 @@ import kotlinx.coroutines.launch
 import kotlinx.io.IOException
 import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
-import org.yassineabou.llms.app.core.data.remote.AiRepository
-import org.yassineabou.llms.app.core.data.remote.GenerationState
+import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.util.FileKit
 import org.yassineabou.llms.app.core.util.ImageMetadataUtil
 import org.yassineabou.llms.app.core.util.saveImage
-import org.yassineabou.llms.feature.imagine.model.ImageGenModelList
-import org.yassineabou.llms.feature.imagine.model.ImageModel
-import org.yassineabou.llms.feature.imagine.model.PollinationsImageRequest
-import org.yassineabou.llms.feature.imagine.model.UrlExample
+import org.yassineabou.llms.feature.imagine.data.model.ImageGenModelList
+import org.yassineabou.llms.feature.imagine.data.model.ImageModel
+import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
+import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 import kotlin.math.min
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class ImageGenViewModel(
+class ImagineViewModel(
     private val aiRepository: AiRepository,
     private val llmsDatabaseRepository: LlmsDatabaseInterface
 ) : ViewModel() {
@@ -54,8 +57,8 @@ class ImageGenViewModel(
 
     // Pagination for inspiration
     private val fullInspirationList = ImageGenModelList.inspiration
-    private var currentPage = 0
-    private val pageSize = 5 // Adjust based on performance needs
+    private var currentPage by mutableStateOf(0)
+    private val pageSize by mutableStateOf(5)  // Adjust based on performance needs
 
     private val _loadedInspiration = MutableStateFlow<List<UrlExample>>(emptyList())
     val loadedInspiration: StateFlow<List<UrlExample>> = _loadedInspiration

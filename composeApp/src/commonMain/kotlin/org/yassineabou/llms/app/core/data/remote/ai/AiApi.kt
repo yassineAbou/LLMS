@@ -1,4 +1,4 @@
-package org.yassineabou.llms.app.core.data.remote
+package org.yassineabou.llms.app.core.data.remote.ai
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -22,11 +22,11 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import org.yassineabou.llms.app.core.data.remote.AiEndPoint.STREAM_PREFIX
+import org.yassineabou.llms.app.core.data.remote.ai.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionResponse
-import org.yassineabou.llms.feature.imagine.model.PollinationsImageRequest
+import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 
 
 interface AiApi {
@@ -51,6 +51,8 @@ class KtorApi(
             parameter("model", request.model)
             parameter("width", request.width)
             parameter("height", request.height)
+            parameter("token", AiEndPoint.POLLINATIONS_TOKEN) // Add token parameter
+
             request.seed?.let { parameter("seed", it) }
             if (request.nologo) parameter("nologo", "true")
             if (request.private) parameter("private", "true")
@@ -63,6 +65,7 @@ class KtorApi(
             }
         }.body()
     }
+
 
     override fun streamChatCompletions(baseUrl: String, apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
         try {

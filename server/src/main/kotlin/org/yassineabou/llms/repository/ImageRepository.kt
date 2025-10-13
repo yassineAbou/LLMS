@@ -3,9 +3,20 @@
 
 package org.yassineabou.llms.repository
 
+import kotlinx.coroutines.flow.map
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
+import org.jetbrains.exposed.v1.r2dbc.insert
+import org.jetbrains.exposed.v1.r2dbc.select
+import org.yassineabou.llms.database.DatabaseFactory.dbQuery
+import org.yassineabou.llms.database.tables.GeneratedImageEntity
+import org.yassineabou.llms.database.tables.GeneratedImagesTable
 import kotlin.time.ExperimentalTime
 
-/*
+
 class ImageRepository {
 
     suspend fun createImage(userId: String, image: GeneratedImageEntity) = dbQuery {
@@ -50,5 +61,3 @@ class ImageRepository {
         generatedAt = row[GeneratedImagesTable.generatedAt]
     )
 }
-
- */

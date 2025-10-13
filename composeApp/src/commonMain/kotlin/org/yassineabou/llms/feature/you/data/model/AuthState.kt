@@ -1,4 +1,4 @@
-package org.yassineabou.llms.feature.you.model
+package org.yassineabou.llms.feature.you.data.model
 
 sealed class AuthState {
     object Idle : AuthState()
