@@ -13,6 +13,6 @@ package org.yassineabou.llms.app.core.util
  * ──────────────────────────────────────────────────────────────────────────────
  */
 object GoogleOAuthConfig {
-    const val CLIENT_ID     = ""
-    const val CLIENT_SECRET = ""
+    const val CLIENT_ID     = "H"
+    const val CLIENT_SECRET = "L"
 }
