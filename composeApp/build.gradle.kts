@@ -141,7 +141,7 @@ kotlin {
 
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.darwin)
             implementation(libs.sqldelight.native.driver)
         }
     }

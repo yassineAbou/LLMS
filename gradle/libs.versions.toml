@@ -11,7 +11,7 @@ androidx-lifecycle = "2.9.4"
 
 
 # Android
-agp = "8.13.0"
+agp = "8.12.0"
 android-compileSdk = "36"
 android-minSdk = "28"
 #noinspection EditedTargetSdkVersion
@@ -90,6 +90,7 @@ ktor-server-websockets-jvm = { module = "io.ktor:ktor-server-websockets-jvm", ve
 ktor-server-host-common-jvm = { module = "io.ktor:ktor-server-host-common-jvm", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 # SQLdelight
 r2dbc-pool = { module = "io.r2dbc:r2dbc-pool", version.ref = "r2dbcPool" }

@@ -68,16 +68,18 @@
     -->
 
 
+    
+    <key>GIDClientID</key><string></string>
+      <key>CFBundleURLTypes</key><array>
+      <dict>
+          <key>CFBundleURLSchemes</key>
+          <array>
+              <string></string>
+          </array>
+      </dict>
+  </array>
 
-  <key>GIDClientID</key><string>899837635305-kngv2dk02b4umpp56qgmmeei69hkndps.apps.googleusercontent.com</string>
-    <key>CFBundleURLTypes</key><array>
-    <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>CFBundleURLSchemes = com.googleusercontent.apps.899837635305-kngv2dk02b4umpp56qgmmeei69hkndps</string>
-        </array>
+
     </dict>
-</array>
+    </plist>
 
-  </dict>
-  </plist>
