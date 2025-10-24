@@ -108,7 +108,7 @@ val commonModule = DI.Module("commonModule") {
     // binding is perfect for this, as it creates a new instance every time.
     bindProvider { ImagineViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
     bindProvider { ChatViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
-    bindProvider { YouViewModel() }
+    bindProvider { YouViewModel( llmsDatabaseRepository = instance()) }
 }
 
 /**

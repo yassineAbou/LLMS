@@ -7,7 +7,7 @@ androidx-activityCompose = "1.11.0"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
-androidx-lifecycle = "2.9.4"
+androidx-lifecycle = "2.9.5"
 
 
 # Android
@@ -25,11 +25,11 @@ kotlinx-collections-immutable = "0.4.0"
 serialization = "1.9.0"
 
 # Compose
-compose-plugin = "1.9.0"
-adaptive = "1.2.0-alpha06"
+compose-plugin = "1.9.1"
+adaptive = "1.2.0-alpha05"
 multiplatformPaths = "0.2.2"
-navigationCompose = "2.9.0"
-foundationLayoutAndroid = "1.9.2"
+navigationCompose = "2.9.1"
+foundationLayoutAndroid = "1.9.4"
 
 # SQLdelight
 sqlDelight = "2.1.0"
@@ -48,7 +48,7 @@ multiplatformMarkdownRendererM3 = "0.37.0"
 sketch = "4.3.1"
 
 # Exposed
-exposed = "1.0.0-rc-1"
+exposed = "1.0.0-rc-2"
 r2dbcPostgres = "0.8.13.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 
@@ -57,7 +57,7 @@ r2dbcPool = "1.0.2.RELEASE"
 kmauth-google = "0.3.1"
 
 # Networking
-ktor = "3.3.0"
+ktor = "3.3.1"
 
 # Utilities
 kermit = "2.0.8"

@@ -29,34 +29,6 @@ object TextGenModelList {
             modelName = "deepseek-reasoning",
             description = "DeepSeek model specialized for advanced reasoning tasks.",
             image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
-            title = "DeepSeek R1 0528",
-            provider = "llm7",
-            modelName = "deepseek-r1-0528",
-            description = "DeepSeek R1 model variant optimized for complex reasoning, math, and programming tasks.",
-            image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
-            title = "DeepSeek R1",
-            provider = "llm7",
-            modelName = "deepseek-r1",
-            description = "DeepSeek's advanced reasoning model for complex problem-solving.",
-            image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
-            title = "DeepSeek V3 0324",
-            provider = "llm7",
-            modelName = "deepseek-v3-0324",
-            description = "DeepSeek V3 model with enhanced capabilities for diverse tasks.",
-            image = Res.drawable.ic_deepseek
-        ),
-        TextModel(
-            title = "DeepSeek AI R1 0528",
-            provider = "llm7",
-            modelName = "deepseek-ai/DeepSeek-R1-0528",
-            description = "DeepSeek AI's R1 model optimized for reasoning and analysis.",
-            image = Res.drawable.ic_deepseek
         )
     )
 
@@ -98,21 +70,21 @@ object TextGenModelList {
             title = "Mistral Small 3.1 24B Instruct",
             provider = "llm7",
             modelName = "mistral-small-3.1-24b-instruct-2503",
-            description = "Instruction-tuned version of Mistral Small 3.1 24B for following directions.",
+            description = "Instruction-tuned Mistral Small 3.1 24B.",
             image = Res.drawable.ic_mistral
         ),
         TextModel(
-            title = "Mistral Small 2503",
-            provider = "llm7",
-            modelName = "mistral-small-2503",
-            description = "Small model with optimizations and improvements for March 2025.",
+            title = "Codestral 2405",
+            provider = "mistral",
+            modelName = "codestral-2405",
+            description = "Mistral's coding-focused model.",
             image = Res.drawable.ic_mistral
         ),
         TextModel(
-            title = "Open Mixtral 8x7B",
-            provider = "llm7",
-            modelName = "open-mixtral-8x7b",
-            description = "Open-source Mixtral with 8x7B experts for balanced performance.",
+            title = "Codestral 2501",
+            provider = "mistral",
+            modelName = "codestral-2501",
+            description = "Updated Codestral model for coding tasks.",
             image = Res.drawable.ic_mistral
         )
     )
@@ -152,6 +124,13 @@ object TextGenModelList {
             image = Res.drawable.ic_gemini
         ),
         TextModel(
+            title = "GLM 4.5 Flash",
+            provider = "glm",
+            modelName = "glm-4.5-flash",
+            description = "GLM's fast multimodal model.",
+            image = Res.drawable.ic_glm
+        ),
+        TextModel(
             title = "Gemini Search",
             provider = "llm7",
             modelName = "gemini-search",
@@ -171,27 +150,6 @@ object TextGenModelList {
             modelName = "qwen2.5-coder-32b-instruct",
             description = "Alibaba's Qwen2.5 Coder model with 32B parameters specialized for programming tasks.",
             image = Res.drawable.ic_qwen
-        ),
-        TextModel(
-            title = "Amazon Nova Fast",
-            provider = "llm7",
-            modelName = "nova-fast",
-            description = "Amazon's model optimized for speed and efficient responses.",
-            image = Res.drawable.ic_nova
-        ),
-        TextModel(
-            title = "Roblox RP",
-            provider = "llm7",
-            modelName = "roblox-rp",
-            description = "Model specialized for Roblox role-playing and scripting scenarios.",
-            image = Res.drawable.ic_llm7
-        ),
-        TextModel(
-            title = "Bidara",
-            provider = "llm7",
-            modelName = "bidara",
-            description = "Bidara model optimized for general language understanding and generation tasks.",
-            image = Res.drawable.ic_llm7
         )
     )
 }

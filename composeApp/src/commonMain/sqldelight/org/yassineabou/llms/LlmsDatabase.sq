@@ -1,23 +1,26 @@
     -- === ENTITY RELATIONSHIP DIAGRAM (ERD) ===
-    -- Visual representation of tables and relationships
+    -- Horizontal layout with relationships embedded in table structure
     --
-    -- +----------------+       +---------------------+       +----------------------+
-    -- |    chats       |       |   chat_messages     |       | generated_images     |
-    -- +----------------+       +---------------------+       +----------------------+
-    -- | id (PK)        |<------| chat_id (FK)        |       | id (PK)              |
-    -- | title          |       | message             |       | prompt               |
-    -- | description    |       | is_user             |       | image_data (BLOB)    |
-    -- | text_model_name|       | timestamp           |       | image_model_name     |
-    -- | is_bookmarked  |       +---------------------+       | generated_at         |
-    -- | created_at     |                                     +----------------------+
-    -- +----------------+
+    -- +----------------+     +---------------------+     +---------------------+     +----------------------+
+    -- |     user       |     |       chats         |     |   chat_messages     |     |   generated_images   |
+    -- +----------------+     +---------------------+     +---------------------+     +----------------------+
+    -- | id (PK = 1)    |     | id (PK)             |◄────| chat_id (FK → chats.id) |   | id (PK)              |
+    -- | google_sub_id  |     | title               |     | id (PK)             |     | prompt               |
+    -- | email          |     | description         |     | message             |     | image_data (BLOB)    |
+    -- | username       |     | text_model_name     |     | is_user             |     | image_model_name     |
+    -- | profile_pic_url|     | is_bookmarked       |     | timestamp           |     | generated_at         |
+    -- | created_at     |     | created_at          |     +---------------------+     +----------------------+
+    -- +----------------+     +---------------------+
+    --      ▲
+    --      │ (Implicit: user owns all chats — single-user design)
+    --      └───────────────────────────────────────────────────────┘
     --
+    -- Notes:
+    -- • chats → chat_messages: One-to-many via chat_id (ON DELETE CASCADE)
+    -- • generated_images: Standalone (no FKs; future link to chats possible)
+    -- • Index: idx_chat_messages_chat_id on chat_messages(chat_id)
     -- Index:
     -- - idx_chat_messages_chat_id (chat_id)
-    --
-    -- Relationships:
-    -- - `chat_messages.chat_id` references `chats.id` (handled in app logic)
-    -- - `generated_images` is standalone but can be linked to chats if needed later
 
     -- === TABLE CREATION ===
     -- CHATS TABLE
@@ -59,17 +62,30 @@
         generated_at TEXT DEFAULT CURRENT_TIMESTAMP -- ISO8601 format
     );
 
+    -- === USER TABLE ===
+    -- Stores the information for the SINGLE logged-in user (local database)
+    -- Only ONE user can exist at a time in this table
+    -- When a user signs in, any existing user is replaced
+    CREATE TABLE user (
+        id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1), -- Ensures only one row ever exists
+        google_sub_id TEXT NOT NULL,
+        email TEXT NOT NULL,
+        username TEXT NOT NULL,
+        profile_pic_url TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP -- ISO8601 format
+    );
+
     -- === INDEXES ===
     -- Index for fast lookup of messages by chat_id
     -- Required for efficient loading of chat history
     CREATE INDEX idx_chat_messages_chat_id ON chat_messages(chat_id);
 
     -- === QUERIES FOR CHATS ===
-    -- Get all chats, ordered by creation time (newest first)
-    -- Returns all columns for UI display
-    selectAllChats:
-    SELECT id, title, description, text_model_name, is_bookmarked, created_at
-    FROM chats ORDER BY created_at DESC;
+        -- Get all chats, ordered by creation time (newest first)
+        -- Returns all columns for UI display
+        selectAllChats:
+        SELECT id, title, description, text_model_name, is_bookmarked, created_at
+        FROM chats ORDER BY created_at DESC;
 
     -- Insert a new chat
     -- Expects values: id, title, description, text_model_name, is_bookmarked, created_at
@@ -100,24 +116,43 @@
     INSERT OR REPLACE INTO chat_messages(chat_id, message, is_user, timestamp)
     VALUES (?, ?, ?, ?);
 
-    -- === QUERIES FOR GENERATED IMAGES ===
-    -- Get all generated images, ordered by generation time
-    -- Returns all columns for gallery view
-    selectAllImages:
-    SELECT id, prompt, image_data, image_model_name, generated_at
-    FROM generated_images ORDER BY generated_at DESC;
+     -- === QUERIES FOR GENERATED IMAGES ===
+     -- Get all generated images, ordered by generation time
+     -- Returns all columns for gallery view
+     selectAllImages:
+     SELECT id, prompt, image_data, image_model_name, generated_at
+     FROM generated_images ORDER BY generated_at DESC;
 
-    -- Insert a new generated image
-    -- Expects values: id, prompt, image_data, image_model_name, generated_at
-    insertImage:
-    INSERT INTO generated_images(id, prompt, image_data, image_model_name, generated_at)
+     -- Insert a new generated image
+     -- Expects values: id, prompt, image_data, image_model_name, generated_at
+     insertImage:
+     INSERT INTO generated_images(id, prompt, image_data, image_model_name, generated_at)
+     VALUES (?, ?, ?, ?, ?);
+
+     -- Delete a specific image by ID
+     deleteImageById:
+     DELETE FROM generated_images WHERE id = ?;
+
+     -- Delete all generated images
+     clearAllImages:
+     DELETE FROM generated_images;
+
+     -- === QUERIES FOR USER ===
+
+    -- Get the current logged-in user
+    -- Returns null if no user is logged in
+    getUser:
+    SELECT id, google_sub_id, email, username, profile_pic_url, created_at
+    FROM user WHERE id = 1;
+
+    -- Save user on sign-in
+    -- INSERT OR REPLACE ensures only one user exists
+    -- Always uses id = 1 to enforce single-user constraint
+    insertOrUpdateUser:
+    INSERT OR REPLACE INTO user(google_sub_id, email, username, profile_pic_url, created_at)
     VALUES (?, ?, ?, ?, ?);
 
-    -- Delete a specific image by ID
-    deleteImageById:
-    DELETE FROM generated_images WHERE id = ?;
-
-    -- Delete all generated images
-    clearAllImages:
-    DELETE FROM generated_images;
-
+    -- Delete user on sign-out or account removal
+    -- Clears the single user row
+    deleteUser:
+    DELETE FROM user WHERE id = 1;

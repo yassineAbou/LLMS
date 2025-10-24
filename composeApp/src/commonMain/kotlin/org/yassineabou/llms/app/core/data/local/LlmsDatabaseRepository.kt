@@ -2,6 +2,7 @@ package org.yassineabou.llms.app.core.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -9,9 +10,9 @@ import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.LlmsDatabase
+import org.yassineabou.llms.User
 
 interface LlmsDatabaseInterface {
-
     // Chats + Messages
     suspend fun insertChatWithMessages(chat: Chats, messages: List<Chat_messages>)
 
@@ -31,6 +32,22 @@ interface LlmsDatabaseInterface {
     suspend fun clearAllImages()
 
     suspend fun deleteImagesByIds(ids: List<String>)
+
+
+    //User
+    fun getCurrentUser(): Flow<User?>
+
+    // NEW INTERFACE
+    suspend fun saveUser(
+        googleSubId: String,
+        email: String,
+        username: String,
+        profilePicUrl: String?,
+        createdAt: String
+    )
+
+    suspend fun clearUser()
+
 }
 
 class LlmsDatabaseRepository(
@@ -132,4 +149,33 @@ class LlmsDatabaseRepository(
             }
         }
     }
+
+    override fun getCurrentUser(): Flow<User?> =
+        queries.getUser()
+            .asFlow()
+            .mapToOneOrNull(Dispatchers.Default)
+
+
+    override suspend fun saveUser(
+        googleSubId: String,
+        email: String,
+        username: String,
+        profilePicUrl: String?,
+        createdAt: String
+    ) = withContext(Dispatchers.Default) {
+        queries.insertOrUpdateUser(
+            google_sub_id = googleSubId,
+            email = email,
+            username = username,
+            profile_pic_url = profilePicUrl,
+            created_at = createdAt
+        )
+        Unit
+    }
+
+    override suspend fun clearUser() = withContext(Dispatchers.Default) {
+        queries.deleteUser()
+        Unit
+    }
+
 }

@@ -8,6 +8,7 @@ import kotlin.time.ExperimentalTime
 data class AuthInfo(
     val userId: String,
     val username: String,
+    val email: String,
     val credentialId: String? = null,
     val publicKey: String? = null,
     val authenticatorData: String? = null,
