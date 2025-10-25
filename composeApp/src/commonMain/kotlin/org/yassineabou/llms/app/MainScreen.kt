@@ -7,19 +7,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.window.core.layout.WindowSizeClass
+import com.sunildhiman90.kmauth.core.KMAuthConfig
 import com.sunildhiman90.kmauth.core.KMAuthInitializer
 import org.yassineabou.llms.app.core.di.kodeinViewModel
 import org.yassineabou.llms.app.core.navigation.Screen
@@ -33,8 +29,8 @@ import org.yassineabou.llms.feature.chat.ui.chat.ChatScreen
 import org.yassineabou.llms.feature.chat.ui.history.ChatHistoryScreen
 import org.yassineabou.llms.feature.imagine.ui.FullScreenImage
 import org.yassineabou.llms.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
+import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneLayout
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.rememberSupportingPaneNavigator
 import org.yassineabou.llms.feature.you.ui.YouScreen
@@ -43,8 +39,7 @@ import org.yassineabou.llms.feature.you.ui.YouViewModel
 @Composable
 fun MainScreen() {
 
-    // Uncomment this if you want to try Google Authentication:
-    KMAuthInitializer.init(webClientId = GoogleOAuthConfig.CLIENT_ID)
+    KMAuthInitializer.initialize(KMAuthConfig.forGoogle(webClientId = GoogleOAuthConfig.CLIENT_ID))
     val navController = rememberNavController()
     var isNavigationBarVisible by rememberSaveable { mutableStateOf(true) }
     var isFullScreenImage by rememberSaveable { mutableStateOf(false) }
@@ -60,22 +55,25 @@ fun MainScreen() {
     }
 
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    var isLargeScreen by  remember { mutableStateOf(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) }
+    var isLargeScreen by remember {
+        mutableStateOf(windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND))
+    }
 
     // Customize the layout type based on window size class and isBottomBarVisible
-    val layoutType = when (windowSizeClass.windowWidthSizeClass) {
-        WindowWidthSizeClass.COMPACT -> {
+    val layoutType = when {
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> {
+            NavigationSuiteType.NavigationRail
+        }
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> {
             if (isNavigationBarVisible) NavigationSuiteType.NavigationBar else NavigationSuiteType.None
         }
-        WindowWidthSizeClass.MEDIUM -> {
+        else -> { // Compact
             if (isNavigationBarVisible) NavigationSuiteType.NavigationBar else NavigationSuiteType.None
         }
-        WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationRail
-        else -> NavigationSuiteType.NavigationBar
     }
 
     LaunchedEffect(navBackStackEntry?.destination?.route) {
-        isLargeScreen =! isLargeScreen
+        isLargeScreen = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
         val routeToCheck = listOf(
             Screen.GeneratedImagesScreen.route,
             Screen.FullScreenImage.route,

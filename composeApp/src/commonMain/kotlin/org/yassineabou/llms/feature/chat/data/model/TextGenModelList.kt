@@ -117,6 +117,13 @@ object TextGenModelList {
     // Other/General models
     val otherModels = listOf(
         TextModel(
+            title = "Claudyclaude",
+            provider = "anthropic",
+            modelName = "claudyclaude",
+            description = "Anthropic's advanced reasoning model.",
+            image = Res.drawable.ic_claude
+        ),
+        TextModel(
             title = "Gemini 2.5 Flash Lite",
             provider = "llm7",
             modelName = "gemini-2.5-flash-lite",

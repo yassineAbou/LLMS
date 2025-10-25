@@ -61,7 +61,7 @@ kotlin {
         val desktopMain by getting
 
         wasmJsMain.dependencies {
-            implementation(libs.ktor.client.js)
+            implementation(libs.ktor.client.wasm)
             implementation(libs.sqldelight.web.driver)
             implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.1.0"))
             implementation(npm("sql.js", libs.versions.sqlJs.get()))
@@ -72,7 +72,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
-            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.android)
             implementation(libs.sqldelight.android.driver)
 
         }

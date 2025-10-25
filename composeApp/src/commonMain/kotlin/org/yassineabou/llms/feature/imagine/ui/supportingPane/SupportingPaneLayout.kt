@@ -1,12 +1,6 @@
 package org.yassineabou.llms.feature.imagine.ui.supportingPane
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -17,11 +11,7 @@ import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import org.yassineabou.llms.feature.imagine.ui.FullScreenImage
-import org.yassineabou.llms.feature.imagine.ui.GeneratedImagesScreen
-import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
-import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
-import org.yassineabou.llms.feature.imagine.ui.ImagineScreen
+import org.yassineabou.llms.feature.imagine.ui.*
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
