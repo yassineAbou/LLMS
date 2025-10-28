@@ -2,9 +2,20 @@
 
 package org.yassineabou.llms.repository
 
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.singleOrNull
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
+import org.jetbrains.exposed.v1.r2dbc.insert
+import org.jetbrains.exposed.v1.r2dbc.select
+import org.yassineabou.llms.database.DatabaseFactory.dbQuery
+import org.yassineabou.llms.database.tables.UserEntity
+import org.yassineabou.llms.database.tables.UsersTable
 import kotlin.time.ExperimentalTime
 
-/*
+
 class UserRepository {
 
     suspend fun findByIdOrCreateUser(
@@ -15,7 +26,7 @@ class UserRepository {
     ) = dbQuery {
         // Try to find the user first
         val existingUser = UsersTable.select(UsersTable.id eq id)
-            .map { toUser(it) }
+            .map { toUser(it)  }
             .singleOrNull()
 
         if (existingUser != null) {
@@ -47,7 +58,6 @@ class UserRepository {
     }
 
     // Helper function to map a ResultRow to a User data class
-    @OptIn(ExperimentalTime::class)
     private fun toUser(row: ResultRow): UserEntity = UserEntity(
         id = row[UsersTable.id],
         username = row[UsersTable.username],
@@ -56,5 +66,3 @@ class UserRepository {
         createdAt = row[UsersTable.createdAt]
     )
 }
-
- */

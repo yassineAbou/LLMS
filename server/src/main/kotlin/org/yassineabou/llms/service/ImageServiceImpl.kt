@@ -3,6 +3,13 @@
 
 package org.yassineabou.llms.service
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import org.yassineabou.llms.api.GeneratedImageDto
+import org.yassineabou.llms.api.ImageService
+import org.yassineabou.llms.database.tables.GeneratedImageEntity
+import org.yassineabou.llms.repository.ImageRepository
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 /**
@@ -10,7 +17,7 @@ import kotlin.time.ExperimentalTime
  * It uses the ImageRepository to interact with the database and maps
  * database entities to network-friendly DTOs.
  */
-/*
+
 class ImageServiceImpl(private val imageRepository: ImageRepository) : ImageService {
 
     override suspend fun createImage(
@@ -44,7 +51,7 @@ class ImageServiceImpl(private val imageRepository: ImageRepository) : ImageServ
         )
     }
 
-    override suspend fun getImagesForUser(userId: String): Flow<GeneratedImageDto> {
+    override fun getImagesForUser(userId: String): Flow<GeneratedImageDto> {
         // 1. Call the repository to get the list of image entities.
         val imageEntities = imageRepository.getImagesForUser(userId)
 
@@ -71,5 +78,3 @@ class ImageServiceImpl(private val imageRepository: ImageRepository) : ImageServ
         return imageRepository.clearAllImagesForUser(userId)
     }
 }
-
- */

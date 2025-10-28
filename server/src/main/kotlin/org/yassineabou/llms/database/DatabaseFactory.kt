@@ -1,6 +1,5 @@
 package org.yassineabou.llms.database
 
-import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils

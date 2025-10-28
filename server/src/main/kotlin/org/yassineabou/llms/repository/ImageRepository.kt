@@ -3,6 +3,8 @@
 
 package org.yassineabou.llms.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.SortOrder
@@ -35,11 +37,15 @@ class ImageRepository {
         }.let { image }
     }
 
-    suspend fun getImagesForUser(userId: String) = dbQuery {
-        GeneratedImagesTable.select(GeneratedImagesTable.userId eq userId )
-            .orderBy(GeneratedImagesTable.generatedAt, SortOrder.DESC)
-            .map { toGeneratedImage(it) }
+    fun getImagesForUser(userId: String): Flow<GeneratedImageEntity> = flow {
+        val images = dbQuery {
+            GeneratedImagesTable.select(GeneratedImagesTable.userId eq userId)
+                .orderBy(GeneratedImagesTable.generatedAt, SortOrder.DESC)
+                .map { toGeneratedImage(it) }
+        }
+        images.collect { emit(it) }
     }
+
 
     suspend fun deleteImage(userId: String, imageId: String): Int = dbQuery {
         GeneratedImagesTable.deleteWhere {

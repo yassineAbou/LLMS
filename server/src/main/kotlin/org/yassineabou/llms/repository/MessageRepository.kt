@@ -3,6 +3,8 @@
 
 package org.yassineabou.llms.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
@@ -40,21 +42,24 @@ class MessageRepository {
         }.let { message.copy(id = it[ChatMessagesTable.id]) }
     }
 
-    suspend fun getChatsForUser(userId: String) = dbQuery {
-        ChatsTable.selectAll()
-            .where { ChatsTable.userId eq userId }
-            .orderBy(ChatsTable.createdAt, SortOrder.DESC)
-            .map { row ->
-                ChatEntity(
-                    id = row[ChatsTable.id],
-                    userId = row[ChatsTable.userId],
-                    title = row[ChatsTable.title],
-                    description = row[ChatsTable.description],
-                    textModelName = row[ChatsTable.textModelName],
-                    isBookmarked = row[ChatsTable.isBookmarked],
-                    createdAt = row[ChatsTable.createdAt]
-                )
-            }
+    fun getChatsForUser(userId: String): Flow<ChatEntity> = flow {
+        val chats = dbQuery {
+            ChatsTable.selectAll()
+                .where { ChatsTable.userId eq userId }
+                .orderBy(ChatsTable.createdAt, SortOrder.DESC)
+                .map { row ->
+                    ChatEntity(
+                        id = row[ChatsTable.id],
+                        userId = row[ChatsTable.userId],
+                        title = row[ChatsTable.title],
+                        description = row[ChatsTable.description],
+                        textModelName = row[ChatsTable.textModelName],
+                        isBookmarked = row[ChatsTable.isBookmarked],
+                        createdAt = row[ChatsTable.createdAt]
+                    )
+                }
+        }
+        chats.collect { emit(it) }
     }
 
     suspend fun clearChatMessages(userId: String, chatId: String): Int = dbQuery {
