@@ -41,5 +41,8 @@ dependencies {
     implementation(libs.exposed.r2dbc)
     implementation(libs.r2dbc.postgresql)
     implementation(libs.r2dbc.pool)
+    implementation(libs.exposed.migration.r2dbc)
+
+    implementation(libs.kodein.di.ktor.server)
 
 }

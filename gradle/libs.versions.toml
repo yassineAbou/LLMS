@@ -7,26 +7,26 @@ androidx-activityCompose = "1.11.0"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
-androidx-lifecycle = "2.9.5"
+androidx-lifecycle = "2.9.6"
 
 
 # Android
-agp = "8.12.0"
+agp = "8.12.3"
 android-compileSdk = "36"
 android-minSdk = "28"
 #noinspection EditedTargetSdkVersion
 android-targetSdk = "36"
 
 # Kotlin
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
 kotlinx-collections-immutable = "0.4.0"
 serialization = "1.9.0"
 
 # Compose
-compose-plugin = "1.9.1"
-adaptive = "1.2.0-alpha05"
+compose-plugin = "1.9.3"
+adaptive = "1.2.0"
 multiplatformPaths = "0.2.2"
 navigationCompose = "2.9.1"
 foundationLayoutAndroid = "1.9.4"
@@ -44,11 +44,11 @@ androidx-espresso-core = "3.7.0"
 
 # UI Components
 dragselect = "3.1.0"
-multiplatformMarkdownRendererM3 = "0.37.0"
+multiplatformMarkdownRendererM3 = "0.38.1"
 sketch = "4.3.1"
 
 # Exposed
-exposed = "1.0.0-rc-2"
+exposed = "1.0.0-rc-3"
 r2dbcPostgres = "0.8.13.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 
@@ -57,17 +57,17 @@ r2dbcPool = "1.0.2.RELEASE"
 kmauth-google = "0.3.1"
 
 # Networking
-ktor = "3.3.1"
+ktor = "3.3.2"
 
 # Utilities
 kermit = "2.0.8"
-logback = "1.5.19"
+logback = "1.5.21"
 
 # Dependency Injection
 kodeinDi = "7.28.0"
 
 # Rpc
-kotlinx-rpc = "0.10.0"
+kotlinx-rpc = "0.10.1"
 
 
 
@@ -127,6 +127,14 @@ kotlinx-rpc-krpc-ktor-client = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krp
 kotlinx-rpc-krpc-ktor-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-ktor-server", version.ref = "kotlinx-rpc" }
 kotlinx-rpc-krpc-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-serialization-json", version.ref = "kotlinx-rpc" }
 
+# Exposed Core Components
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+exposed-r2dbc = { module = "org.jetbrains.exposed:exposed-r2dbc", version.ref = "exposed" }
+r2dbc-postgresql = { module = "io.r2dbc:r2dbc-postgresql", version.ref = "r2dbcPostgres" }
+exposed-migration-r2dbc = { module = "org.jetbrains.exposed:exposed-migration-r2dbc", version.ref = "exposed" }
+
 
 # Kotlin
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -135,12 +143,6 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 
-# Exposed Core Components
-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
-exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
-exposed-r2dbc = { module = "org.jetbrains.exposed:exposed-r2dbc", version.ref = "exposed" }
-r2dbc-postgresql = { module = "io.r2dbc:r2dbc-postgresql", version.ref = "r2dbcPostgres" }
 
 # UI Components
 dragselect = { module = "com.dragselectcompose:dragselect", version.ref = "dragselect" }
@@ -162,8 +164,9 @@ kmauth-google = { module = "io.github.sunildhiman90:kmauth-google", version.ref 
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
-# Dependency Injection
+# Kodein
 kodein-di = { module = "org.kodein.di:kodein-di", version.ref = "kodeinDi" }
+kodein-di-ktor-server = { group = "org.kodein.di", name = "kodein-di-framework-ktor-server-jvm", version.ref = "kodeinDi" }
 
 
 

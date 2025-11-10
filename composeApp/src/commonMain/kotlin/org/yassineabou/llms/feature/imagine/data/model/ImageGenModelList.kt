@@ -3,6 +3,7 @@ package org.yassineabou.llms.feature.imagine.data.model
 import androidx.compose.runtime.Immutable
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_flux
+import llms.composeapp.generated.resources.ic_nanobanana
 import llms.composeapp.generated.resources.ic_openai
 import llms.composeapp.generated.resources.ic_sdxl_turbo
 
@@ -27,6 +28,12 @@ object ImageGenModelList {
             description = "A model for generating images from text descriptions with enhanced understanding.",
             image = Res.drawable.ic_openai, // Assuming you have a drawable
             modelName = "gptimage"
+        ),
+        ImageModel(
+            title = "Nanobanana",
+            description = "Compact and efficient image generation model optimized for speed.",
+            image = Res.drawable.ic_nanobanana,
+            modelName = "nanobanana"
         )
     )
 

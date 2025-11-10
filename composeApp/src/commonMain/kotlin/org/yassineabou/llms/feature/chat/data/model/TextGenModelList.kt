@@ -56,6 +56,13 @@ object TextGenModelList {
             image = Res.drawable.ic_openai
         ),
         TextModel(
+            title = "GPT-4.1 Nano",
+            provider = "llm7",
+            modelName = "gpt-4.1-nano-2025-04-14",
+            description = "Lightweight GPT-4.1 variant for fast, efficient text generation.",
+            image = Res.drawable.ic_openai
+        ),
+        TextModel(
             title = "GPT-O4 Mini",
             provider = "llm7",
             modelName = "gpt-o4-mini-2025-04-16",

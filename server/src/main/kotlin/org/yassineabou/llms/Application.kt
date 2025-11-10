@@ -1,16 +1,26 @@
 package org.yassineabou.llms
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import io.ktor.server.plugins.cors.routing.CORS
-import io.ktor.server.routing.routing
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.routing.*
+import kotlinx.coroutines.launch
 import kotlinx.rpc.krpc.ktor.server.Krpc
 import kotlinx.rpc.krpc.ktor.server.rpc
 import kotlinx.rpc.krpc.serialization.json.json
+import org.kodein.di.direct
+import org.kodein.di.instance
+import org.kodein.di.ktor.closestDI
+import org.kodein.di.ktor.di
+import org.yassineabou.llms.api.ChatService
+import org.yassineabou.llms.api.ImageService
+import org.yassineabou.llms.api.MessageService
+import org.yassineabou.llms.api.UserService
+import org.yassineabou.llms.di.initializeDatabase
+import org.yassineabou.llms.di.kodeinDatabaseModule
+import org.yassineabou.llms.di.kodeinServicesModule
 
 
 fun main() {
@@ -25,8 +35,17 @@ fun main() {
 
 @Suppress("unused")
 fun Application.module() {
-    install(Krpc)
+    di {
 
+        import(kodeinDatabaseModule())
+        import(kodeinServicesModule())
+    }
+
+    launch {
+        initializeDatabase()
+    }
+
+    install(Krpc)
     installCORS(environment = Environment().cors)
 
     routing {
@@ -37,10 +56,15 @@ fun Application.module() {
                 }
             }
 
+            val di = closestDI()
+
+            registerService<ChatService> { di.direct.instance() }
+            registerService<ImageService> { di.direct.instance() }
+            registerService<MessageService> { di.direct.instance() }
+            registerService<UserService> { di.direct.instance() }
         }
     }
 }
-
 
 fun Application.installCORS(environment: Environment.Cors) {
     install(CORS) {
