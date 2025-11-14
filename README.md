@@ -106,40 +106,61 @@ Our development process is divided into five key steps:
 - [Exposed](https://github.com/JetBrains/Exposed) (Kotlin SQL Framework)
 
 ## Package Structure
-```  
-app/
-├── core/
-│   ├── data
-│   │   ├── local
-│   │   └── remote
-│   ├── di  
-│   ├── navigation  
-│   ├── sharedViews  
-│   ├── theme  
-│   └── util  
-└── feature/
-    ├── chat/
-    │   ├── data
-    │   │   └── model
-    │   └── ui
-    │       ├── chat
-    │       ├── history
-    │       ├── listDetailPane
-    │       └── view
-    ├── imagine/
-    │   ├── data
-    │   │   └── model
-    │   └── ui
-    │       ├── supportingPane
-    │       ├── util
-    │       └── view
-    └── you/
-        ├── model
-        └──  ui
-            ├── util
-            └── view
-    
-    
+```
+LLMS/
+├── composeApp/    #  Main application module for the UI, built with Compose Multiplatform
+│   └── src/
+│       └── org/yassineabou/llms/app/
+│           ├── App.kt
+│           ├── MainScreen.kt
+│           └── core/
+│               ├── data/
+│               ├── di/
+│               ├── navigation/
+│               ├── sharedViews/
+│               ├── theme/
+│               └── util/
+│           └── feature/
+│               ├── chat/
+│               │   ├── data/model/
+│               │   └── ui/
+│               │       ├── chat/
+│               │       ├── history/
+│               │       ├── listDetailPane/
+│               │       └── view/
+│               ├── imagine/
+│               │   ├── data/model/
+│               │   └── ui/
+│               │       ├── supportingPane/
+│               │       ├── util/
+│               │       └── view/
+│               └── you/
+│                   ├── model/
+│                   └── ui/
+│                       ├── util/
+│                       └── view/
+│
+├── server/     #  Backend server module,using Ktor, handling API requests and database interactions.
+│   └── src/
+│       └── org/yassineabou/llms/
+│           ├── Application.kt
+│           ├── Environment.kt
+│           └── database/
+│               ├── tables/
+│               ├── di/
+│               ├── repository/
+│               ├── service/
+│               └── DatabaseFactory.kt
+│
+└── shared/    #  Shared API contract and data models, enabling type-safe communication between compose and server module.
+    └── src/
+        └── org/yassineabou/llms/api/
+            ├── ChatService.kt
+            ├── ImageService.kt
+            ├── MessageService.kt
+            ├── UserService.kt
+            ├── Constants.kt
+            └── Platform.kt
 ```
 ## 🔵🔴🟡🟢 Google Authentication Setup
 This project supports Google Authentication for data syncing across devices (part of Step 5 in Progress). Keys and sensitive files (e.g., `google-services.json`, `GoogleService-Info.plist`) are hidden and not committed to GitHub for security. To enable real Google auth after cloning the repo, follow these platform-specific steps. We've included fake data in the code (e.g., in `commonMain/YouViewModel.kt`) for testing without setup—uncomment the real auth code when ready.

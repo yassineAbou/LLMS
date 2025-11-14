@@ -32,7 +32,7 @@ navigationCompose = "2.9.1"
 foundationLayoutAndroid = "1.9.4"
 
 # SQLdelight
-sqlDelight = "2.1.0"
+sqlDelight = "2.2.1"
 sqlJs = "1.8.0"
 webPackPlugin = "9.1.0"
 
@@ -64,7 +64,7 @@ kermit = "2.0.8"
 logback = "1.5.21"
 
 # Dependency Injection
-kodeinDi = "7.28.0"
+kodeinDi = "7.29.0"
 
 # Rpc
 kotlinx-rpc = "0.10.1"

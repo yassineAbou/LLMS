@@ -1,21 +1,46 @@
-/*
- * ──────────────────────────────────────────────────────────────────────────────
- *  GOOGLE AUTHENTICATION SET-UP INSTRUCTIONS
- * ──────────────────────────────────────────────────────────────────────────────
- * 1. Go to the Firebase Console: https://console.firebase.google.com/
- * 2. Create a new Firebase project (or select an existing one).
- * 3. Inside the project, click “Add app” ➜ choose “Android”.
- * 4. Register your package name, SHA-1 debug / release fingerprints, etc.
- * 5. Download the generated `google-services.json` file.
- * 6. Replace THIS file (`app/google-services.json`) with the downloaded file.
- * 7. ALSO open Google Cloud Console → APIs & Services → Credentials
- *    (https://console.cloud.google.com/apis/credentials)
- *    • Click “Create Credentials → OAuth client ID”.
- *    • Choose “Android”, enter the same package name and SHA-1 fingerprint,
- *      then click “Create”.
- * 8. Sync / rebuild the project. Google Authentication will now work.
- * ──────────────────────────────────────────────────────────────────────────────
- */
 {
-  /* Your real google-services.json content goes here */
+  "project_info": {
+    "project_number": "899837635305",
+    "project_id": "llms-27ec1",
+    "storage_bucket": "llms-27ec1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899837635305:android:e82fff0eb16e22eaef5e78",
+        "android_client_info": {
+          "package_name": "org.yassineabou.llms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899837635305-28u5pm0np7ilnrbiv42su91r22053nc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDetNbEO-5Vy14bTbQulNgewRkm46kHnus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899837635305-28u5pm0np7ilnrbiv42su91r22053nc0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "899837635305-kngv2dk02b4umpp56qgmmeei69hkndps.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.yassineabou.playground.LLMS"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }
