@@ -1,11 +1,12 @@
 package org.yassineabou.llms.app.core.data.remote.rpc
 
 
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.encodedPath
-import io.ktor.http.takeFrom
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.client.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.rpc.krpc.ktor.client.rpc
 import kotlinx.rpc.krpc.ktor.client.rpcConfig
 import kotlinx.rpc.krpc.serialization.json.json
@@ -17,11 +18,26 @@ import org.yassineabou.llms.api.MessageService
 import org.yassineabou.llms.api.UserService
 
 class RpcClientProvider(
-    private val baseUrl: String = "http://10.0.2.2:8080",
-    private val rpcPath: String = "/rpc"
+    private val baseUrl: String = "PUT YOUR LOCAL MACHINE ADRESSS HERE",
+    private val rpcPath: String = "/api"
 ) {
     // Shared Ktor HttpClient - similar to the sample
     private val httpClient = HttpClient {
+
+        install(WebSockets)
+
+
+
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                  co.touchlab.kermit.Logger.withTag("KtorClient").i { message }
+                }
+            }
+            level = LogLevel.ALL
+        }
+
+
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

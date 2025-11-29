@@ -8,13 +8,12 @@ import com.sunildhiman90.kmauth.google.KMAuthGoogle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
+import org.yassineabou.llms.app.core.data.async.AsyncManager
 import org.yassineabou.llms.feature.you.data.model.AuthInfo
 import org.yassineabou.llms.feature.you.data.model.AuthState
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-class YouViewModel(private val llmsDatabaseRepository: LlmsDatabaseInterface) : ViewModel() {
+class YouViewModel(private val asyncManager: AsyncManager) : ViewModel() {
 
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
@@ -35,7 +34,7 @@ class YouViewModel(private val llmsDatabaseRepository: LlmsDatabaseInterface) : 
 
     private fun checkInitialAuthState() {
         viewModelScope.launch {
-            llmsDatabaseRepository.getCurrentUser().collect { dbUser ->
+            asyncManager.getCurrentUser().collect { dbUser ->
                 if (dbUser != null) {
                     // User found in local database - restore session
                     _authInfo.value = AuthInfo(
@@ -94,12 +93,11 @@ class YouViewModel(private val llmsDatabaseRepository: LlmsDatabaseInterface) : 
             _isLoggedIn.value = true
             _authState.value = AuthState.Success
 
-            llmsDatabaseRepository.saveUser(
-                googleSubId = userId,
+            asyncManager.onUserLogin(
+                userId = userId,
                 email = email,
                 username = username,
-                profilePicUrl = profilePicUrl,
-                createdAt = Clock.System.now().toString()
+                profilePicUrl = profilePicUrl
             )
         }
     }
@@ -111,7 +109,7 @@ class YouViewModel(private val llmsDatabaseRepository: LlmsDatabaseInterface) : 
             _authInfo.value = null
             _authState.value = AuthState.Idle
 
-            llmsDatabaseRepository.clearUser()
+            asyncManager.onUserLogout()
 
 
             // --- REAL GOOGLE AUTH SIGN OUT ---

@@ -3,7 +3,6 @@ package org.yassineabou.llms.feature.imagine.data.model
 import androidx.compose.runtime.Immutable
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_flux
-import llms.composeapp.generated.resources.ic_nanobanana
 import llms.composeapp.generated.resources.ic_openai
 import llms.composeapp.generated.resources.ic_sdxl_turbo
 
@@ -14,26 +13,20 @@ object ImageGenModelList {
         ImageModel(
             title = "Flux",
             description = "A powerful and fast model for high-quality, general-purpose image generation.",
-            image = Res.drawable.ic_flux, // Assuming you have a drawable
+            image = Res.drawable.ic_flux,
             modelName = "flux"
         ),
         ImageModel(
             title = "Turbo",
             description = "An extremely fast model, great for rapid previews and real-time generation.",
-            image = Res.drawable.ic_sdxl_turbo, // Assuming you have a drawable
+            image = Res.drawable.ic_sdxl_turbo,
             modelName = "turbo"
         ),
         ImageModel(
-            title = "GPT Image",
+            title = "GPT Image 1 Mini",
             description = "A model for generating images from text descriptions with enhanced understanding.",
-            image = Res.drawable.ic_openai, // Assuming you have a drawable
+            image = Res.drawable.ic_openai,
             modelName = "gptimage"
-        ),
-        ImageModel(
-            title = "Nanobanana",
-            description = "Compact and efficient image generation model optimized for speed.",
-            image = Res.drawable.ic_nanobanana,
-            modelName = "nanobanana"
         )
     )
 

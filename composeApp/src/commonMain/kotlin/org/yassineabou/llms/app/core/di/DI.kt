@@ -14,14 +14,19 @@ import kotlinx.serialization.json.Json
 import org.kodein.di.*
 import org.yassineabou.llms.LlmsDatabase
 import org.yassineabou.llms.app.core.data.local.DatabaseFactory
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
 import org.yassineabou.llms.app.core.data.remote.ai.AiApi
 import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.KtorApi
+import org.yassineabou.llms.app.core.data.remote.rpc.RemoteDataSource
+import org.yassineabou.llms.app.core.data.remote.rpc.RpcClientProvider
+import org.yassineabou.llms.app.core.data.async.AsyncManager
+import org.yassineabou.llms.app.core.data.async.AsyncManagerImpl
+import org.yassineabou.llms.app.core.data.async.SyncConfig
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.you.ui.YouViewModel
+import kotlin.time.Duration.Companion.seconds
 
 
 /**
@@ -75,6 +80,40 @@ val commonModule = DI.Module("commonModule") {
     bindSingleton<AiRepository> { AiRepository(aiApi = instance()) }
 
     // ========================================================================================
+    //                                  Async
+    // ========================================================================================
+
+    bindSingleton<RpcClientProvider> {
+        RpcClientProvider(
+            baseUrl = "http://10.0.2.2:8080", // Android emulator localhost
+            rpcPath = "/rpc"
+        )
+    }
+
+    bindSingleton<RemoteDataSource> {
+        RemoteDataSource(rpcClientProvider = instance())
+    }
+
+    bindSingleton<SyncConfig> {
+        SyncConfig(
+            syncInterval = 30.seconds,
+            retryDelay = 5.seconds,
+            maxRetries = 3
+        )
+    }
+
+    bindSingleton<AsyncManager> {
+        AsyncManagerImpl(
+            localDb = instance(),
+            remoteDataSource = instance(),
+            config = instance()
+        )
+    }
+
+
+
+
+    // ========================================================================================
     //                                  Database
     // ========================================================================================
 
@@ -89,7 +128,7 @@ val commonModule = DI.Module("commonModule") {
         LlmsDatabase(driver = instance())
     }
 
-    bindSingleton<LlmsDatabaseInterface> {
+    bindSingleton<LlmsDatabaseRepository> {
         LlmsDatabaseRepository(llmsDatabase = instance())
     }
 
@@ -102,9 +141,9 @@ val commonModule = DI.Module("commonModule") {
     // Koin has a special `viewModel` scope. In Kodein, ViewModels are typically
     // not singletons. They should be created for each screen. The `provider`
     // binding is perfect for this, as it creates a new instance every time.
-    bindProvider { ImagineViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
-    bindProvider { ChatViewModel(aiRepository = instance(), llmsDatabaseRepository = instance()) }
-    bindProvider { YouViewModel( llmsDatabaseRepository = instance()) }
+    bindProvider { ImagineViewModel(aiRepository = instance(), asyncManager = instance()) }
+    bindProvider { ChatViewModel(aiRepository = instance(), asyncManager = instance()) }
+    bindProvider { YouViewModel( asyncManager = instance()) }
 }
 
 /**

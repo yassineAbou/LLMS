@@ -19,29 +19,15 @@
 
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images. and keep everything safe and in sync across your devices.
 
-## Releases
-### ✅ Available Releases
-- **Android app**
-   
-  Download the latest version directly from the Release section
+### 🚀 How to Run 
+You can run the application for **Android**, **Desktop**, **WebAssembly**, and **iOS** directly from your IDE.
 
-- **WebAssembly**
-  
-  Check the about section  
+1. Open the project in **Android Studio** or **IntelliJ IDEA**.
+2. Select your desired run configuration from the dropdown menu (e.g., `composeApp`, `desktopRun`, `iosApp`).
+3. Click the **Run ▶️** button.
 
-- **Desktop(macOS/Windows/Linux)**:
-  
-  1- Build the release by running this command:  
-     ```bash
-     ./gradlew packageReleaseDistributionForCurrentOS
-     ```
-  2- Find binaries in:  
-     ```bash
-     composeApp/build/compose/binaries/
-     ```
-- **iOS**:
-  
-  *Run iOS emulator via Xcode, Intellij Idea or Android Studio*
+*For **iOS**, you can alternatively open the `iosApp` folder in **Xcode** and run it from there.*
+
 
 
 ## 🎨 Demo
@@ -110,37 +96,41 @@ Our development process is divided into five key steps:
 LLMS/
 ├── composeApp/    #  Main application module for the UI, built with Compose Multiplatform
 │   └── src/
-│       └── org/yassineabou/llms/app/
-│           ├── App.kt
-│           ├── MainScreen.kt
-│           └── core/
-│               ├── data/
-│               ├── di/
-│               ├── navigation/
-│               ├── sharedViews/
-│               ├── theme/
-│               └── util/
-│           └── feature/
-│               ├── chat/
-│               │   ├── data/model/
-│               │   └── ui/
-│               │       ├── chat/
-│               │       ├── history/
-│               │       ├── listDetailPane/
-│               │       └── view/
-│               ├── imagine/
-│               │   ├── data/model/
-│               │   └── ui/
-│               │       ├── supportingPane/
-│               │       ├── util/
-│               │       └── view/
-│               └── you/
-│                   ├── model/
-│                   └── ui/
-│                       ├── util/
-│                       └── view/
+│       ├── org/yassineabou/llms/app/
+│       │   ├── App.kt
+│       │   ├── MainScreen.kt
+│       │   ├── core/
+│       │   │   ├── data/
+│       │   │   │   ├── async/
+│       │   │   │   ├── local/
+│       │   │   │   └── remote/
+│       │   │   ├── di/
+│       │   │   ├── navigation/
+│       │   │   ├── sharedViews/
+│       │   │   ├── theme/
+│       │   │   └── util/
+│       │   └── feature/
+│       │       ├── chat/
+│       │       │   ├── data/model/
+│       │       │   └── ui/
+│       │       │       ├── chat/
+│       │       │       ├── history/
+│       │       │       ├── listDetailPane/
+│       │       │       └── view/
+│       │       ├── imagine/
+│       │       │   ├── data/model/
+│       │       │   └── ui/
+│       │       │       ├── supportingPane/
+│       │       │       ├── util/
+│       │       │       └── view/
+│       │       └── you/
+│       │           ├── model/
+│       │           └── ui/
+│       │               ├── util/
+│       │               └── view/
+│       └── sqldelight/org/yassineabou/llms/    # SQLDelight source files defining the local database schema
 │
-├── server/     #  Backend server module,using Ktor, handling API requests and database interactions.
+├── server/     #  Backend server module, using Ktor, handling API requests and database interactions.
 │   └── src/
 │       └── org/yassineabou/llms/
 │           ├── Application.kt

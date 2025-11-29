@@ -8,20 +8,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import io.ktor.util.encodeBase64
+import io.ktor.util.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
 import org.yassineabou.llms.Generated_images
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
 import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
+import org.yassineabou.llms.app.core.data.async.AsyncManager
 import org.yassineabou.llms.app.core.util.FileKit
 import org.yassineabou.llms.app.core.util.ImageMetadataUtil
 import org.yassineabou.llms.app.core.util.saveImage
@@ -37,7 +33,7 @@ import kotlin.uuid.Uuid
 
 class ImagineViewModel(
     private val aiRepository: AiRepository,
-    private val llmsDatabaseRepository: LlmsDatabaseInterface
+    private val asyncManager: AsyncManager
 ) : ViewModel() {
 
     // Existing state
@@ -76,7 +72,7 @@ class ImagineViewModel(
 
         // Make sure this collection is actually working
         viewModelScope.launch {
-            llmsDatabaseRepository.getAllImages()
+            asyncManager.getAllImages()
                 .distinctUntilChanged() // Only emit when data actually changes
                 .collect { images ->
                     Logger.d { "Database images updated: ${images.size} images" }
@@ -192,7 +188,7 @@ class ImagineViewModel(
     fun deleteImage(id: String) {
         viewModelScope.launch {
             if (_listGeneratedImages.value.isNotEmpty()) {
-                llmsDatabaseRepository.deleteImageById(id)
+                asyncManager.deleteImageById(id)
             }
         }
     }
@@ -210,7 +206,7 @@ class ImagineViewModel(
 
 
             viewModelScope.launch {
-                llmsDatabaseRepository.insertImage(newImage)
+                asyncManager.insertImage(newImage)
             }
         }
     }
@@ -219,7 +215,7 @@ class ImagineViewModel(
         viewModelScope.launch {
             val idsToDelete = selectedImages.map { it.id }
             if (idsToDelete.isEmpty()) return@launch
-            llmsDatabaseRepository.deleteImagesByIds(ids = idsToDelete)
+            asyncManager.deleteImagesByIds(ids = idsToDelete)
         }
     }
 

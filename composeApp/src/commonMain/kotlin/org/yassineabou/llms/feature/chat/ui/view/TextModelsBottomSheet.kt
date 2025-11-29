@@ -82,18 +82,6 @@ fun TextModelsBottomSheet(
                     ) {
                         item {
                             TextModelType(
-                                type = "DeepSeek",
-                                textModelsList = TextGenModelList.deepseekModels,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
                                 type = "Openai",
                                 textModelsList = TextGenModelList.openaiModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
@@ -120,18 +108,6 @@ fun TextModelsBottomSheet(
                             TextModelType(
                                 type = "Mistral",
                                 textModelsList = TextGenModelList.mistralModels,
-                                tempSelectedTextModel = tempSelectedTextModel,
-                                onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
-                                onInfoClick = { textModel ->
-                                    isInfoIconClicked = true
-                                    infoTextModel = textModel
-                                }
-                            )
-                        }
-                        item {
-                            TextModelType(
-                                type = "Llama",
-                                textModelsList = TextGenModelList.llamaModels,
                                 tempSelectedTextModel = tempSelectedTextModel,
                                 onTextModelSelected = { chatViewModel.selectTempTextModel(it) },
                                 onInfoClick = { textModel ->

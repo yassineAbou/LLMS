@@ -10,10 +10,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.Chat_messages
 import org.yassineabou.llms.Chats
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseInterface
-import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
 import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
+import org.yassineabou.llms.app.core.data.async.AsyncManager
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import kotlin.coroutines.cancellation.CancellationException
@@ -25,7 +24,7 @@ import kotlin.uuid.Uuid
 
 class ChatViewModel(
     private val aiRepository: AiRepository,
-    private val llmsDatabaseRepository: LlmsDatabaseInterface
+    private val asyncManager: AsyncManager
 ) : ViewModel() {
 
     // ========================================================================================
@@ -75,7 +74,7 @@ class ChatViewModel(
     init {
         // Start collecting chats from repository
         viewModelScope.launch {
-            llmsDatabaseRepository.getAllChats().collect { chats ->
+            asyncManager.getAllChats().collect { chats ->
                 _allChats.update { chats }
             }
         }
@@ -249,7 +248,7 @@ class ChatViewModel(
 
     fun deleteChats(chats: Chats) {
         viewModelScope.launch {
-            llmsDatabaseRepository.deleteChatById(chats.id)
+            asyncManager.deleteChatById(chats.id)
             resetCurrentChat()
         }
 
@@ -257,7 +256,7 @@ class ChatViewModel(
 
     fun clearChats() {
         viewModelScope.launch {
-            llmsDatabaseRepository.clearAllChats()
+            asyncManager.clearAllChats()
             resetCurrentChat()
         }
     }
@@ -267,7 +266,7 @@ class ChatViewModel(
             val updatedChat = chat.copy(
                 is_bookmarked = if (chat.is_bookmarked == 1L) 0L else 1L
             )
-            llmsDatabaseRepository.insertChat(updatedChat)
+            asyncManager.insertChat(updatedChat)
         }
     }
 
@@ -305,7 +304,7 @@ class ChatViewModel(
                 created_at = Clock.System.now().toString()
             )
 
-            llmsDatabaseRepository.insertChatWithMessages(
+            asyncManager.insertChatWithMessages(
                 chat = chats,
                 messages = _currentChatMessages.map {
                     it.copy(chat_id = chatId)
@@ -317,7 +316,7 @@ class ChatViewModel(
     private fun loadChats(chats: Chats) {
         viewModelScope.launch {
             _currentChatMessages.clear()
-            val chatMessages = llmsDatabaseRepository.getMessagesByChatId(chats.id).firstOrNull() ?: emptyList()
+            val chatMessages = asyncManager.getMessagesByChatId(chats.id).firstOrNull() ?: emptyList()
             _currentChatMessages.addAll(chatMessages)
 
         }
