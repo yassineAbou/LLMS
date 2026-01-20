@@ -1,22 +1,10 @@
 package org.yassineabou.llms.feature.chat.ui.history
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,7 +13,7 @@ import androidx.navigation.NavController
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.listDetailPane.ListDetailPane
-import org.yassineabou.llms.feature.chat.ui.view.ClearHistoryDialogContent
+import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.feature.chat.ui.view.HistoryHorizontalPager
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 import org.yassineabou.llms.feature.imagine.ui.view.DropDownDialog
@@ -78,7 +66,9 @@ private fun ChatHistoryContent(
                     showClearHistoryDialog = false
                 }
             ) {
-                ClearHistoryDialogContent(
+                ConfirmationDialogContent(
+                    title = "Are you Sure?",
+                    message = "This will permanently delete all your chat history. This action cannot be undone.",
                     onDismiss = { showClearHistoryDialog = false },
                     onConfirm = {
                         chatViewModel.clearChats()

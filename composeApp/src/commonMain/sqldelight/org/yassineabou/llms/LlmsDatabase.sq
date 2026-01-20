@@ -103,6 +103,7 @@
     clearAllChats:
     DELETE FROM chats;
 
+
     -- === QUERIES FOR CHAT MESSAGES ===
     -- Get messages for a specific chat, ordered by timestamp
     -- Used to load chat history
@@ -115,6 +116,9 @@
     insertMessage:
     INSERT OR REPLACE INTO chat_messages(chat_id, message, is_user, timestamp)
     VALUES (?, ?, ?, ?);
+
+    deleteMessagesByChatId:
+        DELETE FROM chat_messages WHERE chat_id = ?;
 
      -- === QUERIES FOR GENERATED IMAGES ===
      -- Get all generated images, ordered by generation time

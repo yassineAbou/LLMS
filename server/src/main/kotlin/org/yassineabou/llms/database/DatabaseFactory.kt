@@ -3,6 +3,8 @@ package org.yassineabou.llms.database
 import io.ktor.util.logging.KtorSimpleLogger
 import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.IsolationLevel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.jetbrains.exposed.v1.migration.r2dbc.MigrationUtils
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
@@ -101,11 +103,19 @@ object DatabaseFactory {
         }
     }
 
+    /**
+     * Execute a database query within a transaction.
+     * For single operations that return a value.
+     */
     suspend fun <T> dbQuery(block: suspend R2dbcTransaction.() -> T): T =
-        try {
-            suspendTransaction(db = database, statement = block)
-        } catch (e: Exception) {
-            logger.error("❌ Database query failed: ${e.message}", e)
-            throw e
-        }
+        suspendTransaction(db = database, statement = block)
+
+    /**
+     * Execute a database query that returns a list, then convert to Flow.
+     * This ensures all DB operations happen within the transaction.
+     */
+    fun <T> dbQueryAsFlow(block: suspend R2dbcTransaction.() -> List<T>): Flow<T> = flow {
+        val results = suspendTransaction(db = database, statement = block)
+        results.forEach { emit(it) }
+    }
 }

@@ -42,23 +42,26 @@ class KtorApi(
 ) : AiApi {
 
     override suspend fun generateImage(request: PollinationsImageRequest): ByteArray {
-        // Use the correct encoding for URL path segments
         val encodedPrompt = request.prompt.encodeURLPathPart()
         val url = AiEndPoint.POLLINATIONS_BASE_URL + encodedPrompt
 
         return client.get(url) {
-            // Build parameters in a type-safe way from the request object
+            // Authentication via Bearer token
+            header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
+
+            // Required parameters
             parameter("model", request.model)
             parameter("width", request.width)
             parameter("height", request.height)
-            parameter("token", AiEndPoint.POLLINATIONS_TOKEN) // Add token parameter
 
+            // Optional parameters
             request.seed?.let { parameter("seed", it) }
-            if (request.nologo) parameter("nologo", "true")
-            if (request.private) parameter("private", "true")
             if (request.enhance) parameter("enhance", "true")
+            request.negativePrompt?.let { parameter("negative_prompt", it) }
             if (request.safe) parameter("safe", "true")
-            request.referrer?.let { parameter("referrer", it) }
+            request.quality?.let { parameter("quality", it) }
+            request.image?.let { parameter("image", it) }
+            if (request.transparent) parameter("transparent", "true")
 
             timeout {
                 requestTimeoutMillis = 300_000 // 5 minutes

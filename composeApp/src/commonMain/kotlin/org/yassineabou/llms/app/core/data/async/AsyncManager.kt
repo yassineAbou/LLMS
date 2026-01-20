@@ -61,6 +61,8 @@ interface AsyncManager {
      */
     suspend fun onUserLogout()
 
+    suspend fun deleteUserAccount()
+
     // =================================================================================
     //                              CHAT OPERATIONS
     // =================================================================================

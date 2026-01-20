@@ -22,7 +22,7 @@ import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.util.Animations
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.chat.ChatContent
-import org.yassineabou.llms.feature.chat.ui.view.ClearHistoryDialogContent
+import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.llms.feature.imagine.ui.view.NoContentMessage
 
@@ -111,7 +111,9 @@ private fun HistoryListPane(
                     showClearHistoryDialog = false
                 }
             ) {
-                ClearHistoryDialogContent(
+                ConfirmationDialogContent(
+                    title = "Are you Sure?",
+                    message = "This will permanently delete all your chat history. This action cannot be undone.",
                     onDismiss = { showClearHistoryDialog = false },
                     onConfirm = {
                         chatViewModel.clearChats()

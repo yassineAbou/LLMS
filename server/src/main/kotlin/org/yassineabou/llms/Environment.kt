@@ -1,7 +1,7 @@
 package org.yassineabou.llms
 
 private const val DEFAULT_HOST = "0.0.0.0"
-private const val DEFAULT_PORT = 8080
+private const val DEFAULT_PORT = 8081
 
 data class Environment(
     val http: Http = Http(),
@@ -19,7 +19,8 @@ data class Environment(
                 "localhost:3000",
                 "localhost:8080",
                 "localhost:8081",
-                "127.0.0.1:8080"
+                "127.0.0.1:8080",
+                "127.0.0.1:8081"
             )
     )
 }

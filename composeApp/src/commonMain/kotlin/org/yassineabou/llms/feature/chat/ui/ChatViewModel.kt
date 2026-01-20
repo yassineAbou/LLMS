@@ -72,7 +72,6 @@ class ChatViewModel(
     // endregion
 
     init {
-        // Start collecting chats from repository
         viewModelScope.launch {
             asyncManager.getAllChats().collect { chats ->
                 _allChats.update { chats }
@@ -103,10 +102,13 @@ class ChatViewModel(
         if (modelChanged) handleModelChangeWorkflow() else confirmSelectedTextModel()
     }
 
+
     private fun handleModelChangeWorkflow() {
-        if (currentChatMessages.isNotEmpty()) finalizeCurrentChat()
         confirmSelectedTextModel()
-        if (currentChatMessages.isNotEmpty()) startNewChat(forceNew = true) else resetCurrentChat()
+        // Simply reset for new chat - previous messages are already auto-saved
+        if (_currentChatMessages.isNotEmpty()) {
+            resetCurrentChat()
+        }
     }
     // endregion
 
@@ -159,7 +161,7 @@ class ChatViewModel(
     // region Response Generation Implementation
     // ========================================================================================
     private fun initiateResponseGeneration() {
-        val userMessage = _currentChatMessages.lastOrNull { it.is_user == 1L}?.message ?: ""
+        val userMessage = _currentChatMessages.lastOrNull { it.is_user == 1L }?.message ?: ""
         _currentChatMessages.add(
             Chat_messages(
                 id = 0L,
@@ -174,6 +176,7 @@ class ChatViewModel(
             prompt = userMessage
         )
     }
+
 
     private fun performResponseGeneration(
         messageIndex: Int,
@@ -197,11 +200,13 @@ class ChatViewModel(
                     }
                 }
                 _generationState.value = GenerationState.Success
+
+                autoSaveCurrentChat()
+
             } catch (e: Exception) {
                 handleGenerationError(e, messageIndex)
-            } finally {
-                _generationState.value = GenerationState.Success
             }
+
         }
     }
 
@@ -218,8 +223,48 @@ class ChatViewModel(
             )
         }
     }
-
     // endregion
+
+    // ========================================================================================
+    //                              Auto-Save Function
+    // ========================================================================================
+
+    private fun autoSaveCurrentChat() {
+        if (_currentChatMessages.isEmpty()) return
+
+        viewModelScope.launch {
+            val isNewChat = _selectedChats.value == null
+            val chatId = if (isNewChat) {
+                Uuid.random().toString()
+            } else {
+                _selectedChats.value!!.id
+            }
+
+            val description = generateChatDescription()
+
+            val chat = Chats(
+                id = chatId,
+                title = if (isNewChat) {
+                    "Chat ${_allChats.value.size + 1}"
+                } else {
+                    _selectedChats.value!!.title
+                },
+                description = description,
+                text_model_name = _selectedTextModel.value.modelName,
+                is_bookmarked = _selectedChats.value?.is_bookmarked ?: 0L,
+                created_at = _selectedChats.value?.created_at ?: Clock.System.now().toString()
+            )
+
+            asyncManager.insertChatWithMessages(
+                chat = chat,
+                messages = _currentChatMessages.map { it.copy(chat_id = chatId) }
+            )
+
+            if (isNewChat) {
+                _selectedChats.value = chat
+            }
+        }
+    }
 
     // ========================================================================================
     //                                  Chat History Management
@@ -227,17 +272,8 @@ class ChatViewModel(
 
     // region Public Chat Methods
     // ========================================================================================
-    private fun finalizeCurrentChat() {
-        if (currentChatMessages.isNotEmpty()) startNewChat(forceNew = false)
-    }
 
     fun startNewChat(forceNew: Boolean = false) {
-        if (currentChatMessages.isEmpty()) {
-            resetCurrentChat()
-            return
-        }
-        val description = generateChatDescription()
-        createChatHistory(description)
         resetCurrentChat()
     }
 
@@ -249,9 +285,10 @@ class ChatViewModel(
     fun deleteChats(chats: Chats) {
         viewModelScope.launch {
             asyncManager.deleteChatById(chats.id)
-            resetCurrentChat()
+            if (_selectedChats.value?.id == chats.id) {
+                resetCurrentChat()
+            }
         }
-
     }
 
     fun clearChats() {
@@ -267,6 +304,10 @@ class ChatViewModel(
                 is_bookmarked = if (chat.is_bookmarked == 1L) 0L else 1L
             )
             asyncManager.insertChat(updatedChat)
+
+            if (_selectedChats.value?.id == chat.id) {
+                _selectedChats.value = updatedChat
+            }
         }
     }
 
@@ -289,36 +330,12 @@ class ChatViewModel(
         return if (fullDescription.length > 150) "${fullDescription.take(150)}..." else fullDescription
     }
 
-    private fun createChatHistory(description: String) {
-        viewModelScope.launch {
-
-            val isNewChat = _selectedChats.value == null
-            val chatId = if (isNewChat) Uuid.random().toString() else _selectedChats.value!!.id
-
-            val chats = Chats(
-                id = chatId,
-                title = if (isNewChat) "Chat ${_allChats.value.size + 1}" else _selectedChats.value!!.title,
-                description = description,
-                text_model_name = _selectedTextModel.value.modelName,
-                is_bookmarked = 0L,
-                created_at = Clock.System.now().toString()
-            )
-
-            asyncManager.insertChatWithMessages(
-                chat = chats,
-                messages = _currentChatMessages.map {
-                    it.copy(chat_id = chatId)
-                }
-            )
-        }
-    }
 
     private fun loadChats(chats: Chats) {
         viewModelScope.launch {
             _currentChatMessages.clear()
             val chatMessages = asyncManager.getMessagesByChatId(chats.id).firstOrNull() ?: emptyList()
             _currentChatMessages.addAll(chatMessages)
-
         }
     }
     // endregion

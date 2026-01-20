@@ -5,15 +5,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PollinationsImageRequest(
     val prompt: String,
-    val model: String,
+    val model: String = "zimage",
     val width: Int = 1024,
     val height: Int = 1024,
-    val seed: Long? = null,
-    val nologo: Boolean = false,
-    val private: Boolean = false,
+    val seed: Int? = null,
     val enhance: Boolean = false,
+    val negativePrompt: String? = null,
     val safe: Boolean = false,
-    val referrer: String? = null
-    // You can add the 'image' parameter here if you plan to support image-to-image
-    // val image: String? = null
+    val quality: String? = null,       // gptimage only: "low", "medium", "high", "hd"
+    val image: String? = null,          // Reference image URL for image-to-image
+    val transparent: Boolean = false    // gptimage only: transparent background
 )

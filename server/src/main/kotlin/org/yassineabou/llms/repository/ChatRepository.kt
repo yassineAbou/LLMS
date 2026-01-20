@@ -5,6 +5,7 @@ package org.yassineabou.llms.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -12,6 +13,7 @@ import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.upsert
 import org.yassineabou.llms.database.DatabaseFactory.dbQuery
+import org.yassineabou.llms.database.DatabaseFactory.dbQueryAsFlow
 import org.yassineabou.llms.database.tables.ChatEntity
 import org.yassineabou.llms.database.tables.ChatsTable
 import kotlin.time.ExperimentalTime
@@ -36,24 +38,25 @@ class ChatRepository {
         }.let { chatEntity }
     }
 
-    fun getChatsForUser(userId: String): Flow<ChatEntity> = flow {
-        val chats = dbQuery {
-            ChatsTable.selectAll()
-                .where { ChatsTable.userId eq userId }
-                .orderBy(ChatsTable.createdAt, SortOrder.DESC)
-                .map { row ->
-                    ChatEntity(
-                        id = row[ChatsTable.id],
-                        userId = row[ChatsTable.userId],
-                        title = row[ChatsTable.title],
-                        description = row[ChatsTable.description],
-                        textModelName = row[ChatsTable.textModelName],
-                        isBookmarked = row[ChatsTable.isBookmarked],
-                        createdAt = row[ChatsTable.createdAt]
-                    )
-                }
-        }
-        chats.collect { emit(it) }
+    // ⬇️ CHANGED: Use dbQueryAsFlow instead of flow + dbQuery
+    fun getChatsForUser(userId: String): Flow<ChatEntity> = dbQueryAsFlow {
+        // The entire query runs inside the transaction
+        // Then results are emitted as a Flow outside the transaction
+        ChatsTable.selectAll()
+            .where { ChatsTable.userId eq userId }
+            .orderBy(ChatsTable.createdAt, SortOrder.DESC)
+            .map { row ->
+                ChatEntity(
+                    id = row[ChatsTable.id],
+                    userId = row[ChatsTable.userId],
+                    title = row[ChatsTable.title],
+                    description = row[ChatsTable.description],
+                    textModelName = row[ChatsTable.textModelName],
+                    isBookmarked = row[ChatsTable.isBookmarked],
+                    createdAt = row[ChatsTable.createdAt]
+                )
+            }
+            .toList()
     }
 
     suspend fun deleteChat(userId: String, chatId: String): Int = dbQuery {
@@ -61,5 +64,4 @@ class ChatRepository {
             (ChatsTable.id eq chatId) and (ChatsTable.userId eq userId)
         }
     }
-
 }

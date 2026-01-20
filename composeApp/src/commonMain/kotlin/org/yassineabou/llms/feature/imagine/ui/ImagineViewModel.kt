@@ -40,10 +40,10 @@ class ImagineViewModel(
     private val _listGeneratedImages: MutableStateFlow<MutableList<UrlExample>> = MutableStateFlow(mutableListOf())
     val listGeneratedImages: StateFlow<MutableList<UrlExample>> = _listGeneratedImages
 
-    private val _tempSelectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.newImageModel.first())
+    private val _tempSelectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.defaultModel)
     val tempSelectedImageModel: StateFlow<ImageModel> = _tempSelectedImageModel
 
-    private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.newImageModel.first())
+    private val _selectedImageModel = MutableStateFlow<ImageModel>(ImageGenModelList.defaultModel)
     val selectedImageModel: StateFlow<ImageModel> = _selectedImageModel
 
     private val _imageGenerationState = MutableStateFlow<GenerationState>(GenerationState.Success)
@@ -124,13 +124,20 @@ class ImagineViewModel(
         imageGenerationJob = viewModelScope.launch {
             _imageGenerationState.value = GenerationState.Loading(id = _currentImageIndex.value)
 
+            val currentModel = selectedImageModel.value
+
             val request = PollinationsImageRequest(
                 prompt = prompt,
-                model = selectedImageModel.value.modelName, // e.g., "flux"
-                width = 1024,  // You can get these from UI state if needed
+                model = currentModel.modelName,
+                width = 1024,
                 height = 1024,
-                seed = 42L, // Example seed
-                nologo = true  // Example parameter
+                seed = null,  // Use null for random, or specific value for reproducibility
+                enhance = false,
+                negativePrompt = "worst quality, blurry",
+                safe = false,
+                // GPT Image specific options
+                quality = if (currentModel.modelName == "gptimage") "medium" else null,
+                transparent = false
             )
 
             val result = aiRepository.generateImage(request)
@@ -139,11 +146,14 @@ class ImagineViewModel(
                 result.isSuccess -> {
                     val image = result.getOrNull()
                     if (image != null) {
-                        insertImage(prompt = prompt, imageBytes = image.imageBytes, imageModel = selectedImageModel.value)
+                        insertImage(
+                            prompt = prompt,
+                            imageBytes = image.imageBytes,
+                            imageModel = currentModel
+                        )
                         _imageGenerationState.value = GenerationState.Success
                     }
                 }
-
                 result.isFailure -> {
                     _imageGenerationState.value = GenerationState.Failure(
                         result.exceptionOrNull()?.message ?: "Image generation failed"

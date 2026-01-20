@@ -63,14 +63,16 @@ class RemoteDataSource(
         userId: String,
         title: String,
         description: String?,
-        textModelName: String
+        textModelName: String,
+        isBookmarked: Boolean
     ): Chats {
         val dto = rpcClientProvider.chatService.createChat(
             id = id,
             userId = userId,
             title = title,
             description = description,
-            textModelName = textModelName
+            textModelName = textModelName,
+            isBookmarked = isBookmarked
         )
         return dto.toLocalChat()
     }

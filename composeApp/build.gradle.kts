@@ -69,7 +69,7 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.ktor.client.android)
@@ -77,19 +77,15 @@ kotlin {
 
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             implementation(libs.ui.backhandler)
-
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.kotlinx.coroutines.core)
 
             implementation(libs.kotlinx.rpc.krpc.client)
             implementation(libs.kotlinx.rpc.krpc.serialization.json)
@@ -105,14 +101,17 @@ kotlin {
 
 
 
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.material3AdaptiveNavigationSuite)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.material.icons.extended)
+            implementation(libs.compose.material3.adaptive.navigation.suite)
 
 
             implementation(libs.adaptive)
             implementation(libs.adaptive.layout)
             implementation(libs.adaptive.navigation)
+
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kotlinx.coroutines.core)
 
             implementation(libs.sketch.compose)
             implementation(libs.sketch.http)
@@ -185,8 +184,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt")
             )
         }
     }
@@ -198,7 +196,7 @@ android {
         compose = true
     }
     dependencies {
-        debugImplementation(compose.uiTooling)
+        debugImplementation(libs.compose.ui.tooling)
     }
 }
 dependencies {

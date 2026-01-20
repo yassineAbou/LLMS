@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -29,6 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +49,9 @@ import com.github.panpf.sketch.AsyncImage
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_google
 import org.yassineabou.llms.app.core.sharedViews.SnackbarController
+import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
+import org.yassineabou.llms.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.llms.feature.you.data.model.AuthInfo
 import org.yassineabou.llms.feature.you.data.model.AuthState
 import org.yassineabou.llms.feature.you.ui.view.AuthProvider
@@ -87,7 +93,8 @@ fun YouScreen(youViewModel: YouViewModel) {
         isLoggedIn = isLoggedIn,
         authInfo = authInfo,
         onLogin = { youViewModel.onLogin()},
-        onLogout = { youViewModel.onLogout() }
+        onLogout = { youViewModel.onLogout() },
+        onDeleteAccount = { youViewModel.onDeleteAccount() }
     )
 }
 
@@ -98,7 +105,8 @@ fun YouContent(
     isLoggedIn: Boolean,
     authInfo: AuthInfo?,
     onLogin: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onDeleteAccount: () -> Unit
 ) {
     val isLargeScreen = rememberIsLargeScreen()
     val horizontalPadding = if (isLargeScreen) 48.dp else 16.dp
@@ -118,7 +126,8 @@ fun YouContent(
         ) {
             ProfileContent(
                 authInfo = authInfo,
-                onLogout = onLogout
+                onLogout = onLogout,
+                onDeleteAccount = onDeleteAccount
             )
         }
 
@@ -136,7 +145,8 @@ fun YouContent(
 @Composable
 fun ProfileContent(
     authInfo: AuthInfo?,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onDeleteAccount: () -> Unit
 ) {
     // Use authInfo for dynamic data; fallback to defaults
     val displayName = authInfo?.username ?: "User"
@@ -144,6 +154,8 @@ fun ProfileContent(
     // CHANGED: Display accurate information instead of a fake email
     val displayDetail = authInfo?.username ?: "user@example.com"
     val displayLabel = displayName.take(1).uppercase() // For avatar
+
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -173,13 +185,32 @@ fun ProfileContent(
             label = displayLabel,
             email = displayDetail,
             imageUrl = authInfo?.imageUrl,
-            onLogout = onLogout,
+            onRemove = { showDeleteAccountDialog = true },
             modifier = Modifier.padding(top = 32.dp)
         )
 
         VerifiedUserAnimation(modifier = Modifier.size(200.dp))
 
         AuthenticationSuccessContent()
+    }
+
+    if (showDeleteAccountDialog) {
+        DropDownDialog(
+            onDismissRequest = { showDeleteAccountDialog = false }
+        ) {
+            ConfirmationDialogContent(
+                title = "Delete Account?",
+                message = "This will permanently delete your account and all your data including chats and images. This action cannot be undone.",
+                icon = Icons.Filled.Delete,
+                confirmText = "Delete",
+                dismissText = "Cancel",
+                onConfirm = {
+                    showDeleteAccountDialog = false
+                    onDeleteAccount()
+                },
+                onDismiss = { showDeleteAccountDialog = false }
+            )
+        }
     }
 }
 
@@ -218,7 +249,7 @@ private fun AccountCard(
     email: String,
     imageUrl: String?,
     modifier: Modifier = Modifier,
-    onLogout: () -> Unit,
+    onRemove: () -> Unit,
 ) {
     AdaptiveLayout(modifier = modifier) {
         Card(
@@ -255,7 +286,7 @@ private fun AccountCard(
                     )
                 }
 
-                RemoveAccountButton(onLogout)
+                RemoveAccountButton(onRemove)
             }
         }
     }

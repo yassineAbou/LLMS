@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------------------------------
 
 # AndroidX
-androidx-activityCompose = "1.11.0"
+androidx-activityCompose = "1.12.2"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
@@ -11,25 +11,25 @@ androidx-lifecycle = "2.9.6"
 
 
 # Android
-agp = "8.12.3"
+agp = "9.0.0"
 android-compileSdk = "36"
 android-minSdk = "28"
 #noinspection EditedTargetSdkVersion
 android-targetSdk = "36"
 
 # Kotlin
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinx-coroutines = "1.10.2"
-kotlinx-datetime = "0.7.1"
 kotlinx-collections-immutable = "0.4.0"
 serialization = "1.9.0"
 
 # Compose
-compose-plugin = "1.9.3"
-adaptive = "1.2.0"
+compose-plugin = "1.10.0"
+adaptive = "1.3.0-alpha02"
 multiplatformPaths = "0.2.2"
 navigationCompose = "2.9.1"
-foundationLayoutAndroid = "1.9.4"
+foundationLayoutAndroid = "1.10.1"
+
 
 # SQLdelight
 sqlDelight = "2.2.1"
@@ -43,31 +43,31 @@ androidx-test-junit = "1.3.0"
 androidx-espresso-core = "3.7.0"
 
 # UI Components
-dragselect = "3.1.0"
-multiplatformMarkdownRendererM3 = "0.38.1"
+dragselect = "3.2.0"
+multiplatformMarkdownRendererM3 = "0.39.1"
 sketch = "4.3.1"
 
 # Exposed
-exposed = "1.0.0-rc-3"
-r2dbcPostgres = "0.8.13.RELEASE"
+exposed = "1.0.0-rc-4"
+r2dbcPostgres = "1.1.1.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 
 
 # Authentificcation
-kmauth-google = "0.3.1"
+kmauth-google = "0.3.3"
 
 # Networking
-ktor = "3.3.2"
+ktor = "3.3.3"
 
 # Utilities
 kermit = "2.0.8"
-logback = "1.5.21"
+logback = "1.5.25"
 
 # Dependency Injection
-kodeinDi = "7.29.0"
+kodeinDi = "7.30.0"
 
 # Rpc
-kotlinx-rpc = "0.10.1"
+kotlinx-rpc = "0.10.2"
 
 
 
@@ -94,8 +94,24 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 
+# Compose
+adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
+adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
+adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
+multiplatform-paths = { module = "me.sujanpoudel.multiplatform.utils:multiplatform-paths", version.ref = "multiplatformPaths" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-plugin" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-plugin" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-plugin" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-plugin" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-plugin" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version = "1.10.0-alpha05" }
+compose-material3-adaptive-navigation-suite = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version = "1.10.0-alpha05" }
+
 # SQLdelight
-r2dbc-pool = { module = "io.r2dbc:r2dbc-pool", version.ref = "r2dbcPool" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
@@ -111,14 +127,6 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
-# Compose
-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
-multiplatform-paths = { module = "me.sujanpoudel.multiplatform.utils:multiplatform-paths", version.ref = "multiplatformPaths" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-plugin" }
 
 # Kotlinx-rpc
 kotlinx-rpc-core = { module = "org.jetbrains.kotlinx:kotlinx-rpc-core", version.ref = "kotlinx-rpc" }
@@ -133,13 +141,13 @@ exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "e
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
 exposed-r2dbc = { module = "org.jetbrains.exposed:exposed-r2dbc", version.ref = "exposed" }
-r2dbc-postgresql = { module = "io.r2dbc:r2dbc-postgresql", version.ref = "r2dbcPostgres" }
+r2dbc-postgresql = { module = "org.postgresql:r2dbc-postgresql", version.ref = "r2dbcPostgres" }
+r2dbc-pool = { module = "io.r2dbc:r2dbc-pool", version.ref = "r2dbcPool" }
 exposed-migration-r2dbc = { module = "org.jetbrains.exposed:exposed-migration-r2dbc", version.ref = "exposed" }
 
 
 # Kotlin
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
@@ -158,9 +166,6 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
-# Authentification
-kmauth-google = { module = "io.github.sunildhiman90:kmauth-google", version.ref = "kmauth-google" }
-
 # Utilities
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
@@ -168,6 +173,12 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 # Kodein
 kodein-di = { module = "org.kodein.di:kodein-di", version.ref = "kodeinDi" }
 kodein-di-ktor-server = { group = "org.kodein.di", name = "kodein-di-framework-ktor-server-jvm", version.ref = "kodeinDi" }
+
+# Authentification
+kmauth-google = { module = "io.github.sunildhiman90:kmauth-google", version.ref = "kmauth-google" }
+
+# Material 3 & Icons
+compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version = "1.7.3" }
 
 
 

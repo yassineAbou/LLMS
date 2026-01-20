@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.yassineabou.llms.app.core.di
 
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.you.ui.YouViewModel
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 
 /**
@@ -85,8 +88,8 @@ val commonModule = DI.Module("commonModule") {
 
     bindSingleton<RpcClientProvider> {
         RpcClientProvider(
-            baseUrl = "http://10.0.2.2:8080", // Android emulator localhost
-            rpcPath = "/rpc"
+            baseUrl = "http://127.0.0.1:8081",
+            rpcPath =  "/api"
         )
     }
 

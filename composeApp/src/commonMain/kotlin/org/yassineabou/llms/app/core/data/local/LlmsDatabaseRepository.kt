@@ -25,6 +25,9 @@ interface LlmsDatabaseInterface {
     // Messages
     fun getMessagesByChatId(chatId: String): Flow<List<Chat_messages>>
 
+    suspend fun deleteMessagesByChatId(chatId: String)
+
+
     // Images
     fun getAllImages(): Flow<List<Generated_images>>
     suspend fun insertImage(image: Generated_images)
@@ -67,7 +70,7 @@ class LlmsDatabaseRepository(
         messages: List<Chat_messages>
     ) = withContext(Dispatchers.Default) {
         queries.transaction {
-            // 1. Insert chat first
+            // 1. Insert/Replace chat
             queries.insertChat(
                 id = chat.id,
                 title = chat.title,
@@ -77,10 +80,13 @@ class LlmsDatabaseRepository(
                 created_at = chat.created_at
             )
 
-            // 2. Insert messages in the same transaction
+            // 2. DELETE existing messages for this chat first
+            queries.deleteMessagesByChatId(chat.id)
+
+            // 3. Insert all messages fresh
             messages.forEach { message ->
                 queries.insertMessage(
-                    chat_id = chat.id,  // Ensure same chat ID
+                    chat_id = chat.id,
                     message = message.message,
                     is_user = message.is_user,
                     timestamp = message.timestamp
@@ -115,6 +121,12 @@ class LlmsDatabaseRepository(
         queries.selectMessagesByChatId(chatId)
             .asFlow()
             .mapToList(Dispatchers.Default)
+
+    override suspend fun deleteMessagesByChatId(chatId: String) = withContext(Dispatchers.Default) {
+        queries.deleteMessagesByChatId(chatId)
+        Unit
+    }
+
 
     override fun getAllImages(): Flow<List<Generated_images>> =
         queries.selectAllImages()

@@ -72,7 +72,7 @@ class YouViewModel(private val asyncManager: AsyncManager) : ViewModel() {
             }
 
             // --- Guard Clause 2: Handle invalid user data ---
-            val userId = user.idToken
+            val userId = user.id
             if (userId?.isBlank() != false) {
                 _authState.value = AuthState.Error("Failed to get valid user ID from Google.")
                 return@launch
@@ -115,6 +115,27 @@ class YouViewModel(private val asyncManager: AsyncManager) : ViewModel() {
             // --- REAL GOOGLE AUTH SIGN OUT ---
             // Uncomment this to sign out from Google as well
             googleAuthManager.signOut()
+        }
+    }
+
+    fun onDeleteAccount() {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+
+            try {
+                asyncManager.deleteUserAccount()
+
+                googleAuthManager.signOut()
+
+                _isLoggedIn.value = false
+                _authInfo.value = null
+                _authState.value = AuthState.Idle
+
+            } catch (e: Exception) {
+                _authState.value = AuthState.Error(
+                    e.message ?: "Failed to delete account"
+                )
+            }
         }
     }
 

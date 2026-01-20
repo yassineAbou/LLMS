@@ -33,7 +33,8 @@ interface ChatService {
         userId: String,
         title: String,
         description: String?,
-        textModelName: String
+        textModelName: String,
+        isBookmarked: Boolean
     ): ChatDto
 
     /**

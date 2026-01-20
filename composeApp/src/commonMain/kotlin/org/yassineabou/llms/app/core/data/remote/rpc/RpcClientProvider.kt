@@ -2,6 +2,7 @@ package org.yassineabou.llms.app.core.data.remote.rpc
 
 
 import io.ktor.client.*
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.plugins.websocket.*
@@ -16,63 +17,108 @@ import org.yassineabou.llms.api.ChatService
 import org.yassineabou.llms.api.ImageService
 import org.yassineabou.llms.api.MessageService
 import org.yassineabou.llms.api.UserService
+import kotlin.time.Duration.Companion.seconds
 
+
+/**
+ * Provides kRPC client services for remote communication.
+ * Uses WebSockets internally for RPC calls.
+ */
 class RpcClientProvider(
-    private val baseUrl: String = "PUT YOUR LOCAL MACHINE ADRESSS HERE",
-    private val rpcPath: String = "/api"
+    private val baseUrl: String,
+    private val rpcPath: String
 ) {
-    // Shared Ktor HttpClient - similar to the sample
+    private val logger = co.touchlab.kermit.Logger.withTag("KtorClient")
+
+    private val jsonConfig = Json {
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+        isLenient = true
+        prettyPrint = false
+    }
+
+
     private val httpClient = HttpClient {
+        install(WebSockets) {
+            pingInterval = 15.seconds
+            maxFrameSize = Long.MAX_VALUE
+        }
 
-        install(WebSockets)
-
+        install(ContentNegotiation) {
+            json(jsonConfig)
+        }
 
 
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
-                  co.touchlab.kermit.Logger.withTag("KtorClient").i { message }
+                    this@RpcClientProvider.logger.i { message }
                 }
             }
             level = LogLevel.ALL
         }
 
 
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                encodeDefaults = true
-            })
+        install(HttpTimeout) {
+            requestTimeoutMillis = 60_000
+            connectTimeoutMillis = 30_000
+            socketTimeoutMillis = 60_000
         }
-        // Optional: Add logging, timeouts, etc.
     }
 
-    // Create RPC client using the same pattern as the sample
-    private val rpcClient = httpClient.rpc {
-        url {
-            // Parse baseUrl to extract host, port, etc.
-            takeFrom(baseUrl)
-            encodedPath = rpcPath
-        }
 
-        rpcConfig {
-            serialization {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    encodeDefaults = true
-                })
+    private val rpcClient by lazy {
+        logger.i { "🔌 Initializing RPC client: $baseUrl$rpcPath" }
+
+        httpClient.rpc {
+            url {
+                // Parse the base URL
+                val urlBuilder = URLBuilder(baseUrl)
+
+                // Set WebSocket protocol based on HTTP protocol
+                protocol = when (urlBuilder.protocol) {
+                    URLProtocol.HTTPS -> URLProtocol.WSS
+                    else -> URLProtocol.WS
+                }
+
+                host = urlBuilder.host
+                port = urlBuilder.port
+                encodedPath = rpcPath
+
+                logger.i { "🔌 RPC URL: ${this.buildString()}" }
+            }
+
+            rpcConfig {
+                serialization {
+                    json(jsonConfig)
+                }
             }
         }
     }
 
-    // Expose typed service interfaces using the same approach
-    val chatService: ChatService by lazy { rpcClient.withService<ChatService>() }
-    val imageService: ImageService by lazy { rpcClient.withService<ImageService>() }
-    val messageService: MessageService by lazy { rpcClient.withService<MessageService>() }
-    val userService: UserService by lazy { rpcClient.withService<UserService>() }
+    // Service proxies
+    val chatService: ChatService by lazy {
+        logger.d { "Creating ChatService proxy" }
+        rpcClient.withService<ChatService>()
+    }
 
-    // Cleanup
+    val imageService: ImageService by lazy {
+        logger.d { "Creating ImageService proxy" }
+        rpcClient.withService<ImageService>()
+    }
+
+    val messageService: MessageService by lazy {
+        logger.d { "Creating MessageService proxy" }
+        rpcClient.withService<MessageService>()
+    }
+
+    val userService: UserService by lazy {
+        logger.d { "Creating UserService proxy" }
+        rpcClient.withService<UserService>()
+    }
+
     fun close() {
+        logger.i { "Closing RPC client" }
         httpClient.close()
     }
 }

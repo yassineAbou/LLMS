@@ -19,7 +19,8 @@ class ChatServiceImpl(private val chatRepository: ChatRepository) : ChatService 
         userId: String,
         title: String,
         description: String?,
-        textModelName: String
+        textModelName: String,
+        isBookmarked: Boolean
     ): ChatDto {
         // 1. Create a server-side Entity. The server is authoritative for the ID and timestamp.
         val newChatEntity = ChatEntity(
@@ -28,7 +29,7 @@ class ChatServiceImpl(private val chatRepository: ChatRepository) : ChatService 
             title = title,
             description = description,
             textModelName = textModelName,
-            isBookmarked = false, // New chats are not bookmarked by default
+            isBookmarked = isBookmarked, // New chats are not bookmarked by default
             createdAt = Clock.System.now()
         )
 
