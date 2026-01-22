@@ -32,9 +32,9 @@ import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 interface AiApi {
     suspend fun generateImage(request: PollinationsImageRequest): ByteArray
 
-
-    fun streamChatCompletions(baseUrl: String, apiKey: String, request: ChatCompletionRequest): Flow<String>
+    fun streamChatCompletions(request: ChatCompletionRequest): Flow<String>
 }
+
 
 class KtorApi(
     private val client: HttpClient,
@@ -70,17 +70,19 @@ class KtorApi(
     }
 
 
-    override fun streamChatCompletions(baseUrl: String, apiKey: String, request: ChatCompletionRequest): Flow<String> = flow {
+    override fun streamChatCompletions(request: ChatCompletionRequest): Flow<String> = flow {
         try {
-            client.preparePost(baseUrl) {
-                header(HttpHeaders.Authorization, "Bearer $apiKey")
+            client.preparePost(AiEndPoint.POLLINATIONS_TEXT_URL) {
+                header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Text.EventStream)
                 setBody(request)
+                timeout {
+                    requestTimeoutMillis = 120_000 // 2 minutes for text
+                }
             }.execute { response ->
                 if (!response.status.isSuccess()) {
                     val errorBody = response.bodyAsText()
-                    //Logger.e { "API request failed: ${response.status} - $errorBody" }
                     throw Exception("API request failed: ${response.status} - $errorBody")
                 }
 
@@ -118,7 +120,6 @@ class KtorApi(
                 }
             }
         } catch (e: Exception) {
-            //Logger.e { "Global exception during streaming: ${e.message}" }
             throw e
         }
     }
@@ -129,28 +130,28 @@ class KtorApi(
         }
 
         try {
-            // --- PRIMARY LOGIC: Try to parse as a standard streaming chunk ---
+            // Try to parse as a standard streaming chunk
             val chunk = json.decodeFromString<ChatCompletionChunk>(dataJson)
             chunk.choices.forEach { choice ->
                 choice.delta.content?.let { content ->
-                    // Your cleaning logic is fine, let's keep it
                     val cleanedContent = cleanContent(content)
                     if (cleanedContent.isNotBlank()) {
                         emit(cleanedContent)
                     }
                 }
+                // Also handle reasoning content if present
+                choice.delta.reasoningContent?.let { reasoning ->
+                    // Optionally emit reasoning or handle separately
+                }
             }
         } catch (e: SerializationException) {
-            // --- FALLBACK LOGIC: If it's not a chunk, try parsing as a complete response ---
+            // Fallback: Try parsing as a complete response
             try {
                 val completeResponse = json.decodeFromString<ChatCompletionResponse>(dataJson)
                 completeResponse.choices.forEach { choice ->
-                    // This is the raw content from the full response
                     val rawContent = choice.message.content
 
-                    // --- NEW: Add a check here ---
-                    // Try to parse the rawContent itself as another ChatCompletionResponse
-                    // This handles cases where the model wraps its response in a JSON string.
+                    // Handle potentially nested JSON
                     try {
                         val nestedResponse = json.decodeFromString<ChatCompletionResponse>(rawContent)
                         val nestedContent = nestedResponse.choices.firstOrNull()?.message?.content ?: ""
@@ -159,7 +160,7 @@ class KtorApi(
                             emit(cleanedContent)
                         }
                     } catch (nestedException: Exception) {
-                        // If it's not nested JSON, treat it as plain text. THIS IS THE NORMAL PATH.
+                        // Not nested JSON, treat as plain text
                         val cleanedContent = cleanContent(rawContent)
                         if (cleanedContent.isNotBlank()) {
                             emit(cleanedContent)
@@ -167,22 +168,19 @@ class KtorApi(
                     }
                 }
             } catch (e2: Exception) {
-                // If both parsing attempts fail, it might be malformed.
-                // As a last resort, emit the raw string if it doesn't look like JSON.
+                // Last resort: emit raw string if it doesn't look like JSON
                 if (!dataJson.trim().startsWith("{")) {
                     val cleanedContent = cleanContent(dataJson)
                     if (cleanedContent.isNotBlank()) {
                         emit(cleanedContent)
                     }
                 }
-                // Logger.e { "Failed to parse response chunk as stream or complete object: $dataJson" }
             }
         } catch (e: Exception) {
-            // Logger.e { "Unexpected error processing chunk: ${e.message}" }
+            // Silently ignore other errors
         }
     }
 
-    // Helper function to avoid repetition
     private fun cleanContent(rawContent: String): String {
         return rawContent
             .replace(Regex("<reasoning>.*?</reasoning>\\s*"), "")

@@ -12,4 +12,5 @@ data class ImageModel @OptIn(ExperimentalUuidApi::class) constructor(
     val description: String,
     val image: DrawableResource,
     val modelName: String,
+    val efficiency: String? = null
 )

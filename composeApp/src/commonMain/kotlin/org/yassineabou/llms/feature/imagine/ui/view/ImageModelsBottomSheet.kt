@@ -7,10 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,30 +17,38 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.*
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.window.core.layout.WindowSizeClass
 import org.yassineabou.llms.app.core.sharedViews.BottomSheetContent
+import org.yassineabou.llms.app.core.sharedViews.EfficiencyBadge
 import org.yassineabou.llms.app.core.sharedViews.ModelDetails
 import org.yassineabou.llms.app.core.sharedViews.ModelHeader
 import org.yassineabou.llms.app.core.sharedViews.ModelTypeActionButtons
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
+import org.yassineabou.llms.app.core.util.ModelGridUtils.calculateGridHeight
+import org.yassineabou.llms.app.core.util.ModelGridUtils.getMinItemWidth
 import org.yassineabou.llms.feature.imagine.data.model.ImageGenModelList
 import org.yassineabou.llms.feature.imagine.data.model.ImageModel
-import org.yassineabou.llms.feature.imagine.data.model.ImageModelSection
 import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
-import org.yassineabou.llms.feature.imagine.ui.util.getColumnCount
-import org.yassineabou.llms.feature.imagine.ui.util.getItemHeight
-import org.yassineabou.llms.feature.imagine.ui.util.getMinItemWidth
-import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,9 +59,6 @@ fun ImageModelsBottomSheet(
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val tempSelectedImageModel by imagineViewModel.tempSelectedImageModel.collectAsState()
-
-    // Get window size class for responsive layout
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     var isInfoIconClicked by remember { mutableStateOf(false) }
     var infoImageModel by remember { mutableStateOf(tempSelectedImageModel) }
@@ -96,8 +99,7 @@ fun ImageModelsBottomSheet(
                                 onInfoClick = { imageModel ->
                                     isInfoIconClicked = true
                                     infoImageModel = imageModel
-                                },
-                                windowSizeClass = windowSizeClass
+                                }
                             )
                         }
                     }
@@ -126,8 +128,8 @@ private fun ImageModelType(
     tempSelectedImageModel: ImageModel,
     onImageModelSelected: (ImageModel) -> Unit,
     onInfoClick: (ImageModel) -> Unit,
-    windowSizeClass: WindowSizeClass
 ) {
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,17 +168,8 @@ private fun ImageModelGrid(
     onInfoClick: (ImageModel) -> Unit,
     windowSizeClass: WindowSizeClass
 ) {
-    // Calculate columns based on window size
-    val columnCount = getColumnCount(windowSizeClass)
     val minItemWidth = getMinItemWidth(windowSizeClass)
-    val itemHeight = getItemHeight(windowSizeClass)
-
-    // Calculate actual row count based on the number of columns
-    val rowCount = ceil(models.size.toFloat() / columnCount).toInt()
-
-    // Calculate grid height: (rows * itemHeight) + (spacing between rows)
-    val spacingBetweenRows = 12 // dp
-    val estimatedHeight = (rowCount * itemHeight + (rowCount - 1) * spacingBetweenRows).dp
+    val estimatedHeight = calculateGridHeight(models.size, windowSizeClass)
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = minItemWidth),
@@ -256,39 +249,8 @@ private fun ImageModelItem(
         )
 
         EfficiencyBadge(
-            modelName = imageModel.modelName,
+            efficiency = imageModel.efficiency,
             isSelected = isSelected
-        )
-    }
-}
-
-@Composable
-private fun EfficiencyBadge(
-    modelName: String,
-    isSelected: Boolean
-) {
-    val badgeText = when (modelName) {
-        "flux", "zimage" -> "~5K/pollen"
-        "turbo" -> "~3.3K/pollen"
-        "gptimage" -> "~75/pollen"
-        "seedream" -> "~35/pollen"
-        "kontext", "nanobanana", "seedream-pro" -> "~25/pollen"
-        "nanobanana-pro" -> "~6/pollen"
-        else -> null
-    }
-
-    badgeText?.let { text ->
-        val badgeColor = if (isSelected) {
-            Color.White.copy(alpha = 0.8f)
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        }
-
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            color = badgeColor,
-            maxLines = 1
         )
     }
 }

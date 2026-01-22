@@ -21,7 +21,7 @@ android-targetSdk = "36"
 kotlin = "2.3.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-collections-immutable = "0.4.0"
-serialization = "1.9.0"
+serialization = "1.10.0"
 
 # Compose
 compose-plugin = "1.10.0"
@@ -48,7 +48,7 @@ multiplatformMarkdownRendererM3 = "0.39.1"
 sketch = "4.3.1"
 
 # Exposed
-exposed = "1.0.0-rc-4"
+exposed = "1.0.0"
 r2dbcPostgres = "1.1.1.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 

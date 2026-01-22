@@ -13,29 +13,41 @@ import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 
 class AiRepository(private val aiApi: AiApi) {
 
-    // Function now returns a Flow<String>
+    /**
+    * Stream chat completions using Pollinations API
+    */
     fun streamChat(
-        prompt: String, // Keep simple prompt input for ease of use
-        textModel: TextModel, // Pass the TextModel
+        prompt: String,
+        textModel: TextModel,
+        conversationHistory: List<ChatMessage> = emptyList(),
+        systemPrompt: String? = null
     ): Flow<String> {
-        // All models use LLM7 endpoint
-        val baseUrl = AiEndPoint.LLM7_BASE_URL
-        val apiKey = AiEndPoint.LLM7_API_KEY
+        // Build messages list
+        val messages = buildList {
+            // Add system prompt if provided
+            systemPrompt?.let {
+                add(ChatMessage(role = "system", content = it))
+            }
 
-        // Create messages - simple user message for all models
-        val messages = listOf(ChatMessage(role = "user", content = prompt))
+            // Add conversation history
+            addAll(conversationHistory)
+
+            // Add current user message
+            add(ChatMessage(role = "user", content = prompt))
+        }
 
         val request = ChatCompletionRequest(
             model = textModel.modelName,
             messages = messages,
-            stream = true, // Ensure streaming is enabled
-            maxTokens = 1000,
-            temperature = 0.5
+            stream = true,
+            maxTokens = 2000,
+            temperature = 0.7
         )
 
-        // Return the Flow directly from the API call
-        return aiApi.streamChatCompletions(baseUrl, apiKey, request)
+        return aiApi.streamChatCompletions(request)
     }
+
+
 
     suspend fun generateImage(
         request: PollinationsImageRequest // The function now accepts the new data class

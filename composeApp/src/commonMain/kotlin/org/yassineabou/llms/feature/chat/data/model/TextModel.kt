@@ -11,6 +11,7 @@ data class TextModel(
     val modelName: String,
     val image: DrawableResource,
     val description: String,
+    val efficiency: String? = null
 )
 
 

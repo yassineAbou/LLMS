@@ -43,19 +43,22 @@ object ImageGenModelList {
             title = "Flux Schnell",
             description = "Fast, high-quality generation. ~5,000 images/pollen 🔥",
             image = Res.drawable.ic_flux,
-            modelName = "flux"
+            modelName = "flux",
+            efficiency = "~5K/pollen"
         ),
         ImageModel(
             title = "Z-Image Turbo",
             description = "Extremely fast with great quality. ~5,000 images/pollen 🔥",
             image = Res.drawable.ic_llm7,
-            modelName = "zimage"
+            modelName = "zimage",
+            efficiency = "~5K/pollen"
         ),
         ImageModel(
             title = "SDXL Turbo",
             description = "Rapid previews and real-time generation. ~3,300 images/pollen",
             image = Res.drawable.ic_sdxl_turbo,
-            modelName = "turbo"
+            modelName = "turbo",
+            efficiency = "~3.3K/pollen"
         )
     )
 
@@ -67,31 +70,36 @@ object ImageGenModelList {
             title = "GPT Image 1 Mini",
             description = "Enhanced text understanding for images. ~75 images/pollen",
             image = Res.drawable.ic_openai,
-            modelName = "gptimage"
+            modelName = "gptimage",
+            efficiency = "~75/pollen"
         ),
         ImageModel(
             title = "Seedream 4.0",
             description = "High-quality creative generation. ~35 images/pollen",
             image = Res.drawable.ic_seedream,
-            modelName = "seedream"
+            modelName = "seedream",
+            efficiency = "~35/pollen"
         ),
         ImageModel(
             title = "FLUX.1 Kontext",
             description = "Context-aware generation and editing. ~25 images/pollen",
             image = Res.drawable.ic_flux,
-            modelName = "kontext"
+            modelName = "kontext",
+            efficiency = "~25/pollen"
         ),
         ImageModel(
             title = "NanoBanana",
             description = "Gemini 2.5 Flash powered generation. ~25 images/pollen",
             image = Res.drawable.ic_gemini,
-            modelName = "nanobanana"
+            modelName = "nanobanana",
+            efficiency = "~25/pollen"
         ),
         ImageModel(
             title = "Seedream 4.5 Pro",
             description = "Premium Seedream for superior quality. ~25 images/pollen",
             image = Res.drawable.ic_seedream,
-            modelName = "seedream-pro"
+            modelName = "seedream-pro",
+            efficiency = "~25/pollen"
         )
     )
 
@@ -103,7 +111,8 @@ object ImageGenModelList {
             title = "NanoBanana Pro",
             description = "Premium Gemini-powered, best quality. ~6 images/pollen ⭐",
             image = Res.drawable.ic_gemini,
-            modelName = "nanobanana-pro"
+            modelName = "nanobanana-pro",
+            efficiency = "~6/pollen"
         )
     )
 
