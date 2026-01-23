@@ -11,7 +11,7 @@ androidx-lifecycle = "2.9.6"
 
 
 # Android
-agp = "9.0.0"
+agp = "8.12.3"
 android-compileSdk = "36"
 android-minSdk = "28"
 #noinspection EditedTargetSdkVersion
@@ -57,7 +57,7 @@ r2dbcPool = "1.0.2.RELEASE"
 kmauth-google = "0.3.3"
 
 # Networking
-ktor = "3.3.3"
+ktor = "3.4.0"
 
 # Utilities
 kermit = "2.0.8"
