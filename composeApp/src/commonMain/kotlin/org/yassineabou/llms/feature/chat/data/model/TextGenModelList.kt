@@ -13,35 +13,26 @@ data class TextModelSection(
 @Immutable
 object TextGenModelList {
 
-    /**
-     * All text models organized by cost efficiency (most responses per pollen first)
-     */
+    val defaultModel: TextModel by lazy { ultraEfficientModels.first() }
+
     val allModels: List<TextModel> by lazy {
         ultraEfficientModels + highEfficiencyModels + balancedModels + premiumModels
     }
 
-    // Default model - best value
-    val defaultModel: TextModel by lazy {
-        ultraEfficientModels.first()
-    }
-
-    /**
-     * Ultra Efficient Models: 3,000+ responses per pollen
-     */
     val ultraEfficientModels = listOf(
         TextModel(
             title = "Amazon Nova Micro",
             provider = "amazon",
-            modelName = "amazon-nova-micro",
-            description = "Ultra-efficient text generation. ~66.7K responses/pollen 🔥",
+            modelName = "nova-fast",
+            description = "Ultra Fast & Ultra Cheap",
             image = Res.drawable.ic_llm7,
             efficiency = "~66.7K/pollen"
         ),
         TextModel(
             title = "Gemini 2.5 Flash Lite",
             provider = "google",
-            modelName = "gemini-2.5-flash-lite",
-            description = "Lightweight and fast Gemini. ~3.6K responses/pollen",
+            modelName = "gemini-fast",
+            description = "Ultra Fast & Cost-Effective",
             image = Res.drawable.ic_gemini,
             efficiency = "~3.6K/pollen"
         ),
@@ -49,29 +40,26 @@ object TextGenModelList {
             title = "Mistral Small 3.2",
             provider = "mistral",
             modelName = "mistral",
-            description = "Efficient 24B Mistral model. ~3.2K responses/pollen",
+            description = "Efficient 24B Mistral model",
             image = Res.drawable.ic_mistral,
             efficiency = "~3.2K/pollen"
         )
     )
 
-    /**
-     * High Efficiency Models: 500-3,000 responses per pollen
-     */
     val highEfficiencyModels = listOf(
         TextModel(
             title = "Qwen3 Coder 30B",
             provider = "qwen",
             modelName = "qwen-coder",
-            description = "Coding-focused 30B model. ~1.4K responses/pollen",
+            description = "Specialized for Code Generation",
             image = Res.drawable.ic_qwen,
             efficiency = "~1.4K/pollen"
         ),
         TextModel(
             title = "xAI Grok 4 Fast",
             provider = "xai",
-            modelName = "grok-4-fast",
-            description = "Fast reasoning model from xAI. ~950 responses/pollen",
+            modelName = "grok",
+            description = "High Speed & Real-Time",
             image = Res.drawable.ic_grok,
             efficiency = "~950/pollen"
         ),
@@ -79,15 +67,15 @@ object TextGenModelList {
             title = "GPT-5 Mini",
             provider = "openai",
             modelName = "openai",
-            description = "Compact GPT-5 variant. ~800 responses/pollen",
+            description = "Fast & Balanced",
             image = Res.drawable.ic_openai,
             efficiency = "~800/pollen"
         ),
         TextModel(
             title = "Perplexity Sonar",
             provider = "perplexity",
-            modelName = "perplexity-sonar",
-            description = "Search-enhanced responses. ~750 responses/pollen",
+            modelName = "perplexity-fast",
+            description = "Fast with Web Search",
             image = Res.drawable.ic_perplexity,
             efficiency = "~750/pollen"
         ),
@@ -95,123 +83,114 @@ object TextGenModelList {
             title = "GPT-5 Nano",
             provider = "openai",
             modelName = "openai-fast",
-            description = "Fastest GPT-5 variant. ~650 responses/pollen",
+            description = "Ultra Fast & Affordable",
             image = Res.drawable.ic_openai,
             efficiency = "~650/pollen"
         )
     )
 
-    /**
-     * Balanced Models: 100-500 responses per pollen
-     */
     val balancedModels = listOf(
         TextModel(
             title = "Gemini 3 Flash",
             provider = "google",
-            modelName = "gemini-3-flash",
-            description = "Fast multimodal Gemini. ~400 responses/pollen",
+            modelName = "gemini",
+            description = "Pro-Grade Reasoning at Flash Speed",
             image = Res.drawable.ic_gemini,
             efficiency = "~400/pollen"
         ),
         TextModel(
             title = "DeepSeek V3.2",
             provider = "deepseek",
-            modelName = "deepseek-v3",
-            description = "Advanced reasoning model. ~300 responses/pollen",
+            modelName = "deepseek",
+            description = "Efficient Reasoning & Agentic AI",
             image = Res.drawable.ic_deepseek,
             efficiency = "~300/pollen"
         ),
         TextModel(
             title = "Gemini 2.5 Pro",
             provider = "google",
-            modelName = "gemini-2.5-pro",
-            description = "Premium Gemini model. ~150 responses/pollen",
+            modelName = "gemini-legacy",
+            description = "Stable Reasoning with 1M Context",
             image = Res.drawable.ic_gemini,
             efficiency = "~150/pollen"
         ),
         TextModel(
             title = "Perplexity Sonar Reasoning",
             provider = "perplexity",
-            modelName = "perplexity-sonar-reasoning",
-            description = "Enhanced reasoning with search. ~150 responses/pollen",
+            modelName = "perplexity-reasoning",
+            description = "Advanced Reasoning with Web Search",
             image = Res.drawable.ic_perplexity,
             efficiency = "~150/pollen"
         ),
         TextModel(
             title = "Kimi K2 Thinking",
             provider = "moonshot",
-            modelName = "kimi-k2-thinking",
-            description = "Reasoning-focused model. ~100 responses/pollen",
+            modelName = "kimi",
+            description = "Deep Reasoning & Tool Orchestration",
             image = Res.drawable.ic_kimi,
             efficiency = "~100/pollen"
         ),
         TextModel(
             title = "GLM-4.7",
             provider = "zhipu",
-            modelName = "glm-4.7",
-            description = "Latest GLM model. ~100 responses/pollen",
+            modelName = "glm",
+            description = "Coding, Reasoning & Agentic Workflows",
             image = Res.drawable.ic_glm,
             efficiency = "~100/pollen"
         )
     )
 
-    /**
-     * Premium Models: Highest quality, fewer responses per pollen
-     */
     val premiumModels = listOf(
         TextModel(
             title = "GPT-5.2",
             provider = "openai",
             modelName = "openai-large",
-            description = "Most capable GPT model. ~90 responses/pollen ⭐",
+            description = "Most Powerful & Intelligent ⭐",
             image = Res.drawable.ic_openai,
             efficiency = "~90/pollen"
         ),
         TextModel(
             title = "Claude Haiku 4.5",
             provider = "anthropic",
-            modelName = "claude-haiku-4.5",
-            description = "Fast Claude variant. ~50 responses/pollen",
+            modelName = "claude-fast",
+            description = "Fast & Intelligent",
             image = Res.drawable.ic_claude,
             efficiency = "~50/pollen"
         ),
         TextModel(
             title = "MiniMax M2.1",
             provider = "minimax",
-            modelName = "minimax-m2.1",
-            description = "Balanced quality model. ~45 responses/pollen",
+            modelName = "minimax",
+            description = "Multi-Language & Agent Workflows",
             image = Res.drawable.ic_minmax,
             efficiency = "~45/pollen"
         ),
         TextModel(
             title = "Claude Sonnet 4.5",
             provider = "anthropic",
-            modelName = "claude-sonnet-4.5",
-            description = "Balanced Claude model. ~25 responses/pollen",
+            modelName = "claude",
+            description = "Most Capable & Balanced",
             image = Res.drawable.ic_claude,
             efficiency = "~25/pollen"
         ),
         TextModel(
             title = "Gemini 3 Pro",
             provider = "google",
-            modelName = "gemini-3-pro",
-            description = "Premium Gemini model. ~25 responses/pollen",
+            modelName = "gemini-large",
+            description = "Most Intelligent with 1M Context",
             image = Res.drawable.ic_gemini,
             efficiency = "~25/pollen"
         ),
         TextModel(
             title = "Claude Opus 4.5",
             provider = "anthropic",
-            modelName = "claude-opus-4.5",
-            description = "Most powerful Claude. ~20 responses/pollen ⭐",
+            modelName = "claude-large",
+            description = "Most Intelligent Model ⭐",
             image = Res.drawable.ic_claude,
             efficiency = "~20/pollen"
         )
     )
 
-    /**
-     * Grouped models for UI display with section headers
-     */
     val groupedModels: List<TextModelSection> by lazy {
         listOf(
             TextModelSection(

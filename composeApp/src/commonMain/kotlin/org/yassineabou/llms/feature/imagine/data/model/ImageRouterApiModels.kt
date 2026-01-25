@@ -2,7 +2,6 @@ package org.yassineabou.llms.feature.imagine.data.model
 
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class PollinationsImageRequest(
     val prompt: String,
     val model: String = "zimage",
@@ -12,7 +11,7 @@ data class PollinationsImageRequest(
     val enhance: Boolean = false,
     val negativePrompt: String? = null,
     val safe: Boolean = false,
-    val quality: String? = null,       // gptimage only: "low", "medium", "high", "hd"
+    val quality: String? = null,        // gptimage only: "low", "medium", "high", "hd"
     val image: String? = null,          // Reference image URL for image-to-image
-    val transparent: Boolean = false    // gptimage only: transparent background
+    val transparent: Boolean = false,   // gptimage only: transparent background
 )

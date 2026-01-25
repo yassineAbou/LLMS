@@ -1,25 +1,15 @@
 package org.yassineabou.llms.app.core.data.remote.ai
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.timeout
-import io.ktor.client.request.accept
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.parameter
-import io.ktor.client.request.preparePost
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsChannel
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.contentType
-import io.ktor.http.encodeURLPathPart
-import io.ktor.http.isSuccess
-import io.ktor.utils.io.readUTF8Line
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.utils.io.*
+import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.yassineabou.llms.app.core.data.remote.ai.AiEndPoint.STREAM_PREFIX
@@ -31,7 +21,6 @@ import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 
 interface AiApi {
     suspend fun generateImage(request: PollinationsImageRequest): ByteArray
-
     fun streamChatCompletions(request: ChatCompletionRequest): Flow<String>
 }
 
@@ -46,7 +35,6 @@ class KtorApi(
         val url = AiEndPoint.POLLINATIONS_BASE_URL + encodedPrompt
 
         return client.get(url) {
-            // Authentication via Bearer token
             header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
 
             // Required parameters
@@ -54,7 +42,7 @@ class KtorApi(
             parameter("width", request.width)
             parameter("height", request.height)
 
-            // Optional parameters
+            // Optional image parameters
             request.seed?.let { parameter("seed", it) }
             if (request.enhance) parameter("enhance", "true")
             request.negativePrompt?.let { parameter("negative_prompt", it) }
@@ -63,121 +51,78 @@ class KtorApi(
             request.image?.let { parameter("image", it) }
             if (request.transparent) parameter("transparent", "true")
 
-            timeout {
-                requestTimeoutMillis = 300_000 // 5 minutes
-            }
+            timeout { requestTimeoutMillis = 300_000 }
         }.body()
     }
 
+    override fun streamChatCompletions(request: ChatCompletionRequest): Flow<String> = channelFlow {
+        client.preparePost(AiEndPoint.POLLINATIONS_TEXT_URL) {
+            header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Text.EventStream)
+            setBody(request)
+            timeout {
+                requestTimeoutMillis = 120_000
+            }
+        }.execute { response ->
+            if (!response.status.isSuccess()) {
+                val errorBody = response.bodyAsText()
+                throw Exception("API request failed: ${response.status} - $errorBody")
+            }
 
-    override fun streamChatCompletions(request: ChatCompletionRequest): Flow<String> = flow {
-        try {
-            client.preparePost(AiEndPoint.POLLINATIONS_TEXT_URL) {
-                header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
-                contentType(ContentType.Application.Json)
-                accept(ContentType.Text.EventStream)
-                setBody(request)
-                timeout {
-                    requestTimeoutMillis = 120_000 // 2 minutes for text
-                }
-            }.execute { response ->
-                if (!response.status.isSuccess()) {
-                    val errorBody = response.bodyAsText()
-                    throw Exception("API request failed: ${response.status} - $errorBody")
-                }
+            val channel = response.bodyAsChannel()
 
-                val channel = response.bodyAsChannel()
-                val eventBuffer = StringBuilder()
-                val rawJsonBuffer = StringBuilder()
+            while (!channel.isClosedForRead) {
+                val line = channel.readLine() ?: break
 
-                while (!channel.isClosedForRead) {
-                    val line = channel.readUTF8Line() ?: break
+                if (line.isBlank() || line.startsWith(":")) continue
 
-                    when {
-                        line.startsWith(STREAM_PREFIX) -> {
-                            eventBuffer.append(line.removePrefix(STREAM_PREFIX).trim())
-                        }
-                        line.isBlank() -> {
-                            if (eventBuffer.isNotEmpty()) {
-                                processChunk(eventBuffer.toString())
-                                eventBuffer.clear()
-                            }
-                        }
-                        line.startsWith(":") -> Unit // Ignore comments
-                        else -> {
-                            if (line.isNotBlank()) {
-                                rawJsonBuffer.append(line.trim())
-                            }
-                        }
-                    }
-                }
+                if (line.startsWith(STREAM_PREFIX)) {
+                    val dataContent = line.removePrefix(STREAM_PREFIX).trim()
 
-                if (eventBuffer.isNotEmpty()) {
-                    processChunk(eventBuffer.toString())
-                }
-                if (rawJsonBuffer.isNotEmpty()) {
-                    processChunk(rawJsonBuffer.toString())
+                    if (dataContent == "[DONE]" || dataContent.isEmpty()) break
+
+                    processAndSend(dataContent)
+                } else if (line.trim().startsWith("{")) {
+                    processAndSend(line.trim())
                 }
             }
-        } catch (e: Exception) {
-            throw e
         }
     }
 
-    private suspend fun FlowCollector<String>.processChunk(dataJson: String) {
-        if (dataJson.equals("[DONE]", ignoreCase = true)) {
-            return
-        }
+    private suspend fun ProducerScope<String>.processAndSend(dataJson: String) {
+        if (dataJson.equals("[DONE]", ignoreCase = true)) return
 
         try {
-            // Try to parse as a standard streaming chunk
             val chunk = json.decodeFromString<ChatCompletionChunk>(dataJson)
+
             chunk.choices.forEach { choice ->
-                choice.delta.content?.let { content ->
-                    val cleanedContent = cleanContent(content)
-                    if (cleanedContent.isNotBlank()) {
-                        emit(cleanedContent)
-                    }
+                choice.delta?.content?.let { content ->
+                    val cleaned = cleanContent(content)
+                    if (cleaned.isNotBlank()) send(cleaned)
                 }
-                // Also handle reasoning content if present
-                choice.delta.reasoningContent?.let { reasoning ->
-                    // Optionally emit reasoning or handle separately
+
+                choice.message?.content?.let { content ->
+                    val cleaned = cleanContent(content)
+                    if (cleaned.isNotBlank()) send(cleaned)
                 }
             }
         } catch (e: SerializationException) {
-            // Fallback: Try parsing as a complete response
             try {
-                val completeResponse = json.decodeFromString<ChatCompletionResponse>(dataJson)
-                completeResponse.choices.forEach { choice ->
-                    val rawContent = choice.message.content
+                val response = json.decodeFromString<ChatCompletionResponse>(dataJson)
 
-                    // Handle potentially nested JSON
-                    try {
-                        val nestedResponse = json.decodeFromString<ChatCompletionResponse>(rawContent)
-                        val nestedContent = nestedResponse.choices.firstOrNull()?.message?.content ?: ""
-                        val cleanedContent = cleanContent(nestedContent)
-                        if (cleanedContent.isNotBlank()) {
-                            emit(cleanedContent)
-                        }
-                    } catch (nestedException: Exception) {
-                        // Not nested JSON, treat as plain text
-                        val cleanedContent = cleanContent(rawContent)
-                        if (cleanedContent.isNotBlank()) {
-                            emit(cleanedContent)
-                        }
+                response.choices.forEach { choice ->
+                    choice.message?.content?.let { content ->
+                        val cleaned = cleanContent(content)
+                        if (cleaned.isNotBlank()) send(cleaned)
                     }
                 }
             } catch (e2: Exception) {
-                // Last resort: emit raw string if it doesn't look like JSON
                 if (!dataJson.trim().startsWith("{")) {
-                    val cleanedContent = cleanContent(dataJson)
-                    if (cleanedContent.isNotBlank()) {
-                        emit(cleanedContent)
-                    }
+                    val cleaned = cleanContent(dataJson)
+                    if (cleaned.isNotBlank()) send(cleaned)
                 }
             }
-        } catch (e: Exception) {
-            // Silently ignore other errors
         }
     }
 

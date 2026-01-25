@@ -1,5 +1,6 @@
 package org.yassineabou.llms.feature.chat.data.model
 
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -37,12 +38,12 @@ data class ChatCompletionRequest(
 
 @Serializable
 data class ChatCompletionChunk(
-    val id: String,
+    val id: String? = null,
     @SerialName("object")
-    val objectType: String,
-    val created: Long,
-    val model: String,
-    val choices: List<StreamChoice>,
+    val objectType: String? = null,
+    val created: Long? = null,
+    val model: String? = null,
+    val choices: List<StreamChoice> = emptyList(),
     val usage: UsageInfo? = null,
     @SerialName("system_fingerprint")
     val systemFingerprint: String? = null
@@ -50,9 +51,10 @@ data class ChatCompletionChunk(
 
 @Serializable
 data class StreamChoice(
-    val index: Int,
+    val index: Int? = null,
     @SerialName("delta")
-    val delta: DeltaMessage,
+    val delta: DeltaMessage? = null,
+    val message: ChatMessage? = null,
     val logprobs: LogProbs? = null,
     @SerialName("finish_reason")
     val finishReason: String? = null
@@ -70,15 +72,15 @@ data class DeltaMessage(
 
 @Serializable
 data class ToolCall(
-    val id: String,
-    val type: String = "function",
-    val function: FunctionCall
+    val id: String? = null,
+    val type: String? = "function",
+    val function: FunctionCall? = null
 )
 
 @Serializable
 data class FunctionCall(
-    val name: String,
-    val arguments: String
+    val name: String? = null,
+    val arguments: String? = null
 )
 
 @Serializable
@@ -105,9 +107,9 @@ data class TopLogProb(
 @Serializable
 data class UsageInfo(
     @SerialName("prompt_tokens")
-    val promptTokens: Int,
+    val promptTokens: Int? = null,
     @SerialName("total_tokens")
-    val totalTokens: Int,
+    val totalTokens: Int? = null,
     @SerialName("completion_tokens")
     val completionTokens: Int? = null,
     @SerialName("prompt_tokens_details")
@@ -138,12 +140,12 @@ data class CompletionTokensDetails(
 
 @Serializable
 data class ChatCompletionResponse(
-    val id: String,
+    val id: String? = null,
     @SerialName("object")
-    val objectType: String,
-    val created: Long,
-    val model: String,
-    val choices: List<CompletionChoice>,
+    val objectType: String? = null,
+    val created: Long? = null,
+    val model: String? = null,
+    val choices: List<CompletionChoice> = emptyList(),
     val usage: UsageInfo? = null,
     @SerialName("system_fingerprint")
     val systemFingerprint: String? = null,
@@ -155,16 +157,9 @@ data class ChatCompletionResponse(
 @Serializable
 data class CompletionChoice(
     val index: Int? = null,
-    val message: ChatMessage,
+    val message: ChatMessage? = null,
+    val delta: DeltaMessage? = null,
     @SerialName("finish_reason")
     val finishReason: String? = null,
     val logprobs: LogProbs? = null
-)
-
-@Serializable
-data class ModelInfo(
-    val id: String,
-    @SerialName("object")
-    val objectType: String,
-    val created: Long? = null
 )
