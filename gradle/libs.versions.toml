@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------------------------------
 
 # AndroidX
-androidx-activityCompose = "1.12.2"
+androidx-activityCompose = "1.12.3"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
@@ -28,7 +28,7 @@ compose-plugin = "1.10.0"
 adaptive = "1.3.0-alpha02"
 multiplatformPaths = "0.2.2"
 navigationCompose = "2.9.1"
-foundationLayoutAndroid = "1.10.1"
+foundationLayoutAndroid = "1.10.2"
 
 
 # SQLdelight
@@ -43,7 +43,7 @@ androidx-test-junit = "1.3.0"
 androidx-espresso-core = "3.7.0"
 
 # UI Components
-dragselect = "3.2.0"
+dragselect = "3.3.0"
 multiplatformMarkdownRendererM3 = "0.39.1"
 sketch = "4.3.1"
 
@@ -61,7 +61,7 @@ ktor = "3.4.0"
 
 # Utilities
 kermit = "2.0.8"
-logback = "1.5.25"
+logback = "1.5.27"
 
 # Dependency Injection
 kodeinDi = "7.30.0"

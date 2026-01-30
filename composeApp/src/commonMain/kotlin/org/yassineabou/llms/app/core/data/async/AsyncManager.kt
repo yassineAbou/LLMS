@@ -117,9 +117,5 @@ interface AsyncManager {
     //                              SYNC CONTROLS
     // =================================================================================
 
-    fun startSync()
-
-    fun stopSync()
-
     suspend fun forceSyncNow()
 }

@@ -1,34 +1,36 @@
 package org.yassineabou.llms.app.core.data.remote.rpc
 
 
+import co.touchlab.kermit.Logger
 import io.ktor.client.*
-import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.rpc.RpcClient
 import kotlinx.rpc.krpc.ktor.client.rpc
 import kotlinx.rpc.krpc.ktor.client.rpcConfig
 import kotlinx.rpc.krpc.serialization.json.json
-import kotlinx.rpc.withService
 import kotlinx.serialization.json.Json
-import org.yassineabou.llms.api.ChatService
-import org.yassineabou.llms.api.ImageService
-import org.yassineabou.llms.api.MessageService
-import org.yassineabou.llms.api.UserService
+import kotlin.concurrent.Volatile
 import kotlin.time.Duration.Companion.seconds
 
 
 /**
  * Provides kRPC client services for remote communication.
- * Uses WebSockets internally for RPC calls.
+ * Handles automatic reconnection when WebSocket connection is lost.
  */
 class RpcClientProvider(
     private val baseUrl: String,
     private val rpcPath: String
 ) {
-    private val logger = co.touchlab.kermit.Logger.withTag("KtorClient")
+    private val logger = Logger.withTag("RpcClientProvider")
 
     private val jsonConfig = Json {
         ignoreUnknownKeys = true
@@ -36,7 +38,6 @@ class RpcClientProvider(
         isLenient = true
         prettyPrint = false
     }
-
 
     private val httpClient = HttpClient {
         install(WebSockets) {
@@ -48,16 +49,14 @@ class RpcClientProvider(
             json(jsonConfig)
         }
 
-
         install(Logging) {
-            logger = object : Logger {
+            logger = object : io.ktor.client.plugins.logging.Logger {
                 override fun log(message: String) {
-                    this@RpcClientProvider.logger.i { message }
+                    this@RpcClientProvider.logger.d { message }
                 }
             }
-            level = LogLevel.ALL
+            level = LogLevel.INFO
         }
-
 
         install(HttpTimeout) {
             requestTimeoutMillis = 60_000
@@ -66,59 +65,87 @@ class RpcClientProvider(
         }
     }
 
+    private val clientMutex = Mutex()
 
-    private val rpcClient by lazy {
-        logger.i { "🔌 Initializing RPC client: $baseUrl$rpcPath" }
+    @Volatile
+    private var currentRpcClient: RpcClient? = null
 
-        httpClient.rpc {
-            url {
-                // Parse the base URL
-                val urlBuilder = URLBuilder(baseUrl)
+    /**
+     * Gets the current RPC client or creates a new one if needed.
+     */
+    private suspend fun getOrCreateClient(): RpcClient {
+        currentRpcClient?.let { return it }
 
-                // Set WebSocket protocol based on HTTP protocol
-                protocol = when (urlBuilder.protocol) {
-                    URLProtocol.HTTPS -> URLProtocol.WSS
-                    else -> URLProtocol.WS
+        return clientMutex.withLock {
+            currentRpcClient?.let { return it }
+
+            logger.i { "🔌 Creating new RPC connection to $baseUrl$rpcPath" }
+
+            httpClient.rpc {
+                url {
+                    val urlBuilder = URLBuilder(baseUrl)
+                    protocol = when (urlBuilder.protocol) {
+                        URLProtocol.HTTPS -> URLProtocol.WSS
+                        else -> URLProtocol.WS
+                    }
+                    host = urlBuilder.host
+                    port = urlBuilder.port
+                    encodedPath = rpcPath
                 }
-
-                host = urlBuilder.host
-                port = urlBuilder.port
-                encodedPath = rpcPath
-
-                logger.i { "🔌 RPC URL: ${this.buildString()}" }
-            }
-
-            rpcConfig {
-                serialization {
-                    json(jsonConfig)
+                rpcConfig {
+                    serialization {
+                        json(jsonConfig)
+                    }
                 }
+            }.also { currentRpcClient = it }
+        }
+    }
+
+    fun invalidate() {
+        logger.d { "Invalidating RPC client" }
+        currentRpcClient = null
+    }
+
+    suspend fun <T> execute(block: suspend RpcClient.() -> T): T {
+        return try {
+            getOrCreateClient().block()
+        } catch (e: Exception) {
+            if (isConnectionError(e)) {
+                logger.w { "RPC connection lost, reconnecting... (${e.message})" }
+                invalidate()
+                getOrCreateClient().block()
+            } else {
+                throw e
             }
         }
     }
 
-    // Service proxies
-    val chatService: ChatService by lazy {
-        logger.d { "Creating ChatService proxy" }
-        rpcClient.withService<ChatService>()
+    fun <T> executeFlow(block: suspend RpcClient.() -> Flow<T>): Flow<T> = flow {
+        try {
+            getOrCreateClient().block().collect { emit(it) }
+        } catch (e: Exception) {
+            if (isConnectionError(e)) {
+                logger.w { "RPC connection lost during flow, reconnecting... (${e.message})" }
+                invalidate()
+                getOrCreateClient().block().collect { emit(it) }
+            } else {
+                throw e
+            }
+        }
     }
 
-    val imageService: ImageService by lazy {
-        logger.d { "Creating ImageService proxy" }
-        rpcClient.withService<ImageService>()
-    }
-
-    val messageService: MessageService by lazy {
-        logger.d { "Creating MessageService proxy" }
-        rpcClient.withService<MessageService>()
-    }
-
-    val userService: UserService by lazy {
-        logger.d { "Creating UserService proxy" }
-        rpcClient.withService<UserService>()
+    private fun isConnectionError(e: Exception): Boolean {
+        val message = e.message?.lowercase() ?: ""
+        return e is IllegalStateException && (
+                message.contains("cancelled") ||
+                        message.contains("closed") ||
+                        message.contains("connection")
+                )
     }
 
     fun close() {
         logger.i { "Closing RPC client" }
+        currentRpcClient = null
         httpClient.close()
     }
 }
