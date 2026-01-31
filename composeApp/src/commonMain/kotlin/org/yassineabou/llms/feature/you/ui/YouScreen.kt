@@ -61,7 +61,8 @@ import org.yassineabou.llms.feature.you.ui.view.CloudSyncAnimation
 import org.yassineabou.llms.feature.you.ui.view.VerifiedUserAnimation
 
 
-// State container that manages authentication state
+
+
 @Composable
 fun YouScreen(youViewModel: YouViewModel) {
     val isLoggedIn by youViewModel.isLoggedIn.collectAsStateWithLifecycle()
@@ -76,12 +77,14 @@ fun YouScreen(youViewModel: YouViewModel) {
                     message = (authState as AuthState.Error).message,
                     duration = SnackbarDuration.Long
                 )
+                youViewModel.resetAuthState()
             }
             AuthState.Success -> {
                 snackbarController.showMessage(
                     message = "Successfully logged in!",
                     duration = SnackbarDuration.Short
                 )
+                youViewModel.resetAuthState()
             }
             else -> {}
         }
@@ -97,7 +100,6 @@ fun YouScreen(youViewModel: YouViewModel) {
         onDeleteAccount = { youViewModel.onDeleteAccount() }
     )
 }
-
 // Main screen composable
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

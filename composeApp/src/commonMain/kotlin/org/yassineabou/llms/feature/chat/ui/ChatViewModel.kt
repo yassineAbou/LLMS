@@ -75,6 +75,10 @@ class ChatViewModel(
         viewModelScope.launch {
             asyncManager.getAllChats().collect { chats ->
                 _allChats.update { chats }
+
+                if (chats.isEmpty()) {
+                    resetCurrentChat()
+                }
             }
         }
     }

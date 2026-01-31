@@ -139,4 +139,8 @@ class YouViewModel(private val asyncManager: AsyncManager) : ViewModel() {
         }
     }
 
+    fun resetAuthState() {
+        _authState.value = AuthState.Idle
+    }
+
 }
