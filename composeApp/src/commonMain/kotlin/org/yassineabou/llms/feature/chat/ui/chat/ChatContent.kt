@@ -3,12 +3,7 @@ package org.yassineabou.llms.feature.chat.ui.chat
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,20 +14,8 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
 import androidx.compose.material.icons.filled.Stop
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -43,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.Chat_messages
+import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.sharedViews.SelectedModel
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.app.core.util.Animations
-import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.view.ChatAppBar
@@ -57,7 +40,7 @@ import org.yassineabou.llms.feature.chat.ui.view.TextModelsBottomSheet
 fun ChatContent(
     chatViewModel: ChatViewModel,
     selectedTextModel: TextModel,
-    showAppBar: Boolean, // New parameter to control visibility
+    showAppBar: Boolean,
     onClickHistory: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -66,12 +49,11 @@ fun ChatContent(
     val focusManager = LocalFocusManager.current
     var selectModelClicked by remember { mutableStateOf(false) }
     val chatMessages = chatViewModel.currentChatMessages
-    val textGenerationState by  chatViewModel.generationState.collectAsStateWithLifecycle()
+    val textGenerationState by chatViewModel.generationState.collectAsStateWithLifecycle()
     val isLoading = textGenerationState is GenerationState.Loading
 
     Box(modifier = modifier.fillMaxSize()) {
         if (showAppBar) {
-            // Show ChatAppBar if showAppBar is true
             ChatAppBar(
                 title = selectedTextModel.title,
                 image = selectedTextModel.image,
@@ -80,10 +62,9 @@ fun ChatContent(
                     .fillMaxWidth(),
                 onClickHistory = onClickHistory,
                 onNewChatClick = { chatViewModel.startNewChat() },
-                onSelect = { selectModelClicked = true  }
+                onSelect = { selectModelClicked = true }
             )
         } else {
-            // Show SelectedTextModel if showAppBar is false
             SelectedModel(
                 title = selectedTextModel.title,
                 image = selectedTextModel.image,
@@ -135,7 +116,62 @@ fun ChatContent(
     }
 }
 
-// Extracted scroll-to-bottom button component
+@Composable
+private fun ChatMessagesList(
+    generationState: GenerationState,
+    chatMessages: List<Chat_messages>,
+    selectedTextModel: TextModel,
+    regenerateResponse: (Int) -> Unit
+) {
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val showScrollToBottom by remember {
+        derivedStateOf { lazyListState.canScrollForward }
+    }
+
+    LaunchedEffect(chatMessages.size, chatMessages.lastOrNull()?.message) {
+        if (chatMessages.isNotEmpty()) {
+            launch {
+                lazyListState.animateScrollToItem(chatMessages.lastIndex)
+            }
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize().padding(top = 70.dp, bottom = 80.dp)) {
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            itemsIndexed(chatMessages) { index, chatMessage ->
+                val isLoading = generationState is GenerationState.Loading &&
+                        chatMessage.is_user != 1L &&
+                        generationState.id == index
+
+                ChatBubble(
+                    chatMessage = chatMessage,
+                    aiIcon = selectedTextModel.image,
+                    isLoading = isLoading,
+                    regenerateResponse = { regenerateResponse(index) }
+                )
+            }
+        }
+
+        ScrollToBottomButton(
+            visibility = showScrollToBottom,
+            onClick = {
+                coroutineScope.launch {
+                    lazyListState.animateScrollToItem(chatMessages.lastIndex)
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        )
+
+    }
+}
+
 @Composable
 private fun ScrollToBottomButton(
     onClick: () -> Unit,
@@ -151,96 +187,17 @@ private fun ScrollToBottomButton(
         IconButton(
             onClick = onClick,
             modifier = Modifier
+                .shadow(4.dp, CircleShape)
                 .background(
                     color = MaterialTheme.colorScheme.primary,
                     shape = CircleShape
                 )
-                .shadow(4.dp)
         ) {
             Icon(
                 imageVector = Icons.Filled.KeyboardDoubleArrowDown,
                 contentDescription = "Scroll to bottom",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
-        }
-    }
-}
-
-
-@Composable
-private fun ChatMessagesList(
-    generationState: GenerationState,
-    chatMessages: List<Chat_messages>,
-    selectedTextModel: TextModel,
-    regenerateResponse: (Int) -> Unit
-) {
-    val lazyListState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
-    // Track scroll position to show/hide button
-    val showScrollButton by remember {
-        derivedStateOf {
-            val layoutInfo = lazyListState.layoutInfo
-            val totalItems = chatMessages.size
-            if (totalItems == 0) false else {
-                val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                lastVisibleItem < totalItems - 1
-            }
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            state = lazyListState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 70.dp, bottom = 80.dp)
-        ) {
-            itemsIndexed(chatMessages) { index, chatMessage ->
-                val isLoading = when (generationState) {
-                    is GenerationState.Loading -> {
-                        // Only show loading for the specific AI message index
-                        chatMessage.is_user != 1L && generationState.id == index
-                    }
-                    else -> false
-                }
-
-                ChatBubble(
-                    chatMessage = chatMessage,
-                    aiIcon = selectedTextModel.image,
-                    isLoading = isLoading,
-                    regenerateResponse = { regenerateResponse(index) }
-                )
-            }
-        }
-
-        ScrollToBottomButton(
-            onClick = {
-                coroutineScope.launch {
-                    lazyListState.animateScrollToItem(chatMessages.lastIndex)
-                }
-            },
-            visibility = showScrollButton,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 100.dp, end = 8.dp)
-        )
-    }
-
-    // Existing auto-scroll logic
-    val lastMessageLength by remember(chatMessages.size) {
-        derivedStateOf { chatMessages.lastOrNull()?.message?.length ?: 0 }
-    }
-
-    LaunchedEffect(chatMessages.size, lastMessageLength) {
-        if (chatMessages.isNotEmpty()) {
-            val lastIndex = chatMessages.lastIndex
-            val scrollThreshold = 3
-            val layoutInfo = lazyListState.layoutInfo
-            val visibleItems = layoutInfo.visibleItemsInfo
-            if ((visibleItems.lastOrNull()?.index ?: 0) >= lastIndex - scrollThreshold) {
-                lazyListState.scrollToItem(lastIndex)
-            }
         }
     }
 }
@@ -323,7 +280,6 @@ fun SendStopButton(
     IconButton(
         onClick = onClick,
         modifier = modifier
-
     ) {
         Icon(
             imageVector = if (isGenerating) Icons.Filled.Stop

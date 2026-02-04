@@ -44,8 +44,8 @@ androidx-espresso-core = "3.7.0"
 
 # UI Components
 dragselect = "3.3.0"
-multiplatformMarkdownRendererM3 = "0.39.1"
-sketch = "4.3.1"
+multiplatformMarkdownRendererM3 = "0.39.2"
+sketch = "4.4.0-beta01"
 
 # Exposed
 exposed = "1.0.0"
