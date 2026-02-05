@@ -154,6 +154,7 @@ sqldelight {
             generateAsync = true
         }
     }
+    linkSqlite.set(true)
 }
 
 android {

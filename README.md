@@ -19,7 +19,22 @@
 
 Discover the power of AI with our Kotlin Multiplatform app. Choose from the latest open-source text and image models to boost your creativity. Pick the model that fits you, create unique texts or images. and keep everything safe and in sync across your devices.
 
-### 🚀 How to Run 
+## 🌸 Powered by Pollinations.ai
+
+<p align="center">
+  <a href="https://pollinations.ai">
+    <img src="https://pollinations.ai/favicon.ico" alt="Pollinations.ai" width="60">
+  </a>
+</p>
+
+This app uses [Pollinations.ai](https://pollinations.ai) — an open-source AI platform providing a unified API for text and image generation.
+
+<p align="center">
+  <a href="https://pollinations.ai"><img src="https://img.shields.io/badge/API-Pollinations.ai-FF6B6B?style=flat-square" alt="Pollinations.ai"></a>
+  <a href="https://github.com/pollinations"><img src="https://img.shields.io/badge/Open%20Source-GitHub-181717?style=flat-square&logo=github" alt="GitHub"></a>
+</p>
+
+## 🚀 How to Run 
 You can run the application for **Android**, **Desktop**, **WebAssembly**, and **iOS** directly from your IDE.
 
 1. Open the project in **Android Studio** or **IntelliJ IDEA**.
@@ -39,6 +54,7 @@ https://github.com/user-attachments/assets/46d00b90-6df8-484c-bfd6-f38c65ad85d9
 
 
 https://github.com/user-attachments/assets/62ad62f5-a80a-4ac0-b8a7-f0707a45a249
+
 
 
 

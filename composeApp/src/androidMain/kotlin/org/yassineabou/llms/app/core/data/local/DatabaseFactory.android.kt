@@ -1,5 +1,6 @@
 package org.yassineabou.llms.app.core.data.local
 
+import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
@@ -13,8 +14,14 @@ actual class DatabaseFactory {
         AndroidSqliteDriver(
             schema = LlmsDatabase.Schema.synchronous(),
             context = MyApp.getContext(),
-            name = "LlmsDatabase.db"
-        ).apply { enableForeignKeys() }
+            name = "LlmsDatabase.db",
+            callback = object : AndroidSqliteDriver.Callback(LlmsDatabase.Schema.synchronous()) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    db.setForeignKeyConstraintsEnabled(true)
+                }
+            }
+        )
 }
 
 

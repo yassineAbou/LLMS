@@ -6,11 +6,17 @@ import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import co.touchlab.kermit.Logger
 import me.sujanpoudel.utils.paths.appCacheDirectory
 import org.yassineabou.llms.LlmsDatabase
+import java.util.Properties
 
 actual class DatabaseFactory {
     actual fun createDriver(): SqlDriver {
         val databasePath = "${appCacheDirectory("org.yassineabou.llms", true)}/LlmsDatabase.db"
-        val driver = JdbcSqliteDriver(url = "jdbc:sqlite:$databasePath")
+        val driver = JdbcSqliteDriver(
+            url = "jdbc:sqlite:$databasePath",
+            properties = Properties().apply {
+                put("foreign_keys", "true")
+            }
+        )
 
         return migrateIfNeeded(driver)
     }
@@ -46,7 +52,5 @@ fun migrateIfNeeded(driver: JdbcSqliteDriver): SqlDriver {
     } else {
         Logger.i {"DB version $oldVersion is up to date."}
     }
-
-    driver.enableForeignKeys()
     return driver
 }
