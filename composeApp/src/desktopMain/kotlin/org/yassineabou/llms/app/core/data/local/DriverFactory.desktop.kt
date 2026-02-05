@@ -8,18 +8,16 @@ import me.sujanpoudel.utils.paths.appCacheDirectory
 import org.yassineabou.llms.LlmsDatabase
 import java.util.Properties
 
-actual class DatabaseFactory {
-    actual fun createDriver(): SqlDriver {
-        val databasePath = "${appCacheDirectory("org.yassineabou.llms", true)}/LlmsDatabase.db"
-        val driver = JdbcSqliteDriver(
-            url = "jdbc:sqlite:$databasePath",
-            properties = Properties().apply {
-                put("foreign_keys", "true")
-            }
-        )
+actual suspend fun createDriver(): SqlDriver {
+    val databasePath = "${appCacheDirectory("org.yassineabou.llms", true)}/LlmsDatabase.db"
+    val driver = JdbcSqliteDriver(
+        url = "jdbc:sqlite:$databasePath",
+        properties = Properties().apply {
+            put("foreign_keys", "true")
+        }
+    )
 
-        return migrateIfNeeded(driver)
-    }
+    return migrateIfNeeded(driver)
 }
 
 private const val versionPragma = "user_version"

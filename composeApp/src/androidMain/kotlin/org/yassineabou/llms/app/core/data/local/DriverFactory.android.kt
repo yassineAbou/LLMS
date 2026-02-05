@@ -6,23 +6,20 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import org.yassineabou.llms.LlmsDatabase
 import org.yassineabou.llms.MyApp
-import java.io.File
 
 
-actual class DatabaseFactory {
-    actual fun createDriver(): SqlDriver =
-        AndroidSqliteDriver(
-            schema = LlmsDatabase.Schema.synchronous(),
-            context = MyApp.getContext(),
-            name = "LlmsDatabase.db",
-            callback = object : AndroidSqliteDriver.Callback(LlmsDatabase.Schema.synchronous()) {
-                override fun onOpen(db: SupportSQLiteDatabase) {
-                    super.onOpen(db)
-                    db.setForeignKeyConstraintsEnabled(true)
-                }
+actual suspend fun createDriver(): SqlDriver =
+    AndroidSqliteDriver(
+        schema = LlmsDatabase.Schema.synchronous(),
+        context = MyApp.getContext(),
+        name = "LlmsDatabase.db",
+        callback = object : AndroidSqliteDriver.Callback(LlmsDatabase.Schema.synchronous()) {
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                super.onOpen(db)
+                db.setForeignKeyConstraintsEnabled(true)
             }
-        )
-}
+        }
+    )
 
 
 /*
