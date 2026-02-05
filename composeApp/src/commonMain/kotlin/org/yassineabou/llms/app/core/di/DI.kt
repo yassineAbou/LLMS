@@ -49,9 +49,7 @@ val commonModule = DI.Module("commonModule") {
     // ========================================================================================
     //                                  Network
     // ========================================================================================
-
-    // Koin: single { ... }
-    // Kodein: bindSingleton { ... }
+    
     bindSingleton {
         Json {
             ignoreUnknownKeys = true
@@ -141,9 +139,6 @@ val commonModule = DI.Module("commonModule") {
     //                                  ViewModels
     // ========================================================================================
 
-    // Koin has a special `viewModel` scope. In Kodein, ViewModels are typically
-    // not singletons. They should be created for each screen. The `provider`
-    // binding is perfect for this, as it creates a new instance every time.
     bindProvider { ImagineViewModel(aiRepository = instance(), asyncManager = instance()) }
     bindProvider { ChatViewModel(aiRepository = instance(), asyncManager = instance()) }
     bindProvider { YouViewModel( asyncManager = instance()) }

@@ -13,6 +13,7 @@ import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.data.async.AsyncManager
+import org.yassineabou.llms.feature.chat.data.model.ChatMessage
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import kotlin.coroutines.cancellation.CancellationException
@@ -193,9 +194,20 @@ class ChatViewModel(
             _generationState.value = GenerationState.Loading(messageIndex)
 
             try {
+                val conversationHistory = _currentChatMessages
+                    .take(maxOf(0, messageIndex - 1))
+                    .filter { it.message.isNotBlank() }
+                    .map { dbMessage ->
+                        ChatMessage(
+                            role = if (dbMessage.is_user == 1L) "user" else "assistant",
+                            content = dbMessage.message
+                        )
+                    }
+
                 aiRepository.streamChat(
                     prompt = prompt,
                     textModel = _selectedTextModel.value,
+                    conversationHistory = conversationHistory
                 ).collect { chunk ->
                     if (generationState.value is GenerationState.Loading) {
                         _currentChatMessages[messageIndex] = _currentChatMessages[messageIndex].copy(
@@ -210,7 +222,6 @@ class ChatViewModel(
             } catch (e: Exception) {
                 handleGenerationError(e, messageIndex)
             }
-
         }
     }
 
