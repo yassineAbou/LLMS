@@ -56,7 +56,6 @@ fun ChatContent(
         if (showAppBar) {
             ChatAppBar(
                 title = selectedTextModel.title,
-                image = selectedTextModel.image,
                 modifier = Modifier
                     .statusBarsPadding()
                     .fillMaxWidth(),
@@ -67,7 +66,6 @@ fun ChatContent(
         } else {
             SelectedModel(
                 title = selectedTextModel.title,
-                image = selectedTextModel.image,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(8.dp)
@@ -150,7 +148,6 @@ private fun ChatMessagesList(
 
                 ChatBubble(
                     chatMessage = chatMessage,
-                    aiIcon = selectedTextModel.image,
                     isLoading = isLoading,
                     regenerateResponse = { regenerateResponse(index) }
                 )

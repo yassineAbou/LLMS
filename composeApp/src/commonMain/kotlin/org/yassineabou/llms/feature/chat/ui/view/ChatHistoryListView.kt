@@ -1,7 +1,6 @@
 package org.yassineabou.llms.feature.chat.ui.view
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
@@ -139,11 +137,6 @@ fun AiProviderInfo(textModel: TextModel) {
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(resource = textModel.image),
-            contentDescription = "",
-            modifier = Modifier.size(20.dp)
-        )
         Text(
             text = textModel.title,
             style = MaterialTheme.typography.titleSmall,

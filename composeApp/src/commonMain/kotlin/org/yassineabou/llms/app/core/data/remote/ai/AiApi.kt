@@ -22,6 +22,7 @@ import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 interface AiApi {
     suspend fun generateImage(request: PollinationsImageRequest): ByteArray
     fun streamChatCompletions(request: ChatCompletionRequest): Flow<String>
+
 }
 
 
@@ -56,7 +57,7 @@ class KtorApi(
     }
 
     override fun streamChatCompletions(request: ChatCompletionRequest): Flow<String> = channelFlow {
-        client.preparePost(AiEndPoint.POLLINATIONS_TEXT_URL) {
+        client.preparePost(AiEndPoint.POLLINATIONS_CHAT_URL) {
             header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
             contentType(ContentType.Application.Json)
             accept(ContentType.Text.EventStream)

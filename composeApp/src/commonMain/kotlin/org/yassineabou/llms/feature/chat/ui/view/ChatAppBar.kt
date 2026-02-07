@@ -21,7 +21,6 @@ import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 @Composable
 fun ChatAppBar(
     title: String,
-    image: DrawableResource,
     modifier: Modifier = Modifier,
     onClickHistory: () -> Unit,
     onNewChatClick: () -> Unit,
@@ -36,7 +35,6 @@ fun ChatAppBar(
         )
         SelectedModel(
             title = title,
-            image = image,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(8.dp)

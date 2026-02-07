@@ -3,16 +3,7 @@ package org.yassineabou.llms.feature.imagine.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -23,23 +14,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,7 +31,6 @@ import androidx.navigation.NavController
 import androidx.window.core.layout.WindowSizeClass
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.DrawableResource
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.navigation.Screen
 import org.yassineabou.llms.app.core.sharedViews.CustomIconButton
@@ -94,7 +70,6 @@ fun ImagineScreen(
         if (shouldShowSupportingPaneButton) {
             ImagineAppBar(
                 title = selectedImageModel.title,
-                image = selectedImageModel.image,
                 modifier = Modifier
                     .weight(0.1f)
                     .fillMaxSize()
@@ -111,7 +86,6 @@ fun ImagineScreen(
             ) {
                 SelectedModel(
                     title = selectedImageModel.title,
-                    image = selectedImageModel.image,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .padding(8.dp)
@@ -176,7 +150,6 @@ fun ImagineScreen(
 @Composable
 private fun ImagineAppBar(
     title: String,
-    image: DrawableResource,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onSelect: () -> Unit
@@ -192,7 +165,6 @@ private fun ImagineAppBar(
 
         SelectedModel(
             title = title,
-            image = image,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(8.dp)
@@ -204,9 +176,7 @@ private fun ImagineAppBar(
                 .padding(6.dp)
         )
     }
-
 }
-
 
 @Composable
 private fun TypeIdeaForm(

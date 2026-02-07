@@ -1,13 +1,6 @@
 package org.yassineabou.llms.feature.imagine.data.model
 
 import androidx.compose.runtime.Immutable
-import llms.composeapp.generated.resources.Res
-import llms.composeapp.generated.resources.ic_flux
-import llms.composeapp.generated.resources.ic_gemini
-import llms.composeapp.generated.resources.ic_llm7
-import llms.composeapp.generated.resources.ic_openai
-import llms.composeapp.generated.resources.ic_sdxl_turbo
-import llms.composeapp.generated.resources.ic_seedream
 
 
 @Immutable
@@ -28,111 +21,87 @@ object ImageGenModelList {
         highEfficiencyModels.first()
     }
 
-    /**
-     * High Efficiency Models: 3,000+ images per pollen
-     */
     val highEfficiencyModels = listOf(
         ImageModel(
             title = "Flux Schnell",
             description = "Fast high-quality image generation. ~5,000 images/pollen 🔥",
-            image = Res.drawable.ic_flux,
             modelName = "flux",
             efficiency = "~5K/pollen"
         ),
         ImageModel(
             title = "Z-Image Turbo",
             description = "Fast 6B Flux with 2x upscaling. ~5,000 images/pollen 🔥",
-            image = Res.drawable.ic_llm7,
             modelName = "zimage",
             efficiency = "~5K/pollen"
         ),
         ImageModel(
             title = "SDXL Turbo",
             description = "Single-step real-time generation. ~3,300 images/pollen",
-            image = Res.drawable.ic_sdxl_turbo,
             modelName = "turbo",
             efficiency = "~3.3K/pollen"
         ),
         ImageModel(
             title = "NanoBanana",
             description = "Gemini 2.5 Flash Image generation. ~33K images/pollen",
-            image = Res.drawable.ic_gemini,
             modelName = "nanobanana",
             efficiency = "~33K/pollen"
         )
     )
 
-    /**
-     * Medium Efficiency Models: 25-125 images per pollen
-     */
     val mediumEfficiencyModels = listOf(
         ImageModel(
             title = "GPT Image 1 Mini",
             description = "OpenAI's image generation model. ~125 images/pollen",
-            image = Res.drawable.ic_openai,
             modelName = "gptimage",
             efficiency = "~125/pollen"
         ),
         ImageModel(
             title = "FLUX.2 Klein 4B",
             description = "Fast image generation & editing. ~125 images/pollen",
-            image = Res.drawable.ic_flux,
             modelName = "klein",
             efficiency = "~125/pollen"
         ),
         ImageModel(
             title = "FLUX.2 Klein 9B",
             description = "Higher quality generation & editing. ~83 images/pollen",
-            image = Res.drawable.ic_flux,
             modelName = "klein-large",
             efficiency = "~83/pollen"
         ),
         ImageModel(
             title = "Seedream 4.0",
             description = "ByteDance ARK, better quality. ~33 images/pollen",
-            image = Res.drawable.ic_seedream,
             modelName = "seedream",
             efficiency = "~33/pollen"
         ),
         ImageModel(
             title = "FLUX.1 Kontext",
             description = "In-context editing & generation. ~25 images/pollen",
-            image = Res.drawable.ic_flux,
             modelName = "kontext",
             efficiency = "~25/pollen"
         ),
         ImageModel(
             title = "Seedream 4.5 Pro",
             description = "ByteDance ARK 4K, Multi-Image. ~25 images/pollen",
-            image = Res.drawable.ic_seedream,
             modelName = "seedream-pro",
             efficiency = "~25/pollen"
         ),
         ImageModel(
             title = "GPT Image 1.5",
             description = "OpenAI's advanced image generation. ~31 images/pollen",
-            image = Res.drawable.ic_openai,
             modelName = "gptimage-large",
             efficiency = "~31/pollen"
         )
     )
 
-    /**
-     * Premium Models: Highest quality
-     */
     val premiumModels = listOf(
         ImageModel(
             title = "NanoBanana Pro",
             description = "Gemini 3 Pro Image (4K, Thinking). ~8 images/pollen ⭐",
-            image = Res.drawable.ic_gemini,
             modelName = "nanobanana-pro",
             efficiency = "~8/pollen"
         )
     )
 
-    /**
-     * Grouped models for UI display
-     */
     val groupedModels: List<ImageModelSection> by lazy {
         listOf(
             ImageModelSection(

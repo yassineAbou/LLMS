@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +47,6 @@ import org.yassineabou.llms.app.core.util.Animations
 @Composable
 fun ChatBubble(
     chatMessage: Chat_messages,
-    aiIcon: DrawableResource,
     isLoading: Boolean,
     regenerateResponse: () -> Unit
 ) {
@@ -67,7 +67,7 @@ fun ChatBubble(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            ChatBubbleIcon(isUser = chatMessage.is_user == 1L, aiIcon = aiIcon)
+            ChatBubbleIcon(isUser = chatMessage.is_user == 1L)
 
             when {
                 isLoading -> {
@@ -92,15 +92,13 @@ fun ChatBubble(
 @Composable
 private fun ChatBubbleIcon(
     isUser: Boolean,
-    aiIcon: DrawableResource
 ) {
     if (isUser) {
         UserIcon()
     } else {
-        AiProviderIcon(aiIcon = aiIcon)
+        AiIcon()
     }
 }
-
 @Composable
 private fun UserIcon() {
 
@@ -123,19 +121,23 @@ private fun UserIcon() {
 }
 
 @Composable
-private fun AiProviderIcon(aiIcon: DrawableResource) {
+private fun AiIcon() {
     Box(
         modifier = Modifier
-            .size(30.dp)
-            .padding(start = 4.dp, top = 4.dp),
+            .size(40.dp)
+            .background(
+                MaterialTheme.colorSchemeCustom.alwaysBlue,
+                CircleShape
+            ),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(aiIcon),
-            contentDescription = "AI Icon"
+        Icon(
+            imageVector = Icons.Default.SmartToy,
+            contentDescription = "AI Icon",
+            tint = Color.White,
+            modifier = Modifier.size(22.dp)
         )
     }
-
 }
 
 @Composable

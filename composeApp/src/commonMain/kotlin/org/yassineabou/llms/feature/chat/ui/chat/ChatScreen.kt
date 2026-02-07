@@ -22,6 +22,7 @@ fun ChatScreen(
         // Show ListDetailPane for medium or larger screens
         ListDetailPane(chatViewModel = chatViewModel)
     } else {
+
         ChatContent(
             chatViewModel = chatViewModel,
             selectedTextModel = selectedTextModel,

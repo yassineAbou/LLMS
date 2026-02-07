@@ -6,11 +6,10 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Immutable
-data class ImageModel @OptIn(ExperimentalUuidApi::class) constructor(
-    val id: String = Uuid.random().toString(),
+data class ImageModel(
+    val id: Int = IdGenerator().generatedId(),
     val title: String,
     val description: String,
-    val image: DrawableResource,
     val modelName: String,
     val efficiency: String? = null
 )
