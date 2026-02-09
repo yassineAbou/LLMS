@@ -16,12 +16,15 @@ fun RecentChatHistoryContent(
     navController: NavController
 ) {
     val recentChats by chatViewModel.recentChats.collectAsStateWithLifecycle()
+    val availableModels by chatViewModel.availableTextModels.collectAsStateWithLifecycle()
+
     Surface {
         ContentStateAnimator(
             contentList =  recentChats,
             contentComposable = { list ->
                 ChatHistoryListView(
                     chats = list,
+                    availableModels = availableModels,
                     deleteChats = { chatViewModel.deleteChats(it) },
                     toggleBookmark = { chatViewModel.toggleBookmark(it) },
                     onClick = { chatHistory ->

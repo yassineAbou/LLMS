@@ -3,8 +3,11 @@ package org.yassineabou.llms.app.core.data.remote.ai
 object AiEndPoint {
 
     // Text Generation - Pollinations API
-    const val POLLINATIONS_TEXT_URL = "https://gen.pollinations.ai/v1/chat/completions"
+
+    const val POLLINATIONS_TEXT_MODELS_URL = "https://gen.pollinations.ai/text/models"
+    const val POLLINATIONS_CHAT_URL = "https://gen.pollinations.ai/v1/chat/completions"
     const val STREAM_PREFIX = "data: "
+
 
     // Image Generation - Pollinations API
     const val POLLINATIONS_BASE_URL = "https://gen.pollinations.ai/image/"

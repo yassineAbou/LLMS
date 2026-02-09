@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.Chat_messages
@@ -14,7 +15,6 @@ import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.data.async.AsyncManager
 import org.yassineabou.llms.feature.chat.data.model.ChatMessage
-import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock
@@ -34,11 +34,23 @@ class ChatViewModel(
 
     // region Text Model Selection State
     // ========================================================================================
-    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.defaultModel)
-    private val _selectedTextModel = MutableStateFlow<TextModel>(TextGenModelList.defaultModel)
+    private val _tempSelectedTextModel = MutableStateFlow<TextModel>(TextModel.DEFAULT)
+    private val _selectedTextModel = MutableStateFlow<TextModel>(TextModel.DEFAULT)
 
     val tempSelectedTextModel: StateFlow<TextModel> = _tempSelectedTextModel
     val selectedTextModel: StateFlow<TextModel> = _selectedTextModel
+    // endregion
+
+    // region Dynamic Text Models State
+    // ========================================================================================
+    private val _availableTextModels = MutableStateFlow<List<TextModel>>(emptyList())
+    val availableTextModels: StateFlow<List<TextModel>> = _availableTextModels.asStateFlow()
+
+    private val _isLoadingModels = MutableStateFlow(false)
+    val isLoadingModels: StateFlow<Boolean> = _isLoadingModels.asStateFlow()
+
+    private val _modelsLoadError = MutableStateFlow<String?>(null)
+    val modelsLoadError: StateFlow<String?> = _modelsLoadError.asStateFlow()
     // endregion
 
     // region Chat Message State
@@ -82,11 +94,43 @@ class ChatViewModel(
                 }
             }
         }
+
+        loadTextModels()
     }
 
     // ========================================================================================
     //                                  Model Management
     // ========================================================================================
+
+    // region Load Text Models
+    // ========================================================================================
+    fun loadTextModels() {
+        viewModelScope.launch {
+            _isLoadingModels.value = true
+            _modelsLoadError.value = null
+
+            aiRepository.getTextModels()
+                .onSuccess { models ->
+                    _availableTextModels.value = models
+
+                    if (models.isNotEmpty() && _selectedTextModel.value == TextModel.DEFAULT) {
+                        val cheapestModel = models.first()
+                        _selectedTextModel.value = cheapestModel
+                        _tempSelectedTextModel.value = cheapestModel
+                    }
+                }
+                .onFailure { error ->
+                    _modelsLoadError.value = error.message ?: "Failed to load models"
+
+                    if (_availableTextModels.value.isEmpty()) {
+                        _availableTextModels.value = listOf(TextModel.DEFAULT)
+                    }
+                }
+
+            _isLoadingModels.value = false
+        }
+    }
+    // endregion
 
     // region Model Selection Methods
     // ========================================================================================
@@ -104,13 +148,15 @@ class ChatViewModel(
 
     fun handleModelSelectionChange() {
         val modelChanged = tempSelectedTextModel.value != selectedTextModel.value
-        if (modelChanged) handleModelChangeWorkflow() else confirmSelectedTextModel()
+        if (modelChanged) {
+            handleModelChangeWorkflow()
+        } else {
+            confirmSelectedTextModel()
+        }
     }
-
 
     private fun handleModelChangeWorkflow() {
         confirmSelectedTextModel()
-        // Simply reset for new chat - previous messages are already auto-saved
         if (_currentChatMessages.isNotEmpty()) {
             resetCurrentChat()
         }
@@ -125,6 +171,7 @@ class ChatViewModel(
     // ========================================================================================
     fun sendMessage(message: String, isUser: Boolean = true) {
         if (_generationState.value is GenerationState.Loading) stopGeneration()
+
         _currentChatMessages.add(
             Chat_messages(
                 id = 0L,
@@ -155,6 +202,7 @@ class ChatViewModel(
     fun regenerateResponse(index: Int) {
         val userMessage = _currentChatMessages[index - 1].message
         val currentMessage = _currentChatMessages[index]
+
         _currentChatMessages[index] = currentMessage.copy(message = "")
         performResponseGeneration(
             messageIndex = index,
@@ -182,13 +230,13 @@ class ChatViewModel(
         )
     }
 
-
     private fun performResponseGeneration(
         messageIndex: Int,
         prompt: String,
     ) {
         viewModelScope.launch {
             val currentMessage = _currentChatMessages[messageIndex]
+            val currentModel = _selectedTextModel.value
 
             _currentChatMessages[messageIndex] = currentMessage.copy(message = "")
             _generationState.value = GenerationState.Loading(messageIndex)
@@ -206,7 +254,7 @@ class ChatViewModel(
 
                 aiRepository.streamChat(
                     prompt = prompt,
-                    textModel = _selectedTextModel.value,
+                    textModel = currentModel,
                     conversationHistory = conversationHistory
                 ).collect { chunk ->
                     if (generationState.value is GenerationState.Loading) {
@@ -215,8 +263,8 @@ class ChatViewModel(
                         )
                     }
                 }
-                _generationState.value = GenerationState.Success
 
+                _generationState.value = GenerationState.Success
                 autoSaveCurrentChat()
 
             } catch (e: Exception) {
@@ -228,6 +276,7 @@ class ChatViewModel(
     private fun handleGenerationError(e: Exception, messageIndex: Int) {
         if (e !is CancellationException) {
             val errorMessage = e.message ?: "Generation failed"
+
             _generationState.value = GenerationState.Failure(errorMessage)
             _currentChatMessages[messageIndex] = Chat_messages(
                 id = 0L,
@@ -330,9 +379,10 @@ class ChatViewModel(
         viewModelScope.launch {
             _selectedChats.value = chats
             loadChats(chats)
-            val matchedModel = TextGenModelList.allModels.find { it.modelName == chats.text_model_name }
-            _selectedTextModel.value = matchedModel ?: TextGenModelList.defaultModel
-            _tempSelectedTextModel.value = matchedModel ?: TextGenModelList.defaultModel
+
+            val matchedModel = _availableTextModels.value.find { it.modelName == chats.text_model_name }
+            _selectedTextModel.value = matchedModel ?: TextModel.DEFAULT
+            _tempSelectedTextModel.value = matchedModel ?: TextModel.DEFAULT
         }
     }
     // endregion
@@ -344,7 +394,6 @@ class ChatViewModel(
         val fullDescription = _currentChatMessages.joinToString("\n") { it.message }
         return if (fullDescription.length > 150) "${fullDescription.take(150)}..." else fullDescription
     }
-
 
     private fun loadChats(chats: Chats) {
         viewModelScope.launch {

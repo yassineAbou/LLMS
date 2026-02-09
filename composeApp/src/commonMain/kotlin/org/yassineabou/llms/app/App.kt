@@ -1,15 +1,13 @@
 package org.yassineabou.llms.app
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import org.kodein.di.DI
 import org.yassineabou.llms.app.core.di.LocalDI
 import org.yassineabou.llms.app.core.di.createDI
+import org.yassineabou.llms.app.core.sharedViews.AppLoadingIndicator
 import org.yassineabou.llms.app.core.theme.AppTheme
 
 
@@ -24,7 +22,7 @@ fun App() {
     }
 
     if (di == null) {
-        AppLoadingScreen()
+        AppLoadingIndicator(modifier = Modifier.fillMaxSize())
     } else {
         CompositionLocalProvider(LocalDI provides di!!) {
             AppTheme {
@@ -34,15 +32,4 @@ fun App() {
     }
 }
 
-@Composable
-private fun AppLoadingScreen() {
-    AppTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    }
-}
 

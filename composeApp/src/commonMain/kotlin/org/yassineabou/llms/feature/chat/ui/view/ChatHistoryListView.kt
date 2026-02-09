@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.unit.dp
 import org.yassineabou.llms.Chats
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.feature.chat.data.model.TextGenModelList
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 
 
@@ -30,7 +29,8 @@ fun ChatHistoryListView(
     chats: List<Chats>,
     deleteChats: (Chats) -> Unit,
     toggleBookmark: (Chats) -> Unit,
-    onClick: (Chats) -> Unit
+    onClick: (Chats) -> Unit,
+    availableModels: List<TextModel> = emptyList()
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -42,6 +42,7 @@ fun ChatHistoryListView(
         ) { conversationItem ->
             ChatHistoryCard(
                 chats = conversationItem,
+                availableModels = availableModels,
                 deleteChats = { deleteChats(it) },
                 toggleBookmark = { toggleBookmark(it) },
                 onClick = { onClick(it) }
@@ -53,14 +54,15 @@ fun ChatHistoryListView(
 @Composable
 fun ChatHistoryCard(
     chats: Chats,
+    availableModels: List<TextModel>,
     deleteChats: (Chats) -> Unit,
     toggleBookmark: (Chats) -> Unit,
     onClick: (Chats) -> Unit
 ) {
-    val textModel by remember(chats.text_model_name) {
+    val textModel by remember(chats.text_model_name, availableModels) {
         derivedStateOf {
-            TextGenModelList.allModels.find { it.modelName == chats.text_model_name }
-                ?: TextGenModelList.defaultModel
+            availableModels.find { it.modelName == chats.text_model_name }
+                ?: TextModel.DEFAULT
         }
     }
     Card(

@@ -16,6 +16,7 @@ fun SavedChatHistoryContent(
     navController: NavController
 ) {
     val savedChats by chatViewModel.savedChats.collectAsStateWithLifecycle()
+    val availableModels by chatViewModel.availableTextModels.collectAsStateWithLifecycle()
 
     Surface {
         ContentStateAnimator(
@@ -23,6 +24,7 @@ fun SavedChatHistoryContent(
             contentComposable = { list ->
                 ChatHistoryListView(
                     chats = list,
+                    availableModels = availableModels,
                     deleteChats = {
                         chatViewModel.deleteChats(it)
                     },

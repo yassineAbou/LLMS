@@ -16,12 +16,15 @@ import org.yassineabou.llms.app.core.data.remote.ai.AiEndPoint.STREAM_PREFIX
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionResponse
+import org.yassineabou.llms.feature.chat.data.model.TextModelResponse
 import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 
 
 interface AiApi {
     suspend fun generateImage(request: PollinationsImageRequest): ByteArray
     fun streamChatCompletions(request: ChatCompletionRequest): Flow<String>
+
+    suspend fun getTextModels(): List<TextModelResponse>
 
 }
 
@@ -38,12 +41,10 @@ class KtorApi(
         return client.get(url) {
             header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
 
-            // Required parameters
             parameter("model", request.model)
             parameter("width", request.width)
             parameter("height", request.height)
 
-            // Optional image parameters
             request.seed?.let { parameter("seed", it) }
             if (request.enhance) parameter("enhance", "true")
             request.negativePrompt?.let { parameter("negative_prompt", it) }
@@ -89,6 +90,13 @@ class KtorApi(
                 }
             }
         }
+    }
+
+    override suspend fun getTextModels(): List<TextModelResponse> {
+        return client.get(AiEndPoint.POLLINATIONS_TEXT_MODELS_URL) {
+            header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
+            timeout { requestTimeoutMillis = 30_000 }
+        }.body()
     }
 
     private suspend fun ProducerScope<String>.processAndSend(dataJson: String) {

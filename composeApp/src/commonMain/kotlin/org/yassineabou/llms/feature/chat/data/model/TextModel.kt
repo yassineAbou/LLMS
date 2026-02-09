@@ -9,6 +9,15 @@ data class TextModel(
     val id: Int = IdGenerator().generatedId(),
     val title: String,
     val modelName: String,
-    val efficiency: String? = null
-)
+    val description: String? = null
+){
+    companion object {
+
+        val DEFAULT = TextModel(
+            title = "Amazon Nova Micro",
+            modelName = "nova-fast",
+            description = "Amazon Nova Micro - Ultra Fast & Ultra Cheap"
+        )
+    }
+}
 
