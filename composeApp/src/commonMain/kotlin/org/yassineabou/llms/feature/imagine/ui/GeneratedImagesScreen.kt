@@ -1,5 +1,4 @@
-
-
+@file:OptIn(ExperimentalComposeUiApi::class)
 
 package org.yassineabou.llms.feature.imagine.ui
 
@@ -50,7 +49,6 @@ import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExp
 import org.yassineabou.llms.feature.imagine.ui.view.ImageSelectionControls
 import org.yassineabou.llms.feature.imagine.ui.view.NoContentMessage
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun GeneratedImagesScreen(
     navController: NavController,

@@ -3,11 +3,13 @@ package org.yassineabou.llms.app.core.data.remote.ai
 import kotlinx.coroutines.flow.Flow
 import kotlinx.io.IOException
 import org.yassineabou.llms.app.core.util.ImageMetadataUtil
+import org.yassineabou.llms.app.core.util.ImageModelMapper
 import org.yassineabou.llms.app.core.util.TextModelMapper
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatMessage
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import org.yassineabou.llms.feature.imagine.data.model.GeneratedImageResult
+import org.yassineabou.llms.feature.imagine.data.model.ImageModel
 import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 import org.yassineabou.llms.feature.imagine.data.model.UrlExample
 import kotlin.io.encoding.Base64
@@ -70,6 +72,16 @@ class AiRepository(private val aiApi: AiApi) {
         return try {
             val response = aiApi.getTextModels()
             val models = TextModelMapper.mapToTextModels(response)
+            Result.success(models)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getImageModels(): Result<List<ImageModel>> {
+        return try {
+            val response = aiApi.getImageModels()
+            val models = ImageModelMapper.mapToImageModels(response)
             Result.success(models)
         } catch (e: Exception) {
             Result.failure(e)

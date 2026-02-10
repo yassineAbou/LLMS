@@ -10,6 +10,13 @@ data class ImageModel(
     val id: Int = IdGenerator().generatedId(),
     val title: String,
     val description: String,
-    val modelName: String,
-    val efficiency: String? = null
-)
+    val modelName: String
+) {
+    companion object {
+        val DEFAULT = ImageModel(
+            title = "Flux Schnell",
+            description = "Flux Schnell - Fast high-quality image generation",
+            modelName = "flux"
+        )
+    }
+}

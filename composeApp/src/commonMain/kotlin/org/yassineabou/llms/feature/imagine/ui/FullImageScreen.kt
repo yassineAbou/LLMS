@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package org.yassineabou.llms.feature.imagine.ui
 
 import androidx.compose.foundation.background
@@ -67,7 +69,6 @@ import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FullScreenImage(
     navController: NavController,

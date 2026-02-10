@@ -17,6 +17,7 @@ import org.yassineabou.llms.feature.chat.data.model.ChatCompletionChunk
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionRequest
 import org.yassineabou.llms.feature.chat.data.model.ChatCompletionResponse
 import org.yassineabou.llms.feature.chat.data.model.TextModelResponse
+import org.yassineabou.llms.feature.imagine.data.model.ImageModelResponse
 import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 
 
@@ -25,6 +26,8 @@ interface AiApi {
     fun streamChatCompletions(request: ChatCompletionRequest): Flow<String>
 
     suspend fun getTextModels(): List<TextModelResponse>
+
+    suspend fun getImageModels(): List<ImageModelResponse>
 
 }
 
@@ -36,7 +39,7 @@ class KtorApi(
 
     override suspend fun generateImage(request: PollinationsImageRequest): ByteArray {
         val encodedPrompt = request.prompt.encodeURLPathPart()
-        val url = AiEndPoint.POLLINATIONS_BASE_URL + encodedPrompt
+        val url = AiEndPoint.POLLINATIONS_IMAGE_URL + encodedPrompt
 
         return client.get(url) {
             header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
@@ -94,6 +97,13 @@ class KtorApi(
 
     override suspend fun getTextModels(): List<TextModelResponse> {
         return client.get(AiEndPoint.POLLINATIONS_TEXT_MODELS_URL) {
+            header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
+            timeout { requestTimeoutMillis = 30_000 }
+        }.body()
+    }
+
+    override suspend fun getImageModels(): List<ImageModelResponse> {
+        return client.get(AiEndPoint.POLLINATIONS_IMAGE_MODELS_URL) {
             header(HttpHeaders.Authorization, "Bearer ${AiEndPoint.POLLINATIONS_API_KEY}")
             timeout { requestTimeoutMillis = 30_000 }
         }.body()

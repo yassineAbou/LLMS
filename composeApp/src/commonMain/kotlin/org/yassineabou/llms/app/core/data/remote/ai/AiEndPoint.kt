@@ -10,7 +10,9 @@ object AiEndPoint {
 
 
     // Image Generation - Pollinations API
-    const val POLLINATIONS_BASE_URL = "https://gen.pollinations.ai/image/"
+    const val POLLINATIONS_IMAGE_URL = "https://gen.pollinations.ai/image/"
+
+    const val POLLINATIONS_IMAGE_MODELS_URL = "https://gen.pollinations.ai/image/models"
 
     // ═══════════════════════════════════════════════════════════════
     // 🌱 SIGN UP FOR YOUR FREE API KEY AT: https://enter.pollinations.ai

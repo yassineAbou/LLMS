@@ -1,128 +1,8 @@
 package org.yassineabou.llms.feature.imagine.data.model
 
-import androidx.compose.runtime.Immutable
+object Inspiration {
 
-
-@Immutable
-data class ImageModelSection(
-    val title: String,
-    val subtitle: String,
-    val models: List<ImageModel>
-)
-
-@Immutable
-object ImageGenModelList {
-
-    val allModels: List<ImageModel> by lazy {
-        highEfficiencyModels + mediumEfficiencyModels + premiumModels
-    }
-
-    val defaultModel: ImageModel by lazy {
-        highEfficiencyModels.first()
-    }
-
-    val highEfficiencyModels = listOf(
-        ImageModel(
-            title = "Flux Schnell",
-            description = "Fast high-quality image generation. ~5,000 images/pollen 🔥",
-            modelName = "flux",
-            efficiency = "~5K/pollen"
-        ),
-        ImageModel(
-            title = "Z-Image Turbo",
-            description = "Fast 6B Flux with 2x upscaling. ~5,000 images/pollen 🔥",
-            modelName = "zimage",
-            efficiency = "~5K/pollen"
-        ),
-        ImageModel(
-            title = "SDXL Turbo",
-            description = "Single-step real-time generation. ~3,300 images/pollen",
-            modelName = "turbo",
-            efficiency = "~3.3K/pollen"
-        ),
-        ImageModel(
-            title = "NanoBanana",
-            description = "Gemini 2.5 Flash Image generation. ~33K images/pollen",
-            modelName = "nanobanana",
-            efficiency = "~33K/pollen"
-        )
-    )
-
-    val mediumEfficiencyModels = listOf(
-        ImageModel(
-            title = "GPT Image 1 Mini",
-            description = "OpenAI's image generation model. ~125 images/pollen",
-            modelName = "gptimage",
-            efficiency = "~125/pollen"
-        ),
-        ImageModel(
-            title = "FLUX.2 Klein 4B",
-            description = "Fast image generation & editing. ~125 images/pollen",
-            modelName = "klein",
-            efficiency = "~125/pollen"
-        ),
-        ImageModel(
-            title = "FLUX.2 Klein 9B",
-            description = "Higher quality generation & editing. ~83 images/pollen",
-            modelName = "klein-large",
-            efficiency = "~83/pollen"
-        ),
-        ImageModel(
-            title = "Seedream 4.0",
-            description = "ByteDance ARK, better quality. ~33 images/pollen",
-            modelName = "seedream",
-            efficiency = "~33/pollen"
-        ),
-        ImageModel(
-            title = "FLUX.1 Kontext",
-            description = "In-context editing & generation. ~25 images/pollen",
-            modelName = "kontext",
-            efficiency = "~25/pollen"
-        ),
-        ImageModel(
-            title = "Seedream 4.5 Pro",
-            description = "ByteDance ARK 4K, Multi-Image. ~25 images/pollen",
-            modelName = "seedream-pro",
-            efficiency = "~25/pollen"
-        ),
-        ImageModel(
-            title = "GPT Image 1.5",
-            description = "OpenAI's advanced image generation. ~31 images/pollen",
-            modelName = "gptimage-large",
-            efficiency = "~31/pollen"
-        )
-    )
-
-    val premiumModels = listOf(
-        ImageModel(
-            title = "NanoBanana Pro",
-            description = "Gemini 3 Pro Image (4K, Thinking). ~8 images/pollen ⭐",
-            modelName = "nanobanana-pro",
-            efficiency = "~8/pollen"
-        )
-    )
-
-    val groupedModels: List<ImageModelSection> by lazy {
-        listOf(
-            ImageModelSection(
-                title = "🔥 Best Value",
-                subtitle = "3,000+ images per pollen",
-                models = highEfficiencyModels
-            ),
-            ImageModelSection(
-                title = "⚡ Balanced",
-                subtitle = "25-125 images per pollen",
-                models = mediumEfficiencyModels
-            ),
-            ImageModelSection(
-                title = "⭐ Premium",
-                subtitle = "Highest quality",
-                models = premiumModels
-            )
-        )
-    }
-
-    val inspiration = listOf(
+    val list = listOf(
         UrlExample(//1
             url = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/cc242d6c-f960-4274-aa1d-f22a71e705ef/original=true,quality=90/2DD7DD35D931B2293D7B08F39CC371.jpeg",
             prompt = "AtomicHeartTwinsCosplay in absolute darkness, profoundly no light, holding black-pink heart shaped orbstaff, pointed hat, translucent skin, Describe the captivating scene captured in the vintage photograph featuring a Bedouin artist skillfully swallowing a massive sword in the style of Final Fantasy, amidst a mesmerized audience. Provide details about the artist's attire, the sword's intricate design, and the expressions of the onlookers as they witness this extraordinary performance., amazing quality, masterpiece, best quality, hyper detailed, ultra detailed, UHD, perfect anatomy, portrait, dof, hyper-realism, majestic, awesome, inspiring, closeup, an weathered outworn old Fantasy cape, smooth, Closeup, by Dring, rust paint peelz, atmospheric haze, cinamatic composition, soft shadows, national geographic style"
@@ -524,4 +404,5 @@ object ImageGenModelList {
             prompt = "1girl, glowing scythe, full moon, mist, ethereal, dark fantasy, dramatic lighting, night sky, mysterious atmosphere, fantasy setting masterpiece, best quality, amazing quality, very aesthetic, absurdres, detailed eyes, newest, <lora:CivChan:1>, CivChan, purple eyes, pink hair, maid outfit, <lora:PinkieNeonAnimeIL:0.5>, neon illustration in the style of pinkneonanime,"
         )
     )
+
 }

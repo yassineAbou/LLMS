@@ -18,6 +18,8 @@ import org.yassineabou.llms.app.core.sharedViews.AppLoadingIndicator
 import org.yassineabou.llms.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.llms.app.core.sharedViews.ModelItem
 import org.yassineabou.llms.app.core.sharedViews.ModelTypeActionButtons
+import org.yassineabou.llms.app.core.sharedViews.ModelsErrorState
+import org.yassineabou.llms.app.core.sharedViews.ModelsGrid
 import org.yassineabou.llms.app.core.util.ModelGridUtils.getColumnCount
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
@@ -53,122 +55,26 @@ fun TextModelsBottomSheet(
                 )
             },
             body = {
-                TextModelsContent(
-                    isLoading = isLoadingModels,
-                    error = modelsLoadError,
-                    models = availableModels,
-                    selectedModelName = tempSelectedTextModel.modelName,
-                    onModelSelected = { chatViewModel.selectTempTextModel(it) },
-                    onRetry = { chatViewModel.loadTextModels() }
-                )
-            }
-        )
-    }
-}
+                when {
+                    isLoadingModels -> AppLoadingIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
 
-@Composable
-private fun TextModelsContent(
-    isLoading: Boolean,
-    error: String?,
-    models: List<TextModel>,
-    selectedModelName: String,
-    onModelSelected: (TextModel) -> Unit,
-    onRetry: () -> Unit
-) {
-    when {
-        isLoading -> AppLoadingIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-        )
-        error != null && models.isEmpty() -> ModelsErrorState(
-            errorMessage = error,
-            onRetry = onRetry
-        )
-        else -> ModelsGrid(
-            models = models,
-            selectedModelName = selectedModelName,
-            onModelSelected = onModelSelected
-        )
-    }
-}
-
-@Composable
-private fun ModelsErrorState(
-    errorMessage: String,
-    onRetry: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "Failed to load models",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.error
-        )
-        Text(
-            text = errorMessage,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Button(onClick = onRetry) {
-            Text("Retry")
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun ModelsGrid(
-    models: List<TextModel>,
-    selectedModelName: String,
-    onModelSelected: (TextModel) -> Unit
-) {
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    val columns = getColumnCount(windowSizeClass)
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        contentPadding = PaddingValues(
-            start = 16.dp,
-            end = 16.dp,
-            top = 16.dp,
-            bottom = 24.dp
-        )
-    ) {
-        item {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                maxItemsInEachRow = columns
-            ) {
-                models.forEach { model ->
-                    ModelItem(
-                        title = model.title,
-                        efficiency = null,
-                        isSelected = model.modelName == selectedModelName,
-                        onSelected = { onModelSelected(model) },
-                        modifier = Modifier.weight(1f)
+                    )
+                    modelsLoadError != null && availableModels.isEmpty() -> ModelsErrorState(
+                        errorMessage = modelsLoadError ?: "",
+                        onRetry = { chatViewModel.loadTextModels() }
+                    )
+                    else -> ModelsGrid(
+                        models = availableModels,
+                        selectedModel = tempSelectedTextModel,
+                        onModelSelected = { chatViewModel.selectTempTextModel(it) },
+                        modelTitle = { it.title },
+                        modelKey = { it.modelName }
                     )
                 }
-
-                val remainder = models.size % columns
-                if (remainder != 0) {
-                    repeat(columns - remainder) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
             }
-        }
+        )
     }
 }
-
-
-
