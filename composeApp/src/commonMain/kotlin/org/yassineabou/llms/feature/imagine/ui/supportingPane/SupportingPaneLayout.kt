@@ -1,6 +1,14 @@
+@file:OptIn(ExperimentalMaterial3AdaptiveApi::class)
+
 package org.yassineabou.llms.feature.imagine.ui.supportingPane
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -10,33 +18,36 @@ import androidx.compose.material3.adaptive.layout.SupportingPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import org.yassineabou.llms.feature.imagine.ui.*
+import org.yassineabou.llms.app.core.navigation.Navigator
+import org.yassineabou.llms.feature.imagine.ui.FullScreenImage
+import org.yassineabou.llms.feature.imagine.ui.GeneratedImagesScreen
+import org.yassineabou.llms.feature.imagine.ui.ImageGenerationLoadingScreen
+import org.yassineabou.llms.feature.imagine.ui.ImagineScreen
+import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun SupportingPaneLayout(
-    navController: NavController,
+    navigator: Navigator,
     imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator
 ) {
-    val navigator = rememberSupportingPaneScaffoldNavigator()
+    val scaffoldNavigator = rememberSupportingPaneScaffoldNavigator()
 
     SupportingPaneScaffold(
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
+        directive = scaffoldNavigator.scaffoldDirective,
+        value = scaffoldNavigator.scaffoldValue,
         mainPane = {
             MainPane(
-                navController = navController,
+                navigator = navigator,
                 supportingPaneNavigator = supportingPaneNavigator,
                 imagineViewModel = imagineViewModel,
-                shouldShowSupportingPaneButton = navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden,
+                shouldShowSupportingPaneButton = scaffoldNavigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden,
             )
         },
         supportingPane = {
             SupportingPane(
-                navController = navController,
+                navigator = navigator,
                 supportingPaneNavigator = supportingPaneNavigator,
                 imagineViewModel = imagineViewModel
             )
@@ -46,7 +57,7 @@ fun SupportingPaneLayout(
 
 @Composable
 fun MainPane(
-    navController: NavController,
+    navigator: Navigator,
     supportingPaneNavigator: SupportingPaneNavigator,
     imagineViewModel: ImagineViewModel,
     shouldShowSupportingPaneButton: Boolean,
@@ -59,7 +70,7 @@ fun MainPane(
         when {
             isLargeScreen || currentScreen is SupportingPaneScreen.GeneratedImages -> {
                 ImagineScreen(
-                    navController = navController,
+                    navigator = navigator,
                     imagineViewModel = imagineViewModel,
                     supportingPaneNavigator = supportingPaneNavigator,
                     shouldShowSupportingPaneButton = shouldShowSupportingPaneButton
@@ -67,14 +78,14 @@ fun MainPane(
             }
             isLargeScreen && currentScreen is SupportingPaneScreen.ImageGenerationLoading  -> {
                 ImageGenerationLoadingScreen(
-                    navController = navController,
+                    navigator = navigator,
                     imagineViewModel = imagineViewModel,
                     supportingPaneNavigator = supportingPaneNavigator
                 )
             }
             isLargeScreen && currentScreen is SupportingPaneScreen.FullScreenImage  -> {
                 FullScreenImage(
-                    navController = navController,
+                    navigator = navigator,
                     imagineViewModel = imagineViewModel,
                     supportingPaneNavigator = supportingPaneNavigator
                 )
@@ -83,14 +94,14 @@ fun MainPane(
                 when (currentScreen) {
                     SupportingPaneScreen.ImageGenerationLoading -> {
                         ImageGenerationLoadingScreen(
-                            navController = navController,
+                            navigator = navigator,
                             imagineViewModel = imagineViewModel,
                             supportingPaneNavigator = supportingPaneNavigator
                         )
                     }
                     SupportingPaneScreen.FullScreenImage -> {
                         FullScreenImage(
-                            navController = navController,
+                            navigator = navigator,
                             imagineViewModel = imagineViewModel,
                             supportingPaneNavigator = supportingPaneNavigator
                         )
@@ -105,7 +116,7 @@ fun MainPane(
 
 @Composable
 fun SupportingPane(
-    navController: NavController,
+    navigator: Navigator,
     supportingPaneNavigator: SupportingPaneNavigator,
     imagineViewModel: ImagineViewModel,
     modifier: Modifier = Modifier
@@ -131,25 +142,23 @@ fun SupportingPane(
                 GeneratedImagesScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
                     imagineViewModel = imagineViewModel,
-                    navController = navController
+                    navigator = navigator
                 )
             }
             is SupportingPaneScreen.ImageGenerationLoading -> {
                 ImageGenerationLoadingScreen(
                     supportingPaneNavigator = supportingPaneNavigator,
                     imagineViewModel = imagineViewModel,
-                    navController = navController
+                    navigator = navigator
                 )
             }
             is SupportingPaneScreen.FullScreenImage -> {
                 FullScreenImage(
                     supportingPaneNavigator = supportingPaneNavigator,
                     imagineViewModel = imagineViewModel,
-                    navController = navController
+                    navigator = navigator
                 )
             }
         }
     }
 }
-
-

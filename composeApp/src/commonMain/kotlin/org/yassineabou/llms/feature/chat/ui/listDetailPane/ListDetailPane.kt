@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3AdaptiveApi::class)
+
 package org.yassineabou.llms.feature.chat.ui.listDetailPane
 
 import androidx.compose.animation.AnimatedVisibility
@@ -18,25 +20,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import llms.composeapp.generated.resources.Res
 import llms.composeapp.generated.resources.ic_clear
 import org.jetbrains.compose.resources.painterResource
-import org.yassineabou.llms.Chats
+import org.yassineabou.llms.app.core.data.local.Chats
+import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.app.core.util.Animations
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.chat.ChatContent
-import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.feature.imagine.ui.view.DropDownDialog
 import org.yassineabou.llms.feature.imagine.ui.view.NoContentMessage
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun ListDetailPane(
     chatViewModel: ChatViewModel
 ) {
-    // Use ChatHistory as the type for the navigator
-    val navigator = rememberListDetailPaneScaffoldNavigator<Chats>()
+    val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator<Chats>()
 
     ListDetailPaneScaffold(
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
+        directive = scaffoldNavigator.scaffoldDirective,
+        value = scaffoldNavigator.scaffoldValue,
         listPane = {
             AnimatedPane {
                 HistoryListPane(
@@ -68,7 +68,6 @@ private fun HistoryListPane(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
-        // Extracted Top Bar
         HistoryListPaneTop(
             onNewChatClick = { chatViewModel.startNewChat() },
             onClearClick = {
@@ -78,13 +77,12 @@ private fun HistoryListPane(
             },
         )
 
-        // Animate between ListPaneSections and EmptyGeneratedMessage
+
         AnimatedVisibility(
             visible = allChats.isNotEmpty(),
-            enter = Animations.fadeInExpand(), // Use the descriptive enter animation
+            enter = Animations.fadeInExpand(),
             exit = Animations.fadeOutShrink()
         ) {
-            // Show ListPaneSections when chatHistoryList is not empty
             ListPaneSections(
                 chatViewModel = chatViewModel,
             )
@@ -92,10 +90,10 @@ private fun HistoryListPane(
 
         AnimatedVisibility(
             visible = allChats.isEmpty(),
-            enter = Animations.fadeInExpand(), // Use the descriptive enter animation
+            enter = Animations.fadeInExpand(),
             exit = Animations.fadeOutShrink()
         ) {
-            // Show EmptyGeneratedMessage when chatHistoryList is empty
+
             NoContentMessage(
                 modifier = Modifier.fillMaxSize(),
                 title = "Start a Conversation!",
@@ -135,11 +133,10 @@ private fun HistoryListPaneTop(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Top Bar with Icons
         NewChatButton(
             onNewChatClick = onNewChatClick
         )
-        // Extracted Clear Icon Button
+
         ClearIconButton(
             onClearClick = onClearClick
         )

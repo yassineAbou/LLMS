@@ -3,11 +3,11 @@
 # ------------------------------------------------------------------------------------------------------
 
 # AndroidX
-androidx-activityCompose = "1.12.3"
+androidx-activityCompose = "1.13.0"
 androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
-androidx-core-ktx = "1.17.0"
-androidx-lifecycle = "2.9.6"
+androidx-core-ktx = "1.18.0"
+androidx-lifecycle = "2.10.0"
 
 
 # Android
@@ -24,17 +24,16 @@ kotlinx-collections-immutable = "0.4.0"
 serialization = "1.10.0"
 
 # Compose
-compose-plugin = "1.10.0"
+compose-plugin = "1.10.3"
 adaptive = "1.3.0-alpha02"
-multiplatformPaths = "0.2.2"
-navigationCompose = "2.9.1"
-foundationLayoutAndroid = "1.10.2"
+multiplatformNav3Ui = "1.0.0-alpha06"
+foundationLayoutAndroid = "1.10.5"
+navigationEvent = "1.0.1"
 
-
-# SQLdelight
-sqlDelight = "2.2.1"
-sqlJs = "1.8.0"
-webPackPlugin = "9.1.0"
+# SqliteNow
+sqlite = "2.6.2"
+sqlitenow = "0.6.0"
+kotlinx-datetime = "0.7.1"
 
 
 # Testing
@@ -45,10 +44,10 @@ androidx-espresso-core = "3.7.0"
 # UI Components
 dragselect = "3.3.0"
 multiplatformMarkdownRendererM3 = "0.39.2"
-sketch = "4.4.0-beta01"
+sketch = "4.4.0-beta02"
 
 # Exposed
-exposed = "1.0.0"
+exposed = "1.1.1"
 r2dbcPostgres = "1.1.1.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 
@@ -57,14 +56,14 @@ r2dbcPool = "1.0.2.RELEASE"
 kmauth-google = "0.3.3"
 
 # Networking
-ktor = "3.4.0"
+ktor = "3.4.1"
 
 # Utilities
-kermit = "2.0.8"
-logback = "1.5.27"
+kermit = "2.1.0"
+logback = "1.5.32"
 
 # Dependency Injection
-kodeinDi = "7.30.0"
+kodeinDi = "7.31.0"
 
 # Rpc
 kotlinx-rpc = "0.10.2"
@@ -97,11 +96,9 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 # Compose
 adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
-multiplatform-paths = { module = "me.sujanpoudel.multiplatform.utils:multiplatform-paths", version.ref = "multiplatformPaths" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "adaptive" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatformNav3Ui" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-plugin" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-plugin" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-plugin" }
@@ -110,14 +107,13 @@ compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-pre
 compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-plugin" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version = "1.10.0-alpha05" }
 compose-material3-adaptive-navigation-suite = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version = "1.10.0-alpha05" }
+navigationevent-compose = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigationEvent" }
 
-# SQLdelight
-sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
-sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
-sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
-sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
-sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
-sqldelight-web-driver = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
+
+# SqliteNow
+sqlitenow-kmp = { module = "dev.goquick.sqlitenow:core", version.ref = "sqlitenow" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -204,7 +200,7 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 
 # SQLdelight
-sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+sqlitenow = { id = "dev.goquick.sqlitenow", version.ref = "sqlitenow" }
 
 # Kotlinx-rpc
 kotlinx-rpc = { id = "org.jetbrains.kotlinx.rpc.plugin", version.ref = "kotlinx-rpc" }

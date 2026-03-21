@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
 
 package org.yassineabou.llms.feature.imagine.ui
 
@@ -14,36 +13,46 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
-import org.yassineabou.llms.app.core.navigation.Screen
+import org.yassineabou.llms.app.core.navigation.FullScreenImageRoute
+import org.yassineabou.llms.app.core.navigation.GeneratedImagesRoute
+import org.yassineabou.llms.app.core.navigation.ImageGenerationLoadingRoute
+import org.yassineabou.llms.app.core.navigation.ImagineRoute
+import org.yassineabou.llms.app.core.navigation.NavigateToImagineOnScreenExpansion
+import org.yassineabou.llms.app.core.navigation.Navigator
 import org.yassineabou.llms.app.core.sharedViews.LoadingContent
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
+import org.yassineabou.llms.feature.imagine.ui.supportingPane.PaneOrScreenNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExpansion
+import org.yassineabou.llms.feature.imagine.ui.util.DefaultNavigationInfo
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 
 @Composable
 fun ImageGenerationLoadingScreen(
-    navController: NavController,
+    navigator: Navigator,
     imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
     modifier: Modifier = Modifier
 ) {
     val imageGenerationState by imagineViewModel.imageGenerationState.collectAsStateWithLifecycle()
     val isLargeScreen = rememberIsLargeScreen()
+    val backState = rememberNavigationEventState(
+        currentInfo = DefaultNavigationInfo
+    )
 
-    BackHandler {
-        imagineViewModel.cancelImageGeneration()
-    }
+    NavigationBackHandler(
+        state = backState,
+        onBackCompleted = {
+            imagineViewModel.cancelImageGeneration()
+        }
+    )
 
 
     when (imageGenerationState) {
@@ -51,20 +60,20 @@ fun ImageGenerationLoadingScreen(
         is GenerationState.Failure -> {
             PaneOrScreenNavigator.navigateTo(
                 supportingPaneNavigator = supportingPaneNavigator,
-                navController = navController,
+                navigator = navigator,
                 isLargeScreen = isLargeScreen,
                 paneDestination = SupportingPaneScreen.FullScreenImage,
-                screenRoute = Screen.FullScreenImage.route
+                screenRoute = FullScreenImageRoute
             )
         }
 
         is GenerationState.Cancelled -> {
             PaneOrScreenNavigator.navigateTo(
                 supportingPaneNavigator = supportingPaneNavigator,
-                navController = navController,
+                navigator = navigator,
                 isLargeScreen = isLargeScreen,
                 paneDestination = SupportingPaneScreen.GeneratedImages,
-                screenRoute = Screen.GeneratedImagesScreen.route
+                screenRoute = GeneratedImagesRoute
             )
         }
 
@@ -73,11 +82,11 @@ fun ImageGenerationLoadingScreen(
 
 
     NavigateToImagineOnScreenExpansion(
-        navController = navController,
-        targetRoute = Screen.ImageGenerationLoadingScreen.route,
+        navigator = navigator,
+        currentRoute = ImageGenerationLoadingRoute,
         onNavigate = {
             supportingPaneNavigator.navigate(SupportingPaneScreen.ImageGenerationLoading)
-            navController.navigate(Screen.ImagineScreen.route)
+            navigator.navigate(ImagineRoute)
         }
     )
 

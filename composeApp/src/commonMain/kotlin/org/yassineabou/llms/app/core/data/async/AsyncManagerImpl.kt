@@ -7,11 +7,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.yassineabou.llms.Chat_messages
-import org.yassineabou.llms.Chats
-import org.yassineabou.llms.Generated_images
-import org.yassineabou.llms.User
+import org.yassineabou.llms.app.core.data.local.Chat_messages
+import org.yassineabou.llms.app.core.data.local.Chats
+import org.yassineabou.llms.app.core.data.local.Generated_images
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
+import org.yassineabou.llms.app.core.data.local.User
 import org.yassineabou.llms.app.core.data.remote.rpc.RemoteDataSource
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmName

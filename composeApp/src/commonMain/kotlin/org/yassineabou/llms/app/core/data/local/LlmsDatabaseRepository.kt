@@ -1,18 +1,11 @@
 package org.yassineabou.llms.app.core.data.local
 
-import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToList
-import app.cash.sqldelight.coroutines.mapToOneOrNull
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
-import org.yassineabou.llms.Chat_messages
-import org.yassineabou.llms.Chats
-import org.yassineabou.llms.Generated_images
-import org.yassineabou.llms.LlmsDatabase
-import org.yassineabou.llms.User
+import kotlinx.coroutines.flow.map
+import org.yassineabou.llms.db.*
 
 interface LlmsDatabaseInterface {
+
     // Chats + Messages
     suspend fun insertChatWithMessages(chat: Chats, messages: List<Chat_messages>)
 
@@ -24,23 +17,17 @@ interface LlmsDatabaseInterface {
 
     // Messages
     fun getMessagesByChatId(chatId: String): Flow<List<Chat_messages>>
-
     suspend fun deleteMessagesByChatId(chatId: String)
-
 
     // Images
     fun getAllImages(): Flow<List<Generated_images>>
     suspend fun insertImage(image: Generated_images)
     suspend fun deleteImageById(id: String)
     suspend fun clearAllImages()
-
     suspend fun deleteImagesByIds(ids: List<String>)
 
-
-    //User
+    // User
     fun getCurrentUser(): Flow<User?>
-
-    // NEW INTERFACE
     suspend fun saveUser(
         googleSubId: String,
         email: String,
@@ -48,125 +35,142 @@ interface LlmsDatabaseInterface {
         profilePicUrl: String?,
         createdAt: String
     )
-
     suspend fun clearUser()
-
 }
+
 
 class LlmsDatabaseRepository(
     private val llmsDatabase: LlmsDatabase
 ) : LlmsDatabaseInterface {
 
-    private val queries get() = llmsDatabase.llmsDatabaseQueries
+    // =====================================================================
+    //                              CHATS
+    // =====================================================================
 
     override fun getAllChats(): Flow<List<Chats>> =
-        queries.selectAllChats()
+        llmsDatabase.chats.selectAllChats
             .asFlow()
-            .mapToList(Dispatchers.Default)
+            .map { results -> results.toChats() }
 
+    override suspend fun insertChat(chat: Chats) {
+        llmsDatabase.chats.insertChat(
+            ChatsQuery.InsertChat.Params(
+                id = chat.id,
+                title = chat.title,
+                description = chat.description,
+                textModelName = chat.text_model_name,
+                isBookmarked = chat.is_bookmarked == 1L,
+                createdAt = chat.created_at
+            )
+        )
+    }
+
+    override suspend fun deleteChatById(id: String) {
+        llmsDatabase.chats.deleteChatById(
+            ChatsQuery.DeleteChatById.Params(id = id)
+        )
+    }
+
+    override suspend fun clearAllChats() {
+        llmsDatabase.chats.clearAllChats()
+    }
+
+    // =====================================================================
+    //                         CHATS + MESSAGES
+    // =====================================================================
 
     override suspend fun insertChatWithMessages(
         chat: Chats,
         messages: List<Chat_messages>
-    ) = withContext(Dispatchers.Default) {
-        queries.transaction {
-            // 1. Insert/Replace chat
-            queries.insertChat(
+    ) {
+        llmsDatabase.chats.insertChat(
+            ChatsQuery.InsertChat.Params(
                 id = chat.id,
                 title = chat.title,
                 description = chat.description,
-                text_model_name = chat.text_model_name,
-                is_bookmarked = chat.is_bookmarked,
-                created_at = chat.created_at
+                textModelName = chat.text_model_name,
+                isBookmarked = chat.is_bookmarked == 1L,
+                createdAt = chat.created_at
             )
+        )
 
-            // 2. DELETE existing messages for this chat first
-            queries.deleteMessagesByChatId(chat.id)
+        llmsDatabase.chatMessages.deleteMessagesByChatId(
+            ChatMessagesQuery.DeleteMessagesByChatId.Params(chatId = chat.id)
+        )
 
-            // 3. Insert all messages fresh
-            messages.forEach { message ->
-                queries.insertMessage(
-                    chat_id = chat.id,
+        messages.forEach { message ->
+            llmsDatabase.chatMessages.insertMessage(
+                ChatMessagesQuery.InsertMessage.Params(
+                    chatId = chat.id,
                     message = message.message,
-                    is_user = message.is_user,
+                    isUser = message.is_user == 1L,
                     timestamp = message.timestamp
                 )
-            }
+            )
         }
     }
 
-    override suspend fun insertChat(chat: Chats) = withContext(Dispatchers.Default) {
-        queries.insertChat(
-            id = chat.id,
-            title = chat.title,
-            description = chat.description,
-            text_model_name = chat.text_model_name,
-            is_bookmarked = chat.is_bookmarked,
-            created_at = chat.created_at
-        )
-        Unit
-    }
-
-    override suspend fun deleteChatById(id: String) = withContext(Dispatchers.Default) {
-        queries.deleteChatById(id)
-        Unit
-    }
-
-    override suspend fun clearAllChats() = withContext(Dispatchers.Default) {
-        queries.clearAllChats()
-        Unit
-    }
+    // =====================================================================
+    //                            MESSAGES
+    // =====================================================================
 
     override fun getMessagesByChatId(chatId: String): Flow<List<Chat_messages>> =
-        queries.selectMessagesByChatId(chatId)
-            .asFlow()
-            .mapToList(Dispatchers.Default)
+        llmsDatabase.chatMessages.selectMessagesByChatId(
+            ChatMessagesQuery.SelectMessagesByChatId.Params(chatId = chatId)
+        ).asFlow()
+            .map { results -> results.toChatMessages() }
 
-    override suspend fun deleteMessagesByChatId(chatId: String) = withContext(Dispatchers.Default) {
-        queries.deleteMessagesByChatId(chatId)
-        Unit
+    override suspend fun deleteMessagesByChatId(chatId: String) {
+        llmsDatabase.chatMessages.deleteMessagesByChatId(
+            ChatMessagesQuery.DeleteMessagesByChatId.Params(chatId = chatId)
+        )
     }
 
+    // =====================================================================
+    //                             IMAGES
+    // =====================================================================
 
     override fun getAllImages(): Flow<List<Generated_images>> =
-        queries.selectAllImages()
+        llmsDatabase.generatedImages.selectAllImages
             .asFlow()
-            .mapToList(Dispatchers.Default)
+            .map { results -> results.toGeneratedImages() }
 
-    override suspend fun insertImage(image: Generated_images) = withContext(Dispatchers.Default) {
-        queries.insertImage(
-            id = image.id,
-            prompt = image.prompt,
-            image_data = image.image_data,
-            image_model_name = image.image_model_name,
-            generated_at = image.generated_at
+    override suspend fun insertImage(image: Generated_images) {
+        llmsDatabase.generatedImages.insertImage(
+            GeneratedImagesQuery.InsertImage.Params(
+                id = image.id,
+                prompt = image.prompt,
+                imageData = image.image_data,
+                imageModelName = image.image_model_name,
+                generatedAt = image.generated_at
+            )
         )
-        Unit
     }
 
-    override suspend fun deleteImageById(id: String) = withContext(Dispatchers.Default) {
-        queries.deleteImageById(id)
-        Unit
+    override suspend fun deleteImageById(id: String) {
+        llmsDatabase.generatedImages.deleteImageById(
+            GeneratedImagesQuery.DeleteImageById.Params(id = id)
+        )
     }
 
-    override suspend fun clearAllImages() = withContext(Dispatchers.Default) {
-        queries.clearAllImages()
-        Unit
+    override suspend fun clearAllImages() {
+        llmsDatabase.generatedImages.clearAllImages()
     }
 
-    override suspend fun deleteImagesByIds(ids: List<String>) = withContext(Dispatchers.Default) {
-        queries.transaction {
-            ids.forEach { id ->
-                queries.deleteImageById(id)
-            }
-        }
+    override suspend fun deleteImagesByIds(ids: List<String>) {
+        llmsDatabase.generatedImages.deleteImagesByIds(
+            GeneratedImagesQuery.DeleteImagesByIds.Params(ids = ids)
+        )
     }
+
+    // =====================================================================
+    //                              USER
+    // =====================================================================
 
     override fun getCurrentUser(): Flow<User?> =
-        queries.getUser()
+        llmsDatabase.user.getUser
             .asFlow()
-            .mapToOneOrNull(Dispatchers.Default)
-
+            .map { results -> results.firstOrNull()?.toUser() }
 
     override suspend fun saveUser(
         googleSubId: String,
@@ -174,20 +178,19 @@ class LlmsDatabaseRepository(
         username: String,
         profilePicUrl: String?,
         createdAt: String
-    ) = withContext(Dispatchers.Default) {
-        queries.insertOrUpdateUser(
-            google_sub_id = googleSubId,
-            email = email,
-            username = username,
-            profile_pic_url = profilePicUrl,
-            created_at = createdAt
+    ) {
+        llmsDatabase.user.insertOrUpdateUser(
+            UserQuery.InsertOrUpdateUser.Params(
+                googleSubId = googleSubId,
+                email = email,
+                username = username,
+                profilePicUrl = profilePicUrl,
+                createdAt = createdAt
+            )
         )
-        Unit
     }
 
-    override suspend fun clearUser() = withContext(Dispatchers.Default) {
-        queries.deleteUser()
-        Unit
+    override suspend fun clearUser() {
+        llmsDatabase.user.deleteUser()
     }
-
 }

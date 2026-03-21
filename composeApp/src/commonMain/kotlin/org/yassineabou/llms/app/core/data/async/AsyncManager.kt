@@ -2,10 +2,10 @@ package org.yassineabou.llms.app.core.data.async
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import org.yassineabou.llms.Chat_messages
-import org.yassineabou.llms.Chats
-import org.yassineabou.llms.Generated_images
-import org.yassineabou.llms.User
+import org.yassineabou.llms.app.core.data.local.Chat_messages
+import org.yassineabou.llms.app.core.data.local.Chats
+import org.yassineabou.llms.app.core.data.local.Generated_images
+import org.yassineabou.llms.app.core.data.local.User
 
 /**
  * Central data manager that abstracts local and remote data sources.

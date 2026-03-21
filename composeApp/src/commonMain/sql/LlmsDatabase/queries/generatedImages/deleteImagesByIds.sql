@@ -1,0 +1,1 @@
+DELETE FROM generated_images WHERE id IN :ids;

@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
 
 package org.yassineabou.llms.feature.imagine.ui
 
@@ -21,15 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import androidx.window.core.layout.WindowSizeClass
 import com.dragselectcompose.core.DragSelectState
 import com.dragselectcompose.core.rememberDragSelectState
@@ -38,20 +36,24 @@ import com.dragselectcompose.grid.indicator.IndicatorIconDefaults
 import com.dragselectcompose.grid.indicator.SelectedIcon
 import com.dragselectcompose.grid.indicator.UnselectedIcon
 import com.github.panpf.sketch.AsyncImage
-import org.yassineabou.llms.app.core.navigation.Screen
+import org.yassineabou.llms.app.core.navigation.FullScreenImageRoute
+import org.yassineabou.llms.app.core.navigation.GeneratedImagesRoute
+import org.yassineabou.llms.app.core.navigation.ImagineRoute
+import org.yassineabou.llms.app.core.navigation.NavigateToImagineOnScreenExpansion
+import org.yassineabou.llms.app.core.navigation.Navigator
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.llms.feature.imagine.data.model.UrlExample
+import org.yassineabou.llms.feature.imagine.ui.supportingPane.PaneOrScreenNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExpansion
+import org.yassineabou.llms.feature.imagine.ui.util.DefaultNavigationInfo
 import org.yassineabou.llms.feature.imagine.ui.view.ImageSelectionControls
 import org.yassineabou.llms.feature.imagine.ui.view.NoContentMessage
 
 @Composable
 fun GeneratedImagesScreen(
-    navController: NavController,
+    navigator: Navigator,
     imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
     dragSelectState: DragSelectState<UrlExample> = rememberDragSelectState(compareSelector = { it.id }),
@@ -70,17 +72,24 @@ fun GeneratedImagesScreen(
 
     val isLargeScreen = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
 
-    BackHandler {
-        navController.navigate(Screen.ImagineScreen.route)
-        supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
-    }
+    val backState = rememberNavigationEventState(
+        currentInfo = DefaultNavigationInfo
+    )
+
+    NavigationBackHandler(
+        state = backState,
+        onBackCompleted = {
+            navigator.navigate(ImagineRoute)
+            supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
+        }
+    )
 
     NavigateToImagineOnScreenExpansion(
-        navController = navController,
-        targetRoute = Screen.GeneratedImagesScreen.route,
+        navigator = navigator, // Nav3: Navigator instead of NavController
+        currentRoute = GeneratedImagesRoute, // Nav3: NavKey instead of string
         onNavigate = {
             supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
-            navController.navigate(Screen.ImagineScreen.route)
+            navigator.navigate(ImagineRoute) // Nav3: NavKey
         }
     )
 
@@ -97,8 +106,8 @@ fun GeneratedImagesScreen(
                 isLargeScreen = isLargeScreen,
                 modifier = Modifier.padding(vertical = 4.dp),
                 onBackPress = {
-                    navController.navigate(Screen.ImagineScreen.route)
-                   supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
+                    navigator.navigate(ImagineRoute)
+                    supportingPaneNavigator.navigate(SupportingPaneScreen.GeneratedImages)
                 }
             )
         }
@@ -125,7 +134,7 @@ fun GeneratedImagesScreen(
                 subtitle = "Your gallery is empty. Start generating stunning images now!",
                 buttonText = "Generate Images",
                 onButtonClick = {
-                    navController.navigate(Screen.ImagineScreen.route)
+                    navigator.navigate(ImagineRoute)
                 }
             )
         } else {
@@ -162,14 +171,13 @@ fun GeneratedImagesScreen(
                             isInSelectionMode = inSelectionMode,
                             onClick = {
                                 if (index != -1) {
-                                    // Save the index in the ViewModel
                                     imagineViewModel.updateCurrentImageIndex(index)
                                     PaneOrScreenNavigator.navigateTo(
                                         supportingPaneNavigator = supportingPaneNavigator,
-                                        navController = navController,
+                                        navigator = navigator,
                                         isLargeScreen = isLargeScreen,
                                         paneDestination = SupportingPaneScreen.FullScreenImage,
-                                        screenRoute = Screen.FullScreenImage.route
+                                        screenRoute = FullScreenImageRoute
                                     )
                                 }
                             },

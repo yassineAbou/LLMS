@@ -1,11 +1,11 @@
 package org.yassineabou.llms.app.core.util
 
-import org.yassineabou.llms.Chat_messages
-import org.yassineabou.llms.Chats
-import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.api.ChatDto
 import org.yassineabou.llms.api.ChatMessageDto
 import org.yassineabou.llms.api.GeneratedImageDto
+import org.yassineabou.llms.app.core.data.local.Chat_messages
+import org.yassineabou.llms.app.core.data.local.Chats
+import org.yassineabou.llms.app.core.data.local.Generated_images
 
 // DtoMappers.kt
 

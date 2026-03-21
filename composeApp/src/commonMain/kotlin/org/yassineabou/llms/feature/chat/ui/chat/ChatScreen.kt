@@ -3,8 +3,8 @@ package org.yassineabou.llms.feature.chat.ui.chat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import org.yassineabou.llms.app.core.navigation.Screen
+import org.yassineabou.llms.app.core.navigation.ChatHistoryRoute
+import org.yassineabou.llms.app.core.navigation.Navigator
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.listDetailPane.ListDetailPane
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
@@ -12,7 +12,7 @@ import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 
 @Composable
 fun ChatScreen(
-    navController: NavController,
+    navigator: Navigator,
     chatViewModel: ChatViewModel
 ) {
     val isLargeScreen = rememberIsLargeScreen()
@@ -27,7 +27,7 @@ fun ChatScreen(
             chatViewModel = chatViewModel,
             selectedTextModel = selectedTextModel,
             showAppBar = true,
-            onClickHistory = { navController.navigate(Screen.ChatHistoryScreen.route) }
+            onClickHistory = { navigator.navigate(ChatHistoryRoute) }
         )
     }
 }

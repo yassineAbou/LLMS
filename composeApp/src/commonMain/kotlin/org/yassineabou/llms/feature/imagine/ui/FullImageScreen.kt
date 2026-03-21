@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
 
 package org.yassineabou.llms.feature.imagine.ui
 
@@ -39,39 +38,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
-import org.yassineabou.llms.app.core.navigation.Screen
+import org.yassineabou.llms.app.core.navigation.FullScreenImageRoute
+import org.yassineabou.llms.app.core.navigation.GeneratedImagesRoute
+import org.yassineabou.llms.app.core.navigation.ImagineRoute
+import org.yassineabou.llms.app.core.navigation.NavigateToImagineOnScreenExpansion
+import org.yassineabou.llms.app.core.navigation.Navigator
 import org.yassineabou.llms.app.core.sharedViews.BottomSheetContent
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.llms.app.core.sharedViews.PyramidTextFormat
 import org.yassineabou.llms.app.core.sharedViews.SnackbarController
-import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.llms.app.core.util.PlatformConfig
 import org.yassineabou.llms.app.core.util.isDesktop
 import org.yassineabou.llms.app.core.util.isWasm
 import org.yassineabou.llms.feature.imagine.data.model.UrlExample
+import org.yassineabou.llms.feature.imagine.ui.supportingPane.PaneOrScreenNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
-import org.yassineabou.llms.feature.imagine.ui.util.NavigateToImagineOnScreenExpansion
+import org.yassineabou.llms.feature.imagine.ui.util.DefaultNavigationInfo
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
-
 
 
 @Composable
 fun FullScreenImage(
-    navController: NavController,
+    navigator: Navigator,
     imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator
 ) {
@@ -87,16 +88,24 @@ fun FullScreenImage(
     var showInfoBottomSheet by remember { mutableStateOf(false) }
     val isLargeScreen = rememberIsLargeScreen()
 
-    BackHandler {
-        imagineViewModel.resetImageGenerationState()
-        PaneOrScreenNavigator.navigateTo(
-            supportingPaneNavigator = supportingPaneNavigator,
-            navController = navController,
-            isLargeScreen = isLargeScreen,
-            paneDestination = SupportingPaneScreen.GeneratedImages,
-            screenRoute = Screen.GeneratedImagesScreen.route
-        )
-    }
+    val backState = rememberNavigationEventState(
+        currentInfo = DefaultNavigationInfo
+    )
+
+
+    NavigationBackHandler(
+        state = backState,
+        onBackCompleted = {
+            imagineViewModel.resetImageGenerationState()
+            PaneOrScreenNavigator.navigateTo(
+                supportingPaneNavigator = supportingPaneNavigator,
+                navigator = navigator,
+                isLargeScreen = isLargeScreen,
+                paneDestination = SupportingPaneScreen.GeneratedImages,
+                screenRoute = GeneratedImagesRoute
+            )
+        }
+    )
 
 
     LaunchedEffect(currentImageIndex) {
@@ -112,11 +121,11 @@ fun FullScreenImage(
     }
 
     NavigateToImagineOnScreenExpansion(
-        navController = navController,
-        targetRoute = Screen.FullScreenImage.route,
+        navigator = navigator,
+        currentRoute = FullScreenImageRoute,
         onNavigate = {
             supportingPaneNavigator.navigate(SupportingPaneScreen.FullScreenImage)
-            navController.navigate(Screen.ImagineScreen.route)
+            navigator.navigate(ImagineRoute)
         }
     )
 
@@ -134,10 +143,10 @@ fun FullScreenImage(
                 imagineViewModel.resetImageGenerationState()
                 PaneOrScreenNavigator.navigateTo(
                     supportingPaneNavigator = supportingPaneNavigator,
-                    navController = navController,
+                    navigator = navigator,
                     isLargeScreen = isLargeScreen,
                     paneDestination = SupportingPaneScreen.GeneratedImages,
-                    screenRoute = Screen.GeneratedImagesScreen.route
+                    screenRoute = GeneratedImagesRoute
                 )
             }
         )

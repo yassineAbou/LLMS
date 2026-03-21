@@ -7,12 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.sunildhiman90.kmauth.core.KMAuthInitializer
 import com.sunildhiman90.kmauth.core.KMAuthPlatformContext
+import dev.goquick.sqlitenow.common.setupAndroidAppContext
 import org.yassineabou.llms.app.App
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupAndroidAppContext(this.applicationContext)
 
         KMAuthInitializer.initContext(
             kmAuthPlatformContext = KMAuthPlatformContext(this)

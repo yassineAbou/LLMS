@@ -1,0 +1,1 @@
+DELETE FROM chat_messages WHERE chat_id = :chatId;

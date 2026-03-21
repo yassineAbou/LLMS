@@ -4,7 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import org.yassineabou.llms.Chats
+import org.yassineabou.llms.app.core.data.local.Chats
 
 @Composable
 fun ContentStateAnimator(

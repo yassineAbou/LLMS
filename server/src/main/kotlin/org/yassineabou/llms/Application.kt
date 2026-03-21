@@ -6,10 +6,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.routing.*
-import io.ktor.server.websocket.WebSockets
-import io.ktor.server.websocket.pingPeriod
-import io.ktor.server.websocket.timeout
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.rpc.krpc.ktor.server.Krpc
 import kotlinx.rpc.krpc.ktor.server.rpc
 import kotlinx.rpc.krpc.serialization.json.json
@@ -17,14 +14,11 @@ import org.kodein.di.direct
 import org.kodein.di.instance
 import org.kodein.di.ktor.closestDI
 import org.kodein.di.ktor.di
-import org.yassineabou.llms.api.ChatService
-import org.yassineabou.llms.api.ImageService
-import org.yassineabou.llms.api.MessageService
-import org.yassineabou.llms.api.UserService
+import org.yassineabou.llms.api.*
 import org.yassineabou.llms.di.initializeDatabase
 import org.yassineabou.llms.di.kodeinDatabaseModule
 import org.yassineabou.llms.di.kodeinServicesModule
-import kotlin.time.Duration.Companion.seconds
+import org.yassineabou.llms.service.PingServiceImpl
 
 
 fun main() {
@@ -45,18 +39,11 @@ fun Application.module() {
         import(kodeinServicesModule())
     }
 
-    launch {
+    runBlocking {
         initializeDatabase()
     }
 
     installCORS(environment = Environment().cors)
-
-    install(WebSockets) {
-        pingPeriod = 15.seconds
-        timeout = 15.seconds
-        maxFrameSize = Long.MAX_VALUE
-        masking = false
-    }
 
     install(Krpc)
 
@@ -74,6 +61,7 @@ fun Application.module() {
             registerService<ImageService> { di.direct.instance() }
             registerService<MessageService> { di.direct.instance() }
             registerService<UserService> { di.direct.instance() }
+            registerService<PingService> { PingServiceImpl() }
         }
     }
 }

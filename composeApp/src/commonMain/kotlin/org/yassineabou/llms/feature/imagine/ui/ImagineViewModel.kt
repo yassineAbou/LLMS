@@ -13,8 +13,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
-import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.app.core.data.async.AsyncManager
+import org.yassineabou.llms.app.core.data.local.Generated_images
 import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
 import org.yassineabou.llms.app.core.util.FileKit
@@ -24,6 +24,7 @@ import org.yassineabou.llms.feature.imagine.data.model.ImageModel
 import org.yassineabou.llms.feature.imagine.data.model.Inspiration
 import org.yassineabou.llms.feature.imagine.data.model.PollinationsImageRequest
 import org.yassineabou.llms.feature.imagine.data.model.UrlExample
+import kotlin.collections.mapNotNull
 import kotlin.math.min
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime

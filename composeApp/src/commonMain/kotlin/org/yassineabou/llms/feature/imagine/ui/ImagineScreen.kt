@@ -3,7 +3,16 @@ package org.yassineabou.llms.feature.imagine.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,9 +23,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,19 +50,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.window.core.layout.WindowSizeClass
 import com.github.panpf.sketch.AsyncImage
 import kotlinx.coroutines.launch
 import org.yassineabou.llms.app.core.data.remote.ai.GenerationState
-import org.yassineabou.llms.app.core.navigation.Screen
+import org.yassineabou.llms.app.core.navigation.GeneratedImagesRoute
+import org.yassineabou.llms.app.core.navigation.ImageGenerationLoadingRoute
+import org.yassineabou.llms.app.core.navigation.Navigator
 import org.yassineabou.llms.app.core.sharedViews.CustomIconButton
 import org.yassineabou.llms.app.core.sharedViews.GoToFirst
 import org.yassineabou.llms.app.core.sharedViews.SelectedModel
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
-import org.yassineabou.llms.app.core.util.PaneOrScreenNavigator
 import org.yassineabou.llms.app.core.util.draggableScrollModifier
 import org.yassineabou.llms.feature.imagine.data.model.UrlExample
+import org.yassineabou.llms.feature.imagine.ui.supportingPane.PaneOrScreenNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneNavigator
 import org.yassineabou.llms.feature.imagine.ui.supportingPane.SupportingPaneScreen
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
@@ -50,7 +74,7 @@ import org.yassineabou.llms.feature.imagine.ui.view.ImageModelsBottomSheet
 
 @Composable
 fun ImagineScreen(
-    navController: NavController,
+    navigator: Navigator,
     imagineViewModel: ImagineViewModel,
     supportingPaneNavigator: SupportingPaneNavigator,
     shouldShowSupportingPaneButton: Boolean,
@@ -75,7 +99,7 @@ fun ImagineScreen(
                     .fillMaxSize()
                     .align(alignment = Alignment.Start)
                     .padding(start = 8.dp),
-                onClick = { navController.navigate(Screen.GeneratedImagesScreen.route)},
+                onClick = { navigator.navigate(GeneratedImagesRoute) },
                 onSelect = { selectModelClicked = true  }
             )
         } else {
@@ -129,10 +153,10 @@ fun ImagineScreen(
             onGenerateClick = {
                 PaneOrScreenNavigator.navigateTo(
                     supportingPaneNavigator = supportingPaneNavigator,
-                    navController = navController,
+                    navigator = navigator,
                     isLargeScreen = isLargeScreen,
                     paneDestination = SupportingPaneScreen.ImageGenerationLoading,
-                    screenRoute = Screen.ImageGenerationLoadingScreen.route
+                    screenRoute = ImageGenerationLoadingRoute
                 )
                 imagineViewModel.generateImage(ideaText)
             }

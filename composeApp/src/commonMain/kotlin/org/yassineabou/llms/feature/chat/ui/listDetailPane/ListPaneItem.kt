@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.yassineabou.llms.Chats
+import org.yassineabou.llms.app.core.data.local.Chats
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 
 @Composable

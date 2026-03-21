@@ -3,14 +3,15 @@ package org.yassineabou.llms.app.core.data.remote.rpc
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.rpc.withService
-import org.yassineabou.llms.Chat_messages
-import org.yassineabou.llms.Chats
-import org.yassineabou.llms.Generated_images
 import org.yassineabou.llms.api.ChatService
 import org.yassineabou.llms.api.ImageService
 import org.yassineabou.llms.api.MessageService
+import org.yassineabou.llms.api.PingService
 import org.yassineabou.llms.api.UserDto
 import org.yassineabou.llms.api.UserService
+import org.yassineabou.llms.app.core.data.local.Chat_messages
+import org.yassineabou.llms.app.core.data.local.Chats
+import org.yassineabou.llms.app.core.data.local.Generated_images
 import org.yassineabou.llms.app.core.util.DtoMappers.toLocalChat
 import org.yassineabou.llms.app.core.util.DtoMappers.toLocalChatMessage
 import org.yassineabou.llms.app.core.util.DtoMappers.toLocalImage
@@ -23,6 +24,11 @@ import org.yassineabou.llms.app.core.util.DtoMappers.toLocalImage
 class RemoteDataSource(
     private val rpcClientProvider: RpcClientProvider
 ) {
+
+    // === PING ===
+    suspend fun ping(message: String): String = rpcClientProvider.execute {
+        withService<PingService>().ping(message)
+    }
 
     // === USER ===
 

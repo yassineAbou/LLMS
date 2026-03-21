@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.unit.dp
-import org.yassineabou.llms.Chats
+import org.yassineabou.llms.app.core.data.local.Chats
 import org.yassineabou.llms.app.core.theme.colorSchemeCustom
 import org.yassineabou.llms.feature.chat.data.model.TextModel
 

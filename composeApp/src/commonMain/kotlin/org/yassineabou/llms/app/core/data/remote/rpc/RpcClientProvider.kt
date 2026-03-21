@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.rpc.RpcClient
+import kotlinx.rpc.krpc.ktor.client.installKrpc
 import kotlinx.rpc.krpc.ktor.client.rpc
 import kotlinx.rpc.krpc.ktor.client.rpcConfig
 import kotlinx.rpc.krpc.serialization.json.json
@@ -40,10 +41,8 @@ class RpcClientProvider(
     }
 
     private val httpClient = HttpClient {
-        install(WebSockets) {
-            pingInterval = 15.seconds
-            maxFrameSize = Long.MAX_VALUE
-        }
+
+        installKrpc()
 
         install(ContentNegotiation) {
             json(jsonConfig)
@@ -70,9 +69,6 @@ class RpcClientProvider(
     @Volatile
     private var currentRpcClient: RpcClient? = null
 
-    /**
-     * Gets the current RPC client or creates a new one if needed.
-     */
     private suspend fun getOrCreateClient(): RpcClient {
         currentRpcClient?.let { return it }
 

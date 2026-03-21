@@ -12,23 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import org.yassineabou.llms.app.core.util.getScreenHeight
 
 internal enum class DialogState { Ready, Opening, Opened, Closing, Closed }
 
@@ -58,7 +53,7 @@ fun DropDownDialog(
 
     var dialogState by remember { mutableStateOf(DialogState.Ready) }
 
-    val screenHeightDp = getScreenHeight()
+    val screenHeightDp = LocalWindowInfo.current.containerSize.height.dp
     val screenHeightPx = with(
         LocalDensity.current
     ) {

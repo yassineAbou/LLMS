@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.ViewModel
+import dev.goquick.sqlitenow.common.resolveDatabasePath
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -13,17 +14,17 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import org.kodein.di.*
-import org.yassineabou.llms.LlmsDatabase
 import org.yassineabou.llms.app.core.data.async.AsyncManager
 import org.yassineabou.llms.app.core.data.async.AsyncManagerImpl
 import org.yassineabou.llms.app.core.data.async.SyncConfig
 import org.yassineabou.llms.app.core.data.local.LlmsDatabaseRepository
-import org.yassineabou.llms.app.core.data.local.createDriver
 import org.yassineabou.llms.app.core.data.remote.ai.AiApi
 import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.KtorApi
 import org.yassineabou.llms.app.core.data.remote.rpc.RemoteDataSource
 import org.yassineabou.llms.app.core.data.remote.rpc.RpcClientProvider
+import org.yassineabou.llms.db.LlmsDatabase
+import org.yassineabou.llms.db.VersionBasedDatabaseMigrations
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.imagine.ui.ImagineViewModel
 import org.yassineabou.llms.feature.you.ui.YouViewModel
@@ -31,14 +32,18 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 
-suspend fun createDI(): DI {
-    val sqlDriver = createDriver()
-
-    return DI {
-        bindInstance { sqlDriver }
+suspend fun createDI(
+    configureWasmPersistence: (LlmsDatabase) -> Unit = {}
+): DI {
+    val di = DI {
         import(commonModule)
     }
+    val db: LlmsDatabase by di.instance<LlmsDatabase>()
+    db.open()
+    configureWasmPersistence(db)
+    return di
 }
+
 
 /**
  * The common module for dependencies that are platform-agnostic.
@@ -48,7 +53,7 @@ val commonModule = DI.Module("commonModule") {
     // ========================================================================================
     //                                  Network
     // ========================================================================================
-    
+
     bindSingleton {
         Json {
             ignoreUnknownKeys = true
@@ -118,7 +123,10 @@ val commonModule = DI.Module("commonModule") {
 
 
     bindSingleton<LlmsDatabase> {
-        LlmsDatabase(driver = instance())
+        LlmsDatabase(
+            resolveDatabasePath(dbName = "llms.db", appName = "LlmsApp"),
+            migration = VersionBasedDatabaseMigrations()
+        )
     }
 
     bindSingleton<LlmsDatabaseRepository> {

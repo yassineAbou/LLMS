@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.sqlitenow)
     alias(libs.plugins.kotlinx.rpc)
 }
 
@@ -62,10 +62,7 @@ kotlin {
 
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.wasm)
-            implementation(libs.sqldelight.web.driver)
-            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.1.0"))
-            implementation(npm("sql.js", libs.versions.sqlJs.get()))
-            implementation(devNpm("copy-webpack-plugin", libs.versions.webPackPlugin.get()))
+
         }
 
         androidMain.dependencies {
@@ -73,7 +70,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.ktor.client.android)
-            implementation(libs.sqldelight.android.driver)
+            implementation(libs.sqlite.bundled)
 
         }
         commonMain.dependencies {
@@ -85,7 +82,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
-            implementation(libs.ui.backhandler)
+            implementation(libs.navigationevent.compose)
 
             implementation(libs.kotlinx.rpc.krpc.client)
             implementation(libs.kotlinx.rpc.krpc.serialization.json)
@@ -99,16 +96,15 @@ kotlin {
             implementation(libs.ktor.client.websockets)
             implementation(libs.ktor.client.logging)
 
+            implementation(libs.adaptive)
+            implementation(libs.adaptive.layout)
+            implementation(libs.navigation3.ui)
+            implementation(libs.adaptive.navigation3)
 
 
             implementation(libs.compose.material3)
             implementation(libs.compose.material.icons.extended)
             implementation(libs.compose.material3.adaptive.navigation.suite)
-
-
-            implementation(libs.adaptive)
-            implementation(libs.adaptive.layout)
-            implementation(libs.adaptive.navigation)
 
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kotlinx.coroutines.core)
@@ -116,13 +112,11 @@ kotlin {
             implementation(libs.sketch.compose)
             implementation(libs.sketch.http)
 
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.sqldelight.coroutines.extensions)
+            implementation(libs.sqlitenow.kmp)
+            implementation(libs.kotlinx.datetime)
 
 
             implementation(libs.dragselect)
-
-            implementation(libs.navigation.compose)
 
             implementation(libs.multiplatform.markdown.renderer.m3)
 
@@ -136,25 +130,22 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.cio)
-            implementation(libs.sqldelight.sqlite.driver)
-            implementation(libs.multiplatform.paths)
 
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(libs.sqldelight.native.driver)
+            implementation(libs.sqlite.bundled)
         }
     }
 }
 
-sqldelight {
+
+sqliteNow {
     databases {
         create("LlmsDatabase") {
-            packageName.set("org.yassineabou.llms")
-            generateAsync = true
+            packageName = "org.yassineabou.llms.db"
         }
     }
-    linkSqlite.set(true)
 }
 
 android {

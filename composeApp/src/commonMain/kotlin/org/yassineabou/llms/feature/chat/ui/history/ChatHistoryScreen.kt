@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
+import org.yassineabou.llms.app.core.navigation.Navigator
+import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.app.core.sharedViews.FullScreenBackIcon
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.listDetailPane.ListDetailPane
-import org.yassineabou.llms.app.core.sharedViews.ConfirmationDialogContent
 import org.yassineabou.llms.feature.chat.ui.view.HistoryHorizontalPager
 import org.yassineabou.llms.feature.imagine.ui.util.rememberIsLargeScreen
 import org.yassineabou.llms.feature.imagine.ui.view.DropDownDialog
@@ -21,7 +21,7 @@ import org.yassineabou.llms.feature.imagine.ui.view.DropDownDialog
 
 @Composable
 fun ChatHistoryScreen(
-    navController: NavController,
+    navigator: Navigator,
     chatViewModel: ChatViewModel
 ) {
 
@@ -30,13 +30,13 @@ fun ChatHistoryScreen(
     if (isLargeScreen) {
         ListDetailPane(chatViewModel = chatViewModel)
     } else {
-        ChatHistoryContent(navController = navController, chatViewModel = chatViewModel)
+        ChatHistoryContent(navigator = navigator, chatViewModel = chatViewModel)
     }
 }
 
 @Composable
 private fun ChatHistoryContent(
-    navController: NavController,
+    navigator: Navigator,
     chatViewModel: ChatViewModel
 ) {
     var showClearHistoryDialog by remember { mutableStateOf(false) }
@@ -48,7 +48,7 @@ private fun ChatHistoryContent(
     ) {
         HistoryTopBar(
             modifier = Modifier.fillMaxWidth().statusBarsPadding(),
-            onBackPress = { navController.popBackStack() },
+            onBackPress = { navigator.goBack() },
             onClearHistory = {
                 if (allChats.isNotEmpty()) {
                     showClearHistoryDialog = true
@@ -58,7 +58,7 @@ private fun ChatHistoryContent(
 
         HistoryHeader()
 
-        HistoryHorizontalPager(chatViewModel = chatViewModel, navController = navController)
+        HistoryHorizontalPager(chatViewModel = chatViewModel, navigator = navigator)
 
         if (showClearHistoryDialog) {
             DropDownDialog(

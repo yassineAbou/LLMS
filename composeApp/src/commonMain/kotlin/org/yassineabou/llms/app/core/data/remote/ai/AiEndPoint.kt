@@ -23,5 +23,5 @@ object AiEndPoint {
     // 🌸 Flower → 10 pollen/day  (Publish an app)
     // 🍯 Nectar → 20 pollen/day  (Coming soon)
     // ═══════════════════════════════════════════════════════════════
-    const val POLLINATIONS_API_KEY = "YOUR_API_KEY_HERE"
+    const val POLLINATIONS_API_KEY = "sk_5ww7ciDeA6m4X2Xjvi61YoTo2lVnh4Y3"
 }

@@ -4,16 +4,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import org.yassineabou.llms.app.core.navigation.Screen
-import org.yassineabou.llms.feature.imagine.ui.view.ContentStateAnimator
+import org.yassineabou.llms.app.core.navigation.ChatRoute
+import org.yassineabou.llms.app.core.navigation.Navigator
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
 import org.yassineabou.llms.feature.chat.ui.view.ChatHistoryListView
+import org.yassineabou.llms.feature.imagine.ui.view.ContentStateAnimator
 
 @Composable
 fun SavedChatHistoryContent(
     chatViewModel: ChatViewModel,
-    navController: NavController
+    navigator: Navigator
 ) {
     val savedChats by chatViewModel.savedChats.collectAsStateWithLifecycle()
     val availableModels by chatViewModel.availableTextModels.collectAsStateWithLifecycle()
@@ -31,11 +31,11 @@ fun SavedChatHistoryContent(
                     toggleBookmark = { chatViewModel.toggleBookmark(it) },
                     onClick = { chatHistory ->
                         chatViewModel.selectChats(chatHistory)
-                        navController.navigate(Screen.ChatScreen.route)
+                        navigator.navigate(ChatRoute)
                     }
                 )
             },
-            navigateToChatScreen = { navController.navigate(Screen.ChatScreen.route) }
+            navigateToChatScreen = { navigator.navigate(ChatRoute) }
         )
     }
 }
