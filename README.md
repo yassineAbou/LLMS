@@ -95,14 +95,14 @@ Our development process is divided into five key steps:
 ## 📦 Libraries
 
 - [Material 3 Adaptive](https://www.jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html#across-platforms) (creates adaptive UIs that will adapt themselves automatically)
-- [Compose Navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) (Navigates between composables with built-in infrastructure and features)
+- [Compose Navigation 3](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) (a new navigation library designed to work with Compose)
 - [Kodein](https://github.com/kosi-libs/Kodein) (Painless Kotlin Dependency Injection)
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) (asynchronous or non-blocking)
 - [Sketch](https://github.com/panpf/sketch) (Image loading)
 - [Ktor Client](https://ktor.io/docs/full-stack-development-with-kotlin-multiplatform.html) (HTTP client)
 - [Markdown renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) (Markdown renderer)
 - [Drag Select](https://github.com/jordond/drag-select-compose) (adding Google Photos style drag-to-select multi-selection to a LazyGrid)
-- [SQLDelight](https://sqldelight.github.io/sqldelight/2.1.0/) (SQLDelight generates typesafe Kotlin APIs from your SQL statements.)
+- [SQLiteNow](https://github.com/mobiletoly/sqlitenow-kmp) (Build type-safe Kotlin APIs from SQLite)
 - [KotlinMultiplatformAuth](https://github.com/sunildhiman90/KotlinMultiplatformAuth) (Authentification Library Targeting Android, iOS, Desktop and Web Kotlin/Js and Kotlin/Wasm both)
 - [kotlinx-rpc](https://github.com/Kotlin/kotlinx-rpc) (is a Kotlin library for adding asynchronous Remote Procedure Call (RPC) services to your applications)
 - [Exposed](https://github.com/JetBrains/Exposed) (Kotlin SQL Framework)
@@ -144,7 +144,7 @@ LLMS/
 │       │           └── ui/
 │       │               ├── util/
 │       │               └── view/
-│       └── sqldelight/org/yassineabou/llms/    # SQLDelight source files defining the local database schema
+│       └── sql/LlmsDatabse/llms/    # SQLiteNow source files defining the local database schema
 │
 ├── server/     #  Backend server module, using Ktor, handling API requests and database interactions.
 │   └── src/
