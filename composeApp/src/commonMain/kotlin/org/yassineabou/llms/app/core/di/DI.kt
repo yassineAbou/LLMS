@@ -23,6 +23,8 @@ import org.yassineabou.llms.app.core.data.remote.ai.AiRepository
 import org.yassineabou.llms.app.core.data.remote.ai.KtorApi
 import org.yassineabou.llms.app.core.data.remote.rpc.RemoteDataSource
 import org.yassineabou.llms.app.core.data.remote.rpc.RpcClientProvider
+import org.yassineabou.llms.app.core.util.PlatformConfig
+import org.yassineabou.llms.app.core.util.serverBaseUrl
 import org.yassineabou.llms.db.LlmsDatabase
 import org.yassineabou.llms.db.VersionBasedDatabaseMigrations
 import org.yassineabou.llms.feature.chat.ui.ChatViewModel
@@ -89,7 +91,7 @@ val commonModule = DI.Module("commonModule") {
 
     bindSingleton<RpcClientProvider> {
         RpcClientProvider(
-            baseUrl = "http://127.0.0.1:8081",
+            baseUrl = PlatformConfig.serverBaseUrl,
             rpcPath =  "/api"
         )
     }

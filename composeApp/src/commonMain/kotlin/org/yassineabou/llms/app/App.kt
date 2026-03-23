@@ -16,7 +16,7 @@ import org.yassineabou.llms.db.LlmsDatabase
 @Composable
 fun App(configureWasmPersistence: (LlmsDatabase) -> Unit = {}) {
     var di by remember { mutableStateOf<DI?>(null) }
-    var showDebug by remember { mutableStateOf(false) }
+    var showDebug by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         launch {

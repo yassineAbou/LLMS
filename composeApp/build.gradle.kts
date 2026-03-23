@@ -39,7 +39,7 @@ kotlin {
     androidTarget {
 
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
 
     }
@@ -69,7 +69,7 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
 
-            implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.cio)
             implementation(libs.sqlite.bundled)
 
         }
@@ -133,7 +133,7 @@ kotlin {
 
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+            implementation(libs.ktor.client.cio)
             implementation(libs.sqlite.bundled)
         }
     }
