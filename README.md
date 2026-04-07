@@ -55,29 +55,6 @@ https://github.com/user-attachments/assets/46d00b90-6df8-484c-bfd6-f38c65ad85d9
 
 https://github.com/user-attachments/assets/62ad62f5-a80a-4ac0-b8a7-f0707a45a249
 
-
-
-
-## 📈 Progress
-
-Our development process is divided into five key steps:
-
-#### 1. Prototype with Fake Data 🚧
-- Status: 🎯 Done
-
-#### 2. Connect with AI REST API (Text Models) 📝 
-- Status: 🎯 Done
-  
-#### 3. Connect with AI REST API (Image Models) 🖼️  
-- Status: 🎯 Done 
-
-#### 4. Save Chat History & Generated Images Locally 💾  
-- Status: 🎯 Done  
-
-#### 5. Sync Data Across Devices with Authentication 🔐  
-- Status: 🔄 in progress  
-
-
 ## 🏗️ Architecture
 
 - **User Interface**:

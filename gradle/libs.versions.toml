@@ -18,7 +18,7 @@ android-minSdk = "28"
 android-targetSdk = "36"
 
 # Kotlin
-kotlin = "2.3.0"
+kotlin = "2.3.20"
 kotlinx-coroutines = "1.10.2"
 kotlinx-collections-immutable = "0.4.0"
 serialization = "1.10.0"
@@ -32,7 +32,7 @@ navigationEvent = "1.0.1"
 
 # SqliteNow
 sqlite = "2.6.2"
-sqlitenow = "0.6.0"
+sqlitenow = "0.7.0"
 kotlinx-datetime = "0.7.1"
 
 
@@ -47,7 +47,7 @@ multiplatformMarkdownRendererM3 = "0.39.2"
 sketch = "4.4.0-beta02"
 
 # Exposed
-exposed = "1.1.1"
+exposed = "1.2.0"
 r2dbcPostgres = "1.1.1.RELEASE"
 r2dbcPool = "1.0.2.RELEASE"
 
@@ -56,7 +56,7 @@ r2dbcPool = "1.0.2.RELEASE"
 kmauth-google = "0.3.3"
 
 # Networking
-ktor = "3.4.1"
+ktor = "3.4.2"
 
 # Utilities
 kermit = "2.1.0"
