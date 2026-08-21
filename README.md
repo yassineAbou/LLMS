@@ -1,4 +1,5 @@
 
+
 <div align="center">  
  <img src="https://imgur.com/mVICjDJ.png" alt="LLMS" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
  <h1 style="display: inline-block; margin: 0; vertical-align: middle; text-align: center; width: 100%;">LLMS</h1>  
@@ -58,7 +59,7 @@ https://github.com/user-attachments/assets/62ad62f5-a80a-4ac0-b8a7-f0707a45a249
 ## 🏗️ Architecture
 
 - **User Interface**:
-  Uses [Compose multiplatfrom](https://www.jetbrains.com/lp/compose-multiplatform/).
+  Uses [Compose multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/).
 
 - **Layers**: All data handling, business logic, and presentation layers are implemented
   using [kotlin multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)
